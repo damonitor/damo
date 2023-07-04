@@ -634,6 +634,8 @@ damos_actions = [
         'lru_prio',
         'lru_deprio',
         'stat',
+        'demote',
+        'promote',
         ]
 
 damos_action_willneed = damos_actions[0]
@@ -644,6 +646,8 @@ damos_action_nohugepage = damos_actions[4]
 damos_action_lru_prio = damos_actions[5]
 damos_action_lru_deprio = damos_actions[6]
 damos_action_stat = damos_actions[7]
+damos_action_demote = damos_actions[8]
+damos_action_promote = damos_actions[9]
 
 class Damos:
     access_pattern = None
