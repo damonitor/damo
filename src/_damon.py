@@ -957,7 +957,7 @@ class Kdamond:
     def update_proc_stat(self):
         try:
             self.proc_stat = ProcStat(self.pid)
-       except Exception as e:
+        except Exception as e:
             return 'reading stat failed (%s)' % e
         return None
 
