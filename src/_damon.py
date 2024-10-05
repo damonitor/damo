@@ -944,7 +944,7 @@ class ProcStat:
     fields = None
 
     def __init__(self, pid):
-        file_path = 'proc/%s/stat' % pid
+        file_path = '/proc/%s/stat' % pid
         with open(file_path, 'r') as f:
             self.fields = f.read().split()
 
