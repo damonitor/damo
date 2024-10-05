@@ -997,7 +997,26 @@ class Kdamond:
             res = subprocess.check_output(['ps', '-p', self.pid, '-o', '%cpu'], text=True)
             return res.split("\n")[1].strip()
         except:
-            return "(error)"
+            pass
+        try:
+            jiffies_per_sec = float(subprocess.check_output(
+                ['getconf', 'CLK_TCK']).decode())
+        except Exception as e:
+            return 'reading HZ failed (%s)' % e
+
+        err = self.update_proc_stat()
+        if err is not None:
+            return 'getting proc stat failed (%s)' % err
+        utime = float(self.proc_stat.fields[13]) / jiffies_per_sec
+        stime = float(self.proc_stat.fields[14]) / jiffies_per_sec
+        start_time = int(self.proc_stat.fields[21]) / jiffies_per_sec
+        try:
+            with open('/proc/uptime', 'r') as f:
+                uptime = float(f.read().split()[0])
+        except Exception as e:
+            return 'reading /proc/uptime failed (%s)' % e
+        elapsed_time = uptime - start_time
+        return '%.2f' % ((utime + stime) * 100 / elapsed_time)
 
     @classmethod
     def from_kvpairs(cls, kv):
