@@ -954,6 +954,13 @@ class Kdamond:
     contexts = None
     proc_stat = None
 
+    def update_proc_stat(self):
+        try:
+            self.proc_stat = ProcStat(self.pid)
+       except Exception as e:
+            return 'reading stat failed (%s)' % e
+        return None
+
     def __init__(self, state, pid, contexts):
         self.state = state
         self.pid = pid
