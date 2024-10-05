@@ -944,6 +944,8 @@ class ProcStat:
     fields = None
 
     def __init__(self, pid):
+        if pid is None:
+            return
         file_path = '/proc/%s/stat' % pid
         with open(file_path, 'r') as f:
             self.fields = f.read().split()
@@ -965,6 +967,14 @@ class ProcStat:
         for idx, field_name in enumerate(field_names):
             lines.append('%s: %s' % (field_name, self.fields[idx]))
         return '\n'.join(lines)
+
+    def to_kvpairs(self):
+        return self.fields
+
+    @classmethod
+    def from_kvpairs(cls, kvpairs):
+        self = cls(None)
+        self.fields = kvpairs
 
 class Kdamond:
     state = None
