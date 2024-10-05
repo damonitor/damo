@@ -3,6 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.4.9
 - Add --timeout option to 'damo record'
+- Add --show_cpu_usage to 'damo status'
 
 v2.4.8
 - Update awslabs URLs to damonitor URLs
