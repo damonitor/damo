@@ -952,6 +952,7 @@ class Kdamond:
     state = None
     pid = None
     contexts = None
+    proc_stat = None
 
     def __init__(self, state, pid, contexts):
         self.state = state
