@@ -940,6 +940,14 @@ class DamonCtx:
 def target_has_pid(ops):
     return ops in ['vaddr', 'fvaddr']
 
+class ProcStat:
+    fields = None
+
+    def __init__(self, pid):
+        file_path = 'proc/%s/stat' % pid
+        with open(file_path, 'r') as f:
+            self.fields = f.read().split()
+
 class Kdamond:
     state = None
     pid = None
