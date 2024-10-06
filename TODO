@@ -41,8 +41,7 @@
         exists
     - allow report repeating
     - deprecate monitor
-- Record DAMON status
-- Report DAMON status
+- Add 'damo status' full features to 'damo report kdamonds'
 - Deprecate 'damo status'
 - Implement single report formatter
   - Extend 'report access' format arguments for wss, memfootprint, etc
