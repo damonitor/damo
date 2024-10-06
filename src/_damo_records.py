@@ -988,6 +988,11 @@ class RecordingHandle:
         self.timeout = timeout
 
 def start_recording(handle):
+    kdamonds_file_path = '%s.kdamonds' % handle.file_path
+    with open(kdamonds_file_path, 'w') as f:
+        json.dump([k.to_kvpairs() for k in handle.kdamonds], f, indent=4)
+    os.chmod(kdamonds_file_path, handle.file_permission)
+
     if handle.tracepoint is not None:
         handle.perf_pipe = subprocess.Popen(
                 [PERF, 'record', '-a', '-e', handle.tracepoint,
