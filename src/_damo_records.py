@@ -779,34 +779,30 @@ def load_proc_vmas(filepath):
     return [ProcVmasSnapshot.from_kvpairs(x) for x in kvpairs]
 
 class ProcStat:
-    pid = None
-    stat_fields = None
+    fields = None
 
     def __init__(self, pid):
         if pid is None:
             return
         try:
             with open('/proc/%s/stat' % pid, 'r') as f:
-                self.stat_fields = f.read().split()
-                self.pid = pid
+                self.fields = f.read().split()
         except Exception:
             # the process may finished already
             pass
 
     def to_kvpairs(self):
         return {
-                'pid': self.pid,
-                'stat_fields': self.stat_fields,
+                'fields': self.fields,
                 }
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
         self = cls(None)
-        self.pid = kvpairs['pid']
-        self.stat_fields = kvpairs['stat_fields']
+        self.fields = kvpairs['fields']
 
     def __str__(self):
-        if self.pid is None:
+        if self.fields is None:
             return 'uninitialized'
         # from Documentation/filesystesm/proc.rst of Linux source tree
         field_names = ['pid', 'tcomm', 'state', 'ppid', 'pgrp', 'sid',
@@ -820,9 +816,9 @@ class ProcStat:
                        'blkio_ticks', 'gtime', 'cgtime', 'start_data',
                        'end_data', 'start_brk', 'arg_start', 'arg_end',
                        'env_start', 'env_end', 'exit_code']
-        lines = ['pid': self.pid]
+        lines = []
         for idx, field_name in enumerate(field_names):
-            lines.append('%s: %s' % (field_name, self.stat_fields[idx]))
+            lines.append('%s: %s' % (field_name, self.fields[idx]))
         return '\n'.join(lines)
 
 class ProcStatsSnapshot:
