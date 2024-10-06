@@ -805,6 +805,26 @@ class ProcStat:
         self.pid = kvpairs['pid']
         self.stat_fields = kvpairs['stat_fields']
 
+    def __str__(self):
+        if self.pid is None:
+            return 'uninitialized'
+        # from Documentation/filesystesm/proc.rst of Linux source tree
+        field_names = ['pid', 'tcomm', 'state', 'ppid', 'pgrp', 'sid',
+                       'tty_nr', 'tty_pgrp', 'flags', 'min_flt', 'cmin_flt',
+                       'maj_flt', 'cmaj_flt', 'utime', 'stime', 'cutime',
+                       'cstime', 'priority', 'nice', 'num_threads',
+                       'it_real_value', 'start_time', 'vsize', 'rss', 'rsslim',
+                       'start_code', 'end_code', 'start_stack', 'esp', 'eip',
+                       'pending', 'blocked', 'sigign', 'sigcatch', '0', '0',
+                       '0', 'exit_signal', 'task_cpu', 'rt_priority', 'policy',
+                       'blkio_ticks', 'gtime', 'cgtime', 'start_data',
+                       'end_data', 'start_brk', 'arg_start', 'arg_end',
+                       'env_start', 'env_end', 'exit_code']
+        lines = ['pid': self.pid]
+        for idx, field_name in enumerate(field_names):
+            lines.append('%s: %s' % (field_name, self.stat_fields[idx]))
+        return '\n'.join(lines)
+
 class ProcStatsSnapshot:
     time = None
     proc_stats = None
