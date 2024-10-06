@@ -780,22 +780,15 @@ def load_proc_vmas(filepath):
 
 class ProcStat:
     pid = None
-    tcomm = None
-    state = None
-    utime = None
-    stime = None
+    stat_fields = None
 
     def __init__(self, pid):
         if pid is None:
             return
         try:
             with open('/proc/%s/stat' % pid, 'r') as f:
-                fields = f.read().split()
+                self.stat_fields = f.read().split()
                 self.pid = pid
-                self.tcomm = fields[1]
-                self.state = fields[2]
-                self.utime = fields[13]
-                self.stime = fields[14]
         except Exception:
             # the process may finished already
             pass
@@ -803,20 +796,14 @@ class ProcStat:
     def to_kvpairs(self):
         return {
                 'pid': self.pid,
-                'tcomm': self.tcomm,
-                'state': self.state,
-                'utime': self.utime,
-                'stime': self.stime,
+                'stat_fields': self.stat_fields,
                 }
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
         self = cls(None)
         self.pid = kvpairs['pid']
-        self.tcomm = kvpairs['tcomm']
-        self.state = kvpairs['state']
-        self.utime = kvpairs['utime']
-        self.stime = kvpairs['stime']
+        self.stat_fields = kvpairs['stat_fields']
 
 class ProcStatsSnapshot:
     time = None
