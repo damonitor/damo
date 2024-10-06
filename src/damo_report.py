@@ -7,6 +7,7 @@ import damo_nr_regions
 import damo_report_access
 import damo_report_footprint
 import damo_report_holistic
+import damo_report_kdamonds
 import damo_report_profile
 import damo_report_raw
 import damo_report_times
@@ -35,6 +36,9 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(
             name='holistic', module=damo_report_holistic,
             msg='holistic report'),
+        _damo_subcmds.DamoSubCmd(
+            name='kdamonds', module=damo_report_kdamonds,
+            msg='current or recorded kdamonds'),
         ]
 
 def main(args):
