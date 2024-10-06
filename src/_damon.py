@@ -940,54 +940,10 @@ class DamonCtx:
 def target_has_pid(ops):
     return ops in ['vaddr', 'fvaddr']
 
-class ProcStat:
-    fields = None
-
-    def __init__(self, pid):
-        if pid is None:
-            return
-        file_path = '/proc/%s/stat' % pid
-        with open(file_path, 'r') as f:
-            self.fields = f.read().split()
-
-    def __str__(self):
-        # from Documentation/filesystesm/proc.rst of Linux source tree
-        field_names = ['pid', 'tcomm', 'state', 'ppid', 'pgrp', 'sid',
-                       'tty_nr', 'tty_pgrp', 'flags', 'min_flt', 'cmin_flt',
-                       'maj_flt', 'cmaj_flt', 'utime', 'stime', 'cutime',
-                       'cstime', 'priority', 'nice', 'num_threads',
-                       'it_real_value', 'start_time', 'vsize', 'rss', 'rsslim',
-                       'start_code', 'end_code', 'start_stack', 'esp', 'eip',
-                       'pending', 'blocked', 'sigign', 'sigcatch', '0', '0',
-                       '0', 'exit_signal', 'task_cpu', 'rt_priority', 'policy',
-                       'blkio_ticks', 'gtime', 'cgtime', 'start_data',
-                       'end_data', 'start_brk', 'arg_start', 'arg_end',
-                       'env_start', 'env_end', 'exit_code']
-        lines = []
-        for idx, field_name in enumerate(field_names):
-            lines.append('%s: %s' % (field_name, self.fields[idx]))
-        return '\n'.join(lines)
-
-    def to_kvpairs(self):
-        return self.fields
-
-    @classmethod
-    def from_kvpairs(cls, kvpairs):
-        self = cls(None)
-        self.fields = kvpairs
-
 class Kdamond:
     state = None
     pid = None
     contexts = None
-    proc_stat = None
-
-    def update_proc_stat(self):
-        try:
-            self.proc_stat = ProcStat(self.pid)
-        except Exception as e:
-            return 'reading stat failed (%s)' % e
-        return None
 
     def __init__(self, state, pid, contexts):
         self.state = state
@@ -1025,26 +981,7 @@ class Kdamond:
             res = subprocess.check_output(['ps', '-p', self.pid, '-o', '%cpu'], text=True)
             return res.split("\n")[1].strip()
         except:
-            pass
-        try:
-            jiffies_per_sec = float(subprocess.check_output(
-                ['getconf', 'CLK_TCK']).decode())
-        except Exception as e:
-            return 'reading HZ failed (%s)' % e
-
-        err = self.update_proc_stat()
-        if err is not None:
-            return 'getting proc stat failed (%s)' % err
-        utime = float(self.proc_stat.fields[13]) / jiffies_per_sec
-        stime = float(self.proc_stat.fields[14]) / jiffies_per_sec
-        start_time = int(self.proc_stat.fields[21]) / jiffies_per_sec
-        try:
-            with open('/proc/uptime', 'r') as f:
-                uptime = float(f.read().split()[0])
-        except Exception as e:
-            return 'reading /proc/uptime failed (%s)' % e
-        elapsed_time = uptime - start_time
-        return '%.2f' % ((utime + stime) * 100 / elapsed_time)
+            return 'error'
 
     @classmethod
     def from_kvpairs(cls, kv):
