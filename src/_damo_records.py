@@ -931,6 +931,31 @@ def poll_target_pids(kdamonds):
     return False
 
 class RecordingHandle:
+    '''
+    Specifies the recording request.  The recording can be started by
+    start_recording(), and finished by finish_recording().
+
+    As a result of the two function calls, below files can be generated.
+
+    - f'{handle.file_path}.kdamonds'
+      - Given Kdamonds for the recording.  Have a json list of Kdamond kvpair
+        objects.
+    f'{handle.file_path}'
+      - The DAMON monitoring results.  Have a json list of DamonRecord kvpair
+        objects.  Each DamonRecord is for each target or scheme of the kdamond.
+    f'{handle.file_path}.profile'
+      - 'perf record' output file.
+    f'{handle.file_path}.mem_footprint'
+      - System and monitoring target process memory footprints.  Have a json
+        list of MemFootprintsSnapshot kvpair objects.
+    f'{handle.file_path}.vmas'
+      - Monitoring target process memory mappings.  Have a json list of
+        ProcVmaSnapshot kvpair objects.
+    f'{handle.file_path}.proc_stats'
+      - Kdamonds and monitoring target processes /proc/PID/stat contents.  Have
+        a json list of ProcStatsSnapshot kvpair objects.
+    '''
+
     file_path = None
     file_format = None
     file_permission = None
