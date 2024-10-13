@@ -48,7 +48,7 @@ pattern of your workload.
     $ sudo damo start $(pidof <your workload>)
     $ sudo damo report access
     $ sudo damo record ongoing
-    $ sudo damo report heats --heatmap stdout --stdout_heatmap_color emotion
+    $ sudo damo report heatmaps --heatmap stdout --stdout_colorset emotion
 
 The second and last commands will show the access pattern of your workload,
 like below:
@@ -168,7 +168,7 @@ Visualizing Recorded Patterns
 Below three commands visualize the recorded access patterns into three
 image files.
 
-    $ damo report heats --heatmap stdout
+    $ damo report heatmap
     $ damo report wss --range 0 101 1
     $ damo report wss --range 0 101 1 --sortby time --plot
 
