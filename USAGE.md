@@ -86,7 +86,8 @@ commands can be categorized as below:
 - For snapshot and visualization of DAMON's monitoring results and running
   status
   - `show`, and `status` are included
-- For recording the access monitoring results and utilizing the records
+- For recording, snapshot, visualization and utilization of the access
+  monitoring results and additional data
   - `record`, `report` and `replay` are included
 - For more convenient use of `damo`
   - `version` and `args` are included
@@ -413,8 +414,8 @@ The command exits immediately after showing the current status.  It exits with
 exit value `0` if it successfully retrieved and shown the status of DAMON.
 Otherwise, the exit value will be non-zero.
 
-For recording the access monitoring results and visualizing those
-=================================================================
+For Recording, Snapshot, and Visualization of Data
+==================================================
 
 `damo show` shows only a snapshot.  Since it contains the `age` of each region,
 it can be useful enough for online profiling or debugging.  For detailed
