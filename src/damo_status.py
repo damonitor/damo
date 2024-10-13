@@ -77,8 +77,14 @@ def update_pr_schemes_stats(json_format, raw_nr, damos_stat_fields):
         if len(stats) > 1:
             print()
 
-def pr_kdamonds_summary(json_format, raw_nr, show_cpu):
-    kdamonds = _damon.current_kdamonds()
+def pr_kdamonds_summary(input_file, json_format, raw_nr, show_cpu):
+    if input_file is None:
+        kdamonds = _damon.current_kdamonds()
+    else:
+        kdamonds, err = read_kdamonds_from_file(input_file)
+        if err is None:
+            print(err)
+            exit(1)
     summary = [k.summary_str(show_cpu) for k in kdamonds]
     if json_format:
         print(json.dumps(summary, indent=4))
@@ -105,7 +111,8 @@ def main(args):
         return pr_damon_parameters(args.input_file, args.json, args.raw)
 
     if args.kdamonds_summary:
-        return pr_kdamonds_summary(args.json, args.raw, args.show_cpu_usage)
+        return pr_kdamonds_summary(args.input_file, args.json, args.raw,
+                                   args.show_cpu_usage)
 
     if args.damos_stats:
         return update_pr_schemes_stats(args.json, args.raw,
