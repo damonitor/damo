@@ -40,12 +40,19 @@ def pr_damon_parameters(input_file, json_format, raw_nr):
 
     pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu=False)
 
-def update_pr_schemes_stats(json_format, raw_nr, damos_stat_fields):
-    err = _damon.update_schemes_stats()
-    if err:
-        print(err)
-        return
-    kdamonds = _damon.current_kdamonds()
+def update_pr_schemes_stats(input_file, json_format, raw_nr,
+                            damos_stat_fields):
+    if input_file is None:
+        err = _damon.update_schemes_stats()
+        if err:
+            print(err)
+            return
+        kdamonds = _damon.current_kdamonds()
+    else:
+        kdamonds, err = read_kdamonds_from_file(input_file)
+        if err is not None:
+            print(err)
+            exit(1)
 
     stats = []
     for kd_idx, kdamond in enumerate(kdamonds):
@@ -115,8 +122,8 @@ def main(args):
                                    args.show_cpu_usage)
 
     if args.damos_stats:
-        return update_pr_schemes_stats(args.json, args.raw,
-                args.damos_stat_fields)
+        return update_pr_schemes_stats(args.input_file, args.json, args.raw,
+                                       args.damos_stat_fields)
 
     kdamonds, err = _damon.update_read_kdamonds(
             nr_retries=5, update_stats=True, update_tried_regions=True,
