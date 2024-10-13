@@ -13,8 +13,25 @@ import _damo_fmt_str
 import _damon
 import _damon_args
 
-def pr_damon_parameters(json_format, raw_nr):
-    kdamonds = _damon.current_kdamonds()
+def read_kdamonds_from_file(input_file):
+    # returns read kdamonds and error
+    try:
+        with open(input_file, 'r') as f:
+            kdamonds = [_damon.Kdamond.from_kvpairs(kvp)
+                        for kvp in json.load(f)]
+    except Exception as e:
+        return None, 'reading %s failed (%s)' % (input_file, e)
+    return kdamonds, None
+
+def pr_damon_parameters(input_file, json_format, raw_nr):
+    if input_file is None:
+        kdamonds = _damon.current_kdamonds()
+    else:
+        kdamonds, err = read_kdamonds_from_file(input_file)
+        if err is not None:
+            print(err)
+            exit(1)
+
     for k in kdamonds:
         for c in k.contexts:
             for s in c.schemes:
@@ -61,7 +78,6 @@ def update_pr_schemes_stats(json_format, raw_nr, damos_stat_fields):
             print()
 
 def pr_kdamonds_summary(json_format, raw_nr, show_cpu):
-    kdamonds = _damon.current_kdamonds()
     summary = [k.summary_str(show_cpu) for k in kdamonds]
     if json_format:
         print(json.dumps(summary, indent=4))
@@ -85,7 +101,7 @@ def main(args):
     err = _damon.read_feature_supports_file()
 
     if args.damon_params:
-        return pr_damon_parameters(args.json, args.raw)
+        return pr_damon_parameters(args.input_file, args.json, args.raw)
 
     if args.kdamonds_summary:
         return pr_kdamonds_summary(args.json, args.raw, args.show_cpu_usage)
