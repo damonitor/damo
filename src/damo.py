@@ -60,7 +60,7 @@ subcmds = [
         # For convenient use of damo and DAMON
         _damo_subcmds.DamoSubCmd(name='args',
             module=damo_args,
-            msg='(EXPERIMENTAL) generate complex arguments for other commands'),
+            msg='generate complex arguments for other commands'),
         _damo_subcmds.DamoSubCmd(name='version',
             module=_damo_subcmds.DamoSubCmdModule(None, pr_damo_version),
             msg='print the version number'),
