@@ -125,12 +125,18 @@ def main(args):
         return update_pr_schemes_stats(args.input_file, args.json, args.raw,
                                        args.damos_stat_fields)
 
-    kdamonds, err = _damon.update_read_kdamonds(
-            nr_retries=5, update_stats=True, update_tried_regions=True,
-            update_quota_effective_bytes=True)
-    if err != None:
-        print('cannot update and read kdamonds: %s' % err)
-        exit(1)
+    if args.input_file is None:
+        kdamonds, err = _damon.update_read_kdamonds(
+                nr_retries=5, update_stats=True, update_tried_regions=True,
+                update_quota_effective_bytes=True)
+        if err != None:
+            print('cannot update and read kdamonds: %s' % err)
+            exit(1)
+    else:
+        kdamonds, err = read_kdamonds_from_file(args.input_file)
+        if err is not None:
+            print(err)
+            exit(1)
     pr_kdamonds(kdamonds, args.json, args.raw, args.show_cpu_usage)
 
 def set_argparser(parser):
