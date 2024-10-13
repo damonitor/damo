@@ -119,5 +119,10 @@ def set_argparser(parser):
             help='DAMOS stat fields to print')
     parser.add_argument('--damon_params', action='store_true',
             help='print entered DAMON parameters only')
+    parser.add_argument(
+            '--input_file', metavar='<file>', help=' '.join([
+                'A json file containing the status of kdamonds to show.',
+                'If this is not given, capture and show status of',
+                'current kdamonds.']))
     _damon_args.set_common_argparser(parser)
     return parser
