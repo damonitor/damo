@@ -89,7 +89,7 @@ commands can be categorized as below:
 - For recording the access monitoring results and utilizing the records
   - `record`, `report` and `replay` are included
 - For more convenient use of `damo`
-  - `version` and `fmt_json` are included
+  - `version` and `args` are included
 
 Every subcommand also provides `--help` option, which shows the basic usage of
 it.  Below sections introduce more details about the major subcommands.
@@ -157,8 +157,8 @@ memory address spaces monitoring case.
 
 Users can specify full DAMON parameters at once.  Refer to "Full DAMON
 Parameters Update" [section](#full-damon-parameters-update) below for the
-detail of the concept, and "`damo fmt_json`" [section](#damo-fmt_json) below
-for the format of the input.
+detail of the concept, and "`damo args damon`" [section](#damo-args-damon)
+below for the format of the input.
 
 ### Partial DAMON Parameters Update
 
@@ -204,10 +204,10 @@ parameters in `json` or `yaml` format.  Either a string of the format, or a
 path to a file containing the string can be passed to the option.  Then, `damo`
 starts DAMON with the specification.
 
-For the full DAMON parameters input format, please refer to `damo fmt_json`
-[documentation](#damo-fmt_json) below, or simply try the command.  The
+For the full DAMON parameters input format, please refer to `damo args damon`
+[documentation](#damo-args-damon) below, or simply try the command.  The
 `--kdamonds` option keyword can also simply omitted because the full DAMON
-parameters input can used as is for the `deducible target` (refer to "Simple
+parameters input can be used as is for the `deducible target` (refer to "Simple
 Target Argument" [section](#simple-target-argument) above).
 
 Note that multiple DAMON contexts per kdamond is not supported as of
@@ -913,7 +913,7 @@ time of the release.  Later one would have more features and bug fixes.
 `damo fmt_json`
 ---------------
 
-Note: This command will be deprecated by 2024-11.  Use
+Note: This command will be _deprecated_ by 2024-11.  Use
 `damo args damon --format json` instead.  Please report your usecase to GitHub
 [issues](https://github.com/damonitor/damo/issues), sj@kernel.org,
 damon@lists.linux.dev and/or linux-mm@kvack.org if you depend on this command.
