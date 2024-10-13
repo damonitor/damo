@@ -140,7 +140,6 @@ def main(args):
     pr_kdamonds(kdamonds, args.json, args.raw, args.show_cpu_usage)
 
 def set_argparser(parser):
-    parser.description = 'Show status of kdamonds'
     parser.add_argument('--json', action='store_true', default=False,
             help='print output in json format')
     parser.add_argument('--raw', action='store_true', default=False,
