@@ -78,6 +78,7 @@ def update_pr_schemes_stats(json_format, raw_nr, damos_stat_fields):
             print()
 
 def pr_kdamonds_summary(json_format, raw_nr, show_cpu):
+    kdamonds = _damon.current_kdamonds()
     summary = [k.summary_str(show_cpu) for k in kdamonds]
     if json_format:
         print(json.dumps(summary, indent=4))
