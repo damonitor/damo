@@ -46,7 +46,7 @@ pattern of your workload.
     $ # install damo using packaging systems listed above,
     $ # or cloning the source repo and updating $PATH.
     $ sudo damo start $(pidof <your workload>)
-    $ sudo damo show
+    $ sudo damo report access
     $ sudo damo record ongoing
     $ sudo damo report heats --heatmap stdout --stdout_heatmap_color emotion
 
@@ -133,7 +133,7 @@ every second.
     $ git clone https://github.com/sjp38/masim
     $ cd masim; make; ./masim ./configs/zigzag.cfg --silent &
     $ sudo damo start --target_pid $(pidof masim)
-    $ while :; do sudo damo show; sleep 1; done
+    $ while :; do sudo damo report access; sleep 1; done
 
 The first two lines of the commands get an artificial memory access generator
 program and run it in the background.  It will repeatedly access two 100
