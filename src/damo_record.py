@@ -179,5 +179,4 @@ def set_argparser(parser):
                         type=float, help='record accesses as snapshots')
     parser.add_argument('--timeout', type=float, metavar='<seconds>',
                         help='stop recording after the given seconds')
-    parser.description = 'Record monitoring results'
     return parser

@@ -45,9 +45,9 @@ subcmds = [
 
         # DAMON result recording and reporting/replaying
         _damo_subcmds.DamoSubCmd(name='record', module=damo_record,
-            msg='record data accesses'),
+            msg='record data accesses and additional information'),
         _damo_subcmds.DamoSubCmd(name='report', module=damo_report,
-            msg='report the recorded data accesses in the specified form'),
+            msg='visualize the \'record\'-generated or snapshot data'),
         _damo_subcmds.DamoSubCmd(name='replay', module=damo_replay,
             msg='replay the recorded data accesses'),
 
