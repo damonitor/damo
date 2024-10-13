@@ -86,9 +86,9 @@ commands can be categorized as below:
 - For snapshot and visualization of DAMON's monitoring results and running
   status
   - `show`, and `status` are included
-- For recording, snapshot, visualization and utilization of the access
-  monitoring results and additional data
-  - `record`, `report` and `replay` are included
+- For recording, snapshot, and visualization of the access monitoring results
+  and additional data
+  - `record` and `report` are included
 - For more convenient use of `damo`
   - `version` and `args` are included
 
@@ -424,8 +424,8 @@ results and analyzing the record could be more helpful.  In this case, the
 `record` would same to that for `damo show`, but simply contains multiple
 `snapshot`s.
 
-`damo record` (Recording Data Access Pattern)
----------------------------------------------
+`damo record`
+-------------
 
 `damo record` records the data access pattern of target workloads in a file
 (`./damon.data` by default).  The path to the file can be set with `--out`
@@ -510,8 +510,8 @@ to the access pattern record file (specified by `--out` option of `damo
 record`) except having `.proc_stats` suffix.  Hence, `damon.data.proc_stats` is
 the default name of the CPU usage information.
 
-`damo report` (Visualizing Recorded Data Access Pattern)
---------------------------------------------------------
+`damo report`
+-------------
 
 `damo report` reads a data access pattern record file (if not explicitly
 specified using ``-i`` option, reads ``./damon.data`` file by default) and
@@ -833,26 +833,6 @@ percentile               0              25              50              75      
      0.03%  ps               [kernel.vmlinux]                       [k] __memcg_slab_post_alloc_hook
 ```
 
-`damo replay` (Replay Recorded Data Access Pattern)
----------------------------------------------------
-
-Note: This feature is an experimental one.  Some changes could be made, or the
-support can be dropped in future.
-
-`damo replay` receives a `damo record`-generated data access pattern record
-file that specified via command line argument (`./damon.data` by default).
-Then, the command reproduces the recorded accesses in the file by making
-articial memory accesses.  This could be useful for some types of system
-analysis or experiments with real-world memory access pattern.
-
-Note that current implementation of `damo replay` runs on Python with single
-thread.  Hence it might not performant enough to saturate full memory bandwidth
-of the system.  If the record is made by workloads and/or systems that utilize
-memory bandwidth more than 'damo replay' and/or replaying systems could, and as
-the difference of the performance is big, the replayed accesses would be less
-similar to the original one.  To show the real memory access performance of
-`damo replay` on specific system, users could use `--test_perf` option.
-
 Miscellaneous Helper Commands
 =============================
 
@@ -910,6 +890,26 @@ helpful.
 is constructed with three numbers.  `damo` is doing chronological release
 (about once per week), so the version number means nothing but the relative
 time of the release.  Later one would have more features and bug fixes.
+
+`damo replay` (Replay Recorded Data Access Pattern)
+---------------------------------------------------
+
+Note: This feature is an experimental one.  Some changes could be made, or the
+support can be dropped in future.
+
+`damo replay` receives a `damo record`-generated data access pattern record
+file that specified via command line argument (`./damon.data` by default).
+Then, the command reproduces the recorded accesses in the file by making
+articial memory accesses.  This could be useful for some types of system
+analysis or experiments with real-world memory access pattern.
+
+Note that current implementation of `damo replay` runs on Python with single
+thread.  Hence it might not performant enough to saturate full memory bandwidth
+of the system.  If the record is made by workloads and/or systems that utilize
+memory bandwidth more than 'damo replay' and/or replaying systems could, and as
+the difference of the performance is big, the replayed accesses would be less
+similar to the original one.  To show the real memory access performance of
+`damo replay` on specific system, users could use `--test_perf` option.
 
 `damo fmt_json`
 ---------------
