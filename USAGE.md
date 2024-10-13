@@ -51,19 +51,28 @@ DAMON users.
 Install
 =======
 
-You can install `damo` via the official Python packages system, PyPi:
+Using Packaging Systems
+-----------------------
+
+There are a number of packaging systems including PyPi that supports `damo`.
+For example, below can be used if you want to install `damo` via PyPi.
 
     $ sudo pip3 install damo
 
-Or, you can use your distribution's package manager if available.  Refer to
-below [repology](https://repology.org/project/damo) data to show the packaging
-status of `damo` for each distribution.
+Note that PyPi is just one of the options.  Refer to below
+[repology](https://repology.org/project/damo) data to show the packaging status
+of `damo` for each distribution.
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/damo.svg)](https://repology.org/project/damo/versions)
 
-If none of above options work for you, you can simply download the source code
-and use `damo` file at the root of the source tree.  Optionally, you could add
-the path to the source code directory to your `$PATH`.
+Using Source Code
+-----------------
+
+Simply downloading the source code and using `damo` file at the root of the
+source tree is also a completely supported method for `damo` installation.  It
+would be preferred if you want to participate in `damo` development.  In the
+case, you could add the path to the source tree to your `$PATH` for
+convenience.
 
 Overview
 ========
