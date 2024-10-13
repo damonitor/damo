@@ -14,31 +14,32 @@ import damo_report_times
 import damo_wss
 
 subcmds = [
-        _damo_subcmds.DamoSubCmd(name='raw', module=damo_report_raw,
-            msg='human readable raw data of access patterns'),
+        _damo_subcmds.DamoSubCmd(
+            name='kdamonds', module=damo_report_kdamonds,
+            msg='current or recorded kdamonds'),
+        _damo_subcmds.DamoSubCmd(
+            name='holistic', module=damo_report_holistic,
+            msg='holistic report'),
         _damo_subcmds.DamoSubCmd(name='access', module=damo_report_access,
             msg='access patterns'),
         _damo_subcmds.DamoSubCmd(name='heatmap', module=damo_heatmap,
             msg='heatmap of access patterns'),
-        _damo_subcmds.DamoSubCmd(name='heats', module=damo_heats,
-            msg='heats of regions'),
         _damo_subcmds.DamoSubCmd(name='wss', module=damo_wss,
             msg='working set size'),
-        _damo_subcmds.DamoSubCmd(name='nr_regions', module=damo_nr_regions,
-            msg='number of DAMON-regions'),
+        _damo_subcmds.DamoSubCmd(
+            name='footprints', module=damo_report_footprint,
+            msg='memory footprints'),
         _damo_subcmds.DamoSubCmd(name='profile', module=damo_report_profile,
             msg='hotspots for specific access pattern'),
         _damo_subcmds.DamoSubCmd(name='times', module=damo_report_times,
             msg='times of record having specific access pattern'),
-        _damo_subcmds.DamoSubCmd(
-            name='footprints', module=damo_report_footprint,
-            msg='memory footprints'),
-        _damo_subcmds.DamoSubCmd(
-            name='holistic', module=damo_report_holistic,
-            msg='holistic report'),
-        _damo_subcmds.DamoSubCmd(
-            name='kdamonds', module=damo_report_kdamonds,
-            msg='current or recorded kdamonds'),
+
+        _damo_subcmds.DamoSubCmd(name='raw', module=damo_report_raw,
+            msg='human readable raw data of access patterns'),
+        _damo_subcmds.DamoSubCmd(name='heats', module=damo_heats,
+            msg='heats of regions'),
+        _damo_subcmds.DamoSubCmd(name='nr_regions', module=damo_nr_regions,
+            msg='number of DAMON-regions'),
         ]
 
 def main(args):
