@@ -863,13 +863,13 @@ useful for some cases.
 `damo args`
 -----------
 
-Some commands including `damo start` and `damo show` have long lists of command
-line options.  Those makes flexible usage of `damo`, but makes the help message
-too verbose.  For easy handling of such arguments, `damo args` receives such
-command line options and outputs compiled parameters.  The output is in a
-format like json, which users can read and modify using dedicatd editors.  The
-output can also be passed to relevant commands instead of the command line
-options.
+Some commands including `damo start` and `damo report access` have long lists
+of command line options.  Those makes flexible usage of `damo`, but makes the
+help message too verbose.  For easy handling of such arguments, `damo args`
+receives such command line options and outputs compiled parameters.  The output
+is in a format like json, which users can read and modify using dedicated
+editors, and easily maintain as files.  The output can also be passed to
+relevant commands instead of the command line options.
 
 ### `damo args damon`
 
@@ -883,7 +883,7 @@ or yaml input easier, `damo args damon` receives the partial DMAON/DAMOS
 parameters setup options and print out resulting json format Kdamond
 parameters.  For example,
 
-    # damo args damon --damos_action stat
+    # damo args damon --damos_action stat --format json
 
 prints json format DAMON parameters specification that will be result in a
 DAMON configuration that same to one that can be made with `damo start
