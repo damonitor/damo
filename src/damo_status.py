@@ -38,7 +38,7 @@ def pr_damon_parameters(input_file, json_format, raw_nr):
                 s.stats = None
                 s.tried_regions = None
 
-    pr_kdamonds(kdamonds, json_format, raw_nr)
+    pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu=False)
 
 def update_pr_schemes_stats(json_format, raw_nr, damos_stat_fields):
     err = _damon.update_schemes_stats()
