@@ -58,12 +58,15 @@ subcmds = [
             msg='control DAMON_LRU_SORT'),
 
         # For convenient use of damo and DAMON
+        _damo_subcmds.DamoSubCmd(name='args',
+            module=damo_args,
+            msg='(EXPERIMENTAL) generate complex arguments for other commands'),
         _damo_subcmds.DamoSubCmd(name='version',
             module=_damo_subcmds.DamoSubCmdModule(None, pr_damo_version),
             msg='print the version number'),
         _damo_subcmds.DamoSubCmd(name='fmt_json', module=damo_fmt_json,
             msg=' '.join(
-                ['(WILL BE DEPRECATED)',
+                ['(WILL BE DEPRECATED in favor of \'args\' command)',
                  'convert damo-start cmdline option to DAMON json input'])),
         _damo_subcmds.DamoSubCmd(name='schemes', module=damo_schemes,
             msg='apply operation schemes'),
@@ -84,9 +87,6 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='diagnose',
             module=damo_diagnose,
             msg='generate a report on if DAMON is malfunctioning'),
-        _damo_subcmds.DamoSubCmd(name='args',
-            module=damo_args,
-            msg='(EXPERIMENTAL) generate complex arguments for other commands'),
 
         # DAMON result/status snapshot
         _damo_subcmds.DamoSubCmd(name='show', module=damo_show,
