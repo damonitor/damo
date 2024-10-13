@@ -27,24 +27,12 @@
   - add option to add snapshot as (optional) alternate of heatmap
 - Show temperature histogram on holistic report
 - heatmap: Support interactive zoom in/out/scrolling
-- extend/unify common workflow commands
-  - args: Format complext command arguments like DAMON parameters in json and
-    snapshot formatter
-  - extend record/report, deprecate show and status.
-    - extend record for snapshot capturing (done: --snapshot)
-      - damo record --snapshot <delay> <count> (done)
-    - extend report to do record
-      - damo report --input record <deductible target> <timeout>
-      - damo report --input snapshot <delay> <count>
-      - If --input is not given, and a kdamond is running, snapshot once
-      - If --input is not given, no kdamond is running, use damon.data if
-        exists
-    - allow report repeating
-    - deprecate monitor
 - Implement single report formatter
   - Extend 'report access' format arguments for wss, memfootprint, etc
 - Provide virtual memory mapping information
   - shows when what virtual address has mappend and unmapped
+- Document record --snapshot
+- Document report access and kdamonds
 
 - Deprecate old features
   - Deprecate 'damo status'
