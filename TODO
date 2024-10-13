@@ -41,14 +41,14 @@
         exists
     - allow report repeating
     - deprecate monitor
-- Add 'damo status' full features to 'damo report kdamonds'
-- Deprecate 'damo status'
 - Implement single report formatter
   - Extend 'report access' format arguments for wss, memfootprint, etc
 - Provide virtual memory mapping information
   - shows when what virtual address has mappend and unmapped
 
 - Deprecate old features
+  - Deprecate 'damo status'
+  - Deprecate 'damo show'
   - Deprecate fmt_json in favor of 'args damon'
     - notified as will-be-deprecated by 2024-11
   - Deprecate heats report type in favor of heatmap report type
