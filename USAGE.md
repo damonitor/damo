@@ -883,7 +883,7 @@ or yaml input easier, `damo args damon` receives the partial DMAON/DAMOS
 parameters setup options and print out resulting json format Kdamond
 parameters.  For example,
 
-    # damo args json --damos_action stat
+    # damo args damon --damos_action stat
 
 prints json format DAMON parameters specification that will be result in a
 DAMON configuration that same to one that can be made with `damo start
