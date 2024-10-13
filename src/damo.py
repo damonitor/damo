@@ -43,13 +43,6 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='stop', module=damo_stop,
             msg='stop running DAMON'),
 
-        # DAMON result/status snapshot
-        _damo_subcmds.DamoSubCmd(name='show', module=damo_show,
-            msg='show monitored access pattern'),
-        _damo_subcmds.DamoSubCmd(name='status',
-            module=damo_status,
-            msg='show DAMON status'),
-
         # DAMON result recording and reporting/replaying
         _damo_subcmds.DamoSubCmd(name='record', module=damo_record,
             msg='record data accesses'),
@@ -93,7 +86,14 @@ subcmds = [
             msg='generate a report on if DAMON is malfunctioning'),
         _damo_subcmds.DamoSubCmd(name='args',
             module=damo_args,
-            msg='(EXPERIMENTAL) generate complex arguments for other commands')
+            msg='(EXPERIMENTAL) generate complex arguments for other commands'),
+
+        # DAMON result/status snapshot
+        _damo_subcmds.DamoSubCmd(name='show', module=damo_show,
+            msg='show monitored access pattern'),
+        _damo_subcmds.DamoSubCmd(name='status',
+            module=damo_status,
+            msg='show DAMON status'),
 
         ]
 
