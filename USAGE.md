@@ -417,12 +417,25 @@ Otherwise, the exit value will be non-zero.
 For Recording, Snapshot, and Visualization of Data
 ==================================================
 
-`damo show` shows only a snapshot.  Since it contains the `age` of each region,
-it can be useful enough for online profiling or debugging.  For detailed
-offline profiling or debugging, though, recording every changing monitoring
-results and analyzing the record could be more helpful.  In this case, the
-`record` would same to that for `damo show`, but simply contains multiple
-`snapshot`s.
+There are two major DAMON usages.  Automated access-aware system operation, and
+profiling.
+
+Automated access-aware system operation specifies what kind of access-aware
+system operation the users want to do, and ask DAMON to do that on its own.
+That is, using DAMON-based Operation Schemes, aka
+[DAMOS](https://www.kernel.org/doc/html/latest/mm/damon/design.html#operation-schemes).
+`damo` users can do this via `damo start` or `damo tune` with DAMOS parameter
+options.
+
+The second major usage of DAMON is profiling.  In this usage, users retrieve
+DAMON's access monitoring results, visualize it, and better understand the
+behavior of the system and workloads.  With the understanding, users could
+further make profiling-guided optimizations.  Utilizing not only DAMON's
+monitoring results but also some additional information can make it more
+powerful.  Status of DAMON, memory footages, CPU usage, and hot code paths of
+system and processes could be such example.  `damo` provides two commands for
+retrieving such data as snapshots or record of full snapshots, and visualizing
+those.
 
 `damo record`
 -------------
