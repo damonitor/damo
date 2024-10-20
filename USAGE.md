@@ -672,6 +672,12 @@ biggest union in ``--guide`` output and set the boundary in it.
 
 ### `damo report heats`
 
+`damo report heats` will be deprecated by 2025-01-20, in favor of [`damo report
+heatmap`](#damo-report-heatmap).  `damo report heatmap` can replace all usages
+of `damo report heats'.  Please refer to
+[FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
+more details.
+
 The `raw` output is very detailed but hard to manually read.  `heats`
 sub-subcommand plots the data in 3-dimensional form, which represents the time
 in x-axis, address of regions in y-axis, and the access frequency in z-axis.
