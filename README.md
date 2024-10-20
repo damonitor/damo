@@ -79,13 +79,6 @@ Nothing at all but indicate which version is more fresh.  A higher version
 number means it is more recently released.
 
 
-How can I participate in the development of `damo`?
----------------------------------------------------
-
-Please refer to
-[CONTRIBUTING](https://github.com/damonitor/damo/blob/next/CONTRIBUTING) file.
-
-
 Will the features of `damo` be supported forever?
 -------------------------------------------------
 
@@ -102,6 +95,13 @@ Detailed features deprecation process is documented at
 [FEATURES_DEPRECATION_PROCESS.md](FEATURES_DEPRECATION_PROCESS.md).  Schedules
 and status of deprecations are updated on
 [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md).
+
+
+How can I participate in the development of `damo`?
+---------------------------------------------------
+
+Please refer to
+[CONTRIBUTING](https://github.com/damonitor/damo/blob/next/CONTRIBUTING) file.
 
 
 Quick Intro for Major Features
