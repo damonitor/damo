@@ -83,11 +83,8 @@ commands can be categorized as below:
 
 - For controlling DAMON (monitoring and monitoring-based system optimization)
   - `start`, `tune`, and `stop` are included
-- For snapshot and visualization of DAMON's monitoring results and running
-  status
-  - `show`, and `status` are included
-- For recording, snapshot, and visualization of the access monitoring results
-  and additional data
+- For recording, snapshot, and visualization of useful data including DAMON's
+  monitoring results, DAMON's working status, and additional system infomration
   - `record` and `report` are included
 - For more convenient use of `damo`
   - `version` and `args` are included
@@ -97,7 +94,9 @@ it.  Below sections introduce more details about the major subcommands.
 
 Note that some of the subcommands that not described in this document would be
 in experimental stage, or not assumed to be used in major use cases.  Those
-could be deprecated and removed without any notice and grace periods.
+could be deprecated and removed without any notice and grace periods.  Refer to
+[FEATURES_DEPRECATION_PROCESS.md](FEATURES_DEPRECATION_PROCESS.md) for more
+details.
 
 DAMON Control (Access Monitoring and Monitoring-based System Optimization)
 ==========================================================================
