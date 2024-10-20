@@ -378,6 +378,18 @@ self-retrieved data.  Input data, command line options, and usages are
 different for specific report formats.  Following sections describe some of the
 report formats.
 
+### `damo report damon`
+
+`damo report damon` shows the current or recorded status of DAMON.  It gets
+snapshot of the current status of DAMON and shows it by default.  Users can use
+`--input_file` option to show the `damo record`-recorded DAMON status file as
+the source.
+
+It shows every kdamond with the parameters that applied to it, running status
+(`on` or `off`), and DAMOS schemes status including their statistics and
+detailed applied regions information.  It supports more command line options
+for retrieving status of specific parts.
+
 ### raw
 
 `raw` sub-subcommand directly transforms the binary record into a
