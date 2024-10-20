@@ -274,11 +274,11 @@ those.
 `damo record`
 -------------
 
-`damo record` records the data access pattern of target workloads in a file
-(`./damon.data` by default).  The path to the file can be set with `--out`
-option.  The command requires root permission.  The output file will be owned
-by `root` and have `600` permission by default, so only root can read it.
-Users can change the permission via `--output_permission` option.
+`damo record` records the data access pattern of target workloads as snapsots,
+and save those in a file (`./damon.data` by default).  The path to the file can
+be set with `--out` option.  The command requires root permission.  The output
+file will be owned by `root` and have `600` permission by default, so only root
+can read it.  Users can change the permission via `--output_permission` option.
 
 Other than the two options, `damo record` receives command line options that
 same to those for `damo start` and `damo tune`.  If DAMON is already running,
