@@ -122,7 +122,7 @@ def main(args):
     signal.signal(signal.SIGTERM, sighandler)
 
     # Now the real works
-    if not is_ongoing:
+    if not _damon_args.is_ongoing_target(args):
         err, kdamonds = _damon_args.turn_damon_on(args)
         if err:
             print('could not turn DAMON on (%s)' % err)
