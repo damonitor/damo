@@ -585,6 +585,91 @@ pattern (``nr_regions``) first.  After that, each line shows the start/end
 address, size, and the number of observed accesses of each region.
 
 
+### `damo report heatmap`
+
+Even single DAMON monitoring result snapshot is useful since it contains the
+`age` information.  However, retrieving every snapshot and visualizing the
+multiple snapshots can provide good insights.
+
+`damo report heatmap` plots `damo record`-generated multi-snapshots monitoring
+results in 3-dimensional form, which represents the time
+in x-axis, address of regions in y-axis, and the access frequency in z-axis.
+Users can optionally set the resolution of the map (`--resol`) and start/end
+point of each axis (`--time_range` and `--address_range`).  For example:
+
+    $ sudo ./damo report heatmap --resol 15 80
+    11111111111111111111111111111111111111111111111111111111111111111111112211110000
+    11111111111111111111111111111111111111111111111111111111111111111111111111100000
+    00000000000000000000000000000000000000000000000000000000000000000001455555530000
+    00000000000000000000000000000000000000000000000000000000000013333333344444430000
+    00000000000000000000000000000000000000000000000000000111111127777777000000000000
+    00000000000000000000000000000000000000000000000000000688888830000000000000000000
+    00000000000000000000000000000000000000000000037777775000000000000000000000000000
+    00000000000000000000000000000000000000555555522222222000000000000000000000000000
+    00000000000000000000000000000003333332555555510000000000000000000000000000000000
+    00000000000000000000000001111147777774000000000000000000000000000000000000000000
+    00000000000000000000001888888800000000000000000000000000000000000000000000000000
+    00000000000000067777773000000000000000000000000000000000000000000000000000000000
+    00000002555555423333331000000000000000000000000000000000000000000000000000000000
+    33333332555555400000000000000000000000000000000000000000000000000000000000000000
+    77777771000000000000000000000000000000000000000000000000000000000000000000000000
+    # access_frequency: 0123456789
+    # x-axis: space (139905344733184-139905455165424: 105.316 MiB)
+    # y-axis: time (3347892748000-3407716412995: 59.824 s)
+    # resolution: 80x15 (1.316 MiB and 3.988 s for each character)
+
+As the above example shows, it plots the heatmap on the terminal by default.
+Users can ask the heatmap to be made as image files using `--output` option.
+Currently pdf, png, jpeg, and svg file formats are supported.  For example,
+below command will create 'heatmap.png' file that contains the visualized
+heatmap.
+
+    $ sudo ./damo report heatmap --output heatmap.png
+
+In some cases, users may want to have only the raw data points of the heatmap
+so that they can do their own heatmap visualization.  For such use case, a
+special keyword, `raw` can be given to `--output` option, like below.
+
+    # damo report heatmap --output raw --resol 3 3
+    0               0               0.0
+    0               7609002         0.0
+    0               15218004        0.0
+    66112620851     0               0.0
+    66112620851     7609002         0.0
+    66112620851     15218004        0.0
+    132225241702    0               0.0
+    132225241702    7609002         0.0
+    132225241702    15218004        0.0
+
+This command shows a recorded access pattern in a heatmap of 3x3 resolution.
+Therefore it shows 9 data points in total.  Each line shows each of the data
+points.  The three numbers in each line represent time in nanoseconds, address
+in bytes and the observed access frequency.
+
+Users can convert this text output into a heatmap image (represents z-axis
+values with colors) or other 3D representations using various tools such as
+`gnuplot`.
+
+If the target address space is a virtual memory address space and the user
+plots the entire address space, the huge unmapped regions will make the picture
+looks only black.  Therefore the user should do proper zoom in / zoom out using
+the resolution and axis boundary-setting arguments.  To make this effort
+minimal, `--guide` option can be used as below:
+
+    # ./damo report heatmap --guide
+    target_id:18446623438842320000
+    time: 539914032967-596606618651 (56.693 s)
+    region   0: 00000094827419009024-00000094827452162048 (31.617 MiB)
+    region   1: 00000140271510761472-00000140271717171200 (196.848 MiB)
+    region   2: 00000140734916239360-00000140734916927488 (672.000 KiB)
+
+The output shows unions of monitored regions (start and end addresses in byte)
+and the union of monitored time duration (start and end time in nanoseconds) of
+each target task.  Therefore, it would be wise to plot the data points in each
+union.  If no axis boundary option is given, it will automatically find the
+biggest union in ``--guide`` output and set the boundary in it.
+
+
 ### `damo report heats`
 
 The `raw` output is very detailed but hard to manually read.  `heats`
