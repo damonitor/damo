@@ -4,6 +4,11 @@ Deprecated, or Will be Deprecated Features
 Below are features that deprecated, or will be deprecated.  If you depend on
 any of those, please [report](REPORTING.md).
 
+`damo report heats`
+-------------------
+
+Will be dperecated by 2025-01-20.  Use `damo report heatmap` instead.
+
 
 `damo fmt_json`
 ---------------
