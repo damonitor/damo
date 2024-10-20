@@ -248,171 +248,6 @@ The command exits immediately after stopping DAMON.  It exits with exit value
 `0` if it successfully terminated DAMON.  Otherwise, the exit value will be
 non-zero.
 
-Snapshot and Visualization of DAMON Monitoring Results and Running Status
-=========================================================================
-
-`damo show`
------------
-
-`damo show` takes a snapshot of running DAMON's monitoring results and show it.
-
-For example:
-
-    # damo start
-    # damo show
-    0   addr [4.000 GiB   , 16.245 GiB ) (12.245 GiB ) access 0 %   age 7 m 32.100 s
-    1   addr [16.245 GiB  , 28.529 GiB ) (12.284 GiB ) access 0 %   age 12 m 40.500 s
-    2   addr [28.529 GiB  , 40.800 GiB ) (12.271 GiB ) access 0 %   age 15 m 10.100 s
-    3   addr [40.800 GiB  , 52.866 GiB ) (12.066 GiB ) access 0 %   age 15 m 58.600 s
-    4   addr [52.866 GiB  , 65.121 GiB ) (12.255 GiB ) access 0 %   age 16 m 15.900 s
-    5   addr [65.121 GiB  , 77.312 GiB ) (12.191 GiB ) access 0 %   age 16 m 22.400 s
-    6   addr [77.312 GiB  , 89.537 GiB ) (12.225 GiB ) access 0 %   age 16 m 24.200 s
-    7   addr [89.537 GiB  , 101.824 GiB) (12.287 GiB ) access 0 %   age 16 m 25 s
-    8   addr [101.824 GiB , 126.938 GiB) (25.114 GiB ) access 0 %   age 16 m 25.300 s
-    total size: 122.938 GiB
-
-### DAMON Monitoring Results Structure
-
-The biggest unit of the monitoring result is called 'record'.  Each record
-contains monitoring results snapshot that retrieved for each
-kdamond/context/target combination.  Hence, the number of records that `damo
-show` will show depends on how many kdamond/context/target combination exists.
-
-Each record contains multiple snapshots of the monitoring results that
-retrieved for each `aggregation interval`.  For `damo show`, therefore, each
-record will contain only one single snapshot.
-
-Each snapshot contains regions information.  Each region information contains
-the monitoring results for the region including the start and end addresses of
-the memory region, `nr_accesses`, and `age`.  The number of regions per
-snapshot would depend on the `min_nr_regions` and `max_nr_regions` DAMON
-parameters, and actual data access pattern of the monitoring target address
-space.
-
-### `damo`'s way of showing DAMON Monitoring Results
-
-`damo show` shows the information in an enclosed hierarchical way like below:
-
-    <record 0 head>
-        <snapshot 0 head>
-            <region 0 information>
-            [...]
-        <snapshot 0 tail>
-        [...]
-     <record 0 tail>
-     [...]
-
-That is, information of record and snapshot can be
-shown twice, once at the beginning (before showing it's internal data), and
-once at the end.  Meanwhile, the information of regions can be shown only once
-since it is the lowest level that not encloses anything.  By default, record
-and snapshot head/tail are skipped if there is only one record and one
-snapshot.  That's why above `damo show` example output shows only regions
-information.
-
-### Customization of The Output
-
-Users can customize what information to be shown in which way for the each
-position using `--format_{record,snapshot,region}[_{head,tail}]` option.  Each
-of the option receives a string for the template.  The template can have any words and
-special format keywords for each position.  For example, `<start address>`, `<end
-address>`, `<access rate>`, or `<age>` keywords are available for
-`--foramt_region` option's value.  The template can also have arbitrary
-strings.  The newline character (`\n`) is also supported.  Each of the keywords
-for each position and their brief description can be shown via
-`--ls_{record,snapshot,region}_format_keywords` option.  Actually, `damo show`
-also internally uses the customization feature with its default templates.
-
-For example:
-
-    # damo start
-    # damo show --format_region "region that starts from <start address> and ends at <end address> was having <access rate> access rate for <age>."
-    region that starts from 4.000 GiB    and ends at 16.251 GiB  was having 0 %   access rate for 40.700 s.
-    region that starts from 16.251 GiB   and ends at 126.938 GiB was having 0 %   access rate for 47.300 s.
-    total size: 122.938 GiB
-
-#### Region Visualization via Boxes
-
-For region information customization, a special keyword called `<box>` is
-provided.  It represents each region's access pattern with its shape and color.
-By default it represents each region's relative age, access rate
-(`nr_accesses`), and size with its length, color, and height, respectively.
-That is, `damo show --format_region "<box>"` shows visualization of the access
-pattern, by showing location of each region in Y-axis, the hotness with color
-of each box, and how long the hotness has continued in X-axis.  Showing only
-the first column of the output would be somewhat similar to an access heatmap
-of the target address space.
-
-For convenient use of it with a default format, `damo show` provides
-`--region_box` option.  Output of the command with the option would help users
-better to understand.
-
-Users can further customize the box using `damo show` options that having
-`--region_box_` prefix.  For example, users can set what access information to
-be represented by the length, color, and height, and whether the values should
-be represented in logscale or linearscale.
-
-#### Sorting and Filtering Regions Based on Access Pattern
-
-By default, `damo show` shows all regions that sorted by their start address.
-Different users would have different interest to regions having specific access
-pattern.  Someone would be interested in hot and small regions, while some
-others are interested in cold and big regions.
-
-For such cases, users can make it to sort regions with specific access pattern
-values as keys including `access_rate`, `age`, and `size` via
-`--sort_regions_by` option.  `--sort_regions_dsc` option can be used to do
-desscending order sorting.
-
-Further, users can make `damo show` to show only regions of specific access
-pattern and address ranges using options including `--sz_region`,
-`--access_rate`, `--age`, and `--address`.  Note that the filtering could
-reduce DAMON's overhead, and therefore recommended to be used if you don't need
-full results and your system is sensitive to any resource waste.
-
-#### Sorting Regions Based on Hotness
-
-Note: This is an experimental feature at the moment.  Some changes could be
-made, or the support can be dropped in future.
-
-Users can sort the regions based on hotness of the regions by providing
-'temperature' as the sort key (`--sort_regions_by`).
-
-The hotness is calculated as weighted sum of the access pattern values (`size`,
-`access_rate`, and `age`).  If `access_rate` is zero, the hotness becomes the
-weighted sum multiplies `-1`.  By default, the weights for the three values are
-0, 100, and 100, respectively.  Users can set custom weights using
-`--temperature_weights` option.
-
-For example:
-
-    $ sudo damo show --style simple-boxes --sort_regions_by temperature
-    |0000000000000000000000000000000000000000| size 36.488 MiB  access rate 0 %   age 42.300 s
-     |000000000000000000000000000000000000000| size 4.000 KiB   access rate 0 %   age 42 s
-     |000000000000000000000000000000000000000| size 18.367 MiB  access rate 0 %   age 32.800 s
-      |00000000000000000000000000000000000000| size 11.234 MiB  access rate 0 %   age 21.300 s
-       |0000000000000000000000000000000000000| size 18.219 MiB  access rate 0 %   age 14.300 s
-        |000000000000000000000000000000000000| size 17.859 MiB  access rate 0 %   age 7.400 s
-                                           |3| size 8.000 KiB   access rate 35 %  age 0 ns
-              |555555555555555555555555555555| size 8.000 KiB   access rate 65 %  age 500 ms
-           |999999999999999999999999999999999| size 9.535 MiB   access rate 100 % age 2.300 s
-
-`damo status`
--------------
-
-`damo status` shows the status of DAMON.  It shows every kdamond with the
-parameters that applied to it, running status (`on` or `off`), and DAMOS
-schemes status including their statistics and detailed applied regions
-information.
-
-Note that users can use `--json` to represent the status in a json format.  And
-the json format output can again be used for `--kdamonds` or the positional
-option of some DAMON control commands including `damo start` and `damo tune`.
-
-The command exits immediately after showing the current status.  It exits with
-exit value `0` if it successfully retrieved and shown the status of DAMON.
-Otherwise, the exit value will be non-zero.
-
 For Recording, Snapshot, and Visualization of Data
 ==================================================
 
@@ -955,3 +790,169 @@ Note that starting DAMON with the partial DAMON parameter command line option
 and then getting the DAMON parameters in the json format using `damo status`
 could also be one way for easily starting write of the json format
 specification.
+
+Snapshot and Visualization of DAMON Monitoring Results and Running Status
+=========================================================================
+
+`damo show`
+-----------
+
+`damo show` takes a snapshot of running DAMON's monitoring results and show it.
+
+For example:
+
+    # damo start
+    # damo show
+    0   addr [4.000 GiB   , 16.245 GiB ) (12.245 GiB ) access 0 %   age 7 m 32.100 s
+    1   addr [16.245 GiB  , 28.529 GiB ) (12.284 GiB ) access 0 %   age 12 m 40.500 s
+    2   addr [28.529 GiB  , 40.800 GiB ) (12.271 GiB ) access 0 %   age 15 m 10.100 s
+    3   addr [40.800 GiB  , 52.866 GiB ) (12.066 GiB ) access 0 %   age 15 m 58.600 s
+    4   addr [52.866 GiB  , 65.121 GiB ) (12.255 GiB ) access 0 %   age 16 m 15.900 s
+    5   addr [65.121 GiB  , 77.312 GiB ) (12.191 GiB ) access 0 %   age 16 m 22.400 s
+    6   addr [77.312 GiB  , 89.537 GiB ) (12.225 GiB ) access 0 %   age 16 m 24.200 s
+    7   addr [89.537 GiB  , 101.824 GiB) (12.287 GiB ) access 0 %   age 16 m 25 s
+    8   addr [101.824 GiB , 126.938 GiB) (25.114 GiB ) access 0 %   age 16 m 25.300 s
+    total size: 122.938 GiB
+
+### DAMON Monitoring Results Structure
+
+The biggest unit of the monitoring result is called 'record'.  Each record
+contains monitoring results snapshot that retrieved for each
+kdamond/context/target combination.  Hence, the number of records that `damo
+show` will show depends on how many kdamond/context/target combination exists.
+
+Each record contains multiple snapshots of the monitoring results that
+retrieved for each `aggregation interval`.  For `damo show`, therefore, each
+record will contain only one single snapshot.
+
+Each snapshot contains regions information.  Each region information contains
+the monitoring results for the region including the start and end addresses of
+the memory region, `nr_accesses`, and `age`.  The number of regions per
+snapshot would depend on the `min_nr_regions` and `max_nr_regions` DAMON
+parameters, and actual data access pattern of the monitoring target address
+space.
+
+### `damo`'s way of showing DAMON Monitoring Results
+
+`damo show` shows the information in an enclosed hierarchical way like below:
+
+    <record 0 head>
+        <snapshot 0 head>
+            <region 0 information>
+            [...]
+        <snapshot 0 tail>
+        [...]
+     <record 0 tail>
+     [...]
+
+That is, information of record and snapshot can be
+shown twice, once at the beginning (before showing it's internal data), and
+once at the end.  Meanwhile, the information of regions can be shown only once
+since it is the lowest level that not encloses anything.  By default, record
+and snapshot head/tail are skipped if there is only one record and one
+snapshot.  That's why above `damo show` example output shows only regions
+information.
+
+### Customization of The Output
+
+Users can customize what information to be shown in which way for the each
+position using `--format_{record,snapshot,region}[_{head,tail}]` option.  Each
+of the option receives a string for the template.  The template can have any words and
+special format keywords for each position.  For example, `<start address>`, `<end
+address>`, `<access rate>`, or `<age>` keywords are available for
+`--foramt_region` option's value.  The template can also have arbitrary
+strings.  The newline character (`\n`) is also supported.  Each of the keywords
+for each position and their brief description can be shown via
+`--ls_{record,snapshot,region}_format_keywords` option.  Actually, `damo show`
+also internally uses the customization feature with its default templates.
+
+For example:
+
+    # damo start
+    # damo show --format_region "region that starts from <start address> and ends at <end address> was having <access rate> access rate for <age>."
+    region that starts from 4.000 GiB    and ends at 16.251 GiB  was having 0 %   access rate for 40.700 s.
+    region that starts from 16.251 GiB   and ends at 126.938 GiB was having 0 %   access rate for 47.300 s.
+    total size: 122.938 GiB
+
+#### Region Visualization via Boxes
+
+For region information customization, a special keyword called `<box>` is
+provided.  It represents each region's access pattern with its shape and color.
+By default it represents each region's relative age, access rate
+(`nr_accesses`), and size with its length, color, and height, respectively.
+That is, `damo show --format_region "<box>"` shows visualization of the access
+pattern, by showing location of each region in Y-axis, the hotness with color
+of each box, and how long the hotness has continued in X-axis.  Showing only
+the first column of the output would be somewhat similar to an access heatmap
+of the target address space.
+
+For convenient use of it with a default format, `damo show` provides
+`--region_box` option.  Output of the command with the option would help users
+better to understand.
+
+Users can further customize the box using `damo show` options that having
+`--region_box_` prefix.  For example, users can set what access information to
+be represented by the length, color, and height, and whether the values should
+be represented in logscale or linearscale.
+
+#### Sorting and Filtering Regions Based on Access Pattern
+
+By default, `damo show` shows all regions that sorted by their start address.
+Different users would have different interest to regions having specific access
+pattern.  Someone would be interested in hot and small regions, while some
+others are interested in cold and big regions.
+
+For such cases, users can make it to sort regions with specific access pattern
+values as keys including `access_rate`, `age`, and `size` via
+`--sort_regions_by` option.  `--sort_regions_dsc` option can be used to do
+desscending order sorting.
+
+Further, users can make `damo show` to show only regions of specific access
+pattern and address ranges using options including `--sz_region`,
+`--access_rate`, `--age`, and `--address`.  Note that the filtering could
+reduce DAMON's overhead, and therefore recommended to be used if you don't need
+full results and your system is sensitive to any resource waste.
+
+#### Sorting Regions Based on Hotness
+
+Note: This is an experimental feature at the moment.  Some changes could be
+made, or the support can be dropped in future.
+
+Users can sort the regions based on hotness of the regions by providing
+'temperature' as the sort key (`--sort_regions_by`).
+
+The hotness is calculated as weighted sum of the access pattern values (`size`,
+`access_rate`, and `age`).  If `access_rate` is zero, the hotness becomes the
+weighted sum multiplies `-1`.  By default, the weights for the three values are
+0, 100, and 100, respectively.  Users can set custom weights using
+`--temperature_weights` option.
+
+For example:
+
+    $ sudo damo show --style simple-boxes --sort_regions_by temperature
+    |0000000000000000000000000000000000000000| size 36.488 MiB  access rate 0 %   age 42.300 s
+     |000000000000000000000000000000000000000| size 4.000 KiB   access rate 0 %   age 42 s
+     |000000000000000000000000000000000000000| size 18.367 MiB  access rate 0 %   age 32.800 s
+      |00000000000000000000000000000000000000| size 11.234 MiB  access rate 0 %   age 21.300 s
+       |0000000000000000000000000000000000000| size 18.219 MiB  access rate 0 %   age 14.300 s
+        |000000000000000000000000000000000000| size 17.859 MiB  access rate 0 %   age 7.400 s
+                                           |3| size 8.000 KiB   access rate 35 %  age 0 ns
+              |555555555555555555555555555555| size 8.000 KiB   access rate 65 %  age 500 ms
+           |999999999999999999999999999999999| size 9.535 MiB   access rate 100 % age 2.300 s
+
+`damo status`
+-------------
+
+`damo status` shows the status of DAMON.  It shows every kdamond with the
+parameters that applied to it, running status (`on` or `off`), and DAMOS
+schemes status including their statistics and detailed applied regions
+information.
+
+Note that users can use `--json` to represent the status in a json format.  And
+the json format output can again be used for `--kdamonds` or the positional
+option of some DAMON control commands including `damo start` and `damo tune`.
+
+The command exits immediately after showing the current status.  It exits with
+exit value `0` if it successfully retrieved and shown the status of DAMON.
+Otherwise, the exit value will be non-zero.
+
