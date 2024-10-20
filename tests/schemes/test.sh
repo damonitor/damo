@@ -37,7 +37,7 @@ __test_stat() {
 	test_stat_applied=0
 	while ps --pid "$stairs_pid" > /dev/null
 	do
-		test_stat_applied=$(sudo "$damo" status \
+		test_stat_applied=$(sudo "$damo" report damon \
 			--damon_interface_DEPRECATED "$damon_interface" \
 			--damos_stats --damos_stat_fields sz_tried --raw)
 		sleep 1
@@ -120,7 +120,7 @@ measure_scheme_applied() {
 		fi
 	done
 
-	before=$(sudo "$damo" status \
+	before=$(sudo "$damo" report damon \
 		--damon_interface_DEPRECATED "$damon_interface" \
 		--damos_stats --damos_stat_fields sz_tried --raw)
 	if [ "$before" = "" ]
@@ -128,7 +128,7 @@ measure_scheme_applied() {
 		before=0
 	fi
 	sleep "$wait_for"
-	after=$(sudo "$damo" status \
+	after=$(sudo "$damo" report damon \
 		--damon_interface_DEPRECATED "$damon_interface" \
 		--damos_stats --damos_stat_fields sz_tried --raw)
 

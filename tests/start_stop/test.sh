@@ -55,9 +55,9 @@ do
 
 	for i in {1..10}
 	do
-		if ! sudo "$damo" status &> /dev/null
+		if ! sudo "$damo" report damon &> /dev/null
 		then
-			echo "FAIL $testname2 status $i failed"
+			echo "FAIL $testname2 report damon $i failed"
 			if ! sudo "$damo" stop
 			then
 				echo "failed stopping DAMON"
@@ -65,7 +65,7 @@ do
 			exit 1
 		fi
 	done
-	echo "PASS $testname2 status $i"
+	echo "PASS $testname2 report damon $i"
 
 	if [ "$do_show_test" = "true" ]
 	then
@@ -110,9 +110,9 @@ do
 
 	for i in {1..10}
 	do
-		if ! sudo "$damo" status &> /dev/null
+		if ! sudo "$damo" report damon &> /dev/null
 		then
-			echo "FAIL $testname2 tune-status $i failed"
+			echo "FAIL $testname2 tune-report-damon $i failed"
 			if ! sudo "$damo" stop
 			then
 				echo "failed stopping DAMON"
@@ -120,7 +120,7 @@ do
 			exit 1
 		fi
 	done
-	echo "PASS $testname2 tune-status $i"
+	echo "PASS $testname2 tune-report-damon $i"
 
 	if [ "$do_show_test" = "true" ]
 	then
