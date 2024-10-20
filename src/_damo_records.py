@@ -868,6 +868,8 @@ def load_proc_stats(filepath):
     return [ProcStatsSnapshot.from_kvpairs(x) for x in kvpairs]
 
 def add_childs_target(kdamonds):
+    if not _damon.target_has_pid(kdamonds[0].contexts[0].ops):
+        return
     current_targets = kdamonds[0].contexts[0].targets
 
     for target in current_targets:
