@@ -1,6 +1,11 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.5.2
+- Mark 'damo report heats', 'damo show', and 'damo status' as will be deprecated
+- Update USAGE.md for deprecations and alternatives
+- Add features deprecation process documentation
+
 v2.5.1
 - 'damo report kdamonds': Support full feature of 'damo status'
 - Rename 'damo report kdamonds' to 'damo report damon'

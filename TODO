@@ -31,15 +31,16 @@
   - Extend 'report access' format arguments for wss, memfootprint, etc
 - Provide virtual memory mapping information
   - shows when what virtual address has mappend and unmapped
-- Document record --snapshot
-- Document report access and kdamonds
 
 - Deprecate old features
   - Deprecate 'damo status'
+    - notified as will-be-deprecated by 2025-01-20
   - Deprecate 'damo show'
+    - notified as will-be-deprecated by 2025-01-20
   - Deprecate fmt_json in favor of 'args damon'
     - notified as will-be-deprecated by 2024-11
   - Deprecate heats report type in favor of heatmap report type
+    - notified as will-be-deprecated by 2025-01-20
   - Deprecate translate_damos (done.)
   - Deprecate single line per-scheme (done.  code moved to _damon_deprecated)
   - Deprecate v1-v3 schemes (done.  necessary code moved to _damon_deprecated)
