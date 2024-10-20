@@ -26,9 +26,9 @@ do
 	testname2="$testname $damon_interface"
 	if sudo "$damo" features supported | grep schemes_tried_regions --quiet
 	then
-		do_show_test="true"
+		do_report_access_test="true"
 	else
-		do_show_test="false"
+		do_report_access_test="false"
 	fi
 	sudo "$damo" start --ops paddr \
 		--damon_interface_DEPRECATED "$damon_interface" \
@@ -67,13 +67,13 @@ do
 	done
 	echo "PASS $testname2 report damon $i"
 
-	if [ "$do_show_test" = "true" ]
+	if [ "$do_report_access_test" = "true" ]
 	then
 		for i in {1..10}
 		do
-			if ! sudo "$damo" show &> /dev/null
+			if ! sudo "$damo" report access &> /dev/null
 			then
-				echo "FAIL $testname2 show $i failed"
+				echo "FAIL $testname2 report-access $i failed"
 				if ! sudo "$damo" stop
 				then
 					echo "failed stopping DAMON"
@@ -81,7 +81,7 @@ do
 				exit 1
 			fi
 		done
-		echo "PASS $testname2 show $i"
+		echo "PASS $testname2 report-access $i"
 	fi
 
 	if ! sudo "$damo" tune --aggr 200000 --ops paddr \
@@ -122,13 +122,13 @@ do
 	done
 	echo "PASS $testname2 tune-report-damon $i"
 
-	if [ "$do_show_test" = "true" ]
+	if [ "$do_report_access_test" = "true" ]
 	then
 		for i in {1..10}
 		do
-			if ! sudo "$damo" show &> /dev/null
+			if ! sudo "$damo" report access &> /dev/null
 			then
-				echo "FAIL $testname2 tune-show $i failed"
+				echo "FAIL $testname2 tune-report-access $i failed"
 				if ! sudo "$damo" stop
 				then
 					echo "failed stopping DAMON"
@@ -136,7 +136,7 @@ do
 				exit 1
 			fi
 		done
-		echo "PASS $testname2 tune-show $i"
+		echo "PASS $testname2 tune-report-access $i"
 	fi
 
 	sudo "$damo" stop --damon_interface_DEPRECATED "$damon_interface" \
