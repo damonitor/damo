@@ -268,7 +268,7 @@ further make profiling-guided optimizations.  Utilizing not only DAMON's
 monitoring results but also some additional information can make it more
 powerful.  Status of DAMON, memory footages, CPU usage, and hot code paths of
 system and processes could be such example.  `damo` provides two commands for
-retrieving such data as snapshots or record of full snapshots, and visualizing
+retrieving such data as snapshots and save as record files, and visualizing
 those.
 
 `damo record`
