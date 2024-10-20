@@ -546,8 +546,11 @@ For example:
 
 ### `damo report raw`
 
-`raw` sub-subcommand directly transforms the binary record into a
-human-readable text.  For example:
+`raw` sub-subcommand directly transforms the recorded access monitoring results
+into a human-readable text.  Unlike 'damo report access', this report type
+doesn't support self snapshot of DAMON's monitoring results, as of this
+writing.  Users should provide 'damo record'-generated files as data source
+using `--input` option.  It is `damon.data` by default.  For example:
 
     $ damo report raw
     base_time_absolute: 8 m 59.809 s
