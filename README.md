@@ -97,23 +97,22 @@ Please refer to
 [CONTRIBUTING](https://github.com/damonitor/damo/blob/next/CONTRIBUTING) file.
 
 
-Why some features are not documented on [USAGE.md](USAGE.md) file?
-------------------------------------------------------------------
+Will the features of `damo` be supported forever?
+-------------------------------------------------
 
-Because those are not yet stabilized.  In other words, such features are in
-their experimental stages, and therefore could be deprecated and removed
-without notice and grace periods.  The documented features could also be
-deprecated, but those will provide some notifications and grace periods.  If
-there are some features you're relying on but not documented, please
-[report](REPORTING.md) your usecase to the community.
+We try our best to make `damo` stable and doesn't introduce regressions to
+users.  However, nothing goes forever.  Sometimes, some features will be
+deprecated.  Some features will have longer support more than others.
 
+In short, features that documented on [USAGE.md](USAGE.md) and not explicitly
+marked as experimental, the feature will be better supported, and provides at
+least three months of deprecation grace period.  Within the grace period, users
+can ask extension of the support.
 
-How can I know deprecation schedule and alternatives of specific features?
---------------------------------------------------------------------------
-
-The list of features that will be, or already deprecated, the deprecation
-schedule, and their alternatives are summarized in
-[FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file.
+Detailed features deprecation process is documented at
+[FEATURES_DEPRECATION_PROCESS.md](FEATURES_DEPRECATION_PROCESS.md).  Schedules
+and status of deprecations are updated on
+[FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md).
 
 
 Quick Intro for Major Features
