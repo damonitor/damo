@@ -19,6 +19,7 @@ option is given, this tool does that on behalf of the human when '--heatmap'
 option is given.
 """
 
+import _damo_deprecation_notice
 import damo_heatmap
 
 def set_argparser(parser):
@@ -57,6 +58,10 @@ def set_argparser(parser):
     parser.description = 'Show when which address ranges were how frequently accessed'
 
 def main(args=None):
+    _damo_deprecation_notice.will_be_deprecated(
+            feature='"damo report heats"', deadline='2025-01-20',
+            additional_notice='Use "damo report heatmap" instead.')
+
     # --plot_ascii and --ascii_color is used in the demo screenshop[1].
     # Support those.
     #
