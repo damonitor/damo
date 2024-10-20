@@ -4,6 +4,7 @@
 Show status of DAMON.
 """
 
+import _damo_deprecation_notice
 import damo_report_damon
 
 def main(args):
@@ -18,6 +19,9 @@ def main(args):
     don't use the approach to keep this file as a place to add deprecation
     message later.
     '''
+    _damo_deprecation_notice.will_be_deprecated(
+            feature='"damo status"', deadline='2025-01-20',
+            additional_notice='Use "damo report damon" instead.')
     return damo_report_damon.main(args)
 
 def set_argparser(parser):

@@ -4,6 +4,12 @@ Deprecated, or Will be Deprecated Features
 Below are features that deprecated, or will be deprecated.  If you depend on
 any of those, please [report](REPORTING.md).
 
+`damo status`
+-------------
+
+Will be deprecated by 2024-01-20.  Use `damo report damon` instead.
+
+
 `damo report heats`
 -------------------
 
