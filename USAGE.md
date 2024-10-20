@@ -370,11 +370,13 @@ the default name of the CPU usage information.
 `damo report`
 -------------
 
-`damo report` reads a data access pattern record file (if not explicitly
-specified using ``-i`` option, reads ``./damon.data`` file by default) and
-generates human-readable reports.  Users can specify what type of report they
-want using a sub-subcommand to `damo report`.  `raw`, `heats`, and `wss` report
-types are supported.
+`damo report` visualizes the `damo record`-retrieved data in specific report
+format.  Users can specify `damo record`-generated record files as the source
+of the data to visualize.  For some report formats, users can also ask `damo
+report` to retrieve the data on its own, and directly do visualization of the
+self-retrieved data.  Input data, command line options, and usages are
+different for specific report formats.  Following sections describe some of the
+report formats.
 
 ### raw
 
