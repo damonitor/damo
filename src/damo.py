@@ -90,7 +90,9 @@ subcmds = [
 
         # DAMON result/status snapshot
         _damo_subcmds.DamoSubCmd(name='show', module=damo_show,
-            msg='show monitored access pattern'),
+            msg=' '.join(
+                ['show monitored access pattern',
+                 '(Will be DEPRECATED; Use "damo report access" instead.)'])),
         _damo_subcmds.DamoSubCmd(name='status',
             module=damo_status,
             msg=' '.join(

@@ -2,12 +2,17 @@
 
 import os
 
+import _damo_deprecation_notice
 import _damo_records
 import _damon
 import _damon_args
 import damo_report_access
 
 def main(args):
+    _damo_deprecation_notice.will_be_deprecated(
+            feature='"damo show"', deadline='2025-01-20',
+            additional_notice='Use "damo report access" instead.')
+
     handled = damo_report_access.handle_ls_keywords(args)
     if handled:
         return

@@ -4,10 +4,25 @@ Deprecated, or Will be Deprecated Features
 Below are features that deprecated, or will be deprecated.  If you depend on
 any of those, please [report](REPORTING.md).
 
-`damo status`
--------------
+`damo show`, `damo status`
+--------------------------
 
-Will be deprecated by 2024-01-20.  Use `damo report damon` instead.
+Will be deprecated by 2024-01-20.  Use `damo report access` and `damo report
+damon` instead.
+
+`DAMON` and `damo` were initially designed with offline recording-based usages.
+Therefore `damo record` and `damo report` were the main subcommands.  Later,
+`DAMON` has evolved for more online usages, and therefore `damo` was also
+developed for support of online "snapshot" based usages.  For taking
+"snapshots" of the monitoring results and DAMON status, we implemented separate
+subcommands, namely `show` and `status`.  The new features work well, but makes
+the number of `damo` subcommands bit unnecessarily high, and make usages
+confusing.
+
+We therefore extended `record` and `report` to further support online
+"snapshot" based workflows.  As of this writing, `report access` and `report
+damon` can replace all features of `show` and `status`.  Hence we decided to
+deprecate `show` and `status`.
 
 
 `damo report heats`
