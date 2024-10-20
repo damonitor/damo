@@ -274,24 +274,34 @@ those.
 `damo record`
 -------------
 
-`damo record` records the data access pattern of target workloads as snapsots,
-and save those in a file (`./damon.data` by default).  The path to the file can
-be set with `--out` option.  The command requires root permission.  The output
-file will be owned by `root` and have `600` permission by default, so only root
-can read it.  Users can change the permission via `--output_permission` option.
+`damo record` records data including DAMON's monitoring results, DAMON's
+status, and additional system/workloads information as snapshots, and save
+those in files.  Users can set the prefix of the resulting files' paths using
+`--out` option.  It is `./damon.data` by default.  The command requires root
+permission.  The output files will also be owned by `root` and have `600`
+permission by default, so only root can read those.  Users can change the
+permission via `--output_permission` option.
 
-Other than the two options, `damo record` receives command line options that
-same to those for `damo start` and `damo tune`.  If DAMON is already running,
-users can simply record the monitoring results of the running DAMON by
-providing no DAMON parameter options.  For example, below will start DAMON for
+For the DAMON's monitoring results, it retrieves and saves every
+DAMON-generated monitoring result snapshots.  Because DAMON's monitoring result
+snapshot contains `age` information, the full record is not always required.
+Users can retrieve and save only specific number of snapshots with a period,
+using `--snapshot` option.
+
+`damo record` records monitoring results and status of running DAMON by
+default.  If no DAMON is running, users can start DAMON first using `damo
+start`, and then run `damo record`.  For example, below will start DAMON for
 physical address space monitoring, record the monitoring results, and save the
 records in `damon.data` file.
 
     # damo start
     # damo record
 
-Or, users can ask `damo record` to start DAMON by themselves, together with the
-monitoring target command, like below:
+To make the commands shorter, users can also ask `damo record` to start DAMON
+by themselves, together with the monitoring target command if needed, and then
+start the recording of the newly-started DAMON.  For this use case, `damo
+record` receives command line options that same to those for `damo start`.  For
+example, below command can be used.
 
     # damo record "sleep 5"
 
