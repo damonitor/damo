@@ -544,7 +544,7 @@ For example:
            |999999999999999999999999999999999| size 9.535 MiB   access rate 100 % age 2.300 s
 
 
-### raw
+### `damo report raw`
 
 `raw` sub-subcommand directly transforms the binary record into a
 human-readable text.  For example:
@@ -582,7 +582,7 @@ pattern (``nr_regions``) first.  After that, each line shows the start/end
 address, size, and the number of observed accesses of each region.
 
 
-### heats
+### `damo report heats`
 
 The `raw` output is very detailed but hard to manually read.  `heats`
 sub-subcommand plots the data in 3-dimensional form, which represents the time
@@ -637,7 +637,7 @@ each target task.  Therefore, it would be wise to plot the data points in each
 union.  If no axis boundary option is given, it will automatically find the
 biggest union in ``--guide`` output and set the boundary in it.
 
-### wss
+### `damo report wss`
 
 The `wss` type extracts the distribution and chronological working set size
 changes from the record.
@@ -687,7 +687,7 @@ duration spikes could be more easily found.
 Similar to that of ``heats --heatmap``, it also supports `gnuplot` based simple
 visualization of the distribution via ``--plot`` option.
 
-### footprints
+### `damo report footprints`
 
 Note: This is an experimental feature at the moment.  Some changes could be
 made, or the support can be dropped in future.
@@ -730,7 +730,7 @@ For example:
      75     196.168 MiB |***********************************************************|
     100     196.168 MiB |***********************************************************|
 
-### profile
+### `damo report profile`
 
 Note: This feature is an experimental one.  Some changes could be made, or the
 support can be dropped in future.
@@ -763,7 +763,7 @@ access in the address range was 40 or more MiB.
        0.03%  ps               [kernel.vmlinux]      [k] do_syscall_64
        0.03%  swapper          [kernel.vmlinux]      [k] __do_softirq
 
-### times
+### `damo report times`
 
 Note: This feature is an experimental one.  Some changes could be made, or the
 support can be dropped in future.
@@ -786,7 +786,7 @@ starting from `139,798,348,038,144`.
     93956.067597-93961.036500
     93966.101779-93966.910657
 
-### holistic
+### `damo report holistic`
 
 Note: This is an experimental feature at the moment.  Many changes would be
 made, or the support can be dropped in future.
