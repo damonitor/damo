@@ -30,7 +30,7 @@ subcmds = [
             name='footprints', module=damo_report_footprint,
             msg='memory footprints'),
         _damo_subcmds.DamoSubCmd(name='profile', module=damo_report_profile,
-            msg='hotspots for specific access pattern'),
+            msg='hotspot functions for specific access pattern'),
         _damo_subcmds.DamoSubCmd(name='times', module=damo_report_times,
             msg='times of record having specific access pattern'),
 
