@@ -546,6 +546,12 @@ For example:
 
 ### `damo report raw`
 
+`damo report raw` will be deprecated by 2025-01-20, in favor of [`damo report
+access --raw_form`](#damo-report-access).  `damo report access --raw_form` can
+replace all usages of `damo report raw'.  Please refer to
+[FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
+more details.
+
 `raw` sub-subcommand directly transforms the recorded access monitoring results
 into a human-readable text.  Unlike 'damo report access', this report type
 doesn't support self snapshot of DAMON's monitoring results, as of this
