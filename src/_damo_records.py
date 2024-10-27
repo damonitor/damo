@@ -1378,6 +1378,20 @@ def filter_records_by_snapshot_sz(records, sz_ranges):
                     break
         record.snapshots = filtered_snapshots
 
+def filter_records_by_snapshot_time(records, time_ranges):
+    for record in records:
+        filtered_snapshots = []
+        for snapshot in record.snapshots:
+            filter_out = True
+            for start_sec, end_sec in time_ranges:
+                if (snapshot.start_time >= start_sec and
+                    snapshot.end_time <= end_sec):
+                    filter_out = False
+                    break
+            if filter_out is False:
+                filtered_snapshots.append(snapshot)
+        record.snapshots = filtered_snapshots
+
 def get_snapshot_records_of(request):
     '''
     get records containing single snapshot from running kdamonds
@@ -1410,11 +1424,14 @@ class RecordFilter:
     access_pattern = None
     address_ranges = None
     snapshot_sz_ranges = None
+    snapshot_time_ranges = None
 
-    def __init__(self, access_pattern, address_ranges, snapshot_sz_ranges):
+    def __init__(self, access_pattern, address_ranges, snapshot_sz_ranges,
+                 snapshot_time_ranges):
         self.access_pattern = access_pattern
         self.address_ranges = address_ranges
         self.snapshot_sz_ranges = snapshot_sz_ranges
+        self.snapshot_time_ranges = snapshot_time_ranges
 
     def to_kvpairs(self, raw):
         kvpairs = {'access_pattern': self.access_pattern.to_kvpairs(raw)}
@@ -1495,6 +1512,9 @@ def get_records(tried_regions_of=None, record_file=None, record_filter=None,
         if request.record_filter.snapshot_sz_ranges:
             filter_records_by_snapshot_sz(
                     records, request.record_filter.snapshot_sz_ranges)
+        if request.record_filter.snapshot_time_ranges:
+            filter_records_by_snapshot_time(
+                    records, request.record_filter.snapshot_time_ranges)
     return records, None
 
 def parse_sort_bytes_ranges_input(bytes_ranges_input):
@@ -1533,7 +1553,14 @@ def args_to_filter(args):
         if err is not None:
             return None, 'wrong --sz_snapshot input (%s)' % err
 
-    return RecordFilter(access_pattern, addr_range, snapshot_sz_ranges), None
+    snapshot_time = None
+    if args.snapshot_time is not None:
+        snapshot_time = [
+                [_damo_fmt_str.text_to_ns(s), _damo_fmt_str.text_to_ns(e)]
+                for s, e in args.snapshot_time]
+
+    return RecordFilter(access_pattern, addr_range,
+                        snapshot_sz_ranges, snapshot_time), None
 
 def set_filter_argparser(parser):
     parser.add_argument('--sz_region', metavar=('<min>', '<max>'), nargs=2,
