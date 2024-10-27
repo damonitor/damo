@@ -393,10 +393,12 @@ for retrieving status of specific parts.
 ### `damo report access`
 
 `damo report access` visualizes DAMON's access monitoring result snapshots in
-customizable formats.  If DAMON is running, it retrieves the current DAMON's
-monitoring result as a snapshot and visualize it.  Users can set it to use
-`damo record`-generated monitoring results record as the source using
-`--input_file` option.
+customizable formats.  Users can set it to use `damo record`-generated
+monitoring results record as the source using `--input_file` option.  If
+`--input_file` is not provided and DAMON is running, capture snapshot from the
+running DAMON and use it as the source. If `--input_file` is not provided,
+DAMON is not running, and `./damon.data` file exists, use `./damon.data` as
+`--input_file`.
 
 For example:
 
