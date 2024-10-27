@@ -481,7 +481,8 @@ def pr_records(fmt, records):
         _damo_print.pr_with_pager_if_needed(
                 json.dumps([r.to_kvpairs(fmt.raw_number) for r in records],
                            indent=4))
-    _damo_print.pr_with_pager_if_needed(fmt_records(fmt, records))
+    else:
+        _damo_print.pr_with_pager_if_needed(fmt_records(fmt, records))
 
 class RecordsVisualizationFormat:
     sort_regions_by = None
