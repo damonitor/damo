@@ -8,6 +8,7 @@ import _damo_deprecation_notice
 import _damo_fmt_str
 import _damo_print
 import _damo_records
+import damo_report_access
 
 def filter_snapshots(records, start_time_sec, end_time_sec):
     for record in records:
@@ -24,42 +25,6 @@ def filter_snapshots(records, start_time_sec, end_time_sec):
             filtered_snapshots.append(snapshot)
         record.snapshots = filtered_snapshots
 
-def do_pr_records(records, raw_number):
-    lines = []
-    for record in records:
-        snapshots = record.snapshots
-        if len(snapshots) == 0:
-            continue
-
-        base_time = snapshots[0].start_time
-        lines.append('base_time_absolute: %s\n' %
-                _damo_fmt_str.format_time_ns(base_time, raw_number))
-
-        for snapshot in snapshots:
-            lines.append('monitoring_start:    %16s' %
-                    _damo_fmt_str.format_time_ns(
-                        snapshot.start_time - base_time, raw_number))
-            lines.append('monitoring_end:      %16s' %
-                    _damo_fmt_str.format_time_ns(
-                        snapshot.end_time - base_time, raw_number))
-            lines.append('monitoring_duration: %16s' %
-                    _damo_fmt_str.format_time_ns(
-                        snapshot.end_time - snapshot.start_time,
-                        raw_number))
-            lines.append('target_id: %s' % record.target_id)
-            lines.append('nr_regions: %s' % len(snapshot.regions))
-            lines.append('# %10s %12s  %12s  %11s %5s' %
-                    ('start_addr', 'end_addr', 'length', 'nr_accesses', 'age'))
-            for r in snapshot.regions:
-                lines.append("%012x-%012x (%12s) %11d %5d" %
-                        (r.start, r.end,
-                            _damo_fmt_str.format_sz(r.size(), raw_number),
-                            r.nr_accesses.samples, r.age.aggr_intervals
-                                if r.age.aggr_intervals != None else -1))
-            lines.append('')
-    lines.append('')
-    _damo_print.pr_with_pager_if_needed('\n'.join(lines))
-
 def pr_records(args, records):
     lines = []
     if args.duration:
@@ -71,7 +36,7 @@ def pr_records(args, records):
                            indent=4))
         return
 
-    do_pr_records(records, args.raw_number)
+    damo_report_access.pr_records_raw_form(records, args.raw_number)
 
 def set_argparser(parser):
     parser.add_argument('--input', '-i', type=str, metavar='<file>',
