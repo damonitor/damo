@@ -1315,6 +1315,27 @@ def get_snapshot_records_for_schemes(idxs, total_sz_only, merge_regions):
     return update_get_snapshot_records(running_kdamond_idxs, idxs,
             total_sz_only, merge_regions, None)
 
+def region_of_pattern(region, pattern, record_intervals):
+    sz_bytes = pattern.sz_bytes
+    nr_acc = pattern.nr_acc_min_max
+    age = pattern.age_min_max
+    # return if the region fits into the pattern
+    sz = region.size()
+    if sz < sz_bytes[0] or sz_bytes[1] < sz:
+        return False
+
+    if record_intervals is None:
+        return True
+    region.nr_accesses.add_unset_unit(record_intervals)
+    freq = region.nr_accesses.percent
+    if freq < nr_acc_min_max[0].percent or nr_acc_min_max[1].percent < freq:
+        return False
+    region.age.add_unset_unit(record_intervals)
+    usecs = region.age.usec
+    if usecs < age[0].usec or age[1].usec < usecs:
+        return False
+    return True
+
 def filter_by_pattern(record, access_pattern):
     sz_bytes = access_pattern.sz_bytes
     nr_acc = access_pattern.nr_acc_min_max
