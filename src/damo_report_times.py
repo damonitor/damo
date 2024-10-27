@@ -35,6 +35,7 @@ def main(args):
 
     for interval in times:
         print('-'.join(['%f' % (t / 1000000000) for t in interval]))
+        print('# (seconds)')
 
 def set_argparser(parser):
     parser.add_argument('--inputs', metavar='<file>', nargs=2,
