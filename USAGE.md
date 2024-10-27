@@ -543,12 +543,49 @@ For example:
               |555555555555555555555555555555| size 8.000 KiB   access rate 65 %  age 500 ms
            |999999999999999999999999999999999| size 9.535 MiB   access rate 100 % age 2.300 s
 
+#### `damo report access --raw_form`
+
+`--raw_form` option of `damo report access` directly transforms the recorded
+access monitoring results into a human-readable text.  For example:
+
+    $ damo report access --raw_form --input damon.data
+    base_time_absolute: 8 m 59.809 s
+
+    monitoring_start:                0 ns
+    monitoring_end:            104.599 ms
+    monitoring_duration:       104.599 ms
+    target_id: 18446623438842320000
+    nr_regions: 3
+    563ebaa00000-563ebc99e000(  31.617 MiB):        1
+    7f938d7e1000-7f938ddfc000(   6.105 MiB):        0
+    7fff66b0a000-7fff66bb2000( 672.000 KiB):        0
+
+    monitoring_start:          104.599 ms
+    monitoring_end:            208.590 ms
+    monitoring_duration:       103.991 ms
+    target_id: 18446623438842320000
+    nr_regions: 4
+    563ebaa00000-563ebc99e000(  31.617 MiB):        1
+    7f938d7e1000-7f938d9b5000(   1.828 MiB):        0
+    7f938d9b5000-7f938ddfc000(   4.277 MiB):        0
+    7fff66b0a000-7fff66bb2000( 672.000 KiB):        5
+
+The first line shows the recording started timestamp (`base_time_absolute`).
+Records of data access patterns follow.  Each record is separated by a blank
+line.  Each record first specifies when the record started (`monitoring_start`)
+and ended (`monitoring_end`) relative to the start time, the duration for the
+recording (`monitoring_duration`).  Recorded data access patterns of each
+target follow.  Each data access pattern for each task shows the target's id
+(``target_id``) and a number of monitored address regions in this access
+pattern (``nr_regions``) first.  After that, each line shows the start/end
+address, size, and the number of observed accesses of each region.
+
 
 ### `damo report raw`
 
 `damo report raw` will be deprecated by 2025-01-20, in favor of [`damo report
-access --raw_form`](#damo-report-access).  `damo report access --raw_form` can
-replace all usages of `damo report raw'.  Please refer to
+access --raw_form`](#damo-report-access-raw-form).  `damo report access
+--raw_form` can replace all usages of `damo report raw'.  Please refer to
 [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
 more details.
 
