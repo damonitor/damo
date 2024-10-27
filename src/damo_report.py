@@ -35,7 +35,9 @@ subcmds = [
             msg='times of record having specific access pattern'),
 
         _damo_subcmds.DamoSubCmd(name='raw', module=damo_report_raw,
-            msg='human readable raw data of access patterns'),
+            msg=' '.join([
+                'human readable raw data of access patterns',
+                '(Will be DEPRECATED; Use "access --raw_form" instead.)'])),
         _damo_subcmds.DamoSubCmd(name='heats', module=damo_heats,
             msg=' '.join(['heats of regions',
                           '(Will be DEPRECATED; Use "heatmap" instead.)'])),
