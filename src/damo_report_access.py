@@ -691,6 +691,9 @@ def main(args):
 
     if args.input_file == None:
         _damon.ensure_root_and_initialized(args, load_feature_supports=True)
+        if _damon.any_kdamond_running() is False:
+            if os.path.exists('damon.data'):
+                args.input_file = 'damon.data'
 
     records, err = _damo_records.get_records(
                 tried_regions_of=args.tried_regions_of,
@@ -841,7 +844,10 @@ def add_fmt_args(parser, hide_help=False):
 
 def set_argparser(parser):
     parser.description = 'Show DAMON-monitored access pattern'
-    parser.epilog='If --input_file is not provided, capture snapshot.'
+    parser.epilog=' '.join([
+        'If --input_file is not provided, capture snapshot.',
+        'If --input_file is not provided, DAMON is not running,',
+        'and "damon.data" file exists, use "damon.data" as --input_file.'])
 
     _damon_args.set_common_argparser(parser)
 
