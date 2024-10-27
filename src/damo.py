@@ -64,10 +64,6 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='version',
             module=_damo_subcmds.DamoSubCmdModule(None, pr_damo_version),
             msg='print the version number'),
-        _damo_subcmds.DamoSubCmd(name='fmt_json', module=damo_fmt_json,
-            msg=' '.join(
-                ['(WILL BE DEPRECATED in favor of \'args\' command)',
-                 'convert damo-start cmdline option to DAMON json input'])),
         _damo_subcmds.DamoSubCmd(name='schemes', module=damo_schemes,
             msg='apply operation schemes'),
         _damo_subcmds.DamoSubCmd(name='monitor', module=damo_monitor,
@@ -88,7 +84,11 @@ subcmds = [
             module=damo_diagnose,
             msg='generate a report on if DAMON is malfunctioning'),
 
-        # DAMON result/status snapshot
+        # Will be deprecated
+        _damo_subcmds.DamoSubCmd(name='fmt_json', module=damo_fmt_json,
+            msg=' '.join(
+                ['(WILL BE DEPRECATED in favor of \'args\' command)',
+                 'convert damo-start cmdline option to DAMON json input'])),
         _damo_subcmds.DamoSubCmd(name='show', module=damo_show,
             msg=' '.join(
                 ['show monitored access pattern',
