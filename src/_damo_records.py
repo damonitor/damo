@@ -1456,6 +1456,17 @@ class RecordFilter:
         kvpairs['snapshot_sz_ranges'] = snapshot_sz_ranges
         return kvpairs
 
+    def filter_records(self, records):
+        if self.access_pattern is not None:
+            for record in records:
+                filter_by_pattern(record, self.access_pattern)
+        if self.address_ranges is not None:
+            filter_records_by_addr(records, self.address_ranges)
+        if self.snapshot_sz_ranges is not None:
+            filter_records_by_snapshot_sz(records, self.snapshot_sz_ranges)
+        if self.snapshot_time_ranges is not None:
+            filter_records_by_snapshot_time(records, self.snapshot_time_ranges)
+
 class RecordGetRequest:
     # TODO: Extend to be used for recording
 
