@@ -1494,17 +1494,27 @@ def get_records(tried_regions_of=None, record_file=None, record_filter=None,
     request = RecordGetRequest(
             tried_regions_of, record_file, record_filter,
             total_sz_only, dont_merge_regions)
+
+    # If record is live snapshot, access pattern filtering is applied with
+    # get_snapshot_records_of() because it uses DAMOS to get the snapshot.  If
+    # the kernel has schemes_filters_addr feature, address ranges filter is
+    # also applied.  Also, snapshot time range filter makes no sense for live
+    # snapshot.
+    # To avoid confusing caller, copy filter, modify the filter as necessary
+    # and apply only necessary filters at once at last stage.
+    if record_filter:
+        filter_copy = copy.deepcopy(record_filter)
+    else:
+        filter_copy = RecordFilter(None, None, None, None)
+
     if request.record_file is None:
         records, err = get_snapshot_records_of(request)
         if err is not None:
             return None, err
+        filter_copy.access_pattern = None
         if _damon.feature_supported('schemes_filters_addr'):
-            # get_snapshot_records_of() has already handled address filter
-            if request.record_filter is not None:
-                if request.record_filter.snapshot_sz_ranges:
-                    filter_records_by_snapshot_sz(
-                            records, request.record_filter.snapshot_sz_ranges)
-            return records, None
+            filter_copy.address_ranges = None
+            filter_copy.snapshot_time_ranges = None
     else:
         if not os.path.isfile(request.record_file):
             return None, '%s not found' % request.record_file
@@ -1513,22 +1523,8 @@ def get_records(tried_regions_of=None, record_file=None, record_filter=None,
         if err:
             return None, ('parsing %s failed (%s)' %
                     (request.record_file, err))
-        if request.record_filter is not None:
-            if request.record_filter.access_pattern is not None:
-                for record in records:
-                    filter_by_pattern(record,
-                                      request.record_filter.access_pattern)
 
-    if request.record_filter is not None:
-        if request.record_filter.address_ranges:
-            filter_records_by_addr(
-                    records, request.record_filter.address_ranges)
-        if request.record_filter.snapshot_sz_ranges:
-            filter_records_by_snapshot_sz(
-                    records, request.record_filter.snapshot_sz_ranges)
-        if request.record_filter.snapshot_time_ranges:
-            filter_records_by_snapshot_time(
-                    records, request.record_filter.snapshot_time_ranges)
+    filter_copy.filter_records(records)
     return records, None
 
 def parse_sort_bytes_ranges_input(bytes_ranges_input):
