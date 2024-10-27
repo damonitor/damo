@@ -1337,29 +1337,11 @@ def region_of_pattern(region, pattern, record_intervals):
     return True
 
 def filter_by_pattern(record, access_pattern):
-    sz_bytes = access_pattern.sz_bytes
-    nr_acc = access_pattern.nr_acc_min_max
-    age = access_pattern.age_min_max
-
     for snapshot in record.snapshots:
         filtered = []
         for region in snapshot.regions:
-            sz = region.size()
-            if sz < sz_bytes[0] or sz_bytes[1] < sz:
-                continue
-            intervals = record.intervals
-            if intervals is None:
+            if region_of_pattern(region, access_pattern, record.intervals):
                 filtered.append(region)
-                continue
-            region.nr_accesses.add_unset_unit(intervals)
-            freq = region.nr_accesses.percent
-            if freq < nr_acc[0].percent or nr_acc[1].percent < freq:
-                continue
-            region.age.add_unset_unit(intervals)
-            usecs = region.age.usec
-            if usecs < age[0].usec or age[1].usec < usecs:
-                continue
-            filtered.append(region)
         snapshot.regions = filtered
 
 def filter_by_addr(region, addr_ranges):
