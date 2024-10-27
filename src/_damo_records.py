@@ -1552,3 +1552,7 @@ def set_filter_argparser(parser):
             '--sz_snapshot', metavar=('<min>', '<max>'), nargs=2,
             action='append',
             help='min/max total size of regions of snapshots to show')
+    parser.add_argument(
+            '--snapshot_time', metavar=('<start (ns)>', '<end (ns)>'), nargs=2,
+            action='append',
+            help='show snapshots generated in these time intervals')
