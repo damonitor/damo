@@ -1,6 +1,10 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.5.3
+- Mark 'damo report raw' as will be deprecated
+- Use 'damon.data' as --input_file of 'damo report access' as a last resort
+
 v2.5.2
 - Add features deprecation process documentation
 - Mark 'damo show', 'damo status' and 'damo report heats' as will be deprecated
