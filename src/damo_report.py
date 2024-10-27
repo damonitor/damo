@@ -14,14 +14,14 @@ import damo_report_times
 import damo_wss
 
 subcmds = [
+        _damo_subcmds.DamoSubCmd(name='access', module=damo_report_access,
+            msg='access patterns'),
         _damo_subcmds.DamoSubCmd(
             name='damon', module=damo_report_damon,
             msg='current or recorded DAMON status'),
         _damo_subcmds.DamoSubCmd(
             name='holistic', module=damo_report_holistic,
             msg='holistic report'),
-        _damo_subcmds.DamoSubCmd(name='access', module=damo_report_access,
-            msg='access patterns'),
         _damo_subcmds.DamoSubCmd(name='heatmap', module=damo_heatmap,
             msg='heatmap of access patterns'),
         _damo_subcmds.DamoSubCmd(name='wss', module=damo_wss,
