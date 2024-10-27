@@ -529,11 +529,11 @@ class RecordsVisualizationFormat:
         self.json = args.json
         return self
 
-    def total_sz_only():
+    def total_sz_only(self):
         return (
-                args.format_snapshot_head == '' and
-                args.format_region == '' and
-                args.format_snapshot_tail == '<total bytes>')
+                self.format_snapshot_head == '' and
+                self.format_region == '' and
+                self.format_snapshot_tail == '<total bytes>')
 
     def to_kvpairs(self, raw):
         return {
