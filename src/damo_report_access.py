@@ -11,6 +11,7 @@ import _damo_print
 import _damo_records
 import _damon
 import _damon_args
+import damo_report_raw
 
 class Formatter:
     keyword = None
@@ -481,6 +482,8 @@ def pr_records(fmt, records):
         _damo_print.pr_with_pager_if_needed(
                 json.dumps([r.to_kvpairs(fmt.raw_number) for r in records],
                            indent=4))
+    elif fmt.raw:
+        damo_report_raw.do_pr_records(records, fmt.raw_number)
     else:
         _damo_print.pr_with_pager_if_needed(fmt_records(fmt, records))
 
@@ -506,6 +509,7 @@ class RecordsVisualizationFormat:
     min_chars_for = None
     raw_number = None
     json = None
+    raw = None
 
     @classmethod
     def from_args(cls, args):
@@ -528,6 +532,7 @@ class RecordsVisualizationFormat:
         self.min_chars_for = args.min_chars_for
         self.raw_number = args.raw_number
         self.json = args.json
+        self.raw = args.raw_form
         return self
 
     def total_sz_only(self):
@@ -776,6 +781,8 @@ def add_fmt_args(parser, hide_help=False):
             help='use machine-friendly raw numbers')
     parser.add_argument('--json', action='store_true',
             help='print in json format')
+    parser.add_argument('--raw_form', action='store_true',
+                        help='print in raw format')
     parser.add_argument('--ls_record_format_keywords', action='store_true',
                         help='list available record format keywords'
                         if not hide_help else argparse.SUPPRESS)
