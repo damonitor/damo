@@ -667,8 +667,9 @@ def main(args):
         exit(1)
 
     if len([r for r in records if r.intervals is None]) != 0:
-        print('some records lack the intervals information')
-        exit(1)
+        if not args.json and not args.raw_form:
+            print('some records lack the intervals information')
+            exit(1)
 
     if args.format is not None:
         fmt_string = args.format
