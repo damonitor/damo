@@ -34,8 +34,7 @@
 
 - Deprecate old features
   - Deprecate 'damo report raw'
-    - implement replacement as 'damo report access --type raw'
-      - implement 'damo report raw --duration' replacement
+    - notified as will-be-deprecated by 2025-01-27
   - Deprecate 'damo status'
     - notified as will-be-deprecated by 2025-01-20
   - Deprecate 'damo show'
