@@ -24,12 +24,14 @@ test_report() {
 
 mkdir -p results
 
-test_report "$damo report raw" "raw"
+damo_report_raw="$damo report access --raw_form --input"
 
-test_report "$damo report raw -i damon.data.json_compressed" "raw"
+test_report "$damo_report_raw damon.data" "raw"
+
+test_report "$damo_report_raw damon.data.json_compressed" "raw"
 
 test_report \
-	"$damo report raw -i perf.data.script" \
+	"$damo_report_raw perf.data.script" \
 	"raw_perf_script"
 
 test_report "$damo report wss -r 1 101 1 --raw_number" "wss"
@@ -39,12 +41,12 @@ test_report "$damo report wss -r 1 101 1 --work_time 1000000 --raw_number" \
 
 test_report \
 	"$damo adjust --aggregate_interval 1000000 && \
-	$damo report raw -i damon.adjusted.data" \
+	$damo_report_raw damon.adjusted.data" \
 	"aggr_1s_raw"
 
 test_report \
 	"$damo adjust --skip 30 --aggregate_interval 1000000 && \
-	$damo report raw -i damon.adjusted.data" \
+	$damo_report_raw damon.adjusted.data" \
 	"aggr_1s_raw_skip_30"
 
 test_report "$damo report nr_regions -r 1 101 1" "nr_regions"
