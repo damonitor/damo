@@ -2,6 +2,7 @@ This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
 v2.5.3
+- Implement 'damo report raw' alternative as 'damo report access --raw_form'
 - Mark 'damo report raw' as will be deprecated
 - Use 'damon.data' as --input_file of 'damo report access' as a last resort
 
