@@ -37,6 +37,9 @@ the result simpler while it all works seamlessly.  Use a custom dumper that
 prints OrderedDict as normal dict.
 '''
 def dump(kvpairs):
+    if not 'yaml' in sys.modules:
+        return None, 'yaml module is not imported'
+
     def ordered_dict_representer(dumper, ordered_dict):
         # represnet collections.OrderedDict object as normal dict, but while
         # keeping the dumped order; the order will be ignored when loaded
@@ -50,9 +53,6 @@ def dump(kvpairs):
 
     OrderedDumper.add_representer(
             collections.OrderedDict, ordered_dict_representer)
-
-    if not 'yaml' in sys.modules:
-        return None, 'yaml module is not imported'
 
     return yaml.dump(kvpairs, Dumper=OrderedDumper, default_flow_style=False,
                      sort_keys=False), None
