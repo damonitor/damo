@@ -65,7 +65,7 @@ def main(args=None):
     # --plot_ascii and --ascii_color is used in the demo screenshop[1].
     # Support those.
     #
-    # [1] https://sjp38.github.io/img/masim_stairs_heatmap_ascii.png
+    # [1] https://damonitor.github.io/img/masim_stairs_heatmap_ascii.png
     if args.heatmap == None and args.plot_ascii:
         args.heatmap = 'stdout'
     if args.ascii_color != None and args.stdout_heatmap_color == None:
