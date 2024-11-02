@@ -31,6 +31,8 @@
   - Extend 'report access' format arguments for wss, memfootprint, etc
 - Provide virtual memory mapping information
   - shows when what virtual address has mappend and unmapped
+- Implement an official feature to check if 'damo' supports the system
+  - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
 
 - Deprecate old features
   - Deprecate 'damo report raw'
