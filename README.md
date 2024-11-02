@@ -72,6 +72,16 @@ The below sections provide quick introductions for `damo`'s major features.
 For more detailed usage, please refer to [USAGE.md](USAGE.md) file.
 
 
+Which kernels are supported?
+----------------------------
+
+`damo` aims to support every Linux kernel having DAMON source code from any
+upstream (stable or mainline) release, and enabling sysfs interface.  If your
+kernel is assumed to be supported but `damo` is not working, please report the
+issue via https://github.com/damonitor/damo/issues, damon@lists.linux.dev, or
+sj@kernel.org.
+
+
 What does the version numbers mean?
 -----------------------------------
 
