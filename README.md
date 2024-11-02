@@ -63,7 +63,7 @@ How can I ensure DAMON is enabled on my kernel?
 -----------------------------------------------
 
 Please refer to 'Install'
-[section](https://sjp38.github.io/post/damon/#install) of the project webpage.
+[section](https://damonitor.github.io/#install) of the project webpage.
 
 Where can I get more detailed usage?
 ------------------------------------
