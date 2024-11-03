@@ -114,7 +114,7 @@ class TestDamoShow(unittest.TestCase):
                 })
         self.assertEqual(damo_report_access.format_template(
             '<abs start time>', damo_report_access.record_formatters, [], None,
-            None, None, record, False, None), '0 ns')
+            None, None, None, record, False, None), '0 ns')
 
     def test_rescale(self):
         self.assertEqual(

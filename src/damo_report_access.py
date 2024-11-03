@@ -52,39 +52,43 @@ record_formatters = [
 
 snapshot_formatters = [
         Formatter('<total bytes>',
-            lambda snapshot, record, raw, rbargs:
+            lambda snapshot, record, raw, fmt, rbargs:
             _damo_fmt_str.format_sz(snapshot.total_bytes, raw),
             'total bytes of regions in the snapshot'),
         Formatter('<duration>',
-            lambda snapshot, record, raw, rbargs: _damo_fmt_str.format_time_ns(
-                snapshot.end_time - snapshot.start_time, raw),
-            'access monitoring duration for the snapshot'),
+            lambda snapshot, record, raw, fmt, rbargs:
+                  _damo_fmt_str.format_time_ns(
+                      snapshot.end_time - snapshot.start_time, raw),
+                  'access monitoring duration for the snapshot'),
         Formatter('<start time>',
-            lambda snapshot, record, raw, rbargs: _damo_fmt_str.format_time_ns(
-                snapshot.start_time - record.snapshots[0].start_time, raw),
+            lambda snapshot, record, raw, fmt, rbargs:
+                  _damo_fmt_str.format_time_ns(
+                      snapshot.start_time -
+                      record.snapshots[0].start_time, raw),
             'access monitoring start time for the snapshot, relative to the record start time'),
         Formatter('<end time>',
-            lambda snapshot, record, raw, rbargs: _damo_fmt_str.format_time_ns(
-                snapshot.end_time - record.snapshots[0].start_time, raw),
+            lambda snapshot, record, raw, fmt, rbargs:
+                  _damo_fmt_str.format_time_ns(
+                      snapshot.end_time - record.snapshots[0].start_time, raw),
             'access monitoring end time for the snapshot, relative to the record end time'),
         Formatter('<abs start time>',
-            lambda snapshot, record, raw, rbargs:
+            lambda snapshot, record, raw, fmt, rbargs:
             _damo_fmt_str.format_time_ns(snapshot.start_time, raw),
             'absolute access monitoring start time for the snapshot'),
         Formatter('<abs end time>',
-            lambda snapshot, record, raw, rbargs:
+            lambda snapshot, record, raw, fmt, rbargs:
             _damo_fmt_str.format_time_ns(snapshot.end_time, raw),
             'absolute access monitoring end time for the snapshot'),
         Formatter('<number of regions>',
-            lambda snapshot, record, raw, rbargs:
+            lambda snapshot, record, raw, fmt, rbargs:
             _damo_fmt_str.format_nr(len(snapshot.regions), raw),
             'the number of regions in the snapshot'),
         Formatter('<region box colors>',
-            lambda snapshot, record, raw, rbargs:
+            lambda snapshot, record, raw, fmt, rbargs:
             _damo_ascii_color.color_samples(rbargs.colorset),
             'available colors for the region box'),
         Formatter('<region box description>',
-            lambda snapshot, record, raw, rbargs:
+            lambda snapshot, record, raw, fmt, rbargs:
             rbargs.description_msg(raw),
             'description about region box (what and how it represents)'),
         ]
@@ -365,8 +369,8 @@ def apply_min_chars(min_chars, field_name, txt):
             return txt
     return txt
 
-def format_template(template, formatters, min_chars, index, region, snapshot,
-        record, raw, region_box_args):
+def format_template(template, formatters, min_chars, fmt, index, region,
+                    snapshot, record, raw, region_box_args):
     if template == '':
         return
     for formatter in formatters:
@@ -375,7 +379,8 @@ def format_template(template, formatters, min_chars, index, region, snapshot,
         if formatters == record_formatters:
             txt = formatter.format_fn(record, raw)
         elif formatters == snapshot_formatters:
-            txt = formatter.format_fn(snapshot, record, raw, region_box_args)
+            txt = formatter.format_fn(snapshot, record, raw, fmt,
+                                      region_box_args)
         elif formatters == region_formatters:
             txt = formatter.format_fn(index, region, raw, region_box_args)
         txt = apply_min_chars(min_chars, formatter.keyword, txt)
@@ -384,11 +389,11 @@ def format_template(template, formatters, min_chars, index, region, snapshot,
     return template
 
 def format_output(template, formatters, min_chars, raw, region_box_args,
-                  record, snapshot=None, region=None, index=None):
+                  fmt, record, snapshot=None, region=None, index=None):
     if template == '':
         return None
-    return format_template(template, formatters, min_chars, index, region,
-        snapshot, record, raw, region_box_args)
+    return format_template(template, formatters, min_chars, fmt, index, region,
+                           snapshot, record, raw, region_box_args)
 
 def temperature_of(region, weights):
     sz_weight, access_rate_weight, age_weight = weights
@@ -439,7 +444,7 @@ def fmt_records(fmt, records):
         outputs.append(
                 format_output(
                     fmt.format_record_head, record_formatters,
-                    fmt.min_chars_for, fmt.raw_number, region_box_args,
+                    fmt.min_chars_for, fmt.raw_number, region_box_args, fmt,
                     record))
         snapshots = record.snapshots
 
@@ -448,7 +453,7 @@ def fmt_records(fmt, records):
                     format_output(
                         fmt.format_snapshot_head, snapshot_formatters,
                         fmt.min_chars_for, fmt.raw_number, region_box_args,
-                        record, snapshot))
+                        fmt, record, snapshot))
             for r in snapshot.regions:
                 r.nr_accesses.add_unset_unit(record.intervals)
                 r.age.add_unset_unit(record.intervals)
@@ -459,19 +464,19 @@ def fmt_records(fmt, records):
                         format_output(
                             fmt.format_region, region_formatters,
                             fmt.min_chars_for, fmt.raw_number,
-                            region_box_args, record, snapshot, r, idx))
+                            region_box_args, fmt, record, snapshot, r, idx))
             outputs.append(
                     format_output(
                         fmt.format_snapshot_tail, snapshot_formatters,
                         fmt.min_chars_for, fmt.raw_number, region_box_args,
-                        record, snapshot))
+                        fmt, record, snapshot))
 
             if sidx < len(snapshots) - 1 and not fmt.total_sz_only():
                 outputs.append('')
         outputs.append(
                 format_output(
                     fmt.format_record_tail, record_formatters,
-                    fmt.min_chars_for, fmt.raw_number, region_box_args,
+                    fmt.min_chars_for, fmt.raw_number, region_box_args, fmt,
                     record))
     outputs = [o for o in outputs if o is not None]
     return '\n'.join(outputs)
