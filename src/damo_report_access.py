@@ -217,7 +217,9 @@ def lru_hist_str(snapshot, record, raw, fmt):
             min_sz = sz
         if max_sz is None or max_sz < sz:
             max_sz = sz
-        trange_str = '[%d, %d)' % (min_t, max_t)
+        trange_str = '[-%s, -%s)' % (
+                _damo_fmt_str.format_time_us(-1 * min_t, raw),
+                _damo_fmt_str.format_time_us(-1 * max_t, raw))
         if max_trange_str is None or max_trange_str < len(trange_str):
             max_trange_str = len(trange_str)
         sz_str = _damo_fmt_str.format_sz(sz, raw)
