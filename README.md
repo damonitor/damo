@@ -65,21 +65,17 @@ How can I ensure DAMON is enabled on my kernel?
 Please refer to 'Install'
 [section](https://damonitor.github.io/#install) of the project webpage.
 
+`damo` aims to support any Linux kernel that enables DAMON, regardless of the
+version and downstream changes.  Of course, `damo` will be unable to support in
+some special cases.  That said, please reach out to the development community
+for discussions.
+
+
 Where can I get more detailed usage?
 ------------------------------------
 
 The below sections provide quick introductions for `damo`'s major features.
 For more detailed usage, please refer to [USAGE.md](USAGE.md) file.
-
-
-Which kernels are supported?
-----------------------------
-
-`damo` aims to support every Linux kernel having DAMON source code from any
-upstream (stable or mainline) release, and enabling sysfs interface.  If your
-kernel is assumed to be supported but `damo` is not working, please report the
-issue via https://github.com/damonitor/damo/issues, damon@lists.linux.dev, or
-sj@kernel.org.
 
 
 What does the version numbers mean?
