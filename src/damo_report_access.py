@@ -95,9 +95,9 @@ snapshot_formatters = [
                   lambda snapshot, record, raw, fmt, rbargs:
                   temperature_sz_hist_str(snapshot, record, raw, fmt),
                   'temperature to total size of the regions histogram'),
-        Formatter('<lru-sz histogram>',
+        Formatter('<recency-sz histogram>',
                   lambda snapshot, record, raw, fmt, rbargs:
-                  lru_hist_str(snapshot, record, raw, fmt),
+                  recency_hist_str(snapshot, record, raw, fmt),
                   'last accessed time to total size of the regions histogram'),
         ]
 
@@ -187,7 +187,7 @@ def temperature_sz_hist_str(snapshot, record, raw, fmt):
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
-def lru_hist_str(snapshot, record, raw, fmt):
+def recency_hist_str(snapshot, record, raw, fmt):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
     hist = {}
@@ -769,10 +769,10 @@ def set_formats(args):
             '<temperature> <total size>',
             '<temperature-sz histogram>'])
         args.format_region = ''
-    elif args.style == 'lru-sz-hist':
+    elif args.style == 'recency-sz-hist':
         args.format_snapshot_head = '\n'.join([
             '<last accessed time (us)> <total size>',
-            '<lru-sz histogram>'])
+            '<recency-sz histogram>'])
         args.format_region = ''
 
     args.region_box_values = [v if v != 'none' else None
@@ -856,7 +856,7 @@ def add_fmt_args(parser, hide_help=False):
     # how to show, in simple selection
     parser.add_argument(
             '--style', choices=['detailed', 'simple-boxes',
-                                'temperature-sz-hist', 'lru-sz-hist'],
+                                'temperature-sz-hist', 'recency-sz-hist'],
             default='detailed',
             help='output format selection among pre-configures ones')
     # how to show, in highly tunable way
