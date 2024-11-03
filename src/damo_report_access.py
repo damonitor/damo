@@ -672,6 +672,11 @@ def set_formats(args):
         args.region_box_min_max_length = [1, 40]
         args.region_box_align = 'right'
         args.region_box_colorset = 'emotion'
+    elif args.style == 'temperature-sz-hist':
+        args.format_snapshot_head = '\n'.join([
+            '<temperature> <total size>',
+            '<temperature-sz histogram>'])
+        args.format_region = ''
 
     args.region_box_values = [v if v != 'none' else None
             for v in args.region_box_values]
@@ -753,7 +758,8 @@ def main(args):
 def add_fmt_args(parser, hide_help=False):
     # how to show, in simple selection
     parser.add_argument(
-            '--style', choices=['detailed', 'simple-boxes'],
+            '--style', choices=['detailed', 'simple-boxes',
+                                'temperature-sz-hist'],
             default='detailed',
             help='output format selection among pre-configures ones')
     # how to show, in highly tunable way
