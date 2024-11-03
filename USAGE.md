@@ -415,6 +415,70 @@ For example:
     8   addr [101.824 GiB , 126.938 GiB) (25.114 GiB ) access 0 %   age 16 m 25.300 s
     total size: 122.938 GiB
 
+### Access report styles
+
+`damo report access` provides `--style` option that allows users set the report
+style for commonly useful cases.  The default style is 'detailed', which shown
+on example of the previous [section](#damo-report-access).
+
+`recency-sz-hist` style provides last accessed time to total size of the
+regions histogram for each snapshot.  For example,
+
+    $ sudo damo report access --style recency-sz-hist
+    <last accessed time (us)> <total size>
+    [-1 h 31 m 34.300 s, -1 h 22 m 27.650 s) 41.991 GiB |********************|
+    [-1 h 22 m 27.650 s, -1 h 13 m 21 s)     5.957 GiB  |***                 |
+    [-1 h 13 m 21 s, -1 h 4 m 14.350 s)      0 B        |                    |
+    [-1 h 4 m 14.350 s, -55 m 7.700 s)       5.941 GiB  |***                 |
+    [-55 m 7.700 s, -46 m 1.050 s)           0 B        |                    |
+    [-46 m 1.050 s, -36 m 54.400 s)          0 B        |                    |
+    [-36 m 54.400 s, -27 m 47.750 s)         0 B        |                    |
+    [-27 m 47.750 s, -18 m 41.100 s)         0 B        |                    |
+    [-18 m 41.100 s, -9 m 34.450 s)          0 B        |                    |
+    [-9 m 34.450 s, -27.800 s)               0 B        |                    |
+    [-27.800 s, --518850000000 ns)           5.979 GiB  |***                 |
+    total size: 59.868 GiB
+
+`temperature-sz-hist` style provides access temperature to total size of the
+regions histogram for each snapshot.  This is useful if you want to further
+differentiate hot pages that accessed recently.  For example,
+
+    $ sudo damo report access --style temperature-sz-hist
+    <temperature> <total size>
+    [-2210000000, -1773999000) 793.051 MiB  |********************|
+    [-1773999000, -1337998000) 0 B          |                    |
+    [-1337998000, -901997000)  0 B          |                    |
+    [-901997000, -465996000)   23.707 MiB   |*                   |
+    [-465996000, -29995000)    66.766 MiB   |**                  |
+    [-29995000, 406006000)     9.508 MiB    |*                   |
+    [406006000, 842007000)     1008.000 KiB |*                   |
+    [842007000, 1278008000)    0 B          |                    |
+    [1278008000, 1714009000)   0 B          |                    |
+    [1714009000, 2150010000)   0 B          |                    |
+    [2150010000, 2586011000)   4.000 KiB    |*                   |
+    total size: 894.020 MiB
+
+`simple-boxes` style is similar to `detailed` style, but provides a box
+visualization for access frequency and age of each region.  It is useful for
+understanding overall access pattern of the system in a glance.  For example,
+
+    $ sudo damo report access --style simple-boxes
+     |000000000000000000000000000000000000000| size 54.996 MiB  access rate 0 %   age 7.300 s
+    |0000000000000000000000000000000000000000| size 292.797 MiB access rate 0 %   age 10.400 s
+           |000000000000000000000000000000000| size 54.062 MiB  access rate 0 %   age 700 ms
+            |00000000000000000000000000000000| size 31.820 MiB  access rate 0 %   age 500 ms
+            |99999999999999999999999999999999| size 9.402 MiB   access rate 100 % age 500 ms
+         |00000000000000000000000000000000000| size 6.277 MiB   access rate 0 %   age 1.400 s
+     |000000000000000000000000000000000000000| size 116.000 KiB access rate 0 %   age 9.900 s
+                                           |4| size 8.000 KiB   access rate 55 %  age 0 ns
+     |000000000000000000000000000000000000000| size 8.000 KiB   access rate 0 %   age 9.800 s
+    total size: 559.688 MiB
+
+`damo report access` further provides flexible customization features.
+Actually `--style` option is also built on top of the customization features.
+Below sections provide more details about the background and usages of the
+features.
+
 ### DAMON Monitoring Results Structure
 
 The biggest unit of the monitoring result is called 'record'.  Each record
