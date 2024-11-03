@@ -80,7 +80,7 @@ def fmt_report_short(args):
     if args.profile is None:
         args.profile = args.access_pattern + '.profile'
 
-    cmd = ['perf', 'report', '-i', args.profile, '--stdio']
+    cmd = [args.perf_path, 'report', '-i', args.profile, '--stdio']
     output_lines = subprocess.check_output(cmd).decode().split('\n')
     output_lines = output_lines[5:21]
     lines += output_lines
@@ -176,7 +176,7 @@ def fmt_report(args):
     if args.profile is None:
         args.profile = args.access_pattern + '.profile'
 
-    cmd = ['perf', 'report', '-i', args.profile, '--stdio']
+    cmd = [args.perf_path, 'report', '-i', args.profile, '--stdio']
     output = subprocess.check_output(cmd).decode()
     lines.append('\n'.join(output.split('\n')[:30]))
 
@@ -203,4 +203,6 @@ def set_argparser(parser):
             '--profile', metavar='<file>', help='profile record file')
     parser.add_argument(
             '--long', action='store_true', help='make long report')
+    parser.add_argument('--perf_path', type=str, default='perf',
+                        help='path of perf tool')
     parser.description = 'Show a holistic access pattern report'
