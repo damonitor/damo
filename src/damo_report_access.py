@@ -95,6 +95,10 @@ snapshot_formatters = [
                   lambda snapshot, record, raw, fmt, rbargs:
                   temperature_sz_hist_str(snapshot, record, raw, fmt),
                   'temperature to total size of the regions histogram'),
+        Formatter('<lru-sz histogram>',
+                  lambda snapshot, record, raw, fmt, rbargs:
+                  lru_hist_str(snapshot, record, raw, fmt),
+                  'last accessed time to total size of the regions histogram'),
         ]
 
 region_formatters = [
@@ -158,6 +162,57 @@ def temperature_sz_hist_str(snapshot, record, raw, fmt):
         min_t = t
         max_t = t + interval
         sz = sum([hist[x] for x in temperatures if x >= min_t and x < max_t])
+        if min_sz is None or sz < min_sz:
+            min_sz = sz
+        if max_sz is None or max_sz < sz:
+            max_sz = sz
+        trange_str = '[%d, %d)' % (min_t, max_t)
+        if max_trange_str is None or max_trange_str < len(trange_str):
+            max_trange_str = len(trange_str)
+        sz_str = _damo_fmt_str.format_sz(sz, raw)
+        if max_sz_str is None or max_sz_str < len(sz_str):
+            max_sz_str = len(sz_str)
+        hist2.append([trange_str, sz_str, sz])
+    max_dots = 20
+    sz_interval = int((max_sz - min_sz) / max_dots)
+    lines = []
+    for trange_str, sz_str, sz in hist2:
+        trange_str = '%s%s' % (trange_str,
+                               ' ' * (max_trange_str - len(trange_str)))
+        sz_str = '%s%s' % (sz_str,
+                           ' ' * (max_sz_str - len(sz_str)))
+
+        nr_dots = min(math.ceil((sz - min_sz) / sz_interval), max_dots)
+        bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
+        lines.append('%s %s %s' % (trange_str, sz_str, bar))
+    return '\n'.join(lines)
+
+def lru_hist_str(snapshot, record, raw, fmt):
+    if len(snapshot.regions) == 0:
+        return 'no region in snapshot'
+    hist = {}
+    for region in snapshot.regions:
+        last_used = -1 * region.age.usec
+        if region.nr_accesses.percent > 0:
+            last_used = 0
+        if not last_used in hist:
+            hist[last_used] = 0
+        hist[last_used] += region.size()
+
+    last_used_times = sorted(hist.keys())
+    min_lut, max_lut = last_used_times[0], last_used_times[-1]
+    interval = int((max_lut - min_lut) / 10)
+    max_lut = interval * math.ceil(max_lut / interval) + 1
+
+    hist2 = []
+    min_sz = None
+    max_sz = None
+    max_trange_str = None
+    max_sz_str = None
+    for t in range(min_lut, max_lut, interval):
+        min_t = t
+        max_t = t + interval
+        sz = sum([hist[x] for x in last_used_times if x >= min_t and x < max_t])
         if min_sz is None or sz < min_sz:
             min_sz = sz
         if max_sz is None or max_sz < sz:
