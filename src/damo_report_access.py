@@ -133,6 +133,8 @@ default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<dur
 default_region_format = '<index> addr [<start address>, <end address>) (<size>) access <access rate> age <age>'
 
 def temperature_sz_hist_str(snapshot, record, raw, fmt):
+    if len(snapshot.regions) == 0:
+        return 'no region in snapshot'
     hist = {}
     # set size weight zero
     weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
@@ -141,11 +143,18 @@ def temperature_sz_hist_str(snapshot, record, raw, fmt):
         if not temperature in hist:
             hist[temperature] = 0
         hist[temperature] += region.size()
+
     temperatures = sorted(hist.keys())
+    min_temp, max_temp = temperatures[0], temperatures[-1]
+    interval = int((max_temp - min_temp) / 10)
+    max_temp = interval * math.ceil(max_temp / interval) + 1
     lines = []
-    for temperature in temperatures:
-        lines.append('%d: %s' % (temperature,
-                     _damo_fmt_str.format_sz(hist[temperature], raw)))
+    for t in range(min_temp, max_temp, interval):
+        min_t = t
+        max_t = t + interval
+        sz = sum([hist[x] for x in temperatures if x >= min_t and x < max_t])
+        trange = '[%d, %d)' % (min_t, max_t)
+        lines.append('%-31s %-20s' % (trange, _damo_fmt_str.format_sz(sz, raw)))
     return '\n'.join(lines)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
