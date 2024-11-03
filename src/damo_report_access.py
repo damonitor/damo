@@ -767,6 +767,11 @@ def set_formats(args):
             '<temperature> <total size>',
             '<temperature-sz histogram>'])
         args.format_region = ''
+    elif args.style == 'lru-sz-hist':
+        args.format_snapshot_head = '\n'.join([
+            '<last accessed time (us)> <total size>',
+            '<lru-sz histogram>'])
+        args.format_region = ''
 
     args.region_box_values = [v if v != 'none' else None
             for v in args.region_box_values]
@@ -849,7 +854,7 @@ def add_fmt_args(parser, hide_help=False):
     # how to show, in simple selection
     parser.add_argument(
             '--style', choices=['detailed', 'simple-boxes',
-                                'temperature-sz-hist'],
+                                'temperature-sz-hist', 'lru-sz-hist'],
             default='detailed',
             help='output format selection among pre-configures ones')
     # how to show, in highly tunable way
