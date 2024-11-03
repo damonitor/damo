@@ -152,6 +152,8 @@ def temperature_sz_hist_str(snapshot, record, raw, fmt):
     hist2 = []
     min_sz = None
     max_sz = None
+    max_trange_str = None
+    max_sz_str = None
     for t in range(min_temp, max_temp, interval):
         min_t = t
         max_t = t + interval
@@ -160,17 +162,25 @@ def temperature_sz_hist_str(snapshot, record, raw, fmt):
             min_sz = sz
         if max_sz is None or max_sz < sz:
             max_sz = sz
-        hist2.append([t, t + interval, sz])
+        trange_str = '[%d, %d)' % (min_t, max_t)
+        if max_trange_str is None or max_trange_str < len(trange_str):
+            max_trange_str = len(trange_str)
+        sz_str = _damo_fmt_str.format_sz(sz, raw)
+        if max_sz_str is None or max_sz_str < len(sz_str):
+            max_sz_str = len(sz_str)
+        hist2.append([trange_str, sz_str, sz])
     max_dots = 20
     sz_interval = int((max_sz - min_sz) / max_dots)
     lines = []
-    for min_t, max_t, sz in hist2:
-        nr_dots = min(math.ceil((sz - min_sz) / sz_interval), max_dots)
-        trange = '[%d, %d)' % (min_t, max_t)
-        sz = _damo_fmt_str.format_sz(sz, raw)
-        bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
-        lines.append('%-31s %-20s %s' % (trange, sz, bar))
+    for trange_str, sz_str, sz in hist2:
+        trange_str = '%s%s' % (trange_str,
+                               ' ' * (max_trange_str - len(trange_str)))
+        sz_str = '%s%s' % (sz_str,
+                           ' ' * (max_sz_str - len(sz_str)))
 
+        nr_dots = min(math.ceil((sz - min_sz) / sz_interval), max_dots)
+        bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
+        lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
