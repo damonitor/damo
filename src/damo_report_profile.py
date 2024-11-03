@@ -37,7 +37,7 @@ def main(args):
         print('No snapshot of the condition found')
         exit(1)
 
-    cmd = ['perf', 'report', '-i', args.inputs[1]]
+    cmd = [args.perf_path, 'report', '-i', args.inputs[1]]
     for interval in times:
         cmd += ['--time', ','.join(['%s' % (t / 1000000000) for t in interval])]
     subprocess.call(cmd)
@@ -46,6 +46,8 @@ def set_argparser(parser):
     parser.add_argument('--inputs', metavar='<file>', nargs=2,
                         default=['damon.data', 'damon.data.profile'],
                         help='access pattern and profile record files')
+    parser.add_argument('--perf_path', type=str, default='perf',
+                        help='path of perf tool')
     _damo_records.set_filter_argparser(parser)
 
     parser.description='Show profiling report for specific access pattern'
