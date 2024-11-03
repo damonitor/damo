@@ -1328,7 +1328,7 @@ def region_of_pattern(region, pattern, record_intervals):
         return True
     region.nr_accesses.add_unset_unit(record_intervals)
     freq = region.nr_accesses.percent
-    if freq < nr_acc_min_max[0].percent or nr_acc_min_max[1].percent < freq:
+    if freq < nr_acc[0].percent or nr_acc[1].percent < freq:
         return False
     region.age.add_unset_unit(record_intervals)
     usecs = region.age.usec
