@@ -91,6 +91,10 @@ snapshot_formatters = [
             lambda snapshot, record, raw, fmt, rbargs:
             rbargs.description_msg(raw),
             'description about region box (what and how it represents)'),
+        Formatter('<temperature-sz histogram>',
+                  lambda snapshot, record, raw, fmt, rbargs:
+                  temperature_sz_hist_str(snapshot, record, raw, fmt),
+                  'temperature to total size of the regions histogram'),
         ]
 
 region_formatters = [
@@ -127,6 +131,22 @@ region_formatters = [
 default_record_head_format = 'kdamond <kdamond index> / context <context index> / scheme <scheme index> / target id <target id> / recorded for <duration> from <abs start time>'
 default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr [<start address>, <end address>) (<size>) access <access rate> age <age>'
+
+def temperature_sz_hist_str(snapshot, record, raw, fmt):
+    hist = {}
+    # set size weight zero
+    weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
+    for region in snapshot.regions:
+        temperature = temperature_of(region, fmt.temperature_weights)
+        if not temperature in hist:
+            hist[temperature] = 0
+        hist[temperature] += region.size()
+    temperatures = sorted(hist.keys())
+    lines = []
+    for temperature in temperatures:
+        lines.append('%d: %s' % (temperature,
+                     _damo_fmt_str.format_sz(hist[temperature], raw)))
+    return '\n'.join(lines)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
     '''Return a value in new scale
