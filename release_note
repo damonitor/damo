@@ -1,6 +1,9 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.5.5
+- Minimize unnecessary I/O for kernel features check
+
 v2.5.4
 - Implement recency to total size of regions histogram visualization
   (damo report access --style recency-sz-hist)
