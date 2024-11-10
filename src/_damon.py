@@ -1182,9 +1182,9 @@ def initialize(damon_interface, debug_damon,
             return err
 
     if save_feature_supports:
-        write_feature_supports_file()
+        err = write_feature_supports_file()
 
-    return None
+    return err
 
 initialized = False
 def ensure_initialized(args, save_feature_supports, load_feature_supports):
