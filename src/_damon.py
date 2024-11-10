@@ -1178,7 +1178,7 @@ def initialize(damon_interface, debug_damon,
 
     if load_feature_supports:
         err = read_feature_supports_file()
-        if err:
+        if err is None:
             return err
 
     if save_feature_supports:
