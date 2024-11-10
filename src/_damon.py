@@ -1167,8 +1167,7 @@ def set_damon_interface(damon_interface):
         return 'DAMON interface (%s) not supported' % damon_interface
     return None
 
-def initialize(damon_interface, debug_damon,
-        save_feature_supports, load_feature_supports):
+def initialize(damon_interface, debug_damon):
     err = set_damon_interface(damon_interface)
     if err is not None:
         return err
@@ -1176,24 +1175,26 @@ def initialize(damon_interface, debug_damon,
     if debug_damon:
         _damo_fs.debug_print_ops(True)
 
-    if load_feature_supports:
-        err = read_feature_supports_file()
-        if err is None:
-            return err
+    # try reading previously saved feature_supports file, to avoid unnecessary
+    # feature check I/O
+    err = read_feature_supports_file()
+    if err is None:
+        return err
 
-    if save_feature_supports:
-        err = write_feature_supports_file()
+    # While DAMON is running, feature chekcing I/O can fail, corrupt something,
+    # or make something complicated.
+    if any_kdamond_running():
+        return 'feature_supports loading failed (%s), and DAMON is running'
 
-    return err
+    return write_feature_supports_file()
 
 initialized = False
-def ensure_initialized(args, save_feature_supports, load_feature_supports):
+def ensure_initialized(args):
     global initialized
 
     if initialized:
         return
-    err = initialize(args.damon_interface_DEPRECATED, args.debug_damon,
-            save_feature_supports, load_feature_supports)
+    err = initialize(args.damon_interface_DEPRECATED, args.debug_damon)
     if err != None:
         print(err)
         exit(1)
@@ -1202,7 +1203,7 @@ def ensure_initialized(args, save_feature_supports, load_feature_supports):
 def ensure_root_and_initialized(args, save_feature_supports=False,
         load_feature_supports=False):
     ensure_root_permission()
-    ensure_initialized(args, save_feature_supports, load_feature_supports)
+    ensure_initialized(args)
 
 def damon_interface():
     if _damon_fs == _damon_sysfs:
