@@ -817,7 +817,7 @@ def main(args):
         exit(1)
 
     if args.input_file == None:
-        _damon.ensure_root_and_initialized(args, load_feature_supports=True)
+        _damon.ensure_root_and_initialized(args)
         if _damon.any_kdamond_running() is False:
             if os.path.exists('damon.data'):
                 args.input_file = 'damon.data'

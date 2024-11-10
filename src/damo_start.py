@@ -8,7 +8,7 @@ import _damon
 import _damon_args
 
 def main(args):
-    _damon.ensure_root_and_initialized(args, save_feature_supports=True)
+    _damon.ensure_root_and_initialized(args)
 
     err, kdamonds = _damon_args.turn_damon_on(args)
     if err:

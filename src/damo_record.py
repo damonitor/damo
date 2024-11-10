@@ -109,10 +109,7 @@ def mk_handle(args, kdamonds, monitoring_intervals):
 def main(args):
     global data_for_cleanup
 
-    is_ongoing = _damon_args.is_ongoing_target(args)
-    _damon.ensure_root_and_initialized(args,
-            load_feature_supports=True,
-            save_feature_supports=not is_ongoing)
+    _damon.ensure_root_and_initialized(args)
 
     handle_args(args)
 

@@ -1200,8 +1200,7 @@ def ensure_initialized(args):
         exit(1)
     initialized = True
 
-def ensure_root_and_initialized(args, save_feature_supports=False,
-        load_feature_supports=False):
+def ensure_root_and_initialized(args):
     ensure_root_permission()
     ensure_initialized(args)
 

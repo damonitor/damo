@@ -23,7 +23,7 @@ def main(args):
         exit(1)
 
     if args.input_file == None:
-        _damon.ensure_root_and_initialized(args, load_feature_supports=True)
+        _damon.ensure_root_and_initialized(args)
 
     records, err = _damo_records.get_records(
                 tried_regions_of=args.tried_regions_of,

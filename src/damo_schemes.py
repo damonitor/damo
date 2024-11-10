@@ -31,7 +31,7 @@ def main(args):
     global orig_kdamonds
     global kdamonds_idxs
 
-    _damon.ensure_root_and_initialized(args, save_feature_supports=True)
+    _damon.ensure_root_and_initialized(args)
 
     orig_kdamonds = _damon.current_kdamonds()
     kdamonds_idxs = []

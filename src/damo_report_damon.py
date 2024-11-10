@@ -111,8 +111,6 @@ def pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu):
 
 def main(args):
     _damon.ensure_root_and_initialized(args)
-    # ignore the error.  status could be called before feature saving commands.
-    err = _damon.read_feature_supports_file()
 
     if args.damon_params:
         return pr_damon_parameters(args.input_file, args.json, args.raw)
