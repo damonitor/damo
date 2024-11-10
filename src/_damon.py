@@ -1010,10 +1010,22 @@ import damo_version
 # dict is populated by _damon_fs, and saved as _damon_fs.feature_supports.
 #
 # The feature_supports population cannot be fully done while DAMON is running,
-# particularly in case of debugfs.  Sysfs is ok for now, but similar issue
-# could happen in future.  For the reason, the feature_supports are saved at
-# feature_supports_file_path file.  damo commands can ask
-# _damon.ensure_initialized() to load/save the file.
+# particularly in case of debugfs.  Specifically, it has to do writing some
+# values to some files and check if it success or fails.  While DAMON is
+# running, such writing may always fail (-EBUSY).  Sysfs is ok for now since it
+# allows writing files while DAMON is running, except 'state' file.  But,
+# similar issue could happen in future.
+#
+# Hence, damo features for online DAMON control or snapshot cannot make
+# feature_supprots correctly.  And repeated feature check is waste of time,
+# anyway.
+#
+# To work around, ask features that would run while DAMON is not running to
+# build the feature_supports dict, and write on feature_supports_file_path
+# file.  If the file already exists and valid, other damo features that depends
+# on feature_supports setup feature_supports dict by reading it from the file.
+# Specifically, ensure_initialized() receives the save/load request as
+# arguments.
 
 features = ['record',       # was in DAMON patchset, but not merged in mainline
             'vaddr',        # merged in v5.15, thebeginning
