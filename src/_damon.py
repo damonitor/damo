@@ -1108,6 +1108,8 @@ def write_feature_supports_file():
         return 'get_feature_supports() failed (%s)' % err
 
     to_save = {}
+    # if feature supports file has the information for file system that
+    # different from the one current execution is using, keep it.
     if os.path.isfile(feature_supports_file_path):
         with open(feature_supports_file_path, 'r') as f:
             try:
@@ -1115,6 +1117,8 @@ def write_feature_supports_file():
             except:
                 # Maybe previous writing was something wrong.  Just overwrite.
                 to_save = {}
+        # if it is written by old version of damo, discard previously written
+        # things.
         if not 'file_format_ver' in to_save:
             to_save = {}
         elif to_save['file_format_ver'] != feature_support_file_format_ver:
