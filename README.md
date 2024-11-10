@@ -66,9 +66,9 @@ Please refer to 'Install'
 [section](https://damonitor.github.io/#install) of the project webpage.
 
 `damo` aims to support any Linux kernel that enables DAMON, regardless of the
-version and downstream changes.  Of course, `damo` will be unable to support in
-some special cases.  That said, please reach out to the development community
-for discussions.
+version and downstream changes.  Of course, `damo` will be unable to support
+some of such kernels in some special cases.  That said, please reach out to the
+development community for discussions.
 
 
 Where can I get more detailed usage?
