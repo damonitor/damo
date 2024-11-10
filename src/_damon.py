@@ -1071,7 +1071,10 @@ feature_supports_file_path = os.path.join(os.environ['HOME'],
 #
 # Format version 1 file contains feature_supports for debugfs and sysfs, and
 # the version field.
-feature_support_file_format_ver = 1
+#
+# Format version 2 file contains the version of the kernel that
+# feature_supports is made on.
+feature_support_file_format_ver = 2
 
 def read_feature_supports_file():
     '''Return error string'''
@@ -1089,6 +1092,11 @@ def read_feature_supports_file():
     # support only the init version and current version for now.
     if file_format_ver != feature_support_file_format_ver:
         return 'unsupported format version %s' % file_format_ver
+    kernel_ver = feature_supports['kernel_version']
+    current_kernel_ver = subprocess.check_output(['uname', '-r']).decode()
+    if kernel_ver != current_kernel_ver:
+        return 'kernel version is different (old: %s, now: %s)' % (
+                kernel_ver, current_kernel_ver)
     if not damon_interface() in feature_supports:
         return 'no feature_supports for %s interface saved' % damon_interface()
     return set_feature_supports(feature_supports[damon_interface()])
@@ -1114,6 +1122,8 @@ def write_feature_supports_file():
 
     if to_save == {}:
         to_save['file_format_ver'] = feature_support_file_format_ver
+    to_save['kernel_version'] = subprocess.check_output(
+            ['uname', '-r']).decode()
     to_save[damon_interface()] = feature_supports
 
     with open(feature_supports_file_path, 'w') as f:
