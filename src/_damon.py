@@ -1085,18 +1085,19 @@ def read_feature_supports_file():
             feature_supports = json.load(f)
     except Exception as e:
         return 'reading feature supports failed (%s)' % e
+
+    # check version
     if not 'file_format_ver' in feature_supports:
-        # The initial format
-        return set_feature_supports(feature_supports)
-    file_format_ver = feature_supports['file_format_ver']
-    # support only the init version and current version for now.
+        file_format_ver = 0
+    else:
+        file_format_ver = feature_supports['file_format_ver']
     if file_format_ver != feature_support_file_format_ver:
         return 'unsupported format version %s' % file_format_ver
     kernel_ver = feature_supports['kernel_version']
     current_kernel_ver = subprocess.check_output(['uname', '-r']).decode()
     if kernel_ver != current_kernel_ver:
-        return 'kernel version is different (old: %s, now: %s)' % (
-                kernel_ver, current_kernel_ver)
+        return 'kernel is different from that created %s (%s != %s)' % (
+                feature_supports_file_path, kernel_ver, current_kernel_ver)
     if not damon_interface() in feature_supports:
         return 'no feature_supports for %s interface saved' % damon_interface()
     return set_feature_supports(feature_supports[damon_interface()])
