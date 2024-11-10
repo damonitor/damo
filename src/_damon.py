@@ -1124,8 +1124,7 @@ def write_feature_supports_file():
         elif to_save['file_format_ver'] != feature_support_file_format_ver:
             to_save = {}
 
-    if to_save == {}:
-        to_save['file_format_ver'] = feature_support_file_format_ver
+    to_save['file_format_ver'] = feature_support_file_format_ver
     to_save['kernel_version'] = subprocess.check_output(
             ['uname', '-r']).decode()
     to_save[damon_interface()] = feature_supports
