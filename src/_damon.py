@@ -1066,6 +1066,11 @@ def ensure_root_permission():
 feature_supports_file_path = os.path.join(os.environ['HOME'],
         '.damo.damon_feature_supports')
 
+# initial version is json format of feature_supports dict.  the version doesn't
+# have file format version at all.
+#
+# Format version 1 file contains feature_supports for debugfs and sysfs, and
+# the version field.
 feature_support_file_format_ver = 1
 
 def read_feature_supports_file():
