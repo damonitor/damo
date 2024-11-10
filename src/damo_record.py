@@ -111,7 +111,7 @@ def main(args):
 
     is_ongoing = _damon_args.is_ongoing_target(args)
     _damon.ensure_root_and_initialized(args,
-            load_feature_supports=is_ongoing,
+            load_feature_supports=True,
             save_feature_supports=not is_ongoing)
 
     handle_args(args)
