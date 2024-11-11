@@ -1167,7 +1167,7 @@ def set_damon_interface(damon_interface):
         return 'DAMON interface (%s) not supported' % damon_interface
     return None
 
-def initialize(damon_interface, debug_damon):
+def initialize(damon_interface, debug_damon, is_stop):
     err = set_damon_interface(damon_interface)
     if err is not None:
         return err
@@ -1181,6 +1181,11 @@ def initialize(damon_interface, debug_damon):
     if err is None:
         return err
 
+    # stop would be called while DAMON is running.  It can success without
+    # knowing features.  Just proceed.
+    if is_stop:
+        return None
+
     # While DAMON is running, feature chekcing I/O can fail, corrupt something,
     # or make something complicated.
     if any_kdamond_running():
@@ -1189,20 +1194,21 @@ def initialize(damon_interface, debug_damon):
     return write_feature_supports_file()
 
 initialized = False
-def ensure_initialized(args):
+def ensure_initialized(args, is_stop):
     global initialized
 
     if initialized:
         return
-    err = initialize(args.damon_interface_DEPRECATED, args.debug_damon)
+    err = initialize(args.damon_interface_DEPRECATED, args.debug_damon,
+                     is_stop)
     if err != None:
         print(err)
         exit(1)
     initialized = True
 
-def ensure_root_and_initialized(args):
+def ensure_root_and_initialized(args, is_stop=False):
     ensure_root_permission()
-    ensure_initialized(args)
+    ensure_initialized(args, is_stop)
 
 def damon_interface():
     if _damon_fs == _damon_sysfs:

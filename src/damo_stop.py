@@ -8,7 +8,7 @@ import _damon
 import _damon_args
 
 def main(args):
-    _damon.ensure_root_and_initialized(args)
+    _damon.ensure_root_and_initialized(args, is_stop=True)
 
     running_kdamond_idxs = _damon.running_kdamond_idxs()
     if len(running_kdamond_idxs) == 0:
