@@ -1124,6 +1124,11 @@ def write_feature_supports_file():
             to_save = {}
         elif to_save['file_format_ver'] != feature_support_file_format_ver:
             to_save = {}
+        if 'kernel_version' in to_save:
+            old_kver = to_save['kernel_version']
+            now_kver = subprocess.check_output(['uname', '-r']).decode()
+            if old_kver != now_kver:
+                to_save = {}
 
     to_save['file_format_ver'] = feature_support_file_format_ver
     to_save['kernel_version'] = subprocess.check_output(
