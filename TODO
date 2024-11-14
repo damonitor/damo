@@ -35,6 +35,7 @@
   - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
 - Fix crash from 'damo report access --style recency-sz-hist' when only single
   region exists
+- report access: implement snapshot format, heats
 
 - Deprecate old features
   - Deprecate 'damo report raw'
