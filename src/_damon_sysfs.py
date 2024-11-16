@@ -7,6 +7,7 @@ Contains core functions for DAMON sysfs control.
 import os
 import time
 
+import _damo_fmt_str
 import _damo_fs
 import _damon
 
@@ -253,33 +254,37 @@ def write_quotas_dir(dir_path, quotas):
 
     return write_quota_goals_dir(os.path.join(dir_path, 'goals'), quotas.goals)
 
+def write_ulong(file_path, val):
+    return _damo_fs.write_file(
+            file_path, '%d' % min(val, _damo_fmt_str.ulong_max))
+
 def write_scheme_access_pattern_dir(dir_path, pattern):
-    err = _damo_fs.write_file(
-            os.path.join(dir_path, 'sz', 'min'), '%d' % pattern.sz_bytes[0])
+    err = write_ulong(
+            os.path.join(dir_path, 'sz', 'min'), pattern.sz_bytes[0])
     if err is not None:
         return err
 
-    err = _damo_fs.write_file(
-            os.path.join(dir_path, 'sz', 'max'), '%d' % pattern.sz_bytes[1])
+    err = write_ulong(
+            os.path.join(dir_path, 'sz', 'max'), pattern.sz_bytes[1])
     if err is not None:
         return err
 
-    err = _damo_fs.write_file(os.path.join(dir_path, 'nr_accesses', 'min'),
-                              '%d' % pattern.nr_acc_min_max[0].samples)
+    err = write_ulong(os.path.join(dir_path, 'nr_accesses', 'min'),
+                      pattern.nr_acc_min_max[0].samples)
     if err is not None:
         return err
 
-    err = _damo_fs.write_file(os.path.join(dir_path, 'nr_accesses', 'max'),
-                              '%d' % pattern.nr_acc_min_max[1].samples)
+    err = write_ulong(os.path.join(dir_path, 'nr_accesses', 'max'),
+                      pattern.nr_acc_min_max[1].samples)
     if err is not None:
         return err
 
-    err = _damo_fs.write_file(os.path.join(dir_path, 'age', 'min'),
-                              '%d' % pattern.age_min_max[0].aggr_intervals)
+    err = write_ulong(os.path.join(dir_path, 'age', 'min'),
+                      pattern.age_min_max[0].aggr_intervals)
     if err is not None:
         return err
-    return _damo_fs.write_file(os.path.join(dir_path, 'age', 'max'),
-                              '%d' % pattern.age_min_max[1].aggr_intervals)
+    return write_ulong(os.path.join(dir_path, 'age', 'max'),
+                       pattern.age_min_max[1].aggr_intervals)
 
 def write_scheme_dir(dir_path, scheme):
     err = write_scheme_access_pattern_dir(
