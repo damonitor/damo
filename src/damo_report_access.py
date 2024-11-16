@@ -295,7 +295,9 @@ def heatmap_str(snapshot, record, raw, fmt):
         temperature_unit = max_temperature / max_color_level
     dots = []
     for temperature in temperatures_per_pixel:
-        dots.append('%d' % int((temperature - min_temperature) / temperature_unit))
+        temp_level = int((temperature - min_temperature) / temperature_unit)
+        dots.append(_damo_ascii_color.colored(
+            '%d' % temp_level, 'gray', temp_level))
     return ''.join(dots)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
