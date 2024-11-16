@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0
 
 import argparse
+import copy
 import json
 import math
 import os
@@ -99,6 +100,10 @@ snapshot_formatters = [
                   lambda snapshot, record, raw, fmt, rbargs:
                   recency_hist_str(snapshot, record, raw, fmt),
                   'last accessed time to total size of the regions histogram'),
+        Formatter('<heatmap>',
+                  lambda snapshot, record, raw, fmt, rbargs:
+                  heatmap_str(snapshot, record, raw, fmt),
+                  'heatmap of the snapshot'),
         ]
 
 region_formatters = [
@@ -239,6 +244,59 @@ def recency_hist_str(snapshot, record, raw, fmt):
         bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
+
+def heatmap_str(snapshot, record, raw, fmt):
+    total_sz = 0
+    for region in snapshot.regions:
+        total_sz += region.size()
+    map_length = 80
+    sz_unit = total_sz / map_length
+
+    temperatures_per_pixel = [0] * map_length
+    for i in range(map_length):
+        start = i * sz_unit
+        end = start + sz_unit
+        for region in snapshot.regions:
+            # skip region out of the range
+            if region.end < start or end < region.start:
+                continue
+            if start <= region.start and region.end <= end:
+                # region in the range
+                temperatures_per_pixel[i] += temperature_of(
+                        region, fmt.temperature_weights)
+            elif region.end > start:
+                # region intersecting right part
+                # <region>
+                #    <range>
+                sliced = copy.deepcopy(region)
+                sliced.start = start
+                temperatures_per_pixel[i] += temperature_of(
+                        sliced, fmt.temperature_weights)
+            else:
+                # region intersecting left part
+                #    <region>
+                # <range>
+                sliced = copy.deepcopy(region)
+                sliced.end = end
+                temperatures_per_pixel[i] += temperature_of(
+                        sliced, fmt.tempearture_weights)
+
+    min_temperature = None
+    max_temperature = None
+    for temperature in temperatures_per_pixel:
+        if min_temperature is None or temperature < min_temperature:
+            min_temperature = temperature
+        if max_temperature is None or temperature > max_temperature:
+            max_temperature = temperature
+    max_color_level = _damo_ascii_color.max_color_level()
+    temperature_unit = (max_temperature - min_temperature) / max_color_level
+    # single region?
+    if temperature_unit == 0:
+        temperature_unit = max_temperature / max_color_level
+    dots = []
+    for temperature in temperatures_per_pixel:
+        dots.append('%d' % int((temperature - min_temperature) / temperature_unit))
+    return ''.join(dots)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
     '''Return a value in new scale
