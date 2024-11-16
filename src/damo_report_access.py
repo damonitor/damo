@@ -245,6 +245,19 @@ def recency_hist_str(snapshot, record, raw, fmt):
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
+def region_in(start, end, regions):
+    for region in regions:
+        if region.end < start or end < region.start:
+            continue
+        return True
+    return False
+
+def region_after(addr, regions):
+    for region in regions:
+        if region.start > addr:
+            return region
+    return None
+
 def heatmap_str(snapshot, record, raw, fmt):
     total_sz = 0
     for region in snapshot.regions:
@@ -252,10 +265,22 @@ def heatmap_str(snapshot, record, raw, fmt):
     map_length = 80
     sz_unit = total_sz / map_length
 
-    temperatures_per_pixel = [0] * map_length
-    for i in range(map_length):
-        start = i * sz_unit
+    start = snapshot.regions[0].start
+    addr_ranges = []
+    while start < snapshot.regions[-1].end:
         end = start + sz_unit
+        if region_in(start, end, snapshot.regions):
+            addr_ranges.append([start, end])
+            start = end
+        else:
+            next_region = region_after(end, snapshot.regions)
+            if next_region is None:
+                break
+            start = next_region.start
+
+    temperatures_per_pixel = [0] * len(addr_ranges)
+    for i, start_end in enumerate(addr_ranges):
+        start, end = start_end
         for region in snapshot.regions:
             # skip region out of the range
             if region.end < start or end < region.start:
