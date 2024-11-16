@@ -262,7 +262,7 @@ def heatmap_str(snapshot, record, raw, fmt):
     total_sz = 0
     for region in snapshot.regions:
         total_sz += region.size()
-    map_length = 80
+    map_length = fmt.snapshot_heatmap_width
     sz_unit = total_sz / map_length
 
     start = snapshot.regions[0].start
@@ -740,6 +740,8 @@ class RecordsVisualizationFormat:
     format_snapshot_tail = None
     format_region = None
 
+    snapshot_heatmap_width = None
+
     region_box_values = None
     region_box_min_max_height = None
     region_box_min_max_length = None
@@ -764,6 +766,7 @@ class RecordsVisualizationFormat:
         self.format_snapshot_head = args.format_snapshot_head
         self.format_snapshot_tail = args.format_snapshot_tail
         self.format_region = args.format_region
+        self.snapshot_heatmap_width = args.snapshot_heatmap_width
         self.region_box_values = args.region_box_values
         self.region_box_min_max_height = args.region_box_min_max_height
         self.region_box_min_max_length = args.region_box_min_max_length
@@ -793,6 +796,7 @@ class RecordsVisualizationFormat:
                 'format_snapshot_head': self.format_snapshot_head,
                 'format_snapshot_tail': self.format_snapshot_tail,
                 'format_region': self.format_region,
+                'snapshot_heatmap_width': self.snapshot_heatmap_width,
                 'region_box_values': self.region_box_values,
                 'region_box_min_max_height': self.region_box_min_max_height,
                 'region_box_min_max_length': self.region_box_min_max_length,
@@ -816,6 +820,11 @@ class RecordsVisualizationFormat:
         self.format_snapshot_head = kvpairs['format_snapshot_head']
         self.format_snapshot_tail = kvpairs['format_snapshot_tail']
         self.format_region = kvpairs['format_region']
+        # snapshot_heatmap_width introduced from v2.5.6
+        if 'snapshot_heatmap_width' in kvpairs:
+            self.snapshot_heatmap_width = kvpairs['snapshot_heatmap_width']
+        else:
+            self.snapshot_heatmap_width = 80
         self.region_box_values = kvpairs['region_box_values']
         self.region_box_min_max_height = kvpairs['region_box_min_max_height']
         self.region_box_min_max_length = kvpairs['region_box_min_max_length']
@@ -987,6 +996,9 @@ def add_fmt_args(parser, hide_help=False):
             default='total size: <total bytes>',
             help='output format to show at the end of each snapshot'
             if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--snapshot_heatmap_width', default=80, type=int,
+            help='width of snapshot heatmap')
     parser.add_argument('--format_region', metavar='<template>',
                         default=default_region_format,
                         help='output format to show for each memory region'
