@@ -267,12 +267,14 @@ def heatmap_str(snapshot, record, raw, fmt):
 
     start = snapshot.regions[0].start
     addr_ranges = []
+    void_ranges = []
     while start < snapshot.regions[-1].end:
         end = start + sz_unit
         if region_in(start, end, snapshot.regions):
             addr_ranges.append([start, end])
             start = end
         else:
+            void_ranges.append(len(addr_ranges))
             next_region = region_after(end, snapshot.regions)
             if next_region is None:
                 break
@@ -319,10 +321,12 @@ def heatmap_str(snapshot, record, raw, fmt):
     if temperature_unit == 0:
         temperature_unit = max_temperature / max_color_level
     dots = []
-    for temperature in temperatures_per_pixel:
+    for idx, temperature in enumerate(temperatures_per_pixel):
         temp_level = int((temperature - min_temperature) / temperature_unit)
         dots.append(_damo_ascii_color.colored(
             '%d' % temp_level, 'gray', temp_level))
+        if idx in void_ranges:
+            dots.append('~')
     return ''.join(dots)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
