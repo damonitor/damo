@@ -33,8 +33,6 @@
   - shows when what virtual address has mappend and unmapped
 - Implement an official feature to check if 'damo' supports the system
   - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
-- Fix crash from 'damo report access --style recency-sz-hist' when only single
-  region exists
 - report access: implement snapshot format, heats
 - Fix below
   - damo start; damo tune -s 5ms -a 1s; damo report access
