@@ -150,7 +150,7 @@ def temperature_sz_hist_str(snapshot, record, raw, fmt):
 
     temperatures = sorted(hist.keys())
     min_temp, max_temp = temperatures[0], temperatures[-1]
-    interval = int((max_temp - min_temp) / 10)
+    interval = max(int((max_temp - min_temp) / 10), 1)
     max_temp = interval * math.ceil(max_temp / interval) + 1
 
     hist2 = []
@@ -174,7 +174,7 @@ def temperature_sz_hist_str(snapshot, record, raw, fmt):
             max_sz_str = len(sz_str)
         hist2.append([trange_str, sz_str, sz])
     max_dots = 20
-    sz_interval = int((max_sz - min_sz) / max_dots)
+    sz_interval = max(int((max_sz - min_sz) / max_dots), 1)
     lines = []
     for trange_str, sz_str, sz in hist2:
         trange_str = '%s%s' % (trange_str,
