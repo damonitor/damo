@@ -285,8 +285,10 @@ def heatmap_str(snapshot, record, raw, fmt):
         start, end = start_end
         for region in snapshot.regions:
             # skip region out of the range
-            if region.end < start or end < region.start:
+            if region.end < start:
                 continue
+            if end < region.start:
+                break
             if start <= region.start and region.end <= end:
                 # region in the range
                 temperatures_per_pixel[i] += temperature_of(
