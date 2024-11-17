@@ -324,7 +324,7 @@ def heatmap_str(snapshot, record, raw, fmt):
     for idx, temperature in enumerate(temperatures_per_pixel):
         temp_level = int((temperature - min_temperature) / temperature_unit)
         dots.append(_damo_ascii_color.colored(
-            '%d' % temp_level, 'gray', temp_level))
+            '%d' % temp_level, fmt.snapshot_heatmap_colorset, temp_level))
         if idx in void_ranges:
             dots.append('~')
     return ''.join(dots)
@@ -741,6 +741,7 @@ class RecordsVisualizationFormat:
     format_region = None
 
     snapshot_heatmap_width = None
+    snapshot_heatmap_colorset = None
 
     region_box_values = None
     region_box_min_max_height = None
@@ -767,6 +768,7 @@ class RecordsVisualizationFormat:
         self.format_snapshot_tail = args.format_snapshot_tail
         self.format_region = args.format_region
         self.snapshot_heatmap_width = args.snapshot_heatmap_width
+        self.snapshot_heatmap_colorset = args.snapshot_heatmap_colorset
         self.region_box_values = args.region_box_values
         self.region_box_min_max_height = args.region_box_min_max_height
         self.region_box_min_max_length = args.region_box_min_max_length
@@ -797,6 +799,7 @@ class RecordsVisualizationFormat:
                 'format_snapshot_tail': self.format_snapshot_tail,
                 'format_region': self.format_region,
                 'snapshot_heatmap_width': self.snapshot_heatmap_width,
+                'snapshot_heatmap_colorset': self.snapshot_heatmap_colorset,
                 'region_box_values': self.region_box_values,
                 'region_box_min_max_height': self.region_box_min_max_height,
                 'region_box_min_max_length': self.region_box_min_max_length,
@@ -825,6 +828,11 @@ class RecordsVisualizationFormat:
             self.snapshot_heatmap_width = kvpairs['snapshot_heatmap_width']
         else:
             self.snapshot_heatmap_width = 80
+        # snapshot_heatmap_colorset introduced from v2.5.6
+        if 'snapshot_heatmap_colorset' in kvpairs:
+            self.snapshot_heatmap_width = kvpairs['snapshot_heatmap_width']
+        else:
+            self.snapshot_heatmap_width = 'gray'
         self.region_box_values = kvpairs['region_box_values']
         self.region_box_min_max_height = kvpairs['region_box_min_max_height']
         self.region_box_min_max_length = kvpairs['region_box_min_max_length']
@@ -999,6 +1007,10 @@ def add_fmt_args(parser, hide_help=False):
     parser.add_argument(
             '--snapshot_heatmap_width', default=80, type=int,
             help='width of snapshot heatmap')
+    parser.add_argument(
+            '--snapshot_heatmap_colorset', default='gray',
+            choices=_damo_ascii_color.colorsets.keys(),
+            help='snapshot heatmap colorset')
     parser.add_argument('--format_region', metavar='<template>',
                         default=default_region_format,
                         help='output format to show for each memory region'
