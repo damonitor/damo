@@ -22,6 +22,13 @@ def main(args):
                 s.stats = None
                 s.tried_regions = None
 
+    if args.add is not None:
+        old_kdamonds, err = _damon_args.kdamonds_from_json_arg(args.add)
+        if err is not None:
+            print('cannot parse %s (%s)' % (args.add, err))
+            exit(1)
+        kdamonds = old_kdamonds + kdamonds
+
     kvpairs = {'kdamonds': [k.to_kvpairs(args.raw) for k in kdamonds]}
     if args.format == 'json':
         print(json.dumps(kvpairs, indent=4))
@@ -45,3 +52,6 @@ def set_argparser(parser):
     parser.add_argument(
             '--raw', action='store_true',
             help='print numbers in machine friendly raw form')
+    parser.add_argument(
+            '--add', metavar='<file>',
+            help='add DAMON parameters to those of a given file')
