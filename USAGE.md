@@ -1109,6 +1109,40 @@ The command also supports `report` format, which is similar to the output of
 `yaml` format outputs being too verbose or difficult to read.  It means it is
 not for machines, and therefore cannot feed to other damo commands.
 
+#### Multiple kdamonds
+
+Note: This is an experimental feature at the moment.  Some changes could be
+made, or the support can be dropped in future.
+
+`damo args damon` supports only single kdamond by default.  To edit DAMON
+parameters for multiple kdamonds, users can use `--add` and `--remove` options
+of `damo args damon`.
+
+`--add` option receives a file containing output from other `damo args damon`
+execution.  If the option is given, `damo args damon` reads the DAMON
+parameters from the file.  Then, it further generates DAMON parameters with
+command line options other than `--add` that given to `damo args damon`, add
+the newly generated kdamond parameters to those from the file, and print the
+resulting parameters.  Users may use file redicrects to save the output and add
+more kdamonds.  For example, below commands will create kdamonds.json file that
+contains two kdamonds running `migrate_hot` and `migrate_cold` DAMOS actions
+respectively.
+
+    # damo args damon --damos_action migrate_hot 0 > kdamond_hot.json
+    # damo args damon --damos_action migrate_cold 1 \
+             --add kdamond_hot.json > kdamonds.json
+
+`--remove` option receives a file containing output from other `damo args
+damon` execution, and the index of the kdamond in the file that the user wants
+to remove.  If the option is given, `damo args damon` reads the DAMON
+parameters from the file, remove the kdamond parameters of the index, and
+prints resulting parameters.  Again, users may use file redicrections to save
+outputs for incremental edits.  For example, below command will remove the
+kdamond for `migrate_cold` from the `kdamonds.json` file that generated above,
+and save the signle kdamond parameters to `kdamond_hot.json`.
+
+    # damo args damon --remove kdamonds.json 1 > kdamond_hot.json
+
 `damo dianose`
 --------------
 
