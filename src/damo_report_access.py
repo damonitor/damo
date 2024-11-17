@@ -272,6 +272,32 @@ class HeatPixel:
         self.temperature = temperature
         self.is_void = is_void
 
+    def add_temperature(self, region, weights):
+        start = self.start
+        end = self.end
+        # caller should ensure region intersects with self
+        if start <= region.start and region.end <= end:
+            # region is in the pixel
+            pass
+        elif region.start < start and end < region.end:
+            # pixel is in the region
+            region = copy.deepcopy(region)
+            region.start = start
+            region.end = end
+        elif region.end > start:
+            # region intersecting right part
+            # <region>
+            #    <pixel>
+            region = copy.deepcopy(region)
+            region.start = start
+        else:
+            # region intersecting left part
+            #    <region>
+            # <pixel>
+            region = copy.deepcopy(region)
+            region.end = end
+        self.temperature += temperature_of(region, weights)
+
 def heatmap_str(snapshot, record, raw, fmt):
     total_sz = 0
     for region in snapshot.regions:
@@ -304,29 +330,7 @@ def heatmap_str(snapshot, record, raw, fmt):
                 continue
             if end < region.start:
                 break
-            if start <= region.start and region.end <= end:
-                pass
-            elif region.start < start and end < region.end:
-                # region is larger than the range
-                # <----region---->
-                #    <range>
-                region = copy.deepcopy(region)
-                region.start = start
-                region.end = end
-            elif region.end > start:
-                # region intersecting right part
-                # <region>
-                #    <range>
-                region = copy.deepcopy(region)
-                region.start = start
-            else:
-                # region intersecting left part
-                #    <region>
-                # <range>
-                region = copy.deepcopy(region)
-                region.end = end
-            pixel.temperature += temperature_of(
-                    region, fmt.temperature_weights)
+            pixel.add_temperature(region, fmt.temperature_weights)
 
     min_temperature = None
     max_temperature = None
