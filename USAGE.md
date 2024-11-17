@@ -1102,9 +1102,10 @@ DAMON configuration that same to one that can be made with `damo start
 #### report format
 
 The command also supports `report` format, which is similar to the output of
-`damo report damon`.  The format is for human users who feels `json` or even
-`yaml` format outputs being too verbose or difficult to read.  It means it is
-not for machines, and therefore cannot feed to other damo commands.
+[`damo report damon`](#damo-report-damon).  The format is for human users who
+feels `json` or even `yaml` format outputs being too verbose or difficult to
+read.  It means it is not for machines, and therefore cannot feed to other damo
+commands.
 
 #### Multiple kdamonds
 
