@@ -258,6 +258,18 @@ def region_after(addr, regions):
             return region
     return None
 
+class HeatPixel:
+    start = None
+    end = None
+    temperature = None
+    is_void = None
+
+    def __init__(self, start, end, temperature, is_void):
+        self.start = start
+        self.end = end
+        self.temperature = temperature
+        self.is_void = is_void
+
 def heatmap_str(snapshot, record, raw, fmt):
     total_sz = 0
     for region in snapshot.regions:
@@ -266,23 +278,24 @@ def heatmap_str(snapshot, record, raw, fmt):
     sz_unit = total_sz / map_length
 
     start = snapshot.regions[0].start
-    addr_ranges = []
-    void_ranges = []
+    pixels = []
     while start < snapshot.regions[-1].end:
         end = start + sz_unit
         if region_in(start, end, snapshot.regions):
-            addr_ranges.append([start, end])
+            pixels.append(HeatPixel(start, end, 0, False))
             start = end
         else:
-            void_ranges.append(len(addr_ranges))
+            pixels.append(HeatPixel(None, None, None, True))
             next_region = region_after(end, snapshot.regions)
             if next_region is None:
                 break
             start = next_region.start
 
-    temperatures_per_pixel = [0] * len(addr_ranges)
-    for i, start_end in enumerate(addr_ranges):
-        start, end = start_end
+    for pixel in pixels:
+        if pixel.is_void is True:
+            continue
+        start = pixel.start
+        end = pixel.end
         for region in snapshot.regions:
             # skip region out of the range
             if region.end < start:
@@ -310,28 +323,32 @@ def heatmap_str(snapshot, record, raw, fmt):
                 # <range>
                 region = copy.deepcopy(region)
                 region.end = end
-            temperatures_per_pixel[i] += temperature_of(
+            pixel.temperature += temperature_of(
                     region, fmt.temperature_weights)
 
     min_temperature = None
     max_temperature = None
-    for temperature in temperatures_per_pixel:
-        if min_temperature is None or temperature < min_temperature:
-            min_temperature = temperature
-        if max_temperature is None or temperature > max_temperature:
-            max_temperature = temperature
+    for pixel in pixels:
+        if pixel.is_void is True:
+            continue
+        if min_temperature is None or pixel.temperature < min_temperature:
+            min_temperature = pixel.temperature
+        if max_temperature is None or pixel.temperature > max_temperature:
+            max_temperature = pixel.temperature
     max_color_level = _damo_ascii_color.max_color_level()
     temperature_unit = (max_temperature - min_temperature) / max_color_level
     # single region?
     if temperature_unit == 0:
         temperature_unit = max_temperature / max_color_level
     dots = []
-    for idx, temperature in enumerate(temperatures_per_pixel):
-        temp_level = int((temperature - min_temperature) / temperature_unit)
+    for pixel in pixels:
+        if pixel.is_void is True:
+            dots.append('[...]')
+            continue
+        temp_level = int(
+                (pixel.temperature - min_temperature) / temperature_unit)
         dots.append(_damo_ascii_color.colored(
             '%d' % temp_level, fmt.snapshot_heatmap_colorset, temp_level))
-        if idx in void_ranges:
-            dots.append('[...]')
     return ''.join(dots)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
