@@ -4,6 +4,10 @@ picked by human sense, so could be incomplete and missing many things.
 v2.5.6
 - Implement '<heatmap>' snapshot visualization format
   (damo report access --format_snapshot_head <heatmap>)
+- Support multiple kdamonds parameters edit (experimental)
+  (--add and --remove of 'damo args damon')
+- Support human-readable DAMON parameters view (experimental)
+  ('damo args damon --format report')
 
 v2.5.5
 - Minimize unnecessary I/O for kernel features check
