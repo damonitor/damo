@@ -1101,9 +1101,6 @@ DAMON configuration that same to one that can be made with `damo start
 
 #### report format
 
-Note: This is an experimental feature at the moment.  Some changes could be
-made, or the support can be dropped in future.
-
 The command also supports `report` format, which is similar to the output of
 `damo report damon`.  The format is for human users who feels `json` or even
 `yaml` format outputs being too verbose or difficult to read.  It means it is
