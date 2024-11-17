@@ -266,11 +266,23 @@ class HeatPixel:
     temperature = None
     is_void = None
 
-    def __init__(self, start, end, temperature, is_void):
+    def __init__(self, start, end, regions, temperature_weights):
         self.start = start
         self.end = end
-        self.temperature = temperature
-        self.is_void = is_void
+
+        if not region_in(start, end, regions):
+            self.temperature = None
+            self.is_void = True
+            return
+
+        self.is_void = False
+        self.temperature = 0
+        for region in regions:
+            if region.end <= start:
+                continue
+            if end <= region.start:
+                return
+            self.add_temperature(region, temperature_weights)
 
     def add_temperature(self, region, weights):
         start = self.start
@@ -309,28 +321,15 @@ def heatmap_str(snapshot, record, raw, fmt):
     pixels = []
     while start < snapshot.regions[-1].end:
         end = start + sz_unit
-        if region_in(start, end, snapshot.regions):
-            pixels.append(HeatPixel(start, end, 0, False))
-            start = end
-        else:
-            pixels.append(HeatPixel(None, None, None, True))
+        pixels.append(HeatPixel(
+            start, end, snapshot.regions, fmt.temperature_weights))
+        if pixels[-1].is_void is True:
             next_region = region_after(end, snapshot.regions)
             if next_region is None:
                 break
             start = next_region.start
-
-    for pixel in pixels:
-        if pixel.is_void is True:
-            continue
-        start = pixel.start
-        end = pixel.end
-        for region in snapshot.regions:
-            # skip region out of the range
-            if region.end <= start:
-                continue
-            if end <= region.start:
-                break
-            pixel.add_temperature(region, fmt.temperature_weights)
+        else:
+            start = end
 
     min_temperature = None
     max_temperature = None
