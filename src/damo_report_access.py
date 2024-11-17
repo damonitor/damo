@@ -247,9 +247,9 @@ def recency_hist_str(snapshot, record, raw, fmt):
 
 def region_in(start, end, regions):
     for region in regions:
-        if region.end < start:
+        if region.end <= start:
             continue
-        if end < region.start:
+        if end <= region.start:
             break
         return True
     return False
@@ -326,9 +326,9 @@ def heatmap_str(snapshot, record, raw, fmt):
         end = pixel.end
         for region in snapshot.regions:
             # skip region out of the range
-            if region.end < start:
+            if region.end <= start:
                 continue
-            if end < region.start:
+            if end <= region.start:
                 break
             pixel.add_temperature(region, fmt.temperature_weights)
 
