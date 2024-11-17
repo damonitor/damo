@@ -290,34 +290,28 @@ def heatmap_str(snapshot, record, raw, fmt):
             if end < region.start:
                 break
             if start <= region.start and region.end <= end:
-                # region in the range
-                temperatures_per_pixel[i] += temperature_of(
-                        region, fmt.temperature_weights)
+                pass
             elif region.start < start and end < region.end:
                 # region is larger than the range
                 # <----region---->
                 #    <range>
-                sliced = copy.deepcopy(region)
-                sliced.start = start
-                sliced.end = end
-                temperatures_per_pixel[i] += temperature_of(
-                        sliced, fmt.temperature_weights)
+                region = copy.deepcopy(region)
+                region.start = start
+                region.end = end
             elif region.end > start:
                 # region intersecting right part
                 # <region>
                 #    <range>
-                sliced = copy.deepcopy(region)
-                sliced.start = start
-                temperatures_per_pixel[i] += temperature_of(
-                        sliced, fmt.temperature_weights)
+                region = copy.deepcopy(region)
+                region.start = start
             else:
                 # region intersecting left part
                 #    <region>
                 # <range>
-                sliced = copy.deepcopy(region)
-                sliced.end = end
-                temperatures_per_pixel[i] += temperature_of(
-                        sliced, fmt.tempearture_weights)
+                region = copy.deepcopy(region)
+                region.end = end
+            temperatures_per_pixel[i] += temperature_of(
+                    region, fmt.temperature_weights)
 
     min_temperature = None
     max_temperature = None
