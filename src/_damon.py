@@ -1079,17 +1079,7 @@ feature_supports_file_path = os.path.join(os.environ['HOME'],
 # Format version 3 file contains the version of damo.
 feature_support_file_format_ver = 3
 
-def read_feature_supports_file():
-    '''Return error string'''
-    if not os.path.isfile(feature_supports_file_path):
-        return '%s not exist' % feature_supports_file_path
-    try:
-        with open(feature_supports_file_path, 'r') as f:
-            feature_supports = json.load(f)
-    except Exception as e:
-        return 'reading feature supports failed (%s)' % e
-
-    # check versions
+def version_mismatch(feature_supports):
     if not 'file_format_ver' in feature_supports:
         file_format_ver = 0
     else:
@@ -1105,6 +1095,21 @@ def read_feature_supports_file():
     if damo_ver != damo_version.__version__:
         return 'damo version is different from that created %s (%s != %s)' % (
                 feature_supports_file_path, damo_ver, damo_version.__version__)
+    return None
+
+def read_feature_supports_file():
+    '''Return error string'''
+    if not os.path.isfile(feature_supports_file_path):
+        return '%s not exist' % feature_supports_file_path
+    try:
+        with open(feature_supports_file_path, 'r') as f:
+            feature_supports = json.load(f)
+    except Exception as e:
+        return 'reading feature supports failed (%s)' % e
+
+    err = version_mismatch(feature_supports)
+    if err is not None:
+        return err
 
     if not damon_interface() in feature_supports:
         return 'no feature_supports for %s interface saved' % damon_interface()
