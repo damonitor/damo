@@ -34,6 +34,8 @@
 - Implement an official feature to check if 'damo' supports the system
   - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
 - report access: implement snapshot format, heats
+- fixup snapshot heatmap temperature calculation
+  - Simply adding temperature of regions makes no sense
 
 - Deprecate old features
   - Deprecate 'damo report raw'
