@@ -326,7 +326,7 @@ def heatmap_str(snapshot, record, raw, fmt):
         dots.append(_damo_ascii_color.colored(
             '%d' % temp_level, fmt.snapshot_heatmap_colorset, temp_level))
         if idx in void_ranges:
-            dots.append('~')
+            dots.append('[...]')
     return ''.join(dots)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
