@@ -1133,20 +1133,8 @@ def write_feature_supports_file():
                 to_save = {}
         # if it is written by old version of damo, discard previously written
         # things.
-        if not 'file_format_ver' in to_save:
+        if version_mismatch(to_save) is not None:
             to_save = {}
-        elif to_save['file_format_ver'] != feature_support_file_format_ver:
-            to_save = {}
-        if 'kernel_version' in to_save:
-            old_kver = to_save['kernel_version']
-            now_kver = subprocess.check_output(['uname', '-r']).decode()
-            if old_kver != now_kver:
-                to_save = {}
-        if 'damo_version' in to_save:
-            old_damo_ver = to_save['damo_version']
-            now_damo_ver = damo_version.__version__
-            if old_damo_ver != now_damo_ver:
-                to_save = {}
 
     to_save['file_format_ver'] = feature_support_file_format_ver
     to_save['kernel_version'] = subprocess.check_output(
