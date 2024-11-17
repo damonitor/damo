@@ -270,18 +270,14 @@ class HeatPixel:
         self.start = start
         self.end = end
 
-        if not region_in(start, end, regions):
-            self.temperature = None
-            self.is_void = True
-            return
-
-        self.is_void = False
         self.temperature = 0
+        self.is_void = True
         for region in regions:
             if region.end <= start:
                 continue
             if end <= region.start:
                 return
+            self.is_void = False
             self.add_temperature(region, temperature_weights)
 
     def add_temperature(self, region, weights):
