@@ -13,6 +13,7 @@ import time
 import subprocess
 
 import _damo_fmt_str
+import damo_version
 
 # Core data structures
 
@@ -1074,7 +1075,9 @@ feature_supports_file_path = os.path.join(os.environ['HOME'],
 #
 # Format version 2 file contains the version of the kernel that
 # feature_supports is made on.
-feature_support_file_format_ver = 2
+#
+# Format version 3 file contains the version of damo.
+feature_support_file_format_ver = 3
 
 def read_feature_supports_file():
     '''Return error string'''
@@ -1086,7 +1089,7 @@ def read_feature_supports_file():
     except Exception as e:
         return 'reading feature supports failed (%s)' % e
 
-    # check version
+    # check versions
     if not 'file_format_ver' in feature_supports:
         file_format_ver = 0
     else:
@@ -1098,6 +1101,11 @@ def read_feature_supports_file():
     if kernel_ver != current_kernel_ver:
         return 'kernel is different from that created %s (%s != %s)' % (
                 feature_supports_file_path, kernel_ver, current_kernel_ver)
+    damo_ver = feature_supports['damo_version']
+    if damo_ver != damo_version.__version__:
+        return 'damo version is different from that created %s (%s != %s)' % (
+                feature_supports_file_path, damo_ver, damo_version.__version__)
+
     if not damon_interface() in feature_supports:
         return 'no feature_supports for %s interface saved' % damon_interface()
     return set_feature_supports(feature_supports[damon_interface()])
@@ -1129,10 +1137,16 @@ def write_feature_supports_file():
             now_kver = subprocess.check_output(['uname', '-r']).decode()
             if old_kver != now_kver:
                 to_save = {}
+        if 'damo_version' in to_save:
+            old_damo_ver = to_save['damo_version']
+            now_damo_ver = damo_version.__version__
+            if old_damo_ver != now_damo_ver:
+                to_save = {}
 
     to_save['file_format_ver'] = feature_support_file_format_ver
     to_save['kernel_version'] = subprocess.check_output(
             ['uname', '-r']).decode()
+    to_save['damo_version'] = damo_version.__version__
     to_save[damon_interface()] = feature_supports
 
     with open(feature_supports_file_path, 'w') as f:
