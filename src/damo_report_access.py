@@ -315,6 +315,8 @@ def heatmap_str(snapshot, record, raw, fmt):
 
     start = snapshot.regions[0].start
     pixels = []
+    min_temperature = None
+    max_temperature = None
     while start < snapshot.regions[-1].end:
         end = start + sz_unit
         pixels.append(HeatPixel(
@@ -325,17 +327,13 @@ def heatmap_str(snapshot, record, raw, fmt):
                 break
             start = next_region.start
         else:
+            pixel = pixels[-1]
+            if min_temperature is None or pixel.temperature < min_temperature:
+                min_temperature = pixel.temperature
+            if max_temperature is None or pixel.temperature > max_temperature:
+                max_temperature = pixel.temperature
             start = end
 
-    min_temperature = None
-    max_temperature = None
-    for pixel in pixels:
-        if pixel.is_void is True:
-            continue
-        if min_temperature is None or pixel.temperature < min_temperature:
-            min_temperature = pixel.temperature
-        if max_temperature is None or pixel.temperature > max_temperature:
-            max_temperature = pixel.temperature
     max_color_level = _damo_ascii_color.max_color_level()
     temperature_unit = (max_temperature - min_temperature) / max_color_level
     # single region?
