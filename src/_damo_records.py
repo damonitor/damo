@@ -1593,3 +1593,7 @@ def set_filter_argparser(parser):
             '--snapshot_time', metavar=('<start (ns)>', '<end (ns)>'), nargs=2,
             action='append',
             help='show snapshots generated in these time intervals')
+    parser.add_argument(
+            '--temperature', metavar=('<min>', '<max>'), nargs=2, type=int,
+            action='append',
+            help='min/max temperature of regions to show')
