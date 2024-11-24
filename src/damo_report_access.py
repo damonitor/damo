@@ -107,32 +107,39 @@ snapshot_formatters = [
         ]
 
 region_formatters = [
-        Formatter('<index>',
-            lambda index, region, raw, rbargs:
+        Formatter(
+            '<index>',
+            lambda index, region, raw, fmt, rbargs:
             _damo_fmt_str.format_nr(index, raw),
             'index of the region in the regions of the snapshot'),
-        Formatter('<start address>',
-            lambda index, region, raw, rbargs:
+        Formatter(
+            '<start address>',
+            lambda index, region, raw, fmt, rbargs:
             _damo_fmt_str.format_sz(region.start, raw),
             'start address of the region'),
-        Formatter('<end address>',
-            lambda index, region, raw, rbargs:
+        Formatter(
+            '<end address>',
+            lambda index, region, raw, fmt, rbargs:
             _damo_fmt_str.format_sz(region.end, raw),
             'end address of the region'),
-        Formatter('<size>',
-            lambda index, region, raw, rbargs:
+        Formatter(
+            '<size>',
+            lambda index, region, raw, fmt, rbargs:
             _damo_fmt_str.format_sz(region.size(), raw),
             'size of the region'),
-        Formatter('<access rate>',
-            lambda index, region, raw, rbargs:
+        Formatter(
+            '<access rate>',
+            lambda index, region, raw, fmt, rbargs:
             _damo_fmt_str.format_percent(region.nr_accesses.percent, raw),
             'monitored access rate of the region'),
-        Formatter('<age>',
-            lambda index, region, raw, rbargs:
+        Formatter(
+            '<age>',
+            lambda index, region, raw, fmt, rbargs:
             _damo_fmt_str.format_time_us(region.age.usec, raw),
             'how long the access pattern of the region has maintained'),
-        Formatter('<box>',
-            lambda index, region, raw, rbargs:
+        Formatter(
+            '<box>',
+            lambda index, region, raw, fmt, rbargs:
             rbargs.to_str(region),
             'user-customizable (via --region_box_*) box (age/access_rate/size by default)'),
         ]
@@ -604,7 +611,7 @@ def format_template(template, formatters, min_chars, fmt, index, region,
             txt = formatter.format_fn(snapshot, record, raw, fmt,
                                       region_box_args)
         elif formatters == region_formatters:
-            txt = formatter.format_fn(index, region, raw, region_box_args)
+            txt = formatter.format_fn(index, region, raw, fmt, region_box_args)
         txt = apply_min_chars(min_chars, formatter.keyword, txt)
         template = template.replace(formatter.keyword, txt)
     template = template.replace('\\n', '\n')
