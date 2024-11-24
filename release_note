@@ -3,6 +3,8 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.5.7
 - Remove end address from default region format of 'damo report access'
+- Add temperature based region filter (--temperature of multiple report commands)
+- Add '<temperature>' region format keyword for 'damo report access'
 
 v2.5.6
 - Reduce a corner case to use stale cached kernel feature check results
