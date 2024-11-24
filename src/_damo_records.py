@@ -1428,13 +1428,17 @@ class RecordFilter:
     address_ranges = None
     snapshot_sz_ranges = None
     snapshot_time_ranges = None
+    temperature_ranges = None
+    temperature_weights = None
 
     def __init__(self, access_pattern, address_ranges, snapshot_sz_ranges,
-                 snapshot_time_ranges):
+                 snapshot_time_ranges, temperature_ranges, temperature_weights):
         self.access_pattern = access_pattern
         self.address_ranges = address_ranges
         self.snapshot_sz_ranges = snapshot_sz_ranges
         self.snapshot_time_ranges = snapshot_time_ranges
+        self.temperature_ranges = temperature_ranges
+        self.temperature_weights = temperature_weights
 
     def to_kvpairs(self, raw):
         kvpairs = {'access_pattern': self.access_pattern.to_kvpairs(raw)}
@@ -1454,6 +1458,8 @@ class RecordFilter:
                      _damo_fmt_str.format_sz(end, raw)]
                     for start, end in self.snapshot_sz_ranges]
         kvpairs['snapshot_sz_ranges'] = snapshot_sz_ranges
+        kvpairs['temperature_ranges'] = self.temperature_ranges
+        kvpairs['temperature_weights'] = self.temperature_weights
         return kvpairs
 
     def filter_records(self, records):
@@ -1505,7 +1511,7 @@ def get_records(tried_regions_of=None, record_file=None, record_filter=None,
     if record_filter:
         filter_copy = copy.deepcopy(record_filter)
     else:
-        filter_copy = RecordFilter(None, None, None, None)
+        filter_copy = RecordFilter(None, None, None, None, None, None)
 
     if request.record_file is None:
         records, err = get_snapshot_records_of(request)
@@ -1569,8 +1575,15 @@ def args_to_filter(args):
                 [_damo_fmt_str.text_to_ns(s), _damo_fmt_str.text_to_ns(e)]
                 for s, e in args.snapshot_time]
 
+    if hasattr(args, 'temperature_weights'):
+        temperature_weights = args.temperature_weights
+    else:
+        # ignore size
+        temperature_weights = [0, 100, 100]
+
     return RecordFilter(access_pattern, addr_range,
-                        snapshot_sz_ranges, snapshot_time), None
+                        snapshot_sz_ranges, snapshot_time,
+                        args.temperature, temperature_weights), None
 
 def set_filter_argparser(parser):
     parser.add_argument('--sz_region', metavar=('<min>', '<max>'), nargs=2,
