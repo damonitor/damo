@@ -12,6 +12,7 @@ import zlib
 
 import _damo_fmt_str
 import _damon
+import damo_report_access
 
 PERF = 'perf'
 perf_event_damon_aggregated = 'damon:damon_aggregated'
@@ -1395,6 +1396,21 @@ def filter_records_by_snapshot_time(records, time_ranges):
                 filtered_snapshots.append(snapshot)
         record.snapshots = filtered_snapshots
 
+def filter_records_by_temperature(records, temperature_ranges,
+                                  temperature_weights):
+    for record in records:
+        for snapshot in record.snapshots:
+            filtered_regions = []
+            for region in snapshot.regions:
+                temperature = damo_report_access.temperature_of(
+                        region, temperature_weights)
+                for min_t, max_t in temperature_ranges:
+                    if min_t <= temperature and temperature <= max_t:
+                        filtered_regions.append(region)
+                        break
+            snapshot.regions = filtered_regions
+            snapshot.update_total_bytes()
+
 def get_snapshot_records_of(request):
     '''
     get records containing single snapshot from running kdamonds
@@ -1472,6 +1488,9 @@ class RecordFilter:
             filter_records_by_snapshot_sz(records, self.snapshot_sz_ranges)
         if self.snapshot_time_ranges is not None:
             filter_records_by_snapshot_time(records, self.snapshot_time_ranges)
+        if self.temperature_ranges is not None:
+            filter_records_by_temperature(records, self.temperature_ranges,
+                                          self.temperature_weights)
 
 class RecordGetRequest:
     # TODO: Extend to be used for recording
