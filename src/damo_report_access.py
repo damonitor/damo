@@ -138,6 +138,11 @@ region_formatters = [
             _damo_fmt_str.format_time_us(region.age.usec, raw),
             'how long the access pattern of the region has maintained'),
         Formatter(
+            '<temperature>',
+            lambda index, region, raw, fmt, rbargs:
+            temperature_str(region, raw, fmt),
+            'access temperature of the region'),
+        Formatter(
             '<box>',
             lambda index, region, raw, fmt, rbargs:
             rbargs.to_str(region),
@@ -251,6 +256,10 @@ def recency_hist_str(snapshot, record, raw, fmt):
         bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
+
+def temperature_str(region, raw, fmt):
+    temperature = temperature_of(region, fmt.temperature_weights)
+    return _damo_fmt_str.format_nr(temperature, raw)
 
 def region_in(start, end, regions):
     for region in regions:
