@@ -304,7 +304,7 @@ class HeatPixel:
         if start <= region.start and region.end <= end:
             # region is in the pixel
             pass
-        elif region.start < start and end < region.end:
+        elif region.start <= start and end <= region.end:
             # pixel is in the region
             region = copy.deepcopy(region)
             region.start = start
