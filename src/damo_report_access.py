@@ -365,7 +365,12 @@ def heatmap_str(snapshot, record, raw, fmt):
                 (pixel.temperature - min_temperature) / temperature_unit)
         dots.append(_damo_ascii_color.colored(
             '%d' % temp_level, fmt.snapshot_heatmap_colorset, temp_level))
-    return ''.join(dots)
+    dots = ''.join(dots)
+    comment = '# min/max temperatures: %s, %s, column size: %s' % (
+            _damo_fmt_str.format_nr(min_temperature, raw),
+            _damo_fmt_str.format_nr(max_temperature, raw),
+            _damo_fmt_str.format_sz(sz_unit, raw))
+    return '%s\n%s' % (dots, comment)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
     '''Return a value in new scale
