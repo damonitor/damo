@@ -280,6 +280,7 @@ def region_after(addr, regions):
 class HeatPixel:
     start = None
     end = None
+    total_heat = None
     temperature = None
     is_void = None
 
@@ -287,15 +288,16 @@ class HeatPixel:
         self.start = start
         self.end = end
 
-        self.temperature = 0
+        self.total_heat = 0
         self.is_void = True
         for region in regions:
             if region.end <= start:
                 continue
             if end <= region.start:
-                return
+                break
             self.is_void = False
             self.add_temperature(region, temperature_weights)
+        self.temperature = self.total_heat / (self.end - self.start)
 
     def add_temperature(self, region, weights):
         start = self.start
@@ -321,7 +323,7 @@ class HeatPixel:
             # <pixel>
             region = copy.deepcopy(region)
             region.end = end
-        self.temperature += temperature_of(region, weights)
+        self.total_heat += temperature_of(region, weights) * (region.size())
 
 def heatmap_str(snapshot, record, raw, fmt):
     total_sz = 0
