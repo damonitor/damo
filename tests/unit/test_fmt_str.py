@@ -14,6 +14,8 @@ class TestDamoFmtStr(unittest.TestCase):
         self.assertEqual(_damo_fmt_str.format_nr(123, False), '123')
         self.assertEqual(_damo_fmt_str.format_nr(1234, False), '1,234')
         self.assertEqual(_damo_fmt_str.format_nr(1234567, False), '1,234,567')
+        self.assertEqual(_damo_fmt_str.format_nr(-123456789, False),
+                         '-123,456,789')
 
     def test_text_to_nr(self):
         _test_damo_common.test_input_expects(self,
