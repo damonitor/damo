@@ -309,7 +309,7 @@ class HeatPixel:
             region = copy.deepcopy(region)
             region.start = start
             region.end = end
-        elif region.end > start:
+        elif region.start < start:
             # region intersecting right part
             # <region>
             #    <pixel>
