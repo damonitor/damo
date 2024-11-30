@@ -633,8 +633,8 @@ def format_template(template, formatters, min_chars, fmt, index, region,
     template = template.replace('\\n', '\n')
     return template
 
-def format_output(template, formatters, min_chars, raw, region_box_args,
-                  fmt, record, snapshot=None, region=None, index=None):
+def format_output(template, formatters, min_chars, raw, fmt, record,
+                  snapshot=None, region=None, index=None):
     if template == '':
         return None
     return format_template(template, formatters, min_chars, fmt, index, region,
@@ -690,16 +690,15 @@ def fmt_records(fmt, records):
         outputs.append(
                 format_output(
                     fmt.format_record_head, record_formatters,
-                    fmt.min_chars_for, fmt.raw_number, region_box_args, fmt,
-                    record))
+                    fmt.min_chars_for, fmt.raw_number, fmt, record))
         snapshots = record.snapshots
 
         for sidx, snapshot in enumerate(snapshots):
             outputs.append(
                     format_output(
                         fmt.format_snapshot_head, snapshot_formatters,
-                        fmt.min_chars_for, fmt.raw_number, region_box_args,
-                        fmt, record, snapshot))
+                        fmt.min_chars_for, fmt.raw_number, fmt, record,
+                        snapshot))
             for r in snapshot.regions:
                 r.nr_accesses.add_unset_unit(record.intervals)
                 r.age.add_unset_unit(record.intervals)
@@ -709,21 +708,20 @@ def fmt_records(fmt, records):
                 outputs.append(
                         format_output(
                             fmt.format_region, region_formatters,
-                            fmt.min_chars_for, fmt.raw_number,
-                            region_box_args, fmt, record, snapshot, r, idx))
+                            fmt.min_chars_for, fmt.raw_number, fmt, record,
+                            snapshot, r, idx))
             outputs.append(
                     format_output(
                         fmt.format_snapshot_tail, snapshot_formatters,
-                        fmt.min_chars_for, fmt.raw_number, region_box_args,
-                        fmt, record, snapshot))
+                        fmt.min_chars_for, fmt.raw_number, fmt, record,
+                        snapshot))
 
             if sidx < len(snapshots) - 1 and not fmt.total_sz_only():
                 outputs.append('')
         outputs.append(
                 format_output(
                     fmt.format_record_tail, record_formatters,
-                    fmt.min_chars_for, fmt.raw_number, region_box_args, fmt,
-                    record))
+                    fmt.min_chars_for, fmt.raw_number, fmt, record))
     outputs = [o for o in outputs if o is not None]
     return '\n'.join(outputs)
 
