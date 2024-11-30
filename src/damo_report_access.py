@@ -684,6 +684,7 @@ def fmt_records(fmt, records):
             RegionBoxAttr(fmt.region_box_values[2],
                 fmt.region_box_min_max_height,
                 fmt.region_box_scales[2] == 'log'))
+    fmt.region_box_format = region_box_args
 
     outputs = []
     for record in records:
@@ -794,6 +795,9 @@ class RecordsVisualizationFormat:
     region_box_colorset = None
     region_box_scales = None
     region_box_align = None
+
+    # RegionBoxFormat.  Set on fmt_records()
+    region_box_format = None
 
     min_chars_for = None
     raw_number = None
