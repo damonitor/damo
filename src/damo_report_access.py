@@ -673,7 +673,7 @@ def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights):
 
 def fmt_records(fmt, records):
     sorted_access_patterns = SortedAccessPatterns(records)
-    region_box_args = RegionBoxFormat(sorted_access_patterns,
+    fmt.region_box_format = RegionBoxFormat(sorted_access_patterns,
             RegionBoxAttr(fmt.region_box_values[0],
                 fmt.region_box_min_max_length,
                 fmt.region_box_scales[0] == 'log'), fmt.region_box_align,
@@ -683,7 +683,6 @@ def fmt_records(fmt, records):
             RegionBoxAttr(fmt.region_box_values[2],
                 fmt.region_box_min_max_height,
                 fmt.region_box_scales[2] == 'log'))
-    fmt.region_box_format = region_box_args
 
     outputs = []
     for record in records:
