@@ -150,7 +150,7 @@ region_formatters = [
         ]
 
 default_record_head_format = 'kdamond <kdamond index> / context <context index> / scheme <scheme index> / target id <target id> / recorded for <duration> from <abs start time>'
-default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<duration>)'
+default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<duration>)\n<heatmap>'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
 
 def temperature_sz_hist_str(snapshot, record, raw, fmt):
