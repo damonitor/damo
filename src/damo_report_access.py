@@ -86,11 +86,11 @@ snapshot_formatters = [
             'the number of regions in the snapshot'),
         Formatter('<region box colors>',
             lambda snapshot, record, raw, fmt, rbargs:
-            _damo_ascii_color.color_samples(rbargs.colorset),
+            _damo_ascii_color.color_samples(fmt.region_box_format.colorset),
             'available colors for the region box'),
         Formatter('<region box description>',
             lambda snapshot, record, raw, fmt, rbargs:
-            rbargs.description_msg(raw),
+            fmt.region_box_format.description_msg(raw),
             'description about region box (what and how it represents)'),
         Formatter('<temperature-sz histogram>',
                   lambda snapshot, record, raw, fmt, rbargs:
@@ -145,7 +145,7 @@ region_formatters = [
         Formatter(
             '<box>',
             lambda index, region, raw, fmt, rbargs:
-            rbargs.to_str(region),
+            fmt.region_box_format.to_str(region),
             'user-customizable (via --region_box_*) box (age/access_rate/size by default)'),
         ]
 
