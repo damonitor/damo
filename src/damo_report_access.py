@@ -99,7 +99,7 @@ snapshot_formatters = [
                   'temperature to total size of the regions histogram'),
         Formatter('<recency-sz histogram>',
                   lambda snapshot, record, fmt:
-                  recency_hist_str(snapshot, record, fmt.raw_number, fmt),
+                  recency_hist_str(snapshot, record, fmt),
                   'last accessed time to total size of the regions histogram'),
         Formatter('<heatmap>',
                   lambda snapshot, record, fmt:
@@ -209,7 +209,8 @@ def temperature_sz_hist_str(snapshot, record, fmt):
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
-def recency_hist_str(snapshot, record, raw, fmt):
+def recency_hist_str(snapshot, record, fmt):
+    raw = fmt.raw_number
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
     hist = {}
