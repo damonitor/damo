@@ -103,7 +103,7 @@ snapshot_formatters = [
                   'last accessed time to total size of the regions histogram'),
         Formatter('<heatmap>',
                   lambda snapshot, record, fmt:
-                  heatmap_str(snapshot, record, fmt.raw_number, fmt),
+                  heatmap_str(snapshot, record, fmt),
                   'heatmap of the snapshot'),
         ]
 
@@ -330,7 +330,8 @@ class HeatPixel:
             region.end = end
         self.total_heat += temperature_of(region, weights) * (region.size())
 
-def heatmap_str(snapshot, record, raw, fmt):
+def heatmap_str(snapshot, record, fmt):
+    raw = fmt.raw_number
     total_sz = 0
     for region in snapshot.regions:
         total_sz += region.size()
