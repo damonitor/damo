@@ -615,8 +615,8 @@ def apply_min_chars(min_chars, field_name, txt):
             return txt
     return txt
 
-def format_template(template, formatters, min_chars, fmt, index, region,
-                    snapshot, record, raw):
+def format_output(template, formatters, min_chars, raw, fmt, record,
+                  snapshot=None, region=None, index=None):
     if template == '':
         return
     for formatter in formatters:
@@ -633,12 +633,6 @@ def format_template(template, formatters, min_chars, fmt, index, region,
     template = template.replace('\\n', '\n')
     return template
 
-def format_output(template, formatters, min_chars, raw, fmt, record,
-                  snapshot=None, region=None, index=None):
-    if template == '':
-        return None
-    return format_template(template, formatters, min_chars, fmt, index, region,
-                           snapshot, record, raw)
 
 def temperature_of(region, weights):
     sz_weight, access_rate_weight, age_weight = weights
