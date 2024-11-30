@@ -151,6 +151,7 @@ region_formatters = [
 
 default_record_head_format = 'kdamond <kdamond index> / context <context index> / scheme <scheme index> / target id <target id> / recorded for <duration> from <abs start time>'
 default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<duration>)\n<heatmap>'
+default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
 
 def temperature_sz_hist_str(snapshot, record, raw, fmt):
@@ -904,6 +905,7 @@ class RecordsVisualizationFormat:
 
 def set_formats(args):
     if args.style == 'simple-boxes':
+        args.format_snapshot_head = default_snapshot_head_format_without_heatmap
         args.format_region = '<box> size <size> access rate <access rate> age <age>'
         args.region_box_min_max_height = [1, 1]
         args.region_box_min_max_length = [1, 40]
