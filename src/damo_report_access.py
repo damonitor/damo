@@ -95,7 +95,7 @@ snapshot_formatters = [
             'description about region box (what and how it represents)'),
         Formatter('<temperature-sz histogram>',
                   lambda snapshot, record, fmt:
-                  temperature_sz_hist_str(snapshot, record, fmt.raw_number, fmt),
+                  temperature_sz_hist_str(snapshot, record, fmt),
                   'temperature to total size of the regions histogram'),
         Formatter('<recency-sz histogram>',
                   lambda snapshot, record, fmt:
@@ -156,7 +156,8 @@ default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<dur
 default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
 
-def temperature_sz_hist_str(snapshot, record, raw, fmt):
+def temperature_sz_hist_str(snapshot, record, fmt):
+    raw = fmt.raw_number
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
     hist = {}
