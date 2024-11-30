@@ -110,42 +110,43 @@ snapshot_formatters = [
 region_formatters = [
         Formatter(
             '<index>',
-            lambda index, region, raw, fmt:
-            _damo_fmt_str.format_nr(index, raw),
+            lambda index, region, fmt:
+            _damo_fmt_str.format_nr(index, fmt.raw_number),
             'index of the region in the regions of the snapshot'),
         Formatter(
             '<start address>',
-            lambda index, region, raw, fmt:
-            _damo_fmt_str.format_sz(region.start, raw),
+            lambda index, region, fmt:
+            _damo_fmt_str.format_sz(region.start, fmt.raw_number),
             'start address of the region'),
         Formatter(
             '<end address>',
-            lambda index, region, raw, fmt:
-            _damo_fmt_str.format_sz(region.end, raw),
+            lambda index, region, fmt:
+            _damo_fmt_str.format_sz(region.end, fmt.raw_number),
             'end address of the region'),
         Formatter(
             '<size>',
-            lambda index, region, raw, fmt:
-            _damo_fmt_str.format_sz(region.size(), raw),
+            lambda index, region, fmt:
+            _damo_fmt_str.format_sz(region.size(), fmt.raw_number),
             'size of the region'),
         Formatter(
             '<access rate>',
-            lambda index, region, raw, fmt:
-            _damo_fmt_str.format_percent(region.nr_accesses.percent, raw),
+            lambda index, region, fmt:
+            _damo_fmt_str.format_percent(region.nr_accesses.percent,
+                                         fmt.raw_number),
             'monitored access rate of the region'),
         Formatter(
             '<age>',
-            lambda index, region, raw, fmt:
-            _damo_fmt_str.format_time_us(region.age.usec, raw),
+            lambda index, region, fmt:
+            _damo_fmt_str.format_time_us(region.age.usec, fmt.raw_number),
             'how long the access pattern of the region has maintained'),
         Formatter(
             '<temperature>',
-            lambda index, region, raw, fmt:
-            temperature_str(region, raw, fmt),
+            lambda index, region, fmt:
+            temperature_str(region, fmt.raw_number, fmt),
             'access temperature of the region'),
         Formatter(
             '<box>',
-            lambda index, region, raw, fmt:
+            lambda index, region, fmt:
             fmt.region_box_format.to_str(region),
             'user-customizable (via --region_box_*) box (age/access_rate/size by default)'),
         ]
@@ -629,7 +630,7 @@ def format_output(template, formatters, fmt, record, snapshot=None,
         elif formatters == snapshot_formatters:
             txt = formatter.format_fn(snapshot, record, fmt)
         elif formatters == region_formatters:
-            txt = formatter.format_fn(index, region, fmt.raw_number, fmt)
+            txt = formatter.format_fn(index, region, fmt)
         txt = apply_min_chars(fmt.min_chars_for, formatter.keyword, txt)
         template = template.replace(formatter.keyword, txt)
     template = template.replace('\\n', '\n')
