@@ -53,56 +53,57 @@ record_formatters = [
 
 snapshot_formatters = [
         Formatter('<total bytes>',
-            lambda snapshot, record, raw, fmt:
-            _damo_fmt_str.format_sz(snapshot.total_bytes, raw),
+            lambda snapshot, record, fmt:
+            _damo_fmt_str.format_sz(snapshot.total_bytes, fmt.raw_number),
             'total bytes of regions in the snapshot'),
         Formatter('<duration>',
-            lambda snapshot, record, raw, fmt:
+            lambda snapshot, record, fmt:
                   _damo_fmt_str.format_time_ns(
-                      snapshot.end_time - snapshot.start_time, raw),
+                      snapshot.end_time - snapshot.start_time, fmt.raw_number),
                   'access monitoring duration for the snapshot'),
         Formatter('<start time>',
-            lambda snapshot, record, raw, fmt:
+            lambda snapshot, record, fmt:
                   _damo_fmt_str.format_time_ns(
                       snapshot.start_time -
-                      record.snapshots[0].start_time, raw),
+                      record.snapshots[0].start_time, fmt.raw_number),
             'access monitoring start time for the snapshot, relative to the record start time'),
         Formatter('<end time>',
-            lambda snapshot, record, raw, fmt:
+            lambda snapshot, record, fmt:
                   _damo_fmt_str.format_time_ns(
-                      snapshot.end_time - record.snapshots[0].start_time, raw),
+                      snapshot.end_time - record.snapshots[0].start_time,
+                      fmt.raw_number),
             'access monitoring end time for the snapshot, relative to the record end time'),
         Formatter('<abs start time>',
-            lambda snapshot, record, raw, fmt:
-            _damo_fmt_str.format_time_ns(snapshot.start_time, raw),
+            lambda snapshot, record, fmt:
+            _damo_fmt_str.format_time_ns(snapshot.start_time, fmt.raw_number),
             'absolute access monitoring start time for the snapshot'),
         Formatter('<abs end time>',
-            lambda snapshot, record, raw, fmt:
-            _damo_fmt_str.format_time_ns(snapshot.end_time, raw),
+            lambda snapshot, record, fmt:
+            _damo_fmt_str.format_time_ns(snapshot.end_time, fmt.raw_number),
             'absolute access monitoring end time for the snapshot'),
         Formatter('<number of regions>',
-            lambda snapshot, record, raw, fmt:
-            _damo_fmt_str.format_nr(len(snapshot.regions), raw),
+            lambda snapshot, record, fmt:
+            _damo_fmt_str.format_nr(len(snapshot.regions), fmt.raw_number),
             'the number of regions in the snapshot'),
         Formatter('<region box colors>',
-            lambda snapshot, record, raw, fmt:
+            lambda snapshot, record, fmt:
             _damo_ascii_color.color_samples(fmt.region_box_format.colorset),
             'available colors for the region box'),
         Formatter('<region box description>',
-            lambda snapshot, record, raw, fmt:
-            fmt.region_box_format.description_msg(raw),
+            lambda snapshot, record, fmt:
+            fmt.region_box_format.description_msg(fmt.raw_number),
             'description about region box (what and how it represents)'),
         Formatter('<temperature-sz histogram>',
-                  lambda snapshot, record, raw, fmt:
-                  temperature_sz_hist_str(snapshot, record, raw, fmt),
+                  lambda snapshot, record, fmt:
+                  temperature_sz_hist_str(snapshot, record, fmt.raw_number, fmt),
                   'temperature to total size of the regions histogram'),
         Formatter('<recency-sz histogram>',
-                  lambda snapshot, record, raw, fmt:
-                  recency_hist_str(snapshot, record, raw, fmt),
+                  lambda snapshot, record, fmt:
+                  recency_hist_str(snapshot, record, fmt.raw_number, fmt),
                   'last accessed time to total size of the regions histogram'),
         Formatter('<heatmap>',
-                  lambda snapshot, record, raw, fmt:
-                  heatmap_str(snapshot, record, raw, fmt),
+                  lambda snapshot, record, fmt:
+                  heatmap_str(snapshot, record, fmt.raw_number, fmt),
                   'heatmap of the snapshot'),
         ]
 
@@ -626,7 +627,7 @@ def format_output(template, formatters, fmt, record, snapshot=None,
         if formatters == record_formatters:
             txt = formatter.format_fn(record, fmt.raw_number)
         elif formatters == snapshot_formatters:
-            txt = formatter.format_fn(snapshot, record, fmt.raw_number, fmt)
+            txt = formatter.format_fn(snapshot, record, fmt)
         elif formatters == region_formatters:
             txt = formatter.format_fn(index, region, fmt.raw_number, fmt)
         txt = apply_min_chars(fmt.min_chars_for, formatter.keyword, txt)
