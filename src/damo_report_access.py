@@ -498,7 +498,7 @@ class RegionBoxAttr:
         self.display_min_max = display_min_max
         self.display_logscale = display_logscale
 
-class RegionBox:
+class RegionBoxFormat:
     sorted_access_patterns = None
     length = None
     horizontal_align = None
@@ -674,7 +674,7 @@ def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights):
 
 def fmt_records(fmt, records):
     sorted_access_patterns = SortedAccessPatterns(records)
-    region_box_args = RegionBox(sorted_access_patterns,
+    region_box_args = RegionBoxFormat(sorted_access_patterns,
             RegionBoxAttr(fmt.region_box_values[0],
                 fmt.region_box_min_max_length,
                 fmt.region_box_scales[0] == 'log'), fmt.region_box_align,
