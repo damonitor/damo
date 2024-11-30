@@ -616,8 +616,8 @@ def apply_min_chars(min_chars, field_name, txt):
             return txt
     return txt
 
-def format_output(template, formatters, min_chars, raw, fmt, record,
-                  snapshot=None, region=None, index=None):
+def format_output(template, formatters, fmt, record, snapshot=None,
+                  region=None, index=None):
     if template == '':
         return
     for formatter in formatters:
@@ -683,16 +683,14 @@ def fmt_records(fmt, records):
     for record in records:
         outputs.append(
                 format_output(
-                    fmt.format_record_head, record_formatters,
-                    fmt.min_chars_for, fmt.raw_number, fmt, record))
+                    fmt.format_record_head, record_formatters, fmt, record))
         snapshots = record.snapshots
 
         for sidx, snapshot in enumerate(snapshots):
             outputs.append(
                     format_output(
                         fmt.format_snapshot_head, snapshot_formatters,
-                        fmt.min_chars_for, fmt.raw_number, fmt, record,
-                        snapshot))
+                        fmt, record, snapshot))
             for r in snapshot.regions:
                 r.nr_accesses.add_unset_unit(record.intervals)
                 r.age.add_unset_unit(record.intervals)
@@ -702,20 +700,17 @@ def fmt_records(fmt, records):
                 outputs.append(
                         format_output(
                             fmt.format_region, region_formatters,
-                            fmt.min_chars_for, fmt.raw_number, fmt, record,
-                            snapshot, r, idx))
+                            fmt, record, snapshot, r, idx))
             outputs.append(
                     format_output(
                         fmt.format_snapshot_tail, snapshot_formatters,
-                        fmt.min_chars_for, fmt.raw_number, fmt, record,
-                        snapshot))
+                        fmt, record, snapshot))
 
             if sidx < len(snapshots) - 1 and not fmt.total_sz_only():
                 outputs.append('')
         outputs.append(
                 format_output(
-                    fmt.format_record_tail, record_formatters,
-                    fmt.min_chars_for, fmt.raw_number, fmt, record))
+                    fmt.format_record_tail, record_formatters, fmt, record))
     outputs = [o for o in outputs if o is not None]
     return '\n'.join(outputs)
 
