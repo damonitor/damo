@@ -624,12 +624,12 @@ def format_output(template, formatters, min_chars, raw, fmt, record,
         if template.find(formatter.keyword) == -1:
             continue
         if formatters == record_formatters:
-            txt = formatter.format_fn(record, raw)
+            txt = formatter.format_fn(record, fmt.raw_number)
         elif formatters == snapshot_formatters:
-            txt = formatter.format_fn(snapshot, record, raw, fmt)
+            txt = formatter.format_fn(snapshot, record, fmt.raw_number, fmt)
         elif formatters == region_formatters:
-            txt = formatter.format_fn(index, region, raw, fmt)
-        txt = apply_min_chars(min_chars, formatter.keyword, txt)
+            txt = formatter.format_fn(index, region, fmt.raw_number, fmt)
+        txt = apply_min_chars(fmt.min_chars_for, formatter.keyword, txt)
         template = template.replace(formatter.keyword, txt)
     template = template.replace('\\n', '\n')
     return template
