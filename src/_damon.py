@@ -1286,6 +1286,17 @@ def update_schemes_quota_effective_bytes(kdamond_idxs=None):
 def update_schemes_status(stats=True, tried_regions=True,
                           quota_effective_bytes=False):
     '''Returns error string or None'''
+    schemes_exist = False
+    for kdamond in current_kdamonds():
+        for ctx in kdamond.contexts:
+            if len(ctx.schemes) > 0:
+                schemes_exist = True
+                break
+        if schemes_exist is True:
+            break
+    if schemes_exist is False:
+        return None
+
     idxs = running_kdamond_idxs()
     if len(idxs) == 0:
         return None
