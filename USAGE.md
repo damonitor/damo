@@ -1184,9 +1184,9 @@ similar to the original one.  To show the real memory access performance of
 `damo fmt_json`
 ---------------
 
-Note: This command will be _deprecated_ by 2024-11.  Use
-`damo args damon --format json` instead.  Please report your usecase to GitHub
-[issues](https://github.com/damonitor/damo/issues), sj@kernel.org,
+Note: This command is _deprecated_.  This will further be _removed_ by 2024-12.
+Use `damo args damon --format json` instead.  Please report your usecase to
+GitHub [issues](https://github.com/damonitor/damo/issues), sj@kernel.org,
 damon@lists.linux.dev and/or linux-mm@kvack.org if you depend on this command.
 
 As mentioned for `damo start` above, DAMON control commands including `start`,

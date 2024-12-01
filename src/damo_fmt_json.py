@@ -11,8 +11,9 @@ import _damon
 import _damon_args
 
 def main(args):
-    _damo_deprecation_notice.will_be_deprecated(
-            feature='"damo fmt_json"', deadline='2024-11',
+    _damo_deprecation_notice.deprecated(
+            feature='"damo fmt_json"', deadline='2024-12',
+            do_exit=True, exit_code=1,
             additional_notice='Use "damo args damon --format json" instead.')
     _damon.ensure_root_permission()
 
