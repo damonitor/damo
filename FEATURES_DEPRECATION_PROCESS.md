@@ -31,8 +31,9 @@ Deprecation
 
 Once the grace period is passed and no users' special requests about it have
 reported, the features are marked as deprecated.  The change should again be
-noticed on [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md)
-and [USAGE.md](USAGE.md), execution output, and help messages as much as
+noticed on
+[FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md),
+[USAGE.md](USAGE.md), execution output, and help messages as much as
 possible.  For the notice on the execution, `deprecated()` of
 `_damo_deprecation_notice.py` can be used.  The notice should include by when
 the features will be entirely removed from the code base.  Unlike deprecations,
