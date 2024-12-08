@@ -191,6 +191,16 @@ rate for >=5 seconds and prioritize the pages of the regions on the Linux
 kernel's LRU lists, while finding memory regions that not accessed for >=5
 seconds and deprioritizes the pages of the regions from the LRU lists.
 
+#### Access rate
+
+Access rate is the ratio of
+[`nr_accesses`](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#region-based-sampling)
+of the region to maximum `nr_accesses` that possible on given DAMON parameters.
+For example, if the sampling interval is 5 milliseconds and the aggregation
+interval is 100 milliseconds, the "maximum nr_accesses" is 20 (100 milliseconds
+divided by 5 milliseconds).  And if a region has `nr_accesses` value 4, it's
+access rate is 20% (`4 / 20 * 100`).
+
 ### Full DAMON Parameters Update
 
 As mentioned above, the partial DAMON parameters update command line options
