@@ -900,7 +900,7 @@ class RecordsVisualizationFormat:
             if need_snapshot_head:
                 self.format_snapshot_head = default_snapshot_head_format
             else:
-                self.format_snapshot_head = ''
+                self.format_snapshot_head = 'heatmap: <heatmap>'
 
 
 def set_formats(args):
