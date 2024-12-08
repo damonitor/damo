@@ -235,9 +235,6 @@ For the full DAMON parameters input format, please refer to `damo args damon`
 parameters input can be used as is for the `deducible target` (refer to "Simple
 Target Argument" [section](#simple-target-argument) above).
 
-Note that multiple DAMON contexts per kdamond is not supported as of
-2023-09-12, though.
-
 ### Full DAMOS Parameters Update
 
 The Partial DAMOS parameters update options support multiple schemes as abovely
