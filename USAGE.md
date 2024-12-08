@@ -49,6 +49,18 @@ including DAMON introduction talks and publications at the project
 those, since we will try to keep it up to date always, and appropriate for
 DAMON users.
 
+Specifically, if you want to use `damo` for profiling purpose, please ensure
+you understand what `nr_accesses` and `age` mean.  ['Region Based
+Sampling'](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#region-based-sampling)
+and ['Age
+Tracking'](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)
+sections of the kernel documentation should be helpful for that.
+
+You should also understand DAMOS if you want to use `damo` for simple
+access-aware system operations.  ['Operation
+Schemes'](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#operation-schemes)
+section of the kernel documentation should be helpful for that.
+
 Install
 =======
 
