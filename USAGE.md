@@ -124,9 +124,9 @@ DAMON and retrieval/interpretation of the results.
 
 `damo start` starts DAMON as users request.  Specifically, users can specify
 how and to what address spaces DAMON should do monitor accesses, and what
-access monitoring-based system optimization to do.  The request can be made via
-several command line options of the command.  You can get the full list of the
-options via `damo start --help`.
+access monitoring-based system optimizations to do.  The request can be made
+via several command line options of the command.  You can get the full list of
+the options via `damo start --help`.
 
 The command exits immediately after starting DAMON as requested.  It exits with
 exit value `0` if it successfully started DAMON.  Otherwise, the exit value
@@ -150,7 +150,7 @@ Below example shows a command target usage:
 The command will execute ``sleep 5`` by itself and start monitoring the data
 access patterns of the process.
 
-Note that the command requires root permission, and hence executes the
+Note that the command requires the root permission, and hence executes the
 monitoring target command as a root.  This means that the user could execute
 arbitrary commands with root permission.  Hence, sysadmins should allow only
 trusted users to use ``damo``.
@@ -183,10 +183,11 @@ mean with their brief description on the help message wouldn't be that
 difficult.
 
 Note that these command line options support only single kdamond, single DAMON
-context, and single monitoring target case at the moment.  Users can make
-requests without such limitation using full DAMON parameters input.  Refer to
-'Full DAMON Parameters Update' [section](#full-damon-parameters-update) below
-for the detail.
+context, and single monitoring target case.  Users can make requests without
+such limitation using full DAMON parameters input, or `damo args damon`
+command.  Refer to 'Full DAMON Parameters Update'
+[section](#full-damon-parameters-update) or "`damo args damon`"
+[section](#damo-args-damon) below for details.
 
 ### Partial DAMOS Parameters Update
 
