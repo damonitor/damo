@@ -395,9 +395,9 @@ for retrieving status of specific parts.
 `damo report access` visualizes DAMON's access monitoring result snapshots in
 customizable formats.  Users can set it to use `damo record`-generated
 monitoring results record as the source using `--input_file` option.  If
-`--input_file` is not provided and DAMON is running, capture snapshot from the
-running DAMON and use it as the source. If `--input_file` is not provided,
-DAMON is not running, and `./damon.data` file exists, use `./damon.data` as
+`--input_file` is not provided and DAMON is running, it captures snapshot from
+the running DAMON and uses it as the source. If `--input_file` is not provided,
+DAMON is not running, but `./damon.data` file eoes exist, use `./damon.data` as
 `--input_file`.
 
 For example:
@@ -418,6 +418,16 @@ For example:
     9   addr 57.604 GiB   size 5.986 GiB   access 0 %   age 10 m 15.800 s
     10  addr 63.590 GiB   size 284.793 MiB access 0 %   age 10 m 16.300 s
     total size: 59.868 GiB
+
+The line of the output shows the hotness of regions on the address range via a
+heatmap visualization.  Each column represents the memory region of the
+address-wise position on the monitoring target address space.  The number shows
+access temperature of the region.  Higher number means warmer.  The second line
+shows scales of the temperature and size.
+
+Lines showing more detailed properties of each region follows.
+
+Final line shows the total size of the regions that listed on the output.
 
 ### Access report styles
 
