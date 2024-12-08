@@ -251,7 +251,7 @@ any `.json` files in `damon-tests`
 `damo tune`
 -----------
 
-`damo tune` updates the DAMON parameters while DAMON is running.  It provides
+`damo tune` applies new DAMON parameters while DAMON is running.  It provides
 the set of command line options that same to that of `damo start`.  Note that
 users should provide the full request specification to this command.  If only a
 partial parameters are specified via the command line options of this command,
