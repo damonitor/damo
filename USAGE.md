@@ -67,14 +67,15 @@ Install
 Using Packaging Systems
 -----------------------
 
-There are a number of packaging systems including PyPi that supports `damo`.
-For example, below can be used if you want to install `damo` via PyPi.
+There are a number of packaging systems that support `damo`.  For example,
+below can be used if you want to install `damo` via `dnf` or PyPi.
 
-    $ sudo pip3 install damo
+    $ sudo dnf install damo     # if you prefer dnf
+    $ sudo pip3 install damo    # if you prefer PyPi
 
-Note that PyPi is just one of the options.  Refer to below
+Note that `dnf` and PyPi are just two of the options.  Refer to below
 [repology](https://repology.org/project/damo) data to show the packaging status
-of `damo` for each distribution.
+of `damo` on your favorite packaging system.
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/damo.svg)](https://repology.org/project/damo/versions)
 
@@ -83,9 +84,9 @@ Using Source Code
 
 Simply downloading the source code and using `damo` file at the root of the
 source tree is also a completely supported method for `damo` installation.  It
-would be preferred if you want to participate in `damo` development.  In the
-case, you could add the path to the source tree to your `$PATH` for
-convenience.
+would be particularly preferred if you want to participate in `damo`
+development.  In the case, you could add the path to the source tree to your
+`$PATH` for convenience.
 
 Overview
 ========
