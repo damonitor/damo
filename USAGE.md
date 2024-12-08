@@ -404,16 +404,20 @@ For example:
 
     # damo start
     # damo report access
-    0   addr [4.000 GiB   , 16.245 GiB ) (12.245 GiB ) access 0 %   age 7 m 32.100 s
-    1   addr [16.245 GiB  , 28.529 GiB ) (12.284 GiB ) access 0 %   age 12 m 40.500 s
-    2   addr [28.529 GiB  , 40.800 GiB ) (12.271 GiB ) access 0 %   age 15 m 10.100 s
-    3   addr [40.800 GiB  , 52.866 GiB ) (12.066 GiB ) access 0 %   age 15 m 58.600 s
-    4   addr [52.866 GiB  , 65.121 GiB ) (12.255 GiB ) access 0 %   age 16 m 15.900 s
-    5   addr [65.121 GiB  , 77.312 GiB ) (12.191 GiB ) access 0 %   age 16 m 22.400 s
-    6   addr [77.312 GiB  , 89.537 GiB ) (12.225 GiB ) access 0 %   age 16 m 24.200 s
-    7   addr [89.537 GiB  , 101.824 GiB) (12.287 GiB ) access 0 %   age 16 m 25 s
-    8   addr [101.824 GiB , 126.938 GiB) (25.114 GiB ) access 0 %   age 16 m 25.300 s
-    total size: 122.938 GiB
+    heatmap: 99999998666666653333333322222222111111110000000000000000000000000000000000000000
+    # min/max temperatures: -61,598,582,038, -55,200,000,000, column size: 766.312 MiB
+    0   addr 4.000 GiB    size 5.962 GiB   access 0 %   age 9 m 12 s
+    1   addr 9.962 GiB    size 5.947 GiB   access 0 %   age 9 m 32.300 s
+    2   addr 15.910 GiB   size 5.960 GiB   access 0 %   age 9 m 50.300 s
+    3   addr 21.870 GiB   size 5.946 GiB   access 0 %   age 10 m 0.500 s
+    4   addr 27.816 GiB   size 5.953 GiB   access 0 %   age 10 m 6.600 s
+    5   addr 33.769 GiB   size 5.965 GiB   access 0 %   age 10 m 10.100 s
+    6   addr 39.734 GiB   size 5.961 GiB   access 0 %   age 10 m 12.300 s
+    7   addr 45.694 GiB   size 5.939 GiB   access 0 %   age 10 m 13.900 s
+    8   addr 51.633 GiB   size 5.971 GiB   access 0 %   age 10 m 15 s
+    9   addr 57.604 GiB   size 5.986 GiB   access 0 %   age 10 m 15.800 s
+    10  addr 63.590 GiB   size 284.793 MiB access 0 %   age 10 m 16.300 s
+    total size: 59.868 GiB
 
 ### Access report styles
 
