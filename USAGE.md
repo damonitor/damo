@@ -435,7 +435,11 @@ address-wise position on the monitoring target address space.  The number shows
 [access temperature](#access-temperature) of the region.  Higher number means
 warmer.  The second line shows scales of the temperature and size.
 
-Lines showing more detailed properties of each region follows.
+Lines showing more detailed properties of each region follows.  The detailed
+properties include the start address, (`addr`), size (`size`), [access
+rate](#access-rate) (`access`), and the
+[age](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)
+of the region.
 
 Final line shows the total size of the regions that listed on the output.
 
