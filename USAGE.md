@@ -30,8 +30,9 @@ Perf
 ----
 
 `damo` uses `perf`[1] for recording DAMON's access monitoring results.  Please
-ensure your system is having it if you will need to do record DAMON's
-monitoring results.  If you will not do the recording, you don't need to
+ensure your system is having it if you will need to do record full mointoring
+results of DAMON (`damo` supports recording partial snapshots of DAMON
+monitoring results).  If you will not do the full-recording, you don't need to
 install `perf` on your system, though.
 
 [1] https://perf.wiki.kernel.org/index.php/Main_Page
