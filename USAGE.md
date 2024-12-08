@@ -186,10 +186,11 @@ the other one for proactive LRU-deprioritization of cold pages.
         --damos_action lru_prio --damos_access_rate 50% max --damos_age 5s max \
         --damos_action lru_deprio --damos_access_rate 0% 0% --damos_age 5s max
 
-This command will ask DAMON to find memory regions that showing >=50% access
-rate for >=5 seconds and prioritize the pages of the regions on the Linux
-kernel's LRU lists, while finding memory regions that not accessed for >=5
-seconds and deprioritizes the pages of the regions from the LRU lists.
+This command will ask DAMON to find memory regions that showing >=50%
+[access rate](#access-rate) for >=5 seconds and prioritize the pages of the
+regions on the Linux kernel's LRU lists, while finding memory regions that not
+accessed for >=5 seconds and deprioritizes the pages of the regions from the
+LRU lists.
 
 #### Access rate
 
@@ -447,10 +448,11 @@ Final line shows the total size of the regions that listed on the output.
 
 Access temperature is an abstract representing holistic access-hotness of a
 given region.  It is calculated as a weighted sum of the access pattern values
-(`size`, `access_rate`, and `age`).  If `access_rate` is zero, the hotness
-becomes the weighted sum multiplies `-1`.  By default, the weights for the
-three values are 0, 100, and 100, respectively.  Users can set custom weights
-using `--temperature_weights` option.
+(`size`, [`access_rate`](#access-rate), and
+[`age`](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)).
+If `access_rate` is zero, the hotness becomes the weighted sum multiplies `-1`.
+By default, the weights for the three values are 0, 100, and 100, respectively.
+Users can set custom weights using `--temperature_weights` option.
 
 ### Access report styles
 
@@ -565,12 +567,13 @@ Users can customize what information to be shown in which way for the each
 position using `--format_{record,snapshot,region}[_{head,tail}]` option.  Each
 of the option receives a string for the template.  The template can have any words and
 special format keywords for each position.  For example, `<start address>`, `<end
-address>`, `<access rate>`, or `<age>` keywords are available for
-`--foramt_region` option's value.  The template can also have arbitrary
-strings.  The newline character (`\n`) is also supported.  Each of the keywords
-for each position and their brief description can be shown via
-`--ls_{record,snapshot,region}_format_keywords` option.  Actually, `damo report
-access` also internally uses the customization feature with its default
+address>`, [`<access rate>`](#access-rate), or
+[`<age>`](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)
+keywords are available for `--foramt_region` option's value.  The template can
+also have arbitrary strings.  The newline character (`\n`) is also supported.
+Each of the keywords for each position and their brief description can be shown
+via `--ls_{record,snapshot,region}_format_keywords` option.  Actually, `damo
+report access` also internally uses the customization feature with its default
 templates.
 
 For example:
@@ -585,8 +588,8 @@ For example:
 
 For region information customization, a special keyword called `<box>` is
 provided.  It represents each region's access pattern with its shape and color.
-By default it represents each region's relative age, access rate
-(`nr_accesses`), and size with its length, color, and height, respectively.
+By default it represents each region's relative age, [access
+rate](#access-rate), and size with its length, color, and height, respectively.
 That is, `damo show --format_region "<box>"` shows visualization of the access
 pattern, by showing location of each region in Y-axis, the hotness with color
 of each box, and how long the hotness has continued in X-axis.  Showing only
@@ -875,8 +878,8 @@ read the access pattern, find times when the specific access pattern happened,
 collect profiling information for the time ranges, and generate the report with
 the filtered information.
 
-For example, below shows what was consuming CPU while 50% or more rate of
-access was made towards 50 MiB size address range starting from
+For example, below shows what was consuming CPU while 50% or more [access
+rate](#access-rate) was made towards 50 MiB size address range starting from
 `139,798,348,038,144`, and the total size of the memory regions that got the
 access in the address range was 40 or more MiB.
 
@@ -1328,12 +1331,14 @@ Users can customize what information to be shown in which way for the each
 position using `--format_{record,snapshot,region}[_{head,tail}]` option.  Each
 of the option receives a string for the template.  The template can have any words and
 special format keywords for each position.  For example, `<start address>`, `<end
-address>`, `<access rate>`, or `<age>` keywords are available for
-`--foramt_region` option's value.  The template can also have arbitrary
-strings.  The newline character (`\n`) is also supported.  Each of the keywords
-for each position and their brief description can be shown via
-`--ls_{record,snapshot,region}_format_keywords` option.  Actually, `damo show`
-also internally uses the customization feature with its default templates.
+address>`, [`<access rate>`](#access-rate), or
+[`<age>`](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)
+keywords are available for `--foramt_region` option's value.  The template can
+also have arbitrary strings.  The newline character (`\n`) is also supported.
+Each of the keywords for each position and their brief description can be shown
+via `--ls_{record,snapshot,region}_format_keywords` option.  Actually, `damo
+show` also internally uses the customization feature with its default
+templates.
 
 For example:
 
@@ -1347,13 +1352,14 @@ For example:
 
 For region information customization, a special keyword called `<box>` is
 provided.  It represents each region's access pattern with its shape and color.
-By default it represents each region's relative age, access rate
-(`nr_accesses`), and size with its length, color, and height, respectively.
-That is, `damo show --format_region "<box>"` shows visualization of the access
-pattern, by showing location of each region in Y-axis, the hotness with color
-of each box, and how long the hotness has continued in X-axis.  Showing only
-the first column of the output would be somewhat similar to an access heatmap
-of the target address space.
+By default it represents each region's relative
+[age](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking),
+[access rate](#access-rate), and size with its length, color, and height,
+respectively.  That is, `damo show --format_region "<box>"` shows visualization
+of the access pattern, by showing location of each region in Y-axis, the
+hotness with color of each box, and how long the hotness has continued in
+X-axis.  Showing only the first column of the output would be somewhat similar
+to an access heatmap of the target address space.
 
 For convenient use of it with a default format, `damo show` provides
 `--region_box` option.  Output of the command with the option would help users
