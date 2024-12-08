@@ -429,6 +429,15 @@ Lines showing more detailed properties of each region follows.
 
 Final line shows the total size of the regions that listed on the output.
 
+#### Access temperature
+
+Access temperature is an abstract representing holistic access-hotness of a
+given region.  It is calculated as a weighted sum of the access pattern values
+(`size`, `access_rate`, and `age`).  If `access_rate` is zero, the hotness
+becomes the weighted sum multiplies `-1`.  By default, the weights for the
+three values are 0, 100, and 100, respectively.  Users can set custom weights
+using `--temperature_weights` option.
+
 ### Access report styles
 
 `damo report access` provides `--style` option that allows users set the report
