@@ -422,8 +422,8 @@ For example:
 The line of the output shows the hotness of regions on the address range via a
 heatmap visualization.  Each column represents the memory region of the
 address-wise position on the monitoring target address space.  The number shows
-access temperature of the region.  Higher number means warmer.  The second line
-shows scales of the temperature and size.
+[access temperature](#access-temperature) of the region.  Higher number means
+warmer.  The second line shows scales of the temperature and size.
 
 Lines showing more detailed properties of each region follows.
 
@@ -462,9 +462,10 @@ regions histogram for each snapshot.  For example,
     [-27.800 s, --518850000000 ns)           5.979 GiB  |***                 |
     total size: 59.868 GiB
 
-`temperature-sz-hist` style provides access temperature to total size of the
-regions histogram for each snapshot.  This is useful if you want to further
-differentiate hot pages that accessed recently.  For example,
+`temperature-sz-hist` style provides [access temperature](#access-temperature)
+to total size of the regions histogram for each snapshot.  This is useful if
+you want to further differentiate hot pages that accessed recently.  For
+example,
 
     $ sudo damo report access --style temperature-sz-hist
     <temperature> <total size>
@@ -611,13 +612,8 @@ Note: This is an experimental feature at the moment.  Some changes could be
 made, or the support can be dropped in future.
 
 Users can sort the regions based on hotness of the regions by providing
-'temperature' as the sort key (`--sort_regions_by`).
-
-The hotness is calculated as weighted sum of the access pattern values (`size`,
-`access_rate`, and `age`).  If `access_rate` is zero, the hotness becomes the
-weighted sum multiplies `-1`.  By default, the weights for the three values are
-0, 100, and 100, respectively.  Users can set custom weights using
-`--temperature_weights` option.
+[access temperature](#access-temperature) as the sort key
+(`--sort_regions_by`).
 
 For example:
 
@@ -1378,13 +1374,7 @@ Note: This is an experimental feature at the moment.  Some changes could be
 made, or the support can be dropped in future.
 
 Users can sort the regions based on hotness of the regions by providing
-'temperature' as the sort key (`--sort_regions_by`).
-
-The hotness is calculated as weighted sum of the access pattern values (`size`,
-`access_rate`, and `age`).  If `access_rate` is zero, the hotness becomes the
-weighted sum multiplies `-1`.  By default, the weights for the three values are
-0, 100, and 100, respectively.  Users can set custom weights using
-`--temperature_weights` option.
+[access temperature](#access-temperature) as the sort key (`--sort_regions_by`).
 
 For example:
 
