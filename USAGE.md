@@ -448,11 +448,12 @@ Final line shows the total size of the regions that listed on the output.
 
 Access temperature is an abstract representing holistic access-hotness of a
 given region.  It is calculated as a weighted sum of the access pattern values
-(`size`, [`access_rate`](#access-rate), and
-[`age`](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)).
-If `access_rate` is zero, the hotness becomes the weighted sum multiplies `-1`.
-By default, the weights for the three values are 0, 100, and 100, respectively.
-Users can set custom weights using `--temperature_weights` option.
+(size in bytes, [access rate](#access-rate) in percent, and
+[age](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)
+in microseconds) of each region.  If `access_rate` is zero, the hotness becomes
+the weighted sum multiplies `-1`.  By default, the weights for the three values
+are 0, 100, and 100, respectively.  Users can set custom weights using
+`--temperature_weights` option.
 
 ### Access report styles
 
