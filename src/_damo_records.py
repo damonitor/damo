@@ -1490,6 +1490,7 @@ class RecordFilter:
                      _damo_fmt_str.format_sz(end, raw)]
                     for start, end in self.snapshot_sz_ranges]
         kvpairs['snapshot_sz_ranges'] = snapshot_sz_ranges
+        kvpairs['snapshot_time_ranges'] = self.snapshot_time_ranges
         kvpairs['snapshot_index_ranges'] = self.snapshot_index_ranges
         kvpairs['temperature_ranges'] = self.temperature_ranges
         kvpairs['temperature_weights'] = self.temperature_weights
