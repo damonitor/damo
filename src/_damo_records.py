@@ -1396,6 +1396,19 @@ def filter_records_by_snapshot_time(records, time_ranges):
                 filtered_snapshots.append(snapshot)
         record.snapshots = filtered_snapshots
 
+def filter_records_by_snapshot_indices(records, index_ranges):
+    for record in records:
+        filtered_snapshots = []
+        for idx, snapshot in enumerate(record.snapshots):
+            filter_out = True
+            for start_idx, end_idx in index_ranges:
+                if start_idx <= idx and idx <= end_idx:
+                    filter_out = False
+                    break
+            if filter_out is False:
+                filtered_snapshots.append(snapshot)
+        record.snapshots = filtered_snapshots
+
 def filter_records_by_temperature(records, temperature_ranges,
                                   temperature_weights):
     for record in records:
@@ -1444,15 +1457,18 @@ class RecordFilter:
     address_ranges = None
     snapshot_sz_ranges = None
     snapshot_time_ranges = None
+    snapshot_index_ranges = None
     temperature_ranges = None
     temperature_weights = None
 
     def __init__(self, access_pattern, address_ranges, snapshot_sz_ranges,
-                 snapshot_time_ranges, temperature_ranges, temperature_weights):
+                 snapshot_time_ranges, snapshot_index_ranges,
+                 temperature_ranges, temperature_weights):
         self.access_pattern = access_pattern
         self.address_ranges = address_ranges
         self.snapshot_sz_ranges = snapshot_sz_ranges
         self.snapshot_time_ranges = snapshot_time_ranges
+        self.snapshot_index_ranges = snapshot_index_ranges
         self.temperature_ranges = temperature_ranges
         self.temperature_weights = temperature_weights
 
@@ -1474,6 +1490,7 @@ class RecordFilter:
                      _damo_fmt_str.format_sz(end, raw)]
                     for start, end in self.snapshot_sz_ranges]
         kvpairs['snapshot_sz_ranges'] = snapshot_sz_ranges
+        kvpairs['snapshot_index_ranges'] = self.snapshot_index_ranges
         kvpairs['temperature_ranges'] = self.temperature_ranges
         kvpairs['temperature_weights'] = self.temperature_weights
         return kvpairs
@@ -1488,6 +1505,9 @@ class RecordFilter:
             filter_records_by_snapshot_sz(records, self.snapshot_sz_ranges)
         if self.snapshot_time_ranges is not None:
             filter_records_by_snapshot_time(records, self.snapshot_time_ranges)
+        if self.snapshot_index_ranges is not None:
+            filter_records_by_snapshot_indices(records,
+                                               self.snapshot_index_ranges)
         if self.temperature_ranges is not None:
             filter_records_by_temperature(records, self.temperature_ranges,
                                           self.temperature_weights)
@@ -1530,7 +1550,7 @@ def get_records(tried_regions_of=None, record_file=None, record_filter=None,
     if record_filter:
         filter_copy = copy.deepcopy(record_filter)
     else:
-        filter_copy = RecordFilter(None, None, None, None, None, None)
+        filter_copy = RecordFilter(None, None, None, None, None, None, None)
 
     if request.record_file is None:
         records, err = get_snapshot_records_of(request)
@@ -1594,6 +1614,12 @@ def args_to_filter(args):
                 [_damo_fmt_str.text_to_ns(s), _damo_fmt_str.text_to_ns(e)]
                 for s, e in args.snapshot_time]
 
+    snapshot_index_ranges = None
+    if args.snapshot_idx is not None:
+        snapshot_index_ranges = [
+                [_damo_fmt_str.text_to_nr(s), _damo_fmt_str.text_to_nr(e)]
+                for s, e in args.snapshot_idx]
+
     if hasattr(args, 'temperature_weights'):
         temperature_weights = args.temperature_weights
     else:
@@ -1602,6 +1628,7 @@ def args_to_filter(args):
 
     return RecordFilter(access_pattern, addr_range,
                         snapshot_sz_ranges, snapshot_time,
+                        snapshot_index_ranges,
                         args.temperature, temperature_weights), None
 
 def set_filter_argparser(parser):
@@ -1625,6 +1652,10 @@ def set_filter_argparser(parser):
             '--snapshot_time', metavar=('<start (ns)>', '<end (ns)>'), nargs=2,
             action='append',
             help='show snapshots generated in these time intervals')
+    parser.add_argument(
+            '--snapshot_idx', metavar=('<start>', '<end>'), nargs=2,
+            action='append',
+            help='show snapshots of these indices range')
     parser.add_argument(
             '--temperature', metavar=('<min>', '<max>'), nargs=2, type=int,
             action='append',
