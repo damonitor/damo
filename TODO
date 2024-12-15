@@ -33,10 +33,6 @@
   - shows when what virtual address has mappend and unmapped
 - Implement an official feature to check if 'damo' supports the system
   - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
-- Improve snapshot heatmap generation delay
-  - Feed output to 'less' as soon as ready?
-  - alternative: partial record visualization easier
-    - let index-based snapshot filtering
 
 - Deprecate old features
   - Deprecate 'damo report raw'
