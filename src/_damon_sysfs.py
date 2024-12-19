@@ -839,6 +839,11 @@ def update_supported_features():
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'target_nid')):
         feature_supports['schemes_migrate'] = True
 
+    if os.path.isfile(
+            os.path.join(scheme_dir_of(0, 0, 0),
+                         'stats', 'sz_ops_filter_passed')):
+        feature_supports['sz_ops_filter_passed'] = True
+
     avail_ops, err = _avail_ops()
     if err == None:
         for ops in ['vaddr', 'paddr', 'fvaddr']:
