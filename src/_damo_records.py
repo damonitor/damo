@@ -135,6 +135,12 @@ def merge_records(records):
 def regions_intersect(r1, r2):
     return not (r1.end <= r2.start or r2.end <= r1.start)
 
+def sz_filter_passed_for_new_size(region, new_size):
+    if region.sz_filter_passed is None:
+        return None
+    filter_pass_ratio = region.sz_filter_passed / region.size()
+    return int(filter_pass_ratio * new_size)
+
 def add_region(regions, region, nr_acc_to_add):
     for r in regions:
         if regions_intersect(r, region):
@@ -148,13 +154,17 @@ def add_region(regions, region, nr_acc_to_add):
                 new_regions.append(_damon.DamonRegion(
                     region.start, r.start,
                     region.nr_accesses.samples, _damon.unit_samples,
-                    region.age.aggr_intervals, _damon.unit_aggr_intervals))
+                    region.age.aggr_intervals, _damon.unit_aggr_intervals,
+                    sz_filter_passed_for_new_size(
+                        region, r.start - region.start)))
             if r.end < region.end:
                 new_regions.append(_damon.DamonRegion(
                         r.end, region.end,
                         region.nr_accesses.samples, _damon.unit_samples,
                         region.age.aggr_intervals,
-                        _damon.unit_aggr_intervals))
+                        _damon.unit_aggr_intervals,
+                        sz_filter_passed_for_new_size(
+                            region, region.end - r.end)))
 
             for new_r in new_regions:
                 add_region(regions, new_r, nr_acc_to_add)
