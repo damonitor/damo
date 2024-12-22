@@ -1449,10 +1449,11 @@ def get_snapshot_records_of(request):
                     filters.append(_damon.DamosFilter(
                         'addr', False,
                         address_range=_damon.DamonRegion(start, end)))
+            if request.record_filter.damos_filters is not None:
+                filters += request.record_filter.damos_filters
             monitor_scheme = _damon.Damos(
                     access_pattern=request.record_filter.access_pattern,
                     filters=filters)
-
         else:
             monitor_scheme = _damon.Damos()
 
