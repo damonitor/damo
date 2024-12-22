@@ -673,14 +673,16 @@ class DamosStats:
     sz_tried = None
     nr_applied = None
     sz_applied = None
+    sz_ops_filter_passed = None
     qt_exceeds = None
 
     def __init__(self, nr_tried=0, sz_tried=0, nr_applied=0, sz_applied=0,
-            qt_exceeds=0):
+                 sz_ops_filter_passed=0, qt_exceeds=0):
         self.nr_tried = nr_tried
         self.sz_tried = sz_tried
         self.nr_applied = nr_applied
         self.sz_applied = sz_applied
+        self.sz_ops_filter_passed = sz_ops_filter_passed
         self.qt_exceeds = qt_exceeds
 
     def to_str(self, raw):
@@ -689,6 +691,8 @@ class DamosStats:
             _damo_fmt_str.format_sz(self.sz_tried, raw)),
             'applied %d times (%s)' % (self.nr_applied,
             _damo_fmt_str.format_sz(self.sz_applied, raw)),
+            '%s passed filters' %
+            _damo_fmt_str.format_sz(self.sz_ops_filter_passed, raw),
             'quota exceeded %d times' % self.qt_exceeds,
             ])
 
@@ -701,6 +705,8 @@ class DamosStats:
         kv['sz_tried'] = _damo_fmt_str.format_sz(self.sz_tried, raw)
         kv['nr_applied'] = _damo_fmt_str.format_nr(self.nr_applied, raw)
         kv['sz_applied'] = _damo_fmt_str.format_sz(self.sz_applied, raw)
+        kv['sz_ops_filter_passed'] = _damo_fmt_str.format_sz(
+                self.sz_ops_filter_passed, raw)
         kv['qt_exceeds'] = _damo_fmt_str.format_nr(self.qt_exceeds, raw)
         return kv
 
