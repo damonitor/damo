@@ -555,6 +555,8 @@ def files_content_to_damos_stats(files_content):
             int(files_content['sz_tried']),
             int(files_content['nr_applied']),
             int(files_content['sz_applied']),
+            int(files_content['sz_ops_filter_passed']
+                if 'sz_ops_filter_passed' in files_content else 0),
             int(files_content['qt_exceeds']))
 
 def files_content_to_damos_tried_regions(files_content):
