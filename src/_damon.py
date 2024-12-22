@@ -197,10 +197,11 @@ class DamonRegion:
     # nr_accesses and age could be None
     nr_accesses = None
     age = None
+    sz_filter_passed = None
     scheme = None # non-None if tried region
 
     def __init__(self, start, end, nr_accesses=None, nr_accesses_unit=None,
-            age=None, age_unit=None):
+            age=None, age_unit=None, sz_filter_passed=0):
         self.start = _damo_fmt_str.text_to_bytes(start)
         self.end = _damo_fmt_str.text_to_bytes(end)
 
@@ -208,6 +209,7 @@ class DamonRegion:
             return
         self.nr_accesses = DamonNrAccesses(nr_accesses, nr_accesses_unit)
         self.age = DamonAge(age, age_unit)
+        self.sz_filter_passed = sz_filter_passed
 
     def to_str(self, raw, intervals=None):
         if self.nr_accesses == None:
@@ -223,10 +225,14 @@ class DamonRegion:
         else:
             nr_accesses_unit = unit_samples
             age_unit = unit_aggr_intervals
-        return '%s: nr_accesses: %s, age: %s' % (
+        str = '%s: nr_accesses: %s, age: %s' % (
                 _damo_fmt_str.format_addr_range(self.start, self.end, raw),
                 self.nr_accesses.to_str(nr_accesses_unit, raw),
                 self.age.to_str(age_unit, raw))
+        if self.sz_filter_passed is not None:
+            str += ', filter_passed: %s' % _damo_fmt_str.format_sz(
+                    self.sz_filter_passed, raw)
+        return str
 
     def __str__(self):
         return self.to_str(False)
@@ -248,6 +254,11 @@ class DamonRegion:
         region.nr_accesses = DamonNrAccesses.from_kvpairs(
                 kvpairs['nr_accesses'])
         region.age = DamonAge.from_kvpairs(kvpairs['age'])
+        if 'sz_filter_passed' in kvpairs:
+            region.sz_filter_passed = _damo_fmt_str.text_to_bytes(
+                    kvpairs['sz_filter_passed'])
+        else:
+            region.sz_filter_passed = 0
         return region
 
     def to_kvpairs(self, raw=False):
@@ -259,7 +270,10 @@ class DamonRegion:
             ('start', _damo_fmt_str.format_nr(self.start, raw)),
             ('end', _damo_fmt_str.format_nr(self.end, raw)),
             ('nr_accesses', self.nr_accesses.to_kvpairs(raw)),
-            ('age', self.age.to_kvpairs(raw))])
+            ('age', self.age.to_kvpairs(raw)),
+            ('sz_filter_passed', _damo_fmt_str.format_sz(
+                self.sz_filter_passed, raw)),
+            ])
 
     def size(self):
         return self.end - self.start
