@@ -143,32 +143,33 @@ def sz_filter_passed_for_new_size(region, new_size):
 
 def add_region(regions, region, nr_acc_to_add):
     for r in regions:
-        if regions_intersect(r, region):
-            if not r in nr_acc_to_add:
-                nr_acc_to_add[r] = 0
-            nr_acc_to_add[r] = max(nr_acc_to_add[r],
-                    region.nr_accesses.samples)
+        if not regions_intersect(r, region):
+            continue
+        if not r in nr_acc_to_add:
+            nr_acc_to_add[r] = 0
+        nr_acc_to_add[r] = max(nr_acc_to_add[r],
+                region.nr_accesses.samples)
 
-            new_regions = []
-            if region.start < r.start:
-                new_regions.append(_damon.DamonRegion(
-                    region.start, r.start,
+        new_regions = []
+        if region.start < r.start:
+            new_regions.append(_damon.DamonRegion(
+                region.start, r.start,
+                region.nr_accesses.samples, _damon.unit_samples,
+                region.age.aggr_intervals, _damon.unit_aggr_intervals,
+                sz_filter_passed_for_new_size(
+                    region, r.start - region.start)))
+        if r.end < region.end:
+            new_regions.append(_damon.DamonRegion(
+                    r.end, region.end,
                     region.nr_accesses.samples, _damon.unit_samples,
-                    region.age.aggr_intervals, _damon.unit_aggr_intervals,
+                    region.age.aggr_intervals,
+                    _damon.unit_aggr_intervals,
                     sz_filter_passed_for_new_size(
-                        region, r.start - region.start)))
-            if r.end < region.end:
-                new_regions.append(_damon.DamonRegion(
-                        r.end, region.end,
-                        region.nr_accesses.samples, _damon.unit_samples,
-                        region.age.aggr_intervals,
-                        _damon.unit_aggr_intervals,
-                        sz_filter_passed_for_new_size(
-                            region, region.end - r.end)))
+                        region, region.end - r.end)))
 
-            for new_r in new_regions:
-                add_region(regions, new_r, nr_acc_to_add)
-            return
+        for new_r in new_regions:
+            add_region(regions, new_r, nr_acc_to_add)
+        return
     regions.append(region)
 
 def aggregate_snapshots(snapshots):
