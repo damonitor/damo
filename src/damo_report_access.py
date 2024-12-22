@@ -945,6 +945,9 @@ def set_formats(args):
             args.format_snapshot_tail = ('%s\n<region box description>' %
                     args.format_record_tail)
 
+    if args.tried_regions_of and args.format_region == default_region_format:
+        args.format_region += ' filters-passed <filters passed bytes>'
+
     return RecordsVisualizationFormat.from_args(args)
 
 def handle_ls_keywords(args):
