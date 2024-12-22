@@ -1,6 +1,12 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.6.1
+- Support region-internal DAMOS filters passed stats
+  (https://lore.kernel.org/all/20241219040327.61902-1-sj@kernel.org/)
+  - 'damo report damon' shows both per-scheme and per-region stats
+  - 'damo report access' shows the per-region data when '--tried_regions_of' is given
+
 v2.6.0
 - Support filtering records via snapshot index (damo report access --snapshot_idx)
 
