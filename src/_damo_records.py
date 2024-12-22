@@ -1632,6 +1632,7 @@ def args_to_filter(args):
                 [_damo_fmt_str.text_to_nr(s), _damo_fmt_str.text_to_nr(e)]
                 for s, e in args.snapshot_idx]
 
+    # maybe this is called from damo_report_access
     if hasattr(args, 'temperature_weights'):
         temperature_weights = args.temperature_weights
     else:
