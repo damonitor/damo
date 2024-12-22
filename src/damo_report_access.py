@@ -145,6 +145,12 @@ region_formatters = [
             temperature_str(region, fmt.raw_number, fmt),
             'access temperature of the region'),
         Formatter(
+            '<filters passed bytes>',
+            lambda index, region, fmt:
+            _damo_fmt_str.format_sz(region.sz_filter_passed, fmt.raw_number)
+            if region.sz_filter_passed is not None else 'N/A',
+            'bytes of the region that passed DAMOS filters'),
+        Formatter(
             '<box>',
             lambda index, region, fmt:
             fmt.region_box_format.to_str(region),
