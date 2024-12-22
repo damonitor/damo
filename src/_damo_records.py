@@ -1325,7 +1325,7 @@ def get_snapshot_records_for_schemes(idxs, total_sz_only, merge_regions):
         return None, 'no kdamond running'
 
     return update_get_snapshot_records(running_kdamond_idxs, idxs,
-            total_sz_only, merge_regions, None)
+            total_sz_only, merge_regions)
 
 def region_of_pattern(region, pattern, record_intervals):
     sz_bytes = pattern.sz_bytes
