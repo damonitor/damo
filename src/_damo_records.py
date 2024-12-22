@@ -1672,3 +1672,7 @@ def set_filter_argparser(parser):
             '--temperature', metavar=('<min>', '<max>'), nargs=2, type=int,
             action='append',
             help='min/max temperature of regions to show')
+    parser.add_argument(
+            '--damos_filter', nargs='+', action='append', default=[],
+            metavar='<filter argument>',
+            help='damos filter (type, matching, and optional arguments)')
