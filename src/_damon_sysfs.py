@@ -742,7 +742,7 @@ def infer_damon_version():
                                        'sz_ops_filter_passed')):
             version = '>6.13'
         elif os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'target_nid')):
-            version = '>6.11'
+            version = '>=6.11'
         else:
             version = 'v6.10'
         err = stage_kdamonds(orig_kdamonds)
