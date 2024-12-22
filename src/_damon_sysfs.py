@@ -728,9 +728,6 @@ def scheme_tried_regions_dir_of(kdamond_idx, context_idx, scheme_idx):
 def infer_damon_version():
     orig_kdamonds = current_kdamonds()
 
-    if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'target_nid')):
-        return '>6.10'
-
     kdamonds = [
             _damon.Kdamond(
                 state=None, pid=None, contexts=[
@@ -741,8 +738,15 @@ def infer_damon_version():
                                 )])])]
     err = stage_kdamonds(kdamonds)
     if err is None:
+        if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'stats',
+                                       'sz_ops_filter_passed')):
+            version = '>6.13'
+        elif os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'target_nid')):
+            version = '>6.11'
+        else:
+            version = 'v6.10'
         err = stage_kdamonds(orig_kdamonds)
-        return '6.10'
+        return version
 
     kdamonds[0].contexts[0].schemes[0].filters = []
     err = stage_kdamonds(kdamonds)
