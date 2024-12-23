@@ -1112,8 +1112,11 @@ def add_fmt_args(parser, hide_help=False):
             '--min_chars_for', nargs=2,
             metavar=('<keyword>', '<number>'), action='append',
             default=[['<index>', 3],
-                ['<start address>', 12],['<end address>', 11],
-                ['<size>', 11], ['<access rate>', 5]],
+                     ['<start address>', 12],['<end address>', 11],
+                     ['<size>', 11], ['<access rate>', 5],
+                     ['<age>', 13],
+                     ['<filters passed type>', 10],
+                     ],
             help='minimum character for each keyword of the format'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--region_box', action='store_true',
