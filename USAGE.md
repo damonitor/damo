@@ -532,6 +532,40 @@ Actually `--style` option is also built on top of the customization features.
 Below sections provide more details about the background and usages of the
 features.
 
+### `damo report access`: Page Level Properties Based Access Monitoring
+
+Note: This is an experimental feature at the moment.  Some changes could be
+made, or the support can be dropped in future.
+
+`damo` supports DAMON's page level properties based access monitoring feature,
+which is in RFC stage at the moment.
+
+`damo report access` shows the per-region size of the pages of the properties
+by default in following two snapshot-based use cases (`damo report access` is
+executed while DAMON is running).
+1. When `damo report access` is invoked in snapshot mode, with `--damos_filter`
+   option for DAMOS filters that works in region-internal levels.
+2. When DAMON is running with a DAMOS scheme that has the page level DAMOS
+  filters, and `damo report access` is invoked to get snapshot of the scheme,
+  using `--tried_regions_of` option.
+
+For example, users can know how much of anonymous and `PG_young` pages reside
+in regiosn of different access patterns, like below:
+
+```
+$ sudo ./damo report access --damos_filter anon nomatching --damos_filter young nomatching
+heatmap: 00000000000000000000000000000000000000000000000000019999999999999622222222222222
+# min/max temperatures: -144,860,000,000, -96,980,000,000, column size: 441.765 MiB
+0   addr 29.355 GiB   size 4.475 GiB   access 0 %   age 24 m 8.600 s  anon and young 0 B
+1   addr 33.830 GiB   size 5.958 GiB   access 0 %   age 24 m 7.900 s  anon and young 0 B
+2   addr 39.788 GiB   size 5.972 GiB   access 0 %   age 24 m 7.300 s  anon and young 0 B
+3   addr 45.760 GiB   size 5.953 GiB   access 0 %   age 24 m 3.700 s  anon and young 24.000 KiB
+4   addr 51.714 GiB   size 5.978 GiB   access 0 %   age 16 m 9.800 s  anon and young 16.000 KiB
+5   addr 57.692 GiB   size 5.986 GiB   access 0 %   age 21 m 50.700 s anon and young 64.000 KiB
+6   addr 63.678 GiB   size 194.375 MiB access 0 %   age 21 m 13.200 s anon and young 0 B
+total size: 34.513 GiB
+```
+
 ### DAMON Monitoring Results Structure
 
 The biggest unit of the monitoring result is called 'record'.  Each record
