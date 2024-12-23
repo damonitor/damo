@@ -1171,6 +1171,7 @@ def tried_regions_to_snapshot(scheme, intervals, merge_regions):
                     last_region.nr_accesses == tried_region.nr_accesses and
                     last_region.age == tried_region.age):
                 last_region.end = tried_region.end
+                last_region.sz_filter_passed += tried_region.sz_filter_passed
                 continue
         regions.append(tried_region)
     if scheme.tried_bytes is not None:
