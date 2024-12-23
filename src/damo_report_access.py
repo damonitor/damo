@@ -151,6 +151,10 @@ region_formatters = [
             if region.sz_filter_passed is not None else 'N/A',
             'bytes of the region that passed DAMOS filters'),
         Formatter(
+            '<filters passsed type>',
+            lambda index, region, fmt: fmt.region_filters_pass_type,
+            'type of <filters passed bytes> memory'),
+        Formatter(
             '<box>',
             lambda index, region, fmt:
             fmt.region_box_format.to_str(region),
