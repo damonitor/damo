@@ -801,6 +801,8 @@ class RecordsVisualizationFormat:
     json = None
     raw = None
 
+    region_filters_pass_type = None
+
     @classmethod
     def from_args(cls, args):
         self = cls()
@@ -825,6 +827,11 @@ class RecordsVisualizationFormat:
         self.raw_number = args.raw_number
         self.json = args.json
         self.raw = args.raw_form
+        type_str, err = _damon_args.passed_bytes_type_str(args.damos_filter)
+        if err is not None:
+            self.region_filters_pass_type = err
+        else:
+            self.region_filters_pass_type = type_str
         return self
 
     def total_sz_only(self):
