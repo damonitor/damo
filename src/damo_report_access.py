@@ -958,7 +958,8 @@ def set_formats(args):
 
     if args.format_region == default_region_format:
         if args.tried_regions_of or args.damos_filter:
-            args.format_region += ' filters-passed <filters passed bytes>'
+            args.format_region += ' %s %s' % (
+                    '<filters passsed type>', '<filters passed bytes>')
 
     return RecordsVisualizationFormat.from_args(args)
 
