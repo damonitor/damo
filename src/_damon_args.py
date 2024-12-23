@@ -148,6 +148,31 @@ def damos_options_to_filters(filters_args):
             return None, 'unsupported filter type'
     return filters, None
 
+def passed_bytes_type_str(damos_filter_args):
+    filters, err = damos_options_to_filters(damos_filter_args)
+    if err is not None:
+        return None, err
+    type_tokens = []
+    for filter in filters:
+        if filter.filter_type == 'anon':
+            if filter.matching is True:
+                type_tokens.append('file-backed')
+            else:
+                type_tokens.append('anon')
+        elif filter.filter_type == 'memcg':
+            if filter.matching is True:
+                type_tokens.append('not belong to %s' % filter.memcg_path)
+            else:
+                type_tokens.append('belong to %s' % filter.memcg_path)
+        elif filter.filter_type == 'young':
+            if filter.matching is True:
+                type_tokens.append('old')
+            else:
+                type_tokens.append('young')
+    if len(type_tokens) == 0:
+        return 'no filter', None
+    return ' and '.join(type_tokens), None
+
 def damos_quotas_cons_arg(cmd_args):
     time_ms = 0
     sz_bytes = 0
