@@ -111,10 +111,17 @@ def damos_options_to_filters(filters_args):
             return None, 'unsupported matching keyword (%s)' % fmatching
         fmatching = fmatching == 'matching'
         if ftype == 'anon':
-            if len(fargs):
-                return (None, 'anon filter receives no arguments but (%s)'
-                        % fargs)
-            filters.append(_damon.DamosFilter(ftype, fmatching))
+            if len(fargs) > 1:
+                return None, 'anon filter received >1 arguments (%s)' % fargs
+            elif len(fargs) == 0:
+                filter_pass = False
+            else:
+                fpass_arg = fargs[0]
+                if not fpass_args in ['pass', 'block']:
+                    return None, 'wrong pass argument (%s)' % fpass_args
+                filter_pass = fpass_args == 'pass'
+            filters.append(_damon.DamosFilter(
+                ftype, fmatching, filter_pass=filter_pass))
         elif ftype == 'memcg':
             if len(fargs) != 1:
                 return None, 'wrong number of memcg arguments (%s)' % fargs
