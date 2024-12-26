@@ -99,6 +99,13 @@ def write_filter_dir(dir_path, filter_):
         # addr/target are merged in 6.6-rc1
         return err
 
+    if (not os.path.isfile(os.path.join(dir_path, 'pass')) and
+        filter_.filter_pass is True):
+        return 'kernel is not supporting pass_filter'
+    else:
+        err = _damo_fs.write_file(os.path.join(dir_path, 'pass'),
+                                  'Y' if filter_.filter_pass else 'N')
+
     if filter_.memcg_path is not None:
         err = _damo_fs.write_file(
                 os.path.join(dir_path, 'memcg_path'), filter_.memcg_path)
