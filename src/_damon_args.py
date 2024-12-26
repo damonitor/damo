@@ -96,6 +96,37 @@ def schemes_option_to_damos(schemes):
     except Exception as json_err:
         return None, '%s' % json_err
 
+def handle_err_get_filter_pass(filter_type, optional_args):
+    '''
+    optional_args are for filter target memory type specification, and whether
+    the filter is pass filter or block filter.
+    Target memory type specification options depend on the type.
+    Whether to pass or block is optional (block by default)
+    '''
+    type_to_nr_type_args = {
+            'anon': 0,
+            'memcg': 1,
+            'young': 0,
+            'addr': 2,
+            'target': 1}
+    if not filter_type in type_to_nr_type_args:
+        return None, 'unsupported filter target type'
+    nr_type_args = type_to_nr_type_args[filter_type]
+    len_args = len(optional_args)
+    if len_args < nr_type_args:
+        return None, '<%d filter optional args (%s)' % (
+                nr_rype_args, optional_args)
+    elif len_args > nr_type_args + 1:
+        return None, '>%d filter optional args (%s)' % (
+                nr_type_args + 1, optional_args)
+
+    if len_args == nr_type_args:
+        return False, None
+    filter_pass_keyword = optional_args[-1]
+    if not filter_pass_keyword in ['pass', 'block']:
+        return None, 'wrong filter_pass keyword (%s)' % filter_pass_keyword
+    return filter_pass_keyword == 'pass', None
+
 def damos_options_to_filters(filters_args):
     filters = []
     if filters_args == None:
