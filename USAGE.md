@@ -572,6 +572,30 @@ heatmap: 99987777777775555555554333333333211111111111111111100000000000000000000
 total size: 50.369 GiB
 ```
 
+### `--damos_filter` Option Format
+
+`--damos_filter` option's format is as below:
+
+```
+<type> <matching|nomatching> [additional type options>...] [pass|block]
+```
+
+`<type>` is the type of the memory that the filter should work for.  As of this
+writing, `anon`, `memcg`, `young`, `addr`, and `target` are supported values.
+Depending on the running kernel, some of the types will not be supported.
+
+Second argument says if the filter is for memory that matches (`matching`) or
+not matches (`nomatching`) the `<type>`.
+
+Depending on `<type>`, additional type options need to be specified, as below.
+- `memcg`: the target memcg's path should be provided.
+- `addr`: start and end addresses of the target address range.
+- `target`: the index of the DAMON target.
+
+Finally, users can specify if the filter should `pass` of `block` the memory.
+If it is not given, it applies `block` by default.  Note that kernel support of
+pass filter is not yet mainlined as of 2024-12-26.
+
 ### DAMON Monitoring Results Structure
 
 The biggest unit of the monitoring result is called 'record'.  Each record
