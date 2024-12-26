@@ -646,19 +646,29 @@ class DamosFilter:
             self.damon_target_idx = _damo_fmt_str.text_to_nr(damon_target_idx)
 
     def to_str(self, raw):
-        txt = '%s %s %s' % (
-                self.filter_type,
-                'matching' if self.matching else 'nomatching',
-                'pass' if self.filter_pass else 'block')
+        type_to_text = {
+                'anon': ['anon pages', 'file-backed pages'],
+                'memcg': ['pages in memcg', 'pages not in memcg'],
+                'young': ['young pages', 'old pages'],
+                'addr': ['memory in addr', 'memory not in addr'],
+                'target': ['memory in target', 'memory not in target']
+                }
+        words = []
+        if self.filter_pass:
+            words.append('pass')
+        else:
+            words.append('block')
+        match_idx = 0 if self.matching is True else 1
+        words.append(type_to_text[self.filter_type][match_idx])
         if self.filter_type in ['anon', 'young']:
-            return txt
+            return ' '.join(words)
         if self.filter_type == 'memcg':
-            return '%s %s' % (txt, self.memcg_path)
+            return ' '.join(words + [self.memcg_path])
         if self.filter_type == 'addr':
-            return '%s %s' % (txt, self.address_range.to_str(raw))
+            return ' '.join(words + [self.address_range.to_str(raw)])
         if self.filter_type == 'target':
-            return '%s %s' % (txt, _damo_fmt_str.format_nr(
-                    self.damon_target_idx, raw))
+            return ' '.join(words + [_damo_fmt_str.format_nr(
+                    self.damon_target_idx, raw)])
 
     def __str__(self):
         return self.to_str(False)
