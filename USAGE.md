@@ -555,17 +555,21 @@ For example, users can know how much of anonymous and `PG_young` pages reside
 in regiosn of different access patterns, like below:
 
 ```
-$ sudo ./damo report access --damos_filter anon nomatching --damos_filter young nomatching
-heatmap: 00000000000000000000000000000000000000000000000000019999999999999622222222222222
-# min/max temperatures: -144,860,000,000, -96,980,000,000, column size: 441.765 MiB
-0   addr 29.355 GiB   size 4.475 GiB   access 0 %   age 24 m 8.600 s  anon and young 0 B
-1   addr 33.830 GiB   size 5.958 GiB   access 0 %   age 24 m 7.900 s  anon and young 0 B
-2   addr 39.788 GiB   size 5.972 GiB   access 0 %   age 24 m 7.300 s  anon and young 0 B
-3   addr 45.760 GiB   size 5.953 GiB   access 0 %   age 24 m 3.700 s  anon and young 24.000 KiB
-4   addr 51.714 GiB   size 5.978 GiB   access 0 %   age 16 m 9.800 s  anon and young 16.000 KiB
-5   addr 57.692 GiB   size 5.986 GiB   access 0 %   age 21 m 50.700 s anon and young 64.000 KiB
-6   addr 63.678 GiB   size 194.375 MiB access 0 %   age 21 m 13.200 s anon and young 0 B
-total size: 34.513 GiB
+$ sudo ./damo report access --damos_filter anon nomatching block --damos_filter young matching pass
+heatmap: 99987777777775555555554333333333211111111111111111100000000000000000000000000000
+# min/max temperatures: -331,964,554,010, -73,070,000,000, column size: 644.727 MiB
+# damos filters (df): block file-backed pages, pass young pages
+0   addr 13.499 GiB   size 2.379 GiB   access 0 %   age 12 m 10.700 s df-passed 1.617 MiB
+1   addr 15.877 GiB   size 5.948 GiB   access 0 %   age 20 m 53.500 s df-passed 0 B
+2   addr 21.825 GiB   size 5.979 GiB   access 0 %   age 30 m 49.600 s df-passed 0 B
+3   addr 27.804 GiB   size 5.971 GiB   access 0 %   age 39 m 42.700 s df-passed 0 B
+4   addr 33.775 GiB   size 5.965 GiB   access 0 %   age 46 m 14.200 s df-passed 0 B
+5   addr 39.740 GiB   size 5.933 GiB   access 0 %   age 50 m 23.700 s df-passed 0 B
+6   addr 45.673 GiB   size 5.935 GiB   access 0 %   age 53 m 3.800 s  df-passed 0 B
+7   addr 51.607 GiB   size 5.983 GiB   access 0 %   age 54 m 31.800 s df-passed 0 B
+8   addr 57.590 GiB   size 5.986 GiB   access 0 %   age 55 m 13.900 s df-passed 1.371 MiB
+9   addr 63.576 GiB   size 298.734 MiB access 0 %   age 55 m 26.300 s df-passed 0 B
+total size: 50.369 GiB
 ```
 
 ### DAMON Monitoring Results Structure
