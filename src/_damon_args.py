@@ -119,7 +119,8 @@ def damos_options_to_filters(filters_args):
             if len(fargs) != 1:
                 return None, 'wrong number of memcg arguments (%s)' % fargs
             memcg_path = fargs[0]
-            filters.append(_damon.DamosFilter(ftype, fmatching, memcg_path))
+            filters.append(_damon.DamosFilter(
+                ftype, fmatching, memcg_path=memcg_path))
         elif ftype == 'young':
             if len(fargs):
                 return (None,
@@ -133,14 +134,15 @@ def damos_options_to_filters(filters_args):
             except Exception as e:
                 return None, 'wrong addr range (%s, %s)' % (fargs, e)
             filters.append(
-                    _damon.DamosFilter(ftype, fmatching, None, addr_range))
+                    _damon.DamosFilter(
+                        ftype, fmatching, address_range=addr_range))
         elif ftype == 'target':
             if len(fargs) != 1:
                 return None, 'wrong number of target argument (%s)' % fargs
             try:
                 filters.append(
-                        _damon.DamosFilter(ftype, fmatching, None, None,
-                            fargs[0]))
+                        _damon.DamosFilter(
+                            ftype, fmatching, damon_target_idx=fargs[0]))
             except Exception as e:
                 return None, 'target filter creation failed (%s, %s)' % (
                         fargs[0], e)

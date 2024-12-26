@@ -30,7 +30,7 @@ class TestDamon(unittest.TestCase):
                 _damon.DamosQuotas(100, 1024, 1000, [80, 76, 24]),
                 _damon.DamosWatermarks('free_mem_rate', 5000000, 800, 500,
                     200),
-                [_damon.DamosFilter('memcg', True, '/foo/bar'),
+                [_damon.DamosFilter('memcg', True, memcg_path='/foo/bar'),
                     _damon.DamosFilter('anon', False)],
                     None, None)
         damos_kvpairs = damos.to_kvpairs()

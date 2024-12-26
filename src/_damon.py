@@ -629,23 +629,27 @@ class DamosWatermarks:
 class DamosFilter:
     filter_type = None  # anon, memcg, young, addr, or target
     matching = None
+    filter_pass = None
     memcg_path = None
     address_range = None    # DamonRegion
     damon_target_idx = None
     scheme = None
 
-    def __init__(self, filter_type, matching, memcg_path=None,
-            address_range=None, damon_target_idx=None):
+    def __init__(self, filter_type, matching, filter_pass=False,
+                 memcg_path=None, address_range=None, damon_target_idx=None):
         self.filter_type = filter_type
         self.matching = _damo_fmt_str.text_to_bool(matching)
         self.memcg_path = memcg_path
+        self.filter_pass = _damo_fmt_str.text_to_bool(filter_pass)
         self.address_range = address_range
         if damon_target_idx != None:
             self.damon_target_idx = _damo_fmt_str.text_to_nr(damon_target_idx)
 
     def to_str(self, raw):
-        txt = '%s %s' % (self.filter_type,
-                'matching' if self.matching else 'nomatching')
+        txt = '%s %s %s' % (
+                self.filter_type,
+                'matching' if self.matching else 'nomatching',
+                'pass' if self.filter_pass else 'block')
         if self.filter_type in ['anon', 'young']:
             return txt
         if self.filter_type == 'memcg':
@@ -664,7 +668,9 @@ class DamosFilter:
 
     @classmethod
     def from_kvpairs(cls, kv):
-        return DamosFilter(kv['filter_type'], kv['matching'],
+        return DamosFilter(
+                kv['filter_type'], kv['matching'],
+                kv['filter_pass'] if 'filter_pass' in kv else False,
                 kv['memcg_path'] if kv['filter_type'] == 'memcg' else '',
                 DamonRegion.from_kvpairs(kv['address_range'])
                     if kv['filter_type'] == 'addr' else None,
@@ -675,6 +681,7 @@ class DamosFilter:
         return collections.OrderedDict([
             ('filter_type', self.filter_type),
             ('matching', self.matching),
+            ('filter_pass', self.filter_pass),
             ('memcg_path', self.memcg_path),
             ('address_range', self.address_range.to_kvpairs(raw) if
                 self.address_range != None else None),
