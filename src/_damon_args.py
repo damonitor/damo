@@ -141,29 +141,21 @@ def damos_options_to_filters(filters_args):
         if not fmatching in ['matching', 'nomatching']:
             return None, 'unsupported matching keyword (%s)' % fmatching
         fmatching = fmatching == 'matching'
+        filter_pass, err = handle_err_get_filter_pass(ftype, fargs)
+        if err is not None:
+            return None, 'filter arguments handling failed (%s)' % fargs
+
         if ftype == 'anon':
-            if len(fargs) > 1:
-                return None, 'anon filter received >1 arguments (%s)' % fargs
-            elif len(fargs) == 0:
-                filter_pass = False
-            else:
-                fpass_arg = fargs[0]
-                if not fpass_args in ['pass', 'block']:
-                    return None, 'wrong pass argument (%s)' % fpass_args
-                filter_pass = fpass_args == 'pass'
             filters.append(_damon.DamosFilter(
                 ftype, fmatching, filter_pass=filter_pass))
         elif ftype == 'memcg':
-            if len(fargs) != 1:
-                return None, 'wrong number of memcg arguments (%s)' % fargs
             memcg_path = fargs[0]
             filters.append(_damon.DamosFilter(
-                ftype, fmatching, memcg_path=memcg_path))
+                ftype, fmatching, memcg_path=memcg_path,
+                filter_pass=filter_pass))
         elif ftype == 'young':
-            if len(fargs):
-                return (None,
-                        'young filter receives no arguments but (%s)' % fargs)
-            filters.append(_damon.DamosFilter(ftype, fmatching))
+            filters.append(_damon.DamosFilter(
+                ftype, fmatching, filter_pass=filter_pass))
         elif ftype == 'addr':
             if len(fargs) != 2:
                 return None, 'wrong number of addr arguments (%s)' % fargs
@@ -173,14 +165,16 @@ def damos_options_to_filters(filters_args):
                 return None, 'wrong addr range (%s, %s)' % (fargs, e)
             filters.append(
                     _damon.DamosFilter(
-                        ftype, fmatching, address_range=addr_range))
+                        ftype, fmatching, filter_pass=filter_pass,
+                        address_range=addr_range))
         elif ftype == 'target':
             if len(fargs) != 1:
                 return None, 'wrong number of target argument (%s)' % fargs
             try:
                 filters.append(
                         _damon.DamosFilter(
-                            ftype, fmatching, damon_target_idx=fargs[0]))
+                            ftype, fmatching, filter_pass=filter_pass,
+                            damon_target_idx=fargs[0]))
             except Exception as e:
                 return None, 'target filter creation failed (%s, %s)' % (
                         fargs[0], e)
