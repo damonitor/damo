@@ -919,7 +919,7 @@ class RecordsVisualizationFormat:
             else:
                 self.format_snapshot_head = 'heatmap: <heatmap>'
         if '<filters passed bytes>' in self.format_region:
-            self.format_snapshot_head += '\n# filters: <filters passed type>'
+            self.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
 
 
 def set_formats(args):
@@ -960,7 +960,7 @@ def set_formats(args):
 
     if args.format_region == default_region_format:
         if args.tried_regions_of or args.damos_filter:
-            args.format_region += ' filters passed <filters passed bytes>'
+            args.format_region += ' df-passed <filters passed bytes>'
 
     return RecordsVisualizationFormat.from_args(args)
 
