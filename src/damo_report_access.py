@@ -151,7 +151,7 @@ region_formatters = [
             if region.sz_filter_passed is not None else 'N/A',
             'bytes of the region that passed DAMOS filters'),
         Formatter(
-            '<filters passsed type>',
+            '<filters passed type>',
             lambda index, region, fmt: fmt.region_filters_pass_type,
             'type of <filters passed bytes> memory'),
         Formatter(
@@ -959,7 +959,7 @@ def set_formats(args):
     if args.format_region == default_region_format:
         if args.tried_regions_of or args.damos_filter:
             args.format_region += ' %s %s' % (
-                    '<filters passsed type>', '<filters passed bytes>')
+                    '<filters passed type>', '<filters passed bytes>')
 
     return RecordsVisualizationFormat.from_args(args)
 
