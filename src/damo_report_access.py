@@ -921,7 +921,6 @@ class RecordsVisualizationFormat:
         if '<filters passed bytes>' in self.format_region:
             self.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
 
-
 def set_formats(args):
     if args.style == 'simple-boxes':
         args.format_snapshot_head = default_snapshot_head_format_without_heatmap
