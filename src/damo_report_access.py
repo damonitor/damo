@@ -938,6 +938,27 @@ class ReportFormat:
         if '<filters passed bytes>' in self.format_region:
             self.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
 
+def set_formats_hist_style(args):
+    if args.style == 'temperature-sz-hist':
+        legend = '<temperature>'
+        hist_keyword = '<temperature-sz histogram>'
+        filter_passed_hist_keyword = '<temperature-df-passed-sz histogram>'
+    else:
+        # args.style == 'recency-sz-hist':
+        legend = '<last accessed time (us)>'
+        hist_keyword = '<recency-sz histogram>'
+        filter_passed_hist_keyword = '<recency-df-passed-sz histogram>'
+
+    args.format_snapshot_head = '\n'.join([
+        '%s <total size>' % legend, hist_keyword])
+    if len(args.damos_filter) > 0:
+        args.format_snapshot_head += '\n'.join([
+        '',
+        '',
+        '# damos filters (df): <filters passed type>',
+        '%s <df-passed size>' % legend, filter_passed_hist_keyword])
+    args.format_region = ''
+
 def set_formats(args):
     if args.style == 'simple-boxes':
         args.format_snapshot_head = default_snapshot_head_format_without_heatmap
@@ -946,32 +967,8 @@ def set_formats(args):
         args.region_box_min_max_length = [1, 40]
         args.region_box_align = 'right'
         args.region_box_colorset = 'emotion'
-    elif args.style == 'temperature-sz-hist':
-        args.format_snapshot_head = '\n'.join([
-            '<temperature> <total size>',
-            '<temperature-sz histogram>'])
-        if len(args.damos_filter) > 0:
-            args.format_snapshot_head += '\n'.join([
-            '',
-            '',
-            '# damos filters (df): <filters passed type>',
-            '<temperature> <df-passed size>',
-            '<temperature-df-passed-sz histogram>'])
-        args.format_region = ''
-    elif args.style == 'recency-sz-hist':
-        args.format_snapshot_head = '\n'.join([
-            '<last accessed time (us)> <total size>',
-            '<recency-sz histogram>'])
-        if len(args.damos_filter) > 0:
-            args.format_snapshot_head += '\n'.join([
-            '',
-            '',
-            '# damos filters (df): <filters passed type>',
-            '<last accessed time (us)> <df-passed size>',
-            '<recency-df-passed-sz histogram>'])
-        args.format_region = ''
-
-        args.format_region = ''
+    elif args.style in ['temperature-sz-hist', 'recency-sz-hist']:
+        set_formats_hist_style(args)
 
     args.region_box_values = [v if v != 'none' else None
             for v in args.region_box_values]
