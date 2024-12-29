@@ -775,7 +775,7 @@ def pr_records(fmt, records):
     else:
         _damo_print.pr_with_pager_if_needed(fmt_records(fmt, records))
 
-class RecordsVisualizationFormat:
+class ReportFormat:
     sort_regions_by = None
     sort_regions_dsc = None
     temperature_weights = None
@@ -961,7 +961,7 @@ def set_formats(args):
         if args.tried_regions_of or args.damos_filter:
             args.format_region += ' df-passed <filters passed bytes>'
 
-    return RecordsVisualizationFormat.from_args(args)
+    return ReportFormat.from_args(args)
 
 def handle_ls_keywords(args):
     if args.ls_record_format_keywords:
@@ -1010,7 +1010,7 @@ def main(args):
         if os.path.isfile(fmt_string):
             with open(fmt_string, 'r') as f:
                 fmt_string = f.read()
-        fmt = RecordsVisualizationFormat.from_kvpairs(json.loads(fmt_string))
+        fmt = ReportFormat.from_kvpairs(json.loads(fmt_string))
     else:
         fmt = set_formats(args)
     fmt.runtime_update(records)

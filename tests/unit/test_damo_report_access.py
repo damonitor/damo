@@ -112,7 +112,7 @@ class TestDamoShow(unittest.TestCase):
                         }
                     ]
                 })
-        fmt = damo_report_access.RecordsVisualizationFormat()
+        fmt = damo_report_access.ReportFormat()
         fmt.raw_number = False
         fmt.min_chars_for = []
         self.assertEqual(damo_report_access.format_output(
