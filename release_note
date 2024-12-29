@@ -5,6 +5,7 @@ v2.6.2
 - Support DAMOS pass filter
   (https://lore.kernel.org/20241227210819.63776-1-sj@kernel.org)
 - Document --damos_filter option format
+- Support --damos_filter from histogram styles of 'damo report access'
 
 v2.6.1
 - Support page level properties based access monitoring
