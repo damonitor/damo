@@ -43,7 +43,8 @@ def main(args):
         if os.path.isfile(fmt_string):
             with open(fmt_string, 'r') as f:
                 fmt_string = f.read()
-        fmt = RecordsVisualizationFormat.from_kvpairs(json.loads(fmt_string))
+        fmt = damo_report_access.RecordsVisualizationFormat.from_kvpairs(
+                json.loads(fmt_string))
     else:
         fmt = damo_report_access.set_formats(args)
     fmt.runtime_update(records)
