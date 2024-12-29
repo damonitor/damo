@@ -95,8 +95,13 @@ snapshot_formatters = [
             'description about region box (what and how it represents)'),
         Formatter('<temperature-sz histogram>',
                   lambda snapshot, record, fmt:
-                  temperature_sz_hist_str(snapshot, record, fmt),
+                  temperature_sz_hist_str(snapshot, record, fmt, False),
                   'temperature to total size of the regions histogram'),
+        Formatter('<temperature-df-passed-sz histogram>',
+                  lambda snapshot, record, fmt:
+                  temperature_sz_hist_str(snapshot, record, fmt, True),
+                  ' '.join(['temperature to total size of DAMOS filters (df)',
+                            'passed regions histogram'])),
         Formatter('<recency-sz histogram>',
                   lambda snapshot, record, fmt:
                   recency_hist_str(snapshot, record, fmt),
@@ -166,7 +171,7 @@ default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<dur
 default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
 
-def temperature_sz_hist_str(snapshot, record, fmt):
+def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
@@ -177,7 +182,10 @@ def temperature_sz_hist_str(snapshot, record, fmt):
         temperature = temperature_of(region, fmt.temperature_weights)
         if not temperature in hist:
             hist[temperature] = 0
-        hist[temperature] += region.size()
+        if df_passed_sz:
+            hist[temperature] += region.sz_filter_passed
+        else:
+            hist[temperature] += region.size()
 
     temperatures = sorted(hist.keys())
     min_temp, max_temp = temperatures[0], temperatures[-1]
