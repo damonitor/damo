@@ -104,8 +104,14 @@ snapshot_formatters = [
                             'passed regions histogram'])),
         Formatter('<recency-sz histogram>',
                   lambda snapshot, record, fmt:
-                  recency_hist_str(snapshot, record, fmt),
+                  recency_hist_str(snapshot, record, fmt, False),
                   'last accessed time to total size of the regions histogram'),
+        Formatter('<recency-df-passed-sz histogram>',
+                  lambda snapshot, record, fmt:
+                  recency_hist_str(snapshot, record, fmt, True),
+                  ' '.join(['last accessed time to total size of',
+                            'DAMOS filters (df) passed regions histogram'])),
+
         Formatter('<heatmap>',
                   lambda snapshot, record, fmt:
                   heatmap_str(snapshot, record, fmt),
@@ -227,7 +233,7 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
-def recency_hist_str(snapshot, record, fmt):
+def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
@@ -238,7 +244,10 @@ def recency_hist_str(snapshot, record, fmt):
             last_used = 0
         if not last_used in hist:
             hist[last_used] = 0
-        hist[last_used] += region.size()
+        if df_passed_sz is True:
+            hist[last_used] += region.sz_filter_passed
+        else:
+            hist[last_used] += region.size()
 
     last_used_times = sorted(hist.keys())
     min_lut, max_lut = last_used_times[0], last_used_times[-1]
