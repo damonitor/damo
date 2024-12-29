@@ -33,7 +33,7 @@
   - shows when what virtual address has mappend and unmapped
 - Implement an official feature to check if 'damo' supports the system
   - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
-- Support DAMOS filters from damo report access
+- Support DAMOS filters from damo record --snapshot
 
 - Deprecate old features
   - Deprecate 'damo report raw'
