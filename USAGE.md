@@ -543,19 +543,24 @@ stage as of this writing.  The RFC patches are applied on DAMON development
 [tree](https://github.com/damonitor/damo/tree/next).
 
 `damo report access` shows the per-region size of the pages of the properties
-by default in following two snapshot-based use cases (`damo report access` is
+by default in following snapshot-based use cases (`damo report access` is
 executed while DAMON is running).
 1. When `damo report access` is invoked in snapshot mode, with `--damos_filter`
    option for DAMOS filters that works in region-internal levels.
 2. When DAMON is running with a DAMOS scheme that has the page level DAMOS
   filters, and `damo report access` is invoked to get snapshot of the scheme,
   using `--tried_regions_of` option.
+3. The report format supports the filters passed memory information
+   visualization.  `detailed` and histogram report
+   [styles](#access-report-styles) will be extended to support the
+   visualization when [`--damos_filter`](#damos-filter-option-format) option is
+   provided.
 
 For example, users can know how much of anonymous and `PG_young` pages reside
 in regiosn of different access patterns, like below:
 
 ```
-$ sudo ./damo report access --damos_filter anon nomatching block --damos_filter young matching pass
+$ sudo damo report access --damos_filter anon nomatching block --damos_filter young matching pass
 heatmap: 99987777777775555555554333333333211111111111111111100000000000000000000000000000
 # min/max temperatures: -331,964,554,010, -73,070,000,000, column size: 644.727 MiB
 # damos filters (df): block file-backed pages, pass young pages
