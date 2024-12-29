@@ -950,6 +950,13 @@ def set_formats(args):
         args.format_snapshot_head = '\n'.join([
             '<temperature> <total size>',
             '<temperature-sz histogram>'])
+        if len(args.damos_filter) > 0:
+            args.format_snapshot_head += '\n'.join([
+            '',
+            '',
+            '# damos filters (df): <filters passed type>',
+            '<temperature> <df-passed size>',
+            '<temperature-df-passed-sz histogram>'])
         args.format_region = ''
     elif args.style == 'recency-sz-hist':
         args.format_snapshot_head = '\n'.join([
