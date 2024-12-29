@@ -69,27 +69,30 @@ class DamonRecord:
     intervals = None
     scheme_idx = None
     target_id = None
+    scheme_filters = None
     snapshots = None
 
-    def __init__(self, kd_idx, ctx_idx, intervals, scheme_idx, target_id):
+    def __init__(self, kd_idx, ctx_idx, intervals, scheme_idx, target_id,
+                 scheme_filters):
         self.kdamond_idx = kd_idx
         self.context_idx = ctx_idx
         self.intervals = intervals
         self.scheme_idx = scheme_idx
         self.target_id = target_id
+        self.scheme_filters = scheme_filters
         self.snapshots = []
 
     @classmethod
     def from_kvpairs(cls, kv):
         for keyword in ['kdamond_idx', 'context_idx', 'intervals',
-                'scheme_idx']:
+                'scheme_idx', 'scheme_filters']:
             if not keyword in kv:
                 kv[keyword] = None
 
         record = DamonRecord(kv['kdamond_idx'], kv['context_idx'],
                 _damon.DamonIntervals.from_kvpairs(kv['intervals'])
                 if kv['intervals'] is not None else None,
-                kv['scheme_idx'], kv['target_id'])
+                kv['scheme_idx'], kv['target_id'], kv['scheme_filters'])
         record.snapshots = [DamonSnapshot.from_kvpairs(s)
                 for s in kv['snapshots']]
 
@@ -103,6 +106,11 @@ class DamonRecord:
                 if self.intervals is not None else None)
         ordered_dict['scheme_idx'] = self.scheme_idx
         ordered_dict['target_id'] = self.target_id
+        if self.scheme_filters is not None:
+            ordered_dict['scheme_filters'] = [
+                    s.to_kvpairs(raw) for s in self.scheme_filters]
+        else:
+            ordered_dict['scheme_filters'] = []
         ordered_dict['snapshots'] = [s.to_kvpairs(raw) for s in self.snapshots]
         return ordered_dict
 
@@ -239,7 +247,7 @@ def record_of(target_id, records, intervals):
     for record in records:
         if record.target_id == target_id:
             return record
-    record = DamonRecord(None, None, intervals, None, target_id)
+    record = DamonRecord(None, None, intervals, None, target_id, scheme_filters=[])
     records.append(record)
     return record
 
@@ -1198,7 +1206,7 @@ def tried_regions_to_records_of(idxs, merge_regions):
                         merge_regions)
 
                 records.append(DamonRecord(kdamond_idx, ctx_idx, ctx.intervals,
-                    scheme_idx, None))
+                    scheme_idx, target_id=None, scheme_filters=scheme.filters))
                 records[-1].snapshots.append(snapshot)
                 break
     return records
