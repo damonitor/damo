@@ -593,8 +593,10 @@ Depending on `<type>`, additional type options need to be specified, as below.
 - `target`: the index of the DAMON target.
 
 Finally, users can specify if the filter should `pass` of `block` the memory.
-If it is not given, it applies `block` by default.  Note that kernel support of
-pass filter is not yet mainlined as of 2024-12-26.
+If it is not given, it applies `block` by default.  Read DAMON design
+documentation for more details including how filters work.
+
+Note that kernel support of pass filter is not yet mainlined as of 2024-12-26.
 
 ### DAMON Monitoring Results Structure
 
