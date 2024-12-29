@@ -949,11 +949,12 @@ def set_formats_hist_style(args):
         hist_keyword = '<recency-sz histogram>'
         filter_passed_hist_keyword = '<recency-df-passed-sz histogram>'
 
-    snapshot_head_content = ['%s <total size>' % legend, hist_keyword]
+    snapshot_head_content = []
     if len(args.damos_filter) > 0:
         snapshot_head_content += [
-                '', '', '# damos filters (df): <filters passed type>',
-                '%s <df-passed size>' % legend, filter_passed_hist_keyword]
+                '# damos filters (df): <filters passed type>',
+                '%s <df-passed size>' % legend, filter_passed_hist_keyword, '']
+    snapshot_head_content += ['%s <total size>' % legend, hist_keyword]
     args.format_snapshot_head = '\n'.join(snapshot_head_content)
     args.format_region = ''
 
