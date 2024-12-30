@@ -118,7 +118,7 @@ snapshot_formatters = [
                   'heatmap of the snapshot'),
         Formatter(
             '<filters passed type>',
-            lambda snapshot, record, fmt: fmt.region_filters_pass_type,
+            lambda snapshot, record, fmt: filters_pass_type_of(record),
             'type of <filters passed bytes> memory'),
         ]
 
@@ -176,6 +176,12 @@ default_record_head_format = 'kdamond <kdamond index> / context <context index> 
 default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<duration>)\n<heatmap>'
 default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
+
+def filters_pass_type_of(record):
+    ops_filters = [f for f in record.scheme_filters if f.handled_by_ops()]
+    if len(ops_filters) == 0:
+        return 'n/a'
+    return ', '.join(['%s' % f for f in ops_filters])
 
 def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
@@ -822,7 +828,6 @@ class ReportFormat:
     json = None
     raw = None
 
-    region_filters_pass_type = None
 
     @classmethod
     def from_args(cls, args):
@@ -848,11 +853,6 @@ class ReportFormat:
         self.raw_number = args.raw_number
         self.json = args.json
         self.raw = args.raw_form
-        type_str, err = _damon_args.passed_bytes_type_str(args.damos_filter)
-        if err is not None:
-            self.region_filters_pass_type = err
-        else:
-            self.region_filters_pass_type = type_str
         return self
 
     def total_sz_only(self):
