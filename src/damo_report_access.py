@@ -925,6 +925,12 @@ class ReportFormat:
             else:
                 self.format_record_head = ''
 
+        if self.format_region == default_region_format:
+            for record in records:
+                if len(record.scheme_filters) > 0:
+                    self.format_region += ' df-passed <filters passed bytes>'
+                    break
+
         if self.format_snapshot_head == None:
             need_snapshot_head = False
             for record in records:
