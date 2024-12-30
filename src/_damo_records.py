@@ -89,10 +89,13 @@ class DamonRecord:
             if not keyword in kv:
                 kv[keyword] = None
 
-        record = DamonRecord(kv['kdamond_idx'], kv['context_idx'],
+        record = DamonRecord(
+                kv['kdamond_idx'], kv['context_idx'],
                 _damon.DamonIntervals.from_kvpairs(kv['intervals'])
                 if kv['intervals'] is not None else None,
-                kv['scheme_idx'], kv['target_id'], kv['scheme_filters'])
+                kv['scheme_idx'], kv['target_id'],
+                [_damon.DamosFilter.from_kvpairs(pairs) for pairs in
+                 kv['scheme_filters']])
         record.snapshots = [DamonSnapshot.from_kvpairs(s)
                 for s in kv['snapshots']]
 
