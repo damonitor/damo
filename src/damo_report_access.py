@@ -918,32 +918,6 @@ class ReportFormat:
         self.json = kvpairs['json']
         return self
 
-    def runtime_update(self, records):
-        if self.format_record_head == None:
-            if len(records) > 1:
-                self.format_record_head = default_record_head_format
-            else:
-                self.format_record_head = ''
-
-        if self.format_region == default_region_format:
-            for record in records:
-                if len(record.scheme_filters) > 0:
-                    self.format_region += ' df-passed <filters passed bytes>'
-                    break
-
-        if self.format_snapshot_head == None:
-            need_snapshot_head = False
-            for record in records:
-                if len(record.snapshots) > 1:
-                    need_snapshot_head = True
-                    break
-            if need_snapshot_head:
-                self.format_snapshot_head = default_snapshot_head_format
-            else:
-                self.format_snapshot_head = 'heatmap: <heatmap>'
-        if '<filters passed bytes>' in self.format_region:
-            self.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
-
 def set_formats_hist_style(args):
     if args.style == 'temperature-sz-hist':
         legend = '<temperature>'
@@ -964,7 +938,7 @@ def set_formats_hist_style(args):
     args.format_snapshot_head = '\n'.join(snapshot_head_content)
     args.format_region = ''
 
-def set_formats(args):
+def set_formats(args, records):
     if args.style == 'simple-boxes':
         args.format_snapshot_head = default_snapshot_head_format_without_heatmap
         args.format_region = '<box> size <size> access rate <access rate> age <age>'
@@ -996,7 +970,37 @@ def set_formats(args):
         if args.tried_regions_of or args.damos_filter:
             args.format_region += ' df-passed <filters passed bytes>'
 
-    return ReportFormat.from_args(args)
+    fmt = ReportFormat.from_args(args)
+
+    if len(records) == 0:
+        return fmt
+
+    if fmt.format_record_head == None:
+        if len(records) > 1:
+            fmt.format_record_head = default_record_head_format
+        else:
+            fmt.format_record_head = ''
+
+    if fmt.format_region == default_region_format:
+        for record in records:
+            if len(record.scheme_filters) > 0:
+                fmt.format_region += ' df-passed <filters passed bytes>'
+                break
+
+    if fmt.format_snapshot_head == None:
+        need_snapshot_head = False
+        for record in records:
+            if len(record.snapshots) > 1:
+                need_snapshot_head = True
+                break
+        if need_snapshot_head:
+            fmt.format_snapshot_head = default_snapshot_head_format
+        else:
+            fmt.format_snapshot_head = 'heatmap: <heatmap>'
+    if '<filters passed bytes>' in fmt.format_region:
+        fmt.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
+
+    return fmt
 
 def handle_ls_keywords(args):
     if args.ls_record_format_keywords:
@@ -1047,8 +1051,7 @@ def main(args):
                 fmt_string = f.read()
         fmt = ReportFormat.from_kvpairs(json.loads(fmt_string))
     else:
-        fmt = set_formats(args)
-        fmt.runtime_update(records)
+        fmt = set_formats(args, records)
     for record in records:
         try:
             pr_records(fmt, records)
