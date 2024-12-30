@@ -1042,7 +1042,7 @@ def main(args):
         fmt = ReportFormat.from_kvpairs(json.loads(fmt_string))
     else:
         fmt = set_formats(args)
-    fmt.runtime_update(records)
+        fmt.runtime_update(records)
     for record in records:
         try:
             pr_records(fmt, records)
