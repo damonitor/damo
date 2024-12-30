@@ -1657,7 +1657,7 @@ def args_to_filter(args):
     damos_filters, err = _damon_args.damos_options_to_filters(
             args.damos_filter)
     if err is not None:
-        damos_filters = []
+        return None, 'wrong --damos_filter (%s)' % err
 
     return RecordFilter(access_pattern, addr_range,
                         snapshot_sz_ranges, snapshot_time,
