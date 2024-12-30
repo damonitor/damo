@@ -543,20 +543,26 @@ stage as of this writing.  The RFC patches are applied on DAMON development
 [tree](https://github.com/damonitor/damo/tree/next).
 
 `damo report access` shows the per-region size of the pages of the properties
-by default in following snapshot-based use cases (`damo report access` is
-executed while DAMON is running).
-1. When `damo report access` is invoked in snapshot mode, with `--damos_filter`
-   option for DAMOS filters that works in region-internal levels.
-2. When DAMON is running with a DAMOS scheme that has the page level DAMOS
-  filters, and `damo report access` is invoked to get snapshot of the scheme,
-  using `--tried_regions_of` option.
-3. The report format supports the filters passed memory information
-   visualization.  `detailed` and histogram report
-   [styles](#access-report-styles) will be extended to support the
-   visualization when [`--damos_filter`](#damos-filter-option-format) option is
-   provided.
+by default if the access pattern to visulize has the information, and the
+report format supports the filters passed memory information visualization.
+Only access patterns that captured as snapshot contains the information.  Below
+cases could generate such access pattern collections.
 
-For example, users can know how much of anonymous and `PG_young` pages reside
+1. Live snapshot (`damo report access` without `--input_file`).
+   `--damos_filter` or `--tried_regions_of` for schemes having the
+   region-internal filters should be passed.
+2. Periodic snapshots collection.  This can be generated with `damo record`
+   with `--snapshot` and `--schemes_target_regions` while DAMON is running with
+   schemes having the region-internal filters.
+
+`detailed` and histogram report [styles](#access-report-styles) will be
+automatically extended to show the information when it is included in the
+access pattern.  To make custom format of the reports with the information,
+users can use `<filters passed bytes>` region format keyword and `<filters
+passed type>` snapshot format keywords.  Refer to `damo args accesses_format
+--ls_{region,snapshot}_format_keywords` output for more details.
+
+For example, users can show how much of anonymous and `PG_young` pages reside
 in regiosn of different access patterns, like below:
 
 ```
