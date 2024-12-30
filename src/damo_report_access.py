@@ -966,10 +966,6 @@ def set_formats(args, records):
             args.format_snapshot_tail = ('%s\n<region box description>' %
                     args.format_record_tail)
 
-    if args.format_region == default_region_format:
-        if args.tried_regions_of or args.damos_filter:
-            args.format_region += ' df-passed <filters passed bytes>'
-
     fmt = ReportFormat.from_args(args)
 
     if len(records) == 0:
