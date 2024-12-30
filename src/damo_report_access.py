@@ -925,7 +925,7 @@ def has_ops_filters(records):
                 return True
     return False
 
-def set_formats_hist_style(args, records):
+def set_formats_hist_style(args, fmt, records):
     if args.style == 'temperature-sz-hist':
         legend = '<temperature>'
         hist_keyword = '<temperature-sz histogram>'
@@ -942,39 +942,37 @@ def set_formats_hist_style(args, records):
                 '# damos filters (df): <filters passed type>',
                 '%s <df-passed size>' % legend, filter_passed_hist_keyword, '']
     snapshot_head_content += ['%s <total size>' % legend, hist_keyword]
-    args.format_snapshot_head = '\n'.join(snapshot_head_content)
-    args.format_region = ''
+    fmt.format_snapshot_head = '\n'.join(snapshot_head_content)
+    fmt.format_region = ''
 
 def set_formats(args, records):
+    fmt = ReportFormat.from_args(args)
     if args.style == 'simple-boxes':
-        args.format_snapshot_head = default_snapshot_head_format_without_heatmap
-        args.format_region = '<box> size <size> access rate <access rate> age <age>'
-        args.region_box_min_max_height = [1, 1]
-        args.region_box_min_max_length = [1, 40]
-        args.region_box_align = 'right'
-        args.region_box_colorset = 'emotion'
+        fmt.format_snapshot_head = default_snapshot_head_format_without_heatmap
+        fmt.format_region = '<box> size <size> access rate <access rate> age <age>'
+        fmt.region_box_min_max_height = [1, 1]
+        fmt.region_box_min_max_length = [1, 40]
+        fmt.region_box_align = 'right'
+        fmt.region_box_colorset = 'emotion'
     elif args.style in ['temperature-sz-hist', 'recency-sz-hist']:
-        set_formats_hist_style(args, records)
+        set_formats_hist_style(args, fmt, records)
 
-    args.region_box_values = [v if v != 'none' else None
+    fmt.region_box_values = [v if v != 'none' else None
             for v in args.region_box_values]
 
     if args.total_sz_only:
-        args.format_snapshot_head = ''
-        args.format_region = ''
-        args.format_snapshot_tail = '<total bytes>'
+        fmt.format_snapshot_head = ''
+        fmt.format_region = ''
+        fmt.format_snapshot_tail = '<total bytes>'
 
     if args.region_box:
-        if args.region_box_min_max_height[1] > 1:
-            args.format_region = '<box>%s' % default_region_format
+        if fmt.region_box_min_max_height[1] > 1:
+            fmt.format_region = '<box>%s' % default_region_format
         else:
-            args.format_region = '<box>\n%s' % default_region_format
-        if args.format_snapshot_tail.find('<region box description>') == -1:
-            args.format_snapshot_tail = ('%s\n<region box description>' %
-                    args.format_record_tail)
-
-    fmt = ReportFormat.from_args(args)
-
+            fmt.format_region = '<box>\n%s' % default_region_format
+        if fmt.format_snapshot_tail.find('<region box description>') == -1:
+            fmt.format_snapshot_tail = ('%s\n<region box description>' %
+                    fmt.format_record_tail)
     if len(records) == 0:
         return fmt
 
