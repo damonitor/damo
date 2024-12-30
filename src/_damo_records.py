@@ -85,9 +85,11 @@ class DamonRecord:
     @classmethod
     def from_kvpairs(cls, kv):
         for keyword in ['kdamond_idx', 'context_idx', 'intervals',
-                'scheme_idx', 'scheme_filters']:
+                'scheme_idx']:
             if not keyword in kv:
                 kv[keyword] = None
+        if not 'scheme_filters' in kv:
+            kv['scheme_filters'] = []
 
         record = DamonRecord(
                 kv['kdamond_idx'], kv['context_idx'],
