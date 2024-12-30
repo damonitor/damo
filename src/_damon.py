@@ -699,6 +699,10 @@ class DamosFilter:
                 _damo_fmt_str.format_nr(self.damon_target_idx, raw)
                 if self.damon_target_idx != None else None)])
 
+    def handled_by_ops(self):
+        # whether this filter is handled by DAMON operations set layer
+        return self.filter_type in ['anon', 'memcg', 'young']
+
 class DamosStats:
     nr_tried = None
     sz_tried = None
