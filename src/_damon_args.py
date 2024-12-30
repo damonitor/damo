@@ -182,13 +182,6 @@ def damos_options_to_filters(filters_args):
             return None, 'unsupported filter type'
     return filters, None
 
-def passed_bytes_type_str(damos_filter_args):
-    filters, err = damos_options_to_filters(damos_filter_args)
-    if err is not None:
-        return None, err
-    ops_filters = [f for f in filters if f.filter_type in ['anon', 'memcg', 'young']]
-    return ', '.join(['%s' % f for f in ops_filters]), None
-
 def damos_quotas_cons_arg(cmd_args):
     time_ms = 0
     sz_bytes = 0
