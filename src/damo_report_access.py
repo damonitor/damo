@@ -925,7 +925,7 @@ def has_ops_filters(records):
                 return True
     return False
 
-def set_formats_hist_style(args):
+def set_formats_hist_style(args, records):
     if args.style == 'temperature-sz-hist':
         legend = '<temperature>'
         hist_keyword = '<temperature-sz histogram>'
@@ -937,7 +937,7 @@ def set_formats_hist_style(args):
         filter_passed_hist_keyword = '<recency-df-passed-sz histogram>'
 
     snapshot_head_content = []
-    if len(args.damos_filter) > 0:
+    if has_ops_filters(records):
         snapshot_head_content += [
                 '# damos filters (df): <filters passed type>',
                 '%s <df-passed size>' % legend, filter_passed_hist_keyword, '']
@@ -954,7 +954,7 @@ def set_formats(args, records):
         args.region_box_align = 'right'
         args.region_box_colorset = 'emotion'
     elif args.style in ['temperature-sz-hist', 'recency-sz-hist']:
-        set_formats_hist_style(args)
+        set_formats_hist_style(args, records)
 
     args.region_box_values = [v if v != 'none' else None
             for v in args.region_box_values]
