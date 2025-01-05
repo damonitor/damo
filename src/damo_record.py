@@ -60,7 +60,8 @@ def handle_args(args):
     if os.path.isfile(args.out):
         os.rename(args.out, args.out + '.old')
 
-    if args.footprint is True:
+
+    if 'mem_footprint' in args.do_record:
         footprint_file_path = '%s.mem_footprint' % args.out
         if os.path.isfile(footprint_file_path):
             os.rename(footprint_file_path, footprint_file_path + '.old')
@@ -86,7 +87,7 @@ def mk_handle(args, kdamonds, monitoring_intervals):
             do_profile=args.profile is True,
             # for children processes recording and memory footprint
             kdamonds=kdamonds, add_child_tasks=args.include_child_tasks,
-            record_mem_footprint=args.footprint,
+            record_mem_footprint='mem_footprint' in args.do_record,
             record_vmas=args.vmas, record_proc_stats=True,
             timeout=args.timeout)
 
@@ -125,8 +126,6 @@ def mk_handle(args, kdamonds, monitoring_intervals):
         handle.snapshot_request = None
     if not 'cpu_profile' in args.do_record:
         handle.do_profile = False
-    if not 'mem_footprint' in args.do_record:
-        handle.mem_footprint_snapshots = None
     if not 'vmas' in args.do_record:
         handle.vmas_snapshots = None
     if not 'proc_stats' in args.do_record:
@@ -195,9 +194,6 @@ def set_argparser(parser):
                         help='record schemes tried to be applied regions')
     parser.add_argument('--no_profile', action='store_false', dest='profile',
                         help='do not record profiling information')
-    parser.add_argument('--no_footprint', action='store_false',
-                        dest='footprint',
-                        help='do not record memory footprint')
     parser.add_argument('--no_vmas', action='store_false', dest='vmas',
                         help='record virtual memory areas (/proc/<pid>/maps)')
     parser.add_argument('--snapshot', metavar=('<delay>', '<count>'), nargs=2,
