@@ -10,6 +10,7 @@ import signal
 import subprocess
 import time
 
+import _damo_fmt_str
 import _damo_records
 import _damon
 import _damon_args
@@ -101,8 +102,9 @@ def mk_handle(args, kdamonds, monitoring_intervals):
                 tried_regions_of=tried_regions_of, record_file=None,
                 record_filter=None, total_sz_only=False,
                 dont_merge_regions=False)
-        handle.snapshot_interval_sec = args.snapshot[0]
-        handle.snapshot_count = args.snapshot[1]
+        handle.snapshot_interval_sec = _damo_fmt_str.text_to_sec(
+                args.snapshot[0])
+        handle.snapshot_count = _damo_fmt_str.text_to_nr(args.snapshot[1])
 
     return handle
 
@@ -173,7 +175,7 @@ def set_argparser(parser):
     parser.add_argument('--no_vmas', action='store_false', dest='vmas',
                         help='record virtual memory areas (/proc/<pid>/maps)')
     parser.add_argument('--snapshot', metavar=('<delay>', '<count>'), nargs=2,
-                        type=float, help='record accesses as snapshots')
+                        help='record accesses as snapshots')
     parser.add_argument('--timeout', type=float, metavar='<seconds>',
                         help='stop recording after the given seconds')
     return parser
