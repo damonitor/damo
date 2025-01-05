@@ -6,6 +6,9 @@ v2.6.3
 - Rename --damos_filter for snapshot commands to --snapshot_damos_filter
 - Support --snapshot_damos_filter from 'damo record' for snapshot case
 - Support general snapshot filters from 'damo record' for snapshot case
+- Add a single option to specify what to record ('damo record --do_record')
+  - Remove experimental --no_{vmas,mem_footprint,profile} in favor of the new
+    option
 
 v2.6.2
 - Support DAMOS pass filter
