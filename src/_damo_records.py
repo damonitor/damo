@@ -1704,10 +1704,3 @@ def set_filter_argparser(parser):
             '--temperature', metavar=('<min>', '<max>'), nargs=2, type=int,
             action='append',
             help='min/max temperature of regions to show')
-    parser.add_argument(
-            '--dfilter', nargs='+', action='append', default=[],
-            metavar='<damos filter argument>',
-            help=' '.join([
-                'Region-internal DAMOS filters for snapshot filtering.',
-                'Format is same to --damos_filter.'
-                ]))
