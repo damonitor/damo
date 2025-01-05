@@ -548,9 +548,9 @@ report format supports the filters passed memory information visualization.
 Only access patterns that captured as snapshot contains the information.  Below
 cases could generate such access pattern collections.
 
-1. Live snapshot (`damo report access` without `--input_file`).
-   `--damos_filter` or `--tried_regions_of` for schemes having the
-   region-internal filters should be passed.
+1. Live snapshot (`damo report access` without `--input_file`).  `--dfilter` or
+   `--tried_regions_of` for schemes having the region-internal filters should
+   be passed.
 2. Periodic snapshots collection.  This can be generated with `damo record`
    with `--snapshot` and `--schemes_target_regions` while DAMON is running with
    schemes having the region-internal filters.
@@ -566,7 +566,7 @@ For example, users can show how much of anonymous and `PG_young` pages reside
 in regiosn of different access patterns, like below:
 
 ```
-$ sudo damo report access --damos_filter anon nomatching block --damos_filter young matching pass
+$ sudo damo report access --dfilter anon nomatching block --dfilter young matching pass
 heatmap: 99987777777775555555554333333333211111111111111111100000000000000000000000000000
 # min/max temperatures: -331,964,554,010, -73,070,000,000, column size: 644.727 MiB
 # damos filters (df): block file-backed pages, pass young pages
@@ -585,7 +585,8 @@ total size: 50.369 GiB
 
 ### `--damos_filter` Option Format
 
-`--damos_filter` option's format is as below:
+`--damos_filter` option's format, which is same to that of `--dfilter` for
+snapshot commands, is as below:
 
 ```
 <type> <matching|nomatching> [additional type options>...] [pass|block]
