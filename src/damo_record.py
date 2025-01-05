@@ -98,9 +98,14 @@ def mk_handle(args, kdamonds, monitoring_intervals):
                 for cidx, ctx in enumerate(kd.contexts):
                     for sidx, scheme in enumerate(ctx.schemes):
                         tried_regions_of.append([kidx, cidx, sidx])
+        record_filter, err = _damo_records.args_to_filter(args)
+        if err is not None:
+            print('record filter creation fail (%s)' % err)
+            cleanup_exit(1)
+
         handle.snapshot_request = _damo_records.RecordGetRequest(
                 tried_regions_of=tried_regions_of, record_file=None,
-                record_filter=None, total_sz_only=False,
+                record_filter=record_filter, total_sz_only=False,
                 dont_merge_regions=False)
         handle.snapshot_interval_sec = _damo_fmt_str.text_to_sec(
                 args.snapshot[0])
@@ -178,4 +183,5 @@ def set_argparser(parser):
                         help='record accesses as snapshots')
     parser.add_argument('--timeout', type=float, metavar='<seconds>',
                         help='stop recording after the given seconds')
+    _damo_records.set_filter_argparser(parser)
     return parser
