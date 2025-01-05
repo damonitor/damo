@@ -542,22 +542,19 @@ which is in [RFC](https://lore.kernel.org/20241219040327.61902-1-sj@kernel.org)
 stage as of this writing.  The RFC patches are applied on DAMON development
 [tree](https://github.com/damonitor/damo/tree/next).
 
-`damo report access` shows the per-region size of the pages of the properties
-by default if the access pattern to visulize has the information, and the
-report format supports the filters passed memory information visualization.
-Only access patterns that captured as snapshot contains the information.  Below
-cases could generate such access pattern collections.
+`damo report access` shows the per-region size of the pages of specific
+properties by default if following two conditions met.
 
-1. Live snapshot (`damo report access` without `--input_file`).  `--dfilter` or
-   `--tried_regions_of` for schemes having the region-internal filters should
-   be passed.
-2. Periodic snapshots collection.  This can be generated with `damo record`
-   with `--snapshot` and `--schemes_target_regions` while DAMON is running with
-   schemes having the region-internal filters.
+First, the access pattern to visulize should contain the information.  Such
+collection can be made by taking access snapshot with page level
+properties-based DAMOS filters.  For example, `damo record` or `damo report`
+for live snapshot use case with `--dfilter` can generate such access pattern
+collection.
 
-`detailed` and histogram report [styles](#access-report-styles) will be
-automatically extended to show the information when it is included in the
-access pattern.  To make custom format of the reports with the information,
+Second, the visualization format supports the page level properties based
+information.  `detailed` and histogram report [styles](#access-report-styles)
+will be automatically extended to show the information when it is included in
+the access pattern.  To make custom format of the reports with the information,
 users can use `<filters passed bytes>` region format keyword and `<filters
 passed type>` snapshot format keywords.  Refer to `damo args accesses_format
 --ls_{region,snapshot}_format_keywords` output for more details.
@@ -566,6 +563,7 @@ For example, users can show how much of anonymous and `PG_young` pages reside
 in regiosn of different access patterns, like below:
 
 ```
+$ sudo damo start
 $ sudo damo report access --dfilter anon nomatching block --dfilter young matching pass
 heatmap: 99987777777775555555554333333333211111111111111111100000000000000000000000000000
 # min/max temperatures: -331,964,554,010, -73,070,000,000, column size: 644.727 MiB
