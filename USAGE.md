@@ -548,8 +548,8 @@ properties by default if following two conditions met.
 First, the access pattern to visulize should contain the information.  Such
 collection can be made by taking access snapshot with page level
 properties-based DAMOS filters.  For example, `damo record` or `damo report`
-for live snapshot use case with `--dfilter` can generate such access pattern
-collection.
+for live snapshot use case with `--snapshot_damos_dfilter` options can generate
+such access pattern collection.
 
 Second, the visualization format supports the page level properties based
 information.  `detailed` and histogram report [styles](#access-report-styles)
@@ -564,7 +564,8 @@ in regiosn of different access patterns, like below:
 
 ```
 $ sudo damo start
-$ sudo damo report access --dfilter anon nomatching block --dfilter young matching pass
+$ sudo damo report access --snapshot_damos_dfilter anon nomatching block \
+                          --snapshot_damos_filter young matching pass
 heatmap: 99987777777775555555554333333333211111111111111111100000000000000000000000000000
 # min/max temperatures: -331,964,554,010, -73,070,000,000, column size: 644.727 MiB
 # damos filters (df): block file-backed pages, pass young pages
@@ -583,8 +584,8 @@ total size: 50.369 GiB
 
 ### `--damos_filter` Option Format
 
-`--damos_filter` option's format, which is same to that of `--dfilter` for
-snapshot commands, is as below:
+`--damos_filter` option's format, which is same to that of
+`--snapshot_damos_filter` for access snapshot commands, is as below:
 
 ```
 <type> <matching|nomatching> [additional type options>...] [pass|block]
