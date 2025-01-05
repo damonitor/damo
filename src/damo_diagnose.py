@@ -26,8 +26,14 @@ def main(args):
             exit(1)
         report[damon_interface]['feature_supports'] = feature_supports
 
+        kdamonds, err = _damon.update_read_kdamonds(
+                nr_retries=6, update_stats=True, update_tried_regions=True,
+                update_quota_effective_bytes=True)
+        if err != None:
+            print('cannot update and read kdamonds: %s' % err)
+            continue
         report[damon_interface]['kdamonds'] = [
-                k.to_kvpairs() for k in _damon.current_kdamonds()]
+                k.to_kvpairs() for k in kdamonds]
 
     report['damon_reclaim_status'] = damo_reclaim.darc_status()
 
