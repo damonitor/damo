@@ -1021,7 +1021,7 @@ class RecordingHandle:
                  monitoring_intervals,
                  do_profile,
                  kdamonds, add_child_tasks, record_mem_footprint,
-                 record_vmas, timeout):
+                 record_vmas, record_proc_stats, timeout):
         self.tracepoint = tracepoint
         self.file_path = file_path
         self.file_format = file_format
@@ -1037,7 +1037,8 @@ class RecordingHandle:
         if record_vmas is True:
             self.vmas_snapshots = []
 
-        self.proc_stats = []
+        if record_proc_stats is True:
+            self.proc_stats = []
 
         self.timeout = timeout
 
@@ -1072,7 +1073,9 @@ def start_recording(handle):
         if handle.vmas_snapshots is not None:
             record_proc_vmas(handle.kdamonds, handle.vmas_snapshots)
 
-        record_proc_stats(handle.kdamonds, handle.proc_stats)
+        if handle.proc_stats is not None:
+            record_proc_stats(handle.kdamonds, handle.proc_stats)
+
         if (handle.timeout is not None and
             time.time() - start_time >= handle.timeout):
             break
@@ -1131,8 +1134,9 @@ def finish_recording(handle):
     if handle.vmas_snapshots is not None:
         save_proc_vmas(handle.vmas_snapshots, '%s.vmas' % handle.file_path,
                        handle.file_permission)
-    save_proc_stats(handle.proc_stats, '%s.proc_stats' % handle.file_path,
-                    handle.file_permission)
+    if handle.proc_stats is not None:
+        save_proc_stats(handle.proc_stats, '%s.proc_stats' % handle.file_path,
+                        handle.file_permission)
 
 # for snapshot
 

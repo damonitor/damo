@@ -87,7 +87,8 @@ def mk_handle(args, kdamonds, monitoring_intervals):
             # for children processes recording and memory footprint
             kdamonds=kdamonds, add_child_tasks=args.include_child_tasks,
             record_mem_footprint=args.footprint,
-            record_vmas=args.vmas, timeout=args.timeout)
+            record_vmas=args.vmas, record_proc_stats=True,
+            timeout=args.timeout)
 
     if args.snapshot is not None:
         handle.tracepoint = None
