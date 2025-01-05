@@ -1455,8 +1455,11 @@ def get_snapshot_records_of(request):
     get records containing single snapshot from running kdamonds
     '''
     if request.tried_regions_of is None:
+        access_pattern = _damon.DamosAccessPattern()
         filters = []
         if request.record_filter:
+            access_pattern = request.record_filter.access_pattern
+
             addr_ranges = request.record_filter.address_ranges
             if addr_ranges and _damon.feature_supported('schemes_filters_addr'):
                 for start, end in addr_ranges:
@@ -1465,11 +1468,8 @@ def get_snapshot_records_of(request):
                         address_range=_damon.DamonRegion(start, end)))
             if request.record_filter.damos_filters is not None:
                 filters += request.record_filter.damos_filters
-            monitor_scheme = _damon.Damos(
-                    access_pattern=request.record_filter.access_pattern,
-                    filters=filters)
-        else:
-            monitor_scheme = _damon.Damos()
+        monitor_scheme = _damon.Damos(
+                access_pattern=access_pattern, filters=filters)
 
         records, err = get_snapshot_records(monitor_scheme,
                 request.total_sz_only, not request.dont_merge_regions)
