@@ -16,6 +16,10 @@ def main(args):
 
         err = _damon.set_damon_interface(damon_interface)
         if err is not None:
+            if damon_interface == 'debugfs':
+                # DAMON debugfs removed kernel?
+                if err == 'DAMON interface (debugfs) not supported':
+                    continue
             print('DAMON interface set with %s failed: %s' %
                   (damon_interface, err))
             exit(1)
