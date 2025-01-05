@@ -120,6 +120,18 @@ def mk_handle(args, kdamonds, monitoring_intervals):
                 args.snapshot[0])
         handle.snapshot_count = _damo_fmt_str.text_to_nr(args.snapshot[1])
 
+    if not 'access' in args.do_record:
+        handle.tracepoint = None
+        handle.snapshot_request = None
+    if not 'cpu_profile' in args.do_record:
+        handle.do_profile = False
+    if not 'mem_footprint' in args.do_record:
+        handle.mem_footprint_snapshots = None
+    if not 'vmas' in args.do_record:
+        handle.vmas_snapshots = None
+    if not 'proc_stats' in args.do_record:
+        handle.proc_stats = None
+
     return handle
 
 def main(args):
@@ -192,6 +204,12 @@ def set_argparser(parser):
                         help='record accesses as snapshots')
     parser.add_argument('--timeout', type=float, metavar='<seconds>',
                         help='stop recording after the given seconds')
+    parser.add_argument('--do_record', nargs='+',
+                        default=['access', 'cpu_profile', 'mem_footprint',
+                                 'vmas', 'proc_stats'],
+                        choices=['access', 'cpu_profile', 'mem_footprint',
+                                 'vmas', 'proc_stats'],
+                        help='what to do record')
     _damo_records.set_snapshot_damos_filters_option(parser)
     _damo_records.set_filter_argparser(parser)
     return parser
