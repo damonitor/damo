@@ -1307,39 +1307,6 @@ the difference of the performance is big, the replayed accesses would be less
 similar to the original one.  To show the real memory access performance of
 `damo replay` on specific system, users could use `--test_perf` option.
 
-`damo fmt_json`
----------------
-
-Note: This command is _deprecated_.  This will further be _removed_ by 2024-12.
-Use `damo args damon --format json` instead.  Please report your usecase to
-GitHub [issues](https://github.com/damonitor/damo/issues), sj@kernel.org,
-damon@lists.linux.dev and/or linux-mm@kvack.org if you depend on this command.
-
-As mentioned for `damo start` above, DAMON control commands including `start`,
-`tune`, and additionally `record` allows passing DAMON parameters or DAMOS
-specification all at once via json or yaml formats.  That's for making
-specifying and managing complex requests easier, but writing the whole json or
-yaml manually could be annoying, while the partial DAMON/DAMOS parameters setup
-command line options are easy for simple use case.  To help formatting the json
-or yaml input easier, `damo fmt_json` receives the partial DMAON/DAMOS
-parameters setup options and print out resulting json format Kdamond
-parameters.  For example,
-
-    # damo fmt_json --damos_action stat
-
-prints json format DAMON parameters specification that will be result in a
-DAMON configuration that same to one that can be made with `damo start
---damos_action stat`.  In other words, `damo start $(damo fmt_json
---damos_action stat)` will be same to `damo start --damos_action stat`.
-
-For yaml format input, users can simply convert the json input to a valid yaml
-format, using common tools.
-
-Note that starting DAMON with the partial DAMON parameter command line option
-and then getting the DAMON parameters in the json format using `damo status`
-could also be one way for easily starting write of the json format
-specification.
-
 Snapshot and Visualization of DAMON Monitoring Results and Running Status
 =========================================================================
 
