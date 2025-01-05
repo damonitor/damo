@@ -84,7 +84,7 @@ def mk_handle(args, kdamonds, monitoring_intervals):
             file_permission=args.output_permission,
             monitoring_intervals=monitoring_intervals,
             # for perf profile
-            do_profile=args.profile is True,
+            do_profile='cpu_profile' in args.do_record,
             # for children processes recording and memory footprint
             kdamonds=kdamonds, add_child_tasks=args.include_child_tasks,
             record_mem_footprint='mem_footprint' in args.do_record,
@@ -124,8 +124,6 @@ def mk_handle(args, kdamonds, monitoring_intervals):
     if not 'access' in args.do_record:
         handle.tracepoint = None
         handle.snapshot_request = None
-    if not 'cpu_profile' in args.do_record:
-        handle.do_profile = False
     if not 'vmas' in args.do_record:
         handle.vmas_snapshots = None
     if not 'proc_stats' in args.do_record:
@@ -192,8 +190,6 @@ def set_argparser(parser):
                         help='record accesses of child processes')
     parser.add_argument('--schemes_target_regions', action='store_true',
                         help='record schemes tried to be applied regions')
-    parser.add_argument('--no_profile', action='store_false', dest='profile',
-                        help='do not record profiling information')
     parser.add_argument('--no_vmas', action='store_false', dest='vmas',
                         help='record virtual memory areas (/proc/<pid>/maps)')
     parser.add_argument('--snapshot', metavar=('<delay>', '<count>'), nargs=2,
