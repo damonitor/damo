@@ -3,6 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.6.3
 - Remove 'damo fmt_json' as notified (use 'damo args damon --format json' instead)
+- Rename --damos_filter of snapshot commands to --dfilter
 
 v2.6.2
 - Support DAMOS pass filter
