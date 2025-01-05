@@ -98,6 +98,13 @@ def mk_handle(args, kdamonds, monitoring_intervals):
                 for cidx, ctx in enumerate(kd.contexts):
                     for sidx, scheme in enumerate(ctx.schemes):
                         tried_regions_of.append([kidx, cidx, sidx])
+
+        dfilters, err = _damon_args.damos_options_to_filters(
+                args.snapshot_damos_filter)
+        if err is not None:
+            print('wrong --snapshot_damos_filters (%s)' % err)
+            cleanup_exit(1)
+
         record_filter, err = _damo_records.args_to_filter(args)
         if err is not None:
             print('record filter creation fail (%s)' % err)
@@ -105,7 +112,7 @@ def mk_handle(args, kdamonds, monitoring_intervals):
 
         handle.snapshot_request = _damo_records.RecordGetRequest(
                 tried_regions_of=tried_regions_of, record_file=None,
-                snapshot_damos_filters=None,
+                snapshot_damos_filters=dfilters,
                 record_filter=record_filter, total_sz_only=False,
                 dont_merge_regions=False)
         handle.snapshot_interval_sec = _damo_fmt_str.text_to_sec(
