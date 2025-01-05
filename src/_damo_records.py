@@ -1660,7 +1660,7 @@ def args_to_filter(args):
         temperature_weights = [0, 100, 100]
 
     damos_filters, err = _damon_args.damos_options_to_filters(
-            args.damos_filter)
+            args.dfilter)
     if err is not None:
         return None, 'wrong --damos_filter (%s)' % err
 
@@ -1700,6 +1700,9 @@ def set_filter_argparser(parser):
             action='append',
             help='min/max temperature of regions to show')
     parser.add_argument(
-            '--damos_filter', nargs='+', action='append', default=[],
-            metavar='<filter argument>',
-            help='damos filter (type, matching, and optional arguments)')
+            '--dfilter', nargs='+', action='append', default=[],
+            metavar='<damos filter argument>',
+            help=' '.join([
+                'Region-internal DAMOS filters for snapshot filtering.',
+                'Format is same to --damos_filter.'
+                ]))
