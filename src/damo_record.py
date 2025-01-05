@@ -184,5 +184,6 @@ def set_argparser(parser):
                         help='record accesses as snapshots')
     parser.add_argument('--timeout', type=float, metavar='<seconds>',
                         help='stop recording after the given seconds')
+    _damo_records.set_snapshot_damos_filters_option(parser)
     _damo_records.set_filter_argparser(parser)
     return parser
