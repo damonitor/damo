@@ -1487,11 +1487,10 @@ class RecordFilter:
     snapshot_index_ranges = None
     temperature_ranges = None
     temperature_weights = None
-    damos_filters = None
 
     def __init__(self, access_pattern, address_ranges, snapshot_sz_ranges,
                  snapshot_time_ranges, snapshot_index_ranges,
-                 temperature_ranges, temperature_weights, damos_filters):
+                 temperature_ranges, temperature_weights):
         self.access_pattern = access_pattern
         self.address_ranges = address_ranges
         self.snapshot_sz_ranges = snapshot_sz_ranges
@@ -1499,7 +1498,6 @@ class RecordFilter:
         self.snapshot_index_ranges = snapshot_index_ranges
         self.temperature_ranges = temperature_ranges
         self.temperature_weights = temperature_weights
-        self.damos_filters = damos_filters
 
     def to_kvpairs(self, raw):
         kvpairs = {'access_pattern': self.access_pattern.to_kvpairs(raw)}
@@ -1523,7 +1521,6 @@ class RecordFilter:
         kvpairs['snapshot_index_ranges'] = self.snapshot_index_ranges
         kvpairs['temperature_ranges'] = self.temperature_ranges
         kvpairs['temperature_weights'] = self.temperature_weights
-        kvpairs['damos_filters'] = [f.to_kvpairs() for f in self.damos_filters]
         return kvpairs
 
     def filter_records(self, records):
@@ -1596,8 +1593,7 @@ def get_records(tried_regions_of=None, record_file=None,
     if record_filter:
         filter_copy = copy.deepcopy(record_filter)
     else:
-        filter_copy = RecordFilter(None, None, None, None, None, None, None,
-                                   None)
+        filter_copy = RecordFilter(None, None, None, None, None, None, None)
 
     if request.record_file is None:
         records, err = get_snapshot_records_of(request)
@@ -1674,16 +1670,10 @@ def args_to_filter(args):
         # ignore size
         temperature_weights = [0, 100, 100]
 
-    damos_filters, err = _damon_args.damos_options_to_filters(
-            args.dfilter)
-    if err is not None:
-        return None, 'wrong --damos_filter (%s)' % err
-
     return RecordFilter(access_pattern, addr_range,
                         snapshot_sz_ranges, snapshot_time,
                         snapshot_index_ranges,
-                        args.temperature, temperature_weights,
-                        damos_filters), None
+                        args.temperature, temperature_weights), None
 
 def set_filter_argparser(parser):
     parser.add_argument('--sz_region', metavar=('<min>', '<max>'), nargs=2,
