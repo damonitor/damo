@@ -105,6 +105,7 @@ def mk_handle(args, kdamonds, monitoring_intervals):
 
         handle.snapshot_request = _damo_records.RecordGetRequest(
                 tried_regions_of=tried_regions_of, record_file=None,
+                snapshot_damos_filters=None,
                 record_filter=record_filter, total_sz_only=False,
                 dont_merge_regions=False)
         handle.snapshot_interval_sec = _damo_fmt_str.text_to_sec(

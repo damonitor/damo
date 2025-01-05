@@ -1550,6 +1550,8 @@ class RecordGetRequest:
     tried_regions_of = None
     record_file = None
 
+    snapshot_damos_filters = None
+
     record_filter = None
 
     # more detailed requests
@@ -1557,10 +1559,13 @@ class RecordGetRequest:
     dont_merge_regions = None
 
     def __init__(
-            self, tried_regions_of=None, record_file=None, record_filter=None,
+            self, tried_regions_of=None, record_file=None,
+            snapshot_damos_filters=None,
+            record_filter=None,
             total_sz_only=False, dont_merge_regions=True):
         self.tried_regions_of = tried_regions_of
         self.record_file = record_file
+        self.snapshot_damos_filters = snapshot_damos_filters
         self.record_filter = record_filter
         self.total_sz_only = total_sz_only
         self.dont_merge_regions = dont_merge_regions
@@ -1568,7 +1573,7 @@ class RecordGetRequest:
 def get_records(tried_regions_of=None, record_file=None, record_filter=None,
                 total_sz_only=False, dont_merge_regions=True):
     request = RecordGetRequest(
-            tried_regions_of, record_file, record_filter,
+            tried_regions_of, record_file, None, record_filter,
             total_sz_only, dont_merge_regions)
 
     # If record is live snapshot, access pattern filtering is applied with
