@@ -14,7 +14,6 @@ import damo_args
 import damo_convert_record_format
 import damo_diagnose
 import damo_features
-import damo_fmt_json
 import damo_lru_sort
 import damo_monitor
 import damo_reclaim
@@ -85,10 +84,6 @@ subcmds = [
             msg='generate a report on if DAMON is malfunctioning'),
 
         # Will be deprecated
-        _damo_subcmds.DamoSubCmd(name='fmt_json', module=damo_fmt_json,
-            msg=' '.join(
-                ['(WILL BE DEPRECATED in favor of \'args\' command)',
-                 'convert damo-start cmdline option to DAMON json input'])),
         _damo_subcmds.DamoSubCmd(name='show', module=damo_show,
             msg=' '.join(
                 ['show monitored access pattern',

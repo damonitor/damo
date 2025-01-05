@@ -40,8 +40,7 @@ Will be dperecated by 2025-01-20.  Use `damo report heatmap` instead.
 `damo fmt_json`
 ---------------
 
-Deprecated.  Will be removed by 2024-12.  Use `damo args damon --format json`
-instead.
+Deprecated.  Use `damo args damon --format json` instead.
 
 
 `--damon_interface`
