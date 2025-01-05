@@ -1543,6 +1543,15 @@ class RecordFilter:
             filter_records_by_temperature(records, self.temperature_ranges,
                                           self.temperature_weights)
 
+def set_snapshot_damos_filters_option(parser):
+    parser.add_argument(
+            '--snapshot_damos_filter', nargs='+', action='append', default=[],
+            metavar='<damos filter argument>',
+            help=' '.join([
+                'Region-internal DAMOS filters for the snapshot.',
+                'Format is same to --damos_filter.'
+                ]))
+
 class RecordGetRequest:
     # TODO: Extend to be used for recording
 
