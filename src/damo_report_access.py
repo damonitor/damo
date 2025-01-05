@@ -1206,6 +1206,7 @@ def set_argparser(parser):
             action='append',
             metavar=('<kdamond idx>', '<context idx>', '<scheme idx>'),
             help='show tried regions of given schemes')
+    _damo_records.set_snapshot_damos_filters_option(parser)
     add_fmt_args(parser, hide_help=True)
     parser.add_argument('--format', metavar='<json string>',
                         help='visualization format in json format')
