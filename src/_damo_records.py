@@ -1678,20 +1678,20 @@ def args_to_filter(args):
 def set_filter_argparser(parser):
     parser.add_argument('--sz_region', metavar=('<min>', '<max>'), nargs=2,
             default=['min', 'max'],
-            help='min/max size of regions (bytes) to show')
+            help='min/max size of regions (bytes) to filter in')
     parser.add_argument('--access_rate', metavar=('<min>', '<max>'), nargs=2,
             default=['min', 'max'],
-            help='min/max access rate of regions (percent) to show')
+            help='min/max access rate of regions (percent) to filter in')
     parser.add_argument('--age', metavar=('<min>', '<max>'), nargs=2,
             default=['min', 'max'],
-            help='min/max age of regions (seconds) to show')
+            help='min/max age of regions (seconds) to filter in')
     parser.add_argument('--address', metavar=('<start>', '<end>'), nargs=2,
             action='append',
-            help='address ranges to show')
+            help='address ranges to filter in')
     parser.add_argument(
             '--sz_snapshot', metavar=('<min>', '<max>'), nargs=2,
             action='append',
-            help='min/max total size of regions of snapshots to show')
+            help='min/max total size of regions of snapshots to filter in')
     parser.add_argument(
             '--snapshot_time', metavar=('<start (ns)>', '<end (ns)>'), nargs=2,
             action='append',
@@ -1703,4 +1703,4 @@ def set_filter_argparser(parser):
     parser.add_argument(
             '--temperature', metavar=('<min>', '<max>'), nargs=2, type=int,
             action='append',
-            help='min/max temperature of regions to show')
+            help='min/max temperature of regions to filter in')
