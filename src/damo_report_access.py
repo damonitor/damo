@@ -1031,9 +1031,16 @@ def main(args):
             if os.path.exists('damon.data'):
                 args.input_file = 'damon.data'
 
+    dfilters, err = _damon_args.damos_options_to_filters(
+            args.snapshot_damos_filter)
+    if err is not None:
+        print('wrong --snapshot_damos_filter (%s)' % err)
+        exit(1)
+
     records, err = _damo_records.get_records(
                 tried_regions_of=args.tried_regions_of,
-                record_file=args.input_file, record_filter=record_filter,
+                record_file=args.input_file, snapshot_damos_filters=dfilters,
+                record_filter=record_filter,
                 total_sz_only=args.total_sz_only,
                 dont_merge_regions=args.dont_merge_regions)
     if err != None:
