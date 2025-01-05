@@ -1579,11 +1579,12 @@ class RecordGetRequest:
         self.total_sz_only = total_sz_only
         self.dont_merge_regions = dont_merge_regions
 
-def get_records(tried_regions_of=None, record_file=None, record_filter=None,
+def get_records(tried_regions_of=None, record_file=None,
+                snapshot_damos_filters=None, record_filter=None,
                 total_sz_only=False, dont_merge_regions=True):
     request = RecordGetRequest(
-            tried_regions_of, record_file, None, record_filter,
-            total_sz_only, dont_merge_regions)
+            tried_regions_of, record_file, snapshot_damos_filters,
+            record_filter, total_sz_only, dont_merge_regions)
 
     # If record is live snapshot, access pattern filtering is applied with
     # get_snapshot_records_of() because it uses DAMOS to get the snapshot.  If
