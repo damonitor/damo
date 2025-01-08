@@ -99,12 +99,18 @@ def write_filter_dir(dir_path, filter_):
         # addr/target are merged in 6.6-rc1
         return err
 
-    if (not os.path.isfile(os.path.join(dir_path, 'pass')) and
-        filter_.allow is True):
-        return 'kernel is not supporting pass_filter'
-    else:
-        err = _damo_fs.write_file(os.path.join(dir_path, 'pass'),
-                                  'Y' if filter_.allow else 'N')
+    if filter_.allow is True:
+        if os.path.isfile(os.path.join(dir_path, 'allow')):
+            err = _damo_fs.write_file(os.path.join(dir_path, 'allow'),
+                                      'Y' if filter_.allow else 'N')
+        # pass file has renamed to allow during development
+        elif os.path.isfile(os.path.join(dir_path, 'pass')):
+            err = _damo_fs.write_file(os.path.join(dir_path, 'pass'),
+                                      'Y' if filter_.allow else 'N')
+        else:
+            return 'kernel is not supporting allow_filter'
+        if err is not None:
+            return err
 
     if filter_.memcg_path is not None:
         err = _damo_fs.write_file(
@@ -543,18 +549,28 @@ def files_content_to_watermarks(files_content):
             int(files_content['mid']),
             int(files_content['low']))
 
-def files_content_to_damos_filters(files_content):
-    return [_damon.DamosFilter(
-        filter_kv['type'].strip(),
-        filter_kv['matching'].strip(),
-        filter_kv['pass'].strip() if 'pass' in filter_kv else False,
-        filter_kv['memcg_path'].strip(),
-        _damon.DamonRegion(filter_kv['addr_start'].strip(),
-                           filter_kv['addr_end'].strip())
-        if 'addr_start' in filter_kv and 'addr_end' in filter_kv
+def files_content_to_damos_filter(files_content):
+    allow = False
+    if 'allow' in files_content:
+        allow = files_content['allow'].strip()
+    # the file name has changed from pass to allow after v1 patch
+    elif 'pass' in files_content:
+        allow = files_content['pass'].strip()
+
+    return _damon.DamosFilter(
+        files_content['type'].strip(),
+        files_content['matching'].strip(),
+        allow,
+        files_content['memcg_path'].strip(),
+        _damon.DamonRegion(files_content['addr_start'].strip(),
+                           files_content['addr_end'].strip())
+        if 'addr_start' in files_content and 'addr_end' in files_content
         else None,
-        filter_kv['damon_target_idx']
-        if 'damon_target_idx' in filter_kv else None)
+        files_content['damon_target_idx']
+        if 'damon_target_idx' in files_content else None)
+
+def files_content_to_damos_filters(files_content):
+    return [files_content_to_damos_filter(filter_kv)
             for filter_kv in numbered_dirs_content(
                 files_content, 'nr_filters')]
 
