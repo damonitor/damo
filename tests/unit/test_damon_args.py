@@ -133,6 +133,11 @@ class TestDamonArgs(unittest.TestCase):
         self.assertEqual(filter_pass, False)
 
         filter_pass, err = _damon_args.handle_err_get_filter_pass(
+                'anon', ['allow'])
+        self.assertEqual(err, None)
+        self.assertEqual(filter_pass, True)
+
+        filter_pass, err = _damon_args.handle_err_get_filter_pass(
                 'anon', ['pass'])
         self.assertEqual(err, None)
         self.assertEqual(filter_pass, True)
