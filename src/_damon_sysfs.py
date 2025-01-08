@@ -100,11 +100,11 @@ def write_filter_dir(dir_path, filter_):
         return err
 
     if (not os.path.isfile(os.path.join(dir_path, 'pass')) and
-        filter_.filter_pass is True):
+        filter_.allow is True):
         return 'kernel is not supporting pass_filter'
     else:
         err = _damo_fs.write_file(os.path.join(dir_path, 'pass'),
-                                  'Y' if filter_.filter_pass else 'N')
+                                  'Y' if filter_.allow else 'N')
 
     if filter_.memcg_path is not None:
         err = _damo_fs.write_file(

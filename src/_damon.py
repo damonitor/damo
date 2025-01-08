@@ -629,18 +629,18 @@ class DamosWatermarks:
 class DamosFilter:
     filter_type = None  # anon, memcg, young, addr, or target
     matching = None
-    filter_pass = None
+    allow = None
     memcg_path = None
     address_range = None    # DamonRegion
     damon_target_idx = None
     scheme = None
 
-    def __init__(self, filter_type, matching, filter_pass=False,
+    def __init__(self, filter_type, matching, allow=False,
                  memcg_path=None, address_range=None, damon_target_idx=None):
         self.filter_type = filter_type
         self.matching = _damo_fmt_str.text_to_bool(matching)
         self.memcg_path = memcg_path
-        self.filter_pass = _damo_fmt_str.text_to_bool(filter_pass)
+        self.allow = _damo_fmt_str.text_to_bool(allow)
         self.address_range = address_range
         if damon_target_idx != None:
             self.damon_target_idx = _damo_fmt_str.text_to_nr(damon_target_idx)
@@ -654,10 +654,10 @@ class DamosFilter:
                 'target': ['memory in target', 'memory not in target']
                 }
         words = []
-        if self.filter_pass:
-            words.append('pass')
+        if self.allow:
+            words.append('allow')
         else:
-            words.append('block')
+            words.append('reject')
         match_idx = 0 if self.matching is True else 1
         words.append(type_to_text[self.filter_type][match_idx])
         if self.filter_type in ['anon', 'young']:
@@ -678,9 +678,15 @@ class DamosFilter:
 
     @classmethod
     def from_kvpairs(cls, kv):
+        allow = False
+        if 'allow' in kv:
+            allow = kv['allow']
+        # filter_pass has renamed to allow
+        elif 'filter_pass' in kv:
+            allow = kv['filter_pass']
         return DamosFilter(
                 kv['filter_type'], kv['matching'],
-                kv['filter_pass'] if 'filter_pass' in kv else False,
+                allow,
                 kv['memcg_path'] if kv['filter_type'] == 'memcg' else '',
                 DamonRegion.from_kvpairs(kv['address_range'])
                     if kv['filter_type'] == 'addr' else None,
@@ -691,7 +697,7 @@ class DamosFilter:
         return collections.OrderedDict([
             ('filter_type', self.filter_type),
             ('matching', self.matching),
-            ('filter_pass', self.filter_pass),
+            ('allow', self.allow),
             ('memcg_path', self.memcg_path),
             ('address_range', self.address_range.to_kvpairs(raw) if
                 self.address_range != None else None),
