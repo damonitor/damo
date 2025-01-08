@@ -588,7 +588,7 @@ total size: 50.369 GiB
 `--snapshot_damos_filter` for access snapshot commands, is as below:
 
 ```
-<type> <matching|nomatching> [additional type options>...] [pass|block]
+<type> <matching|nomatching> [additional type options>...] [allow|reject]
 ```
 
 `<type>` is the type of the memory that the filter should work for.  As of this
@@ -603,8 +603,8 @@ Depending on `<type>`, additional type options need to be specified, as below.
 - `addr`: start and end addresses of the target address range.
 - `target`: the index of the DAMON target.
 
-Finally, users can specify if the filter should `pass` of `block` the memory.
-If it is not given, it applies `block` by default.  Read DAMON design
+Finally, users can specify if the filter should `allow` of `reject` the memory.
+If it is not given, it applies `reject` by default.  Read DAMON design
 documentation for more details including how filters work.
 
 Note that kernel support of pass filter is not yet mainlined as of 2024-12-26.
