@@ -863,6 +863,9 @@ def update_supported_features():
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0), 'filters', '0', 'pass')):
         feature_supports['pass_filter'] = True
+    if os.path.isfile(
+            os.path.join(scheme_dir_of(0, 0, 0), 'filters', '0', 'allow')):
+        feature_supports['allow_filter'] = True
 
     avail_ops, err = _avail_ops()
     if err == None:
