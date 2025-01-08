@@ -123,7 +123,7 @@ def handle_err_get_filter_pass(filter_type, optional_args):
     if len_args == nr_type_args:
         return False, None
     filter_pass_keyword = optional_args[-1]
-    if not filter_pass_keyword in ['allow', 'pass', 'block']:
+    if not filter_pass_keyword in ['allow', 'reject', 'pass', 'block']:
         return None, 'wrong filter_pass keyword (%s)' % filter_pass_keyword
     return filter_pass_keyword in ['allow', 'pass'], None
 
