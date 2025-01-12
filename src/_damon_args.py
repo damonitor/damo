@@ -127,6 +127,36 @@ def handle_err_get_filter_allow(filter_type, optional_args):
         return None, 'wrong allow keyword (%s)' % allow_keyword
     return allow_keyword in ['allow', 'pass'], None
 
+def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
+    # return filter, error, and nuber of consumed words
+    if ftype == 'memcg':
+        if len(optional_words) < 1:
+            return None, 'no memcg path is given', 0
+        memcg_path = optional_words[0]
+        return _damon.DamosFilter(ftype, fmatching, memcg_path=memcg_path,
+                                  allow=allow), None, 1
+    if ftype == 'addr':
+        if len(optional_words) < 2:
+            return None, 'no address range is given', 0
+        try:
+            addr_range = _damon.DamonRegion(optional_words[0], optional_words[1])
+        except Exception as e:
+            return None, 'wrong addr range (%s, %s)' % (optional_words, e), 0
+        return _damon.DamosFilter(ftype, fmatching, allow=allow,
+                                  address_range=addr_range), None, 2
+    elif ftype == 'target':
+        if len(optional_words) < 1:
+            return None, 'no target argument', 0
+        try:
+            return _damon.DamosFilter(
+                    ftype, fmatching, allow=allow,
+                    damon_target_idx=optional_words[0]), None, 1
+        except Exception as e:
+            return None, 'target filter creation failed (%s, %s)' % (
+                    optional_words[0], e), 0
+    else:
+        return None, 'unsupported filter type', 0
+
 def damos_options_to_filter(fields):
     if len(fields) < 2:
         return None, '<2 filter field length (%s)' % fields
