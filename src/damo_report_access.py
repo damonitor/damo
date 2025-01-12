@@ -364,6 +364,8 @@ class HeatPixel:
         self.total_heat += temperature_of(region, weights) * (region.size())
 
 def heatmap_str(snapshot, record, fmt):
+    if len(snapshot.regions) == 0:
+        return 'n/a (no region)'
     raw = fmt.raw_number
     total_sz = 0
     for region in snapshot.regions:
