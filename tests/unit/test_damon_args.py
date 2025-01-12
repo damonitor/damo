@@ -147,5 +147,32 @@ class TestDamonArgs(unittest.TestCase):
         self.assertEqual(err, None)
         self.assertEqual(allow, False)
 
+    def test_damos_filter_format_v2(self):
+        f, e, n = _damon_args.damos_options_to_filter_v2(
+                'allow anon'.split())
+        self.assertEqual(
+                f, _damon.DamosFilter(
+                    filter_type='anon', matching=True, allow=True))
+        self.assertEqual(n, 2)
+        f, e, n = _damon_args.damos_options_to_filter_v2(
+                'allow none anon'.split())
+        self.assertEqual(
+                f, _damon.DamosFilter(
+                    filter_type='anon', matching=False, allow=True))
+        self.assertEqual(n, 3)
+        f, e, n = _damon_args.damos_options_to_filter_v2(
+                'reject none anon'.split())
+        self.assertEqual(
+                f, _damon.DamosFilter(
+                    filter_type='anon', matching=False, allow=False))
+        self.assertEqual(n, 3)
+        f, e, n = _damon_args.damos_options_to_filter_v2(
+                'allow memcg a/b/c'.split())
+        self.assertEqual(
+                f, _damon.DamosFilter(
+                    filter_type='memcg', matching=True, allow=True,
+                    memcg_path='a/b/c'))
+        self.assertEqual(n, 3)
+
 if __name__ == '__main__':
     unittest.main()
