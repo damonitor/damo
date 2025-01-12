@@ -197,34 +197,15 @@ def damos_options_to_filter_v2(words):
     ftype = words[nr_consumed_words]
     nr_consumed_words += 1
 
-    if ftype == 'anon':
+    if ftype in ['anon', 'young']:
         filter = _damon.DamosFilter(ftype, fmatching, allow=allow)
-    elif ftype == 'memcg':
-        memcg_path = words[nr_consumed_words]
-        nr_consumed_words += 1
-        filter = _damon.DamosFilter(ftype, fmatching, memcg_path=memcg_path,
-                                  allow=allow)
-    elif ftype == 'addr':
-        if len(fargs) != 2:
-            return None, 'wrong number of addr arguments (%s)' % fargs, 0
-        try:
-            addr_range = _damon.DamonRegion(fargs[0], fargs[1])
-        except Exception as e:
-            return None, 'wrong addr range (%s, %s)' % (fargs, e), 0
-        filter = _damon.DamosFilter(
-                ftype, fmatching, allow=allow, address_range=addr_range)
-    elif ftype == 'target':
-        if len(fargs) != 1:
-            return None, 'wrong number of target argument (%s)' % fargs, 0
-        try:
-            filter = _damon.DamosFilter(ftype, fmatching, allow=allow,
-                                      damon_target_idx=fargs[0])
-        except Exception as e:
-            return None, 'target filter creation failed (%s, %s)' % (
-                    fargs[0], e), 0
+        return filter, None, nr_consumed_words
     else:
-        return None, 'unsupported filter type', 0
-    return filter, None, nr_consumed_words
+        filter, err, nr_words = damos_filter_with_optional_args(
+                ftype, fmatching, allow, words[nr_consumed_words:])
+        if err is not None:
+            return None, 'handling %s fail (%s)' % (words, err), 0
+        return filter, None, nr_consumed_words + nr_words
 
 def damos_options_to_filters(filters_args):
     filters = []
