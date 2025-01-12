@@ -40,7 +40,7 @@ do
 	fi
 	echo "PASS $testname2 start"
 
-	sudo timeout 3 "$damo" record ongoing \
+	sudo "$damo" record ongoing --timeout 3 \
 		--damon_interface_DEPRECATED "$damon_interface" &> /dev/null
 	if ! "$damo" validate 2> /dev/null
 	then
@@ -95,7 +95,7 @@ do
 
 		exit 1
 	fi
-	sudo timeout 3 "$damo" record ongoing \
+	sudo "$damo" record ongoing --timeout 3 \
 		--damon_interface_DEPRECATED "$damon_interface" &> /dev/null
 	if ! "$damo" validate --aggr 180000 220000 --nr_accesses 0 44 2> /dev/null
 	then
