@@ -96,7 +96,7 @@ def schemes_option_to_damos(schemes):
     except Exception as json_err:
         return None, '%s' % json_err
 
-def handle_err_get_filter_pass(filter_type, optional_args):
+def handle_err_get_filter_allow(filter_type, optional_args):
     '''
     optional_args are for filter target memory type specification, and whether
     the filter is pass filter or block filter.
@@ -122,10 +122,10 @@ def handle_err_get_filter_pass(filter_type, optional_args):
 
     if len_args == nr_type_args:
         return False, None
-    filter_pass_keyword = optional_args[-1]
-    if not filter_pass_keyword in ['allow', 'reject', 'pass', 'block']:
-        return None, 'wrong filter_pass keyword (%s)' % filter_pass_keyword
-    return filter_pass_keyword in ['allow', 'pass'], None
+    allow_keyword = optional_args[-1]
+    if not allow_keyword in ['allow', 'reject', 'pass', 'block']:
+        return None, 'wrong allow keyword (%s)' % allow_keyword
+    return allow_keyword in ['allow', 'pass'], None
 
 def damos_options_to_filter(fields):
     if len(fields) < 2:
@@ -136,18 +136,18 @@ def damos_options_to_filter(fields):
     if not fmatching in ['matching', 'nomatching']:
         return None, 'unsupported matching keyword (%s)' % fmatching
     fmatching = fmatching == 'matching'
-    filter_pass, err = handle_err_get_filter_pass(ftype, fargs)
+    allow, err = handle_err_get_filter_allow(ftype, fargs)
     if err is not None:
         return None, 'filter arguments handling failed (%s)' % fargs
 
     if ftype == 'anon':
-        return _damon.DamosFilter(ftype, fmatching, allow=filter_pass), None
+        return _damon.DamosFilter(ftype, fmatching, allow=allow), None
     elif ftype == 'memcg':
         memcg_path = fargs[0]
         return _damon.DamosFilter(ftype, fmatching, memcg_path=memcg_path,
-                                  allow=filter_pass), None
+                                  allow=allow), None
     elif ftype == 'young':
-        return _damon.DamosFilter(ftype, fmatching, allow=filter_pass), None
+        return _damon.DamosFilter(ftype, fmatching, allow=allow), None
     elif ftype == 'addr':
         if len(fargs) != 2:
             return None, 'wrong number of addr arguments (%s)' % fargs
@@ -155,13 +155,13 @@ def damos_options_to_filter(fields):
             addr_range = _damon.DamonRegion(fargs[0], fargs[1])
         except Exception as e:
             return None, 'wrong addr range (%s, %s)' % (fargs, e)
-        return _damon.DamosFilter(ftype, fmatching, allow=filter_pass,
+        return _damon.DamosFilter(ftype, fmatching, allow=allow,
                                   address_range=addr_range), None
     elif ftype == 'target':
         if len(fargs) != 1:
             return None, 'wrong number of target argument (%s)' % fargs
         try:
-            return _damon.DamosFilter(ftype, fmatching, allow=filter_pass,
+            return _damon.DamosFilter(ftype, fmatching, allow=allow,
                                       damon_target_idx=fargs[0]), None
         except Exception as e:
             return None, 'target filter creation failed (%s, %s)' % (

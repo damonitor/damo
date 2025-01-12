@@ -126,26 +126,26 @@ class TestDamonArgs(unittest.TestCase):
                              ]
                          )
 
-    def test_handle_err_get_filter_pass(self):
-        filter_pass, err = _damon_args.handle_err_get_filter_pass(
+    def test_handle_err_get_filter_allow(self):
+        allow, err = _damon_args.handle_err_get_filter_allow(
                 'anon', [])
         self.assertEqual(err, None)
-        self.assertEqual(filter_pass, False)
+        self.assertEqual(allow, False)
 
-        filter_pass, err = _damon_args.handle_err_get_filter_pass(
+        allow, err = _damon_args.handle_err_get_filter_allow(
                 'anon', ['allow'])
         self.assertEqual(err, None)
-        self.assertEqual(filter_pass, True)
+        self.assertEqual(allow, True)
 
-        filter_pass, err = _damon_args.handle_err_get_filter_pass(
+        allow, err = _damon_args.handle_err_get_filter_allow(
                 'anon', ['pass'])
         self.assertEqual(err, None)
-        self.assertEqual(filter_pass, True)
+        self.assertEqual(allow, True)
 
-        filter_pass, err = _damon_args.handle_err_get_filter_pass(
+        allow, err = _damon_args.handle_err_get_filter_allow(
                 'anon', ['block'])
         self.assertEqual(err, None)
-        self.assertEqual(filter_pass, False)
+        self.assertEqual(allow, False)
 
 if __name__ == '__main__':
     unittest.main()
