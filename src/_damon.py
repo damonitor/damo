@@ -646,20 +646,14 @@ class DamosFilter:
             self.damon_target_idx = _damo_fmt_str.text_to_nr(damon_target_idx)
 
     def to_str(self, raw):
-        type_to_text = {
-                'anon': ['anon pages', 'file-backed pages'],
-                'memcg': ['pages in memcg', 'pages not in memcg'],
-                'young': ['young pages', 'old pages'],
-                'addr': ['memory in addr', 'memory not in addr'],
-                'target': ['memory in target', 'memory not in target']
-                }
         words = []
         if self.allow:
             words.append('allow')
         else:
             words.append('reject')
-        match_idx = 0 if self.matching is True else 1
-        words.append(type_to_text[self.filter_type][match_idx])
+        if self.matching is False:
+            words.append('none')
+        words.append(self.filter_type)
         if self.filter_type in ['anon', 'young']:
             return ' '.join(words)
         if self.filter_type == 'memcg':
