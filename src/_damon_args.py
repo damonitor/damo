@@ -207,15 +207,33 @@ def damos_options_to_filter_v2(words):
             return None, 'handling %s fail (%s)' % (words, err), 0
         return filter, None, nr_consumed_words + nr_words
 
+def damos_options_to_filters_v2(words):
+    filters = []
+    while len(words) > 0:
+        filter, err, nr_consumed_words = damos_options_to_filter_v2(words)
+        if err is not None:
+            return None, err
+        filters.append(filter)
+        words = words[nr_consumed_words:]
+    return filters, None
+
 def damos_options_to_filters(filters_args):
     filters = []
     if filters_args == None:
         return filters, None
 
+    full_words = []
+    for fields in filters_args:
+        full_words += fields
+    filters, v2_err = damos_options_to_filters_v2(full_words)
+    if v2_err is None:
+        return filters, None
+
     for fields in filters_args:
         filter, err = damos_options_to_filter(fields)
         if err is not None:
-            return None, err
+            return None, 'damos_filter v2 (%s) and v1 (%s) all fail' % (
+                    v2_err, err)
         filters.append(filter)
     return filters, None
 
