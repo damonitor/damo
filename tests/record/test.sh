@@ -24,7 +24,7 @@ cleanup_files()
 
 test_record_permission()
 {
-	sudo timeout 3 "$damo" record "sleep 3" --output_permission 611 \
+	sudo "$damo" record "sleep 3" --timeout 3 --output_permission 611 \
 		&> /dev/null
 	if [ ! "$(stat -c %a damon.data)" = "611" ]
 	then
@@ -64,11 +64,11 @@ test_record_validate()
 
 	if [ "$regions_boundary" = "none" ]
 	then
-		sudo timeout "$timeout" "$damo" record "$target" \
+		sudo "$damo" record "$target" --timeout "$timeout" \
 			--damon_interface_DEPRECATED "$damon_interface" \
 			&> /dev/null
 	else
-		sudo timeout "$timeout" "$damo" record "$target" \
+		sudo "$damo" record "$target" --timeout "$timeout" \
 			--regions "$regions_boundary" \
 			--damon_interface_DEPRECATED "$damon_interface" \
 			&> /dev/null
