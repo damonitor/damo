@@ -1174,6 +1174,11 @@ def find_install_scheme(scheme_to_find):
                     'committing scheme installed kdamonds failed: %s' % err)
     return installed, indices, None
 
+def can_merge(left_region, right_region):
+    return (left_region.end == right_region.start and
+            left_region.nr_accesses == right_region.nr_accesses and
+            left_region.age == right_region.age)
+
 def tried_regions_to_snapshot(scheme, intervals, merge_regions):
     snapshot_end_time_ns = time.time() * 1000000000
     snapshot_start_time_ns = snapshot_end_time_ns - intervals.aggr * 1000
@@ -1184,9 +1189,7 @@ def tried_regions_to_snapshot(scheme, intervals, merge_regions):
         splits regions unnecessarily to keep the min_nr_regions'''
         if merge_regions and len(regions) > 0:
             last_region = regions[-1]
-            if (last_region.end == tried_region.start and
-                    last_region.nr_accesses == tried_region.nr_accesses and
-                    last_region.age == tried_region.age):
+            if can_merge(last_region, tried_region):
                 last_region.end = tried_region.end
                 if last_region.sz_filter_passed is not None:
                     last_region.sz_filter_passed += tried_region.sz_filter_passed
