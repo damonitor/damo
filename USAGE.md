@@ -616,7 +616,7 @@ Starting from v2.6.4, below format is also supported:
 Adding `none` on the format is same to `nomatching` of the previous version.
 If `none` is not given, it is same to `matching`.
 
-Note that kernel support of pass filter is not yet mainlined as of 2024-12-26.
+Note that kernel support of `allow` behavior is not yet mainlined as of 2024-12-26.
 
 ### DAMON Monitoring Results Structure
 
