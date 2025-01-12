@@ -1175,6 +1175,8 @@ def find_install_scheme(scheme_to_find):
     return installed, indices, None
 
 def can_merge(left_region, right_region):
+    if left_region.sz_filter_passed or right_region.sz_filter_passed:
+        return False
     return (left_region.end == right_region.start and
             left_region.nr_accesses == right_region.nr_accesses and
             left_region.age == right_region.age)
