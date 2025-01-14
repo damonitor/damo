@@ -107,6 +107,7 @@ def handle_err_get_filter_allow(filter_type, optional_args):
             'anon': 0,
             'memcg': 1,
             'young': 0,
+            'unmapped': 0,
             'addr': 2,
             'target': 1}
     if not filter_type in type_to_nr_type_args:
@@ -170,7 +171,7 @@ def damos_options_to_filter(fields):
     if err is not None:
         return None, 'filter arguments handling failed (%s)' % fargs
 
-    if ftype in ['anon', 'young']:
+    if ftype in ['anon', 'young', 'unmapped']:
         return _damon.DamosFilter(ftype, fmatching, allow=allow), None
     filter, err, _ = damos_filter_with_optional_args(
             ftype, fmatching, allow, fargs)
@@ -197,7 +198,7 @@ def damos_options_to_filter_v2(words):
     ftype = words[nr_consumed_words]
     nr_consumed_words += 1
 
-    if ftype in ['anon', 'young']:
+    if ftype in ['anon', 'young', 'unmapped']:
         filter = _damon.DamosFilter(ftype, fmatching, allow=allow)
         return filter, None, nr_consumed_words
     else:
