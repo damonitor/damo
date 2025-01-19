@@ -97,7 +97,7 @@ def schemes_option_to_damos(schemes):
         return None, '%s' % json_err
 
 def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
-    # return filter, error, and nuber of consumed words
+    # return filter, error, and number of consumed words
     if ftype == 'memcg':
         if len(optional_words) < 1:
             return None, 'no memcg path is given', 0

@@ -107,7 +107,7 @@ v2.4.7
 - 'damo show': Support json format formatting parameters.
 - 'damo args': Support access formatting parameters
   ('damo args accesses_format').
-- Hide detailed formatting parmeter options from help message of 'damo show'.
+- Hide detailed formatting parameter options from help message of 'damo show'.
 
 v2.4.6
 - Mark 'damo fmt_json' as will-be-deprecated.

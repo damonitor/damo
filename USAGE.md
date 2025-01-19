@@ -30,7 +30,7 @@ Perf
 ----
 
 `damo` uses `perf`[1] for recording DAMON's access monitoring results.  Please
-ensure your system is having it if you will need to do record full mointoring
+ensure your system is having it if you will need to do record full monitoring
 results of DAMON (`damo` supports recording partial snapshots of DAMON
 monitoring results).  If you will not do the full-recording, you don't need to
 install `perf` on your system, though.
@@ -98,7 +98,7 @@ commands can be categorized as below:
 - For controlling DAMON (monitoring and monitoring-based system optimization)
   - `start`, `tune`, and `stop` are included
 - For recording, snapshot, and visualization of useful data including DAMON's
-  monitoring results, DAMON's working status, and additional system infomration
+  monitoring results, DAMON's working status, and additional system information
   - `record` and `report` are included
 - For more convenient use of `damo`
   - `version` and `args` are included
@@ -1272,7 +1272,7 @@ parameters from the file, remove the kdamond parameters of the index, and
 prints resulting parameters.  Again, users may use file redicrections to save
 outputs for incremental edits.  For example, below command will remove the
 kdamond for `migrate_cold` from the `kdamonds.json` file that generated above,
-and save the signle kdamond parameters to `kdamond_hot.json`.
+and save the single kdamond parameters to `kdamond_hot.json`.
 
     # damo args damon --remove kdamonds.json 1 > kdamond_hot.json
 

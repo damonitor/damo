@@ -27,7 +27,7 @@ def main(args):
 
     if args.infer_version:
         if _damon._damon_fs is not _damon_sysfs:
-            print('Version inferrence is unavailable')
+            print('Version inference is unavailable')
             exit(1)
         print('Seems the version of DAMON is %s' %
               _damon_sysfs.infer_damon_version())

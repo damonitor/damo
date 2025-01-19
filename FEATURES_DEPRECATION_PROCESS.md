@@ -13,7 +13,7 @@ also include replacement of the feature.
 
 The notice should be made on
 [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) and
-[USAGE.md](USAGE.md).  If avaialble, the notice should also be made on
+[USAGE.md](USAGE.md).  If available, the notice should also be made on
 execution of the features, and help messages that related to the features.  For
 the notice on the execution, `will_be_deprecated()` of
 `_damo_deprecation_notice.py` can be used.

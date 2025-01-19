@@ -1243,7 +1243,7 @@ def initialize(damon_interface, debug_damon, is_stop):
     if is_stop:
         return None
 
-    # While DAMON is running, feature chekcing I/O can fail, corrupt something,
+    # While DAMON is running, feature checking I/O can fail, corrupt something,
     # or make something complicated.
     if any_kdamond_running():
         return 'feature_supports loading failed (%s), and DAMON is running'

@@ -41,7 +41,7 @@ def dump(kvpairs):
         return None, 'yaml module is not imported'
 
     def ordered_dict_representer(dumper, ordered_dict):
-        # represnet collections.OrderedDict object as normal dict, but while
+        # represent collections.OrderedDict object as normal dict, but while
         # keeping the dumped order; the order will be ignored when loaded
         # again, but that's not a problem for Kdamonds.
         return dumper.represent_dict(ordered_dict.items())

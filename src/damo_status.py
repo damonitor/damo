@@ -14,7 +14,7 @@ def main(args):
     deprecated and removed, make this source file to work as just a wrapper of
     'damo_report_damon.py'.
 
-    Another appraoch would be simply removing this file and updating 'damo.py'
+    Another approach would be simply removing this file and updating 'damo.py'
     to keep 'status' command, but link 'damo_report_kdamodsn.py' file.  We
     don't use the approach to keep this file as a place to add deprecation
     message later.
