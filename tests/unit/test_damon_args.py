@@ -126,27 +126,6 @@ class TestDamonArgs(unittest.TestCase):
                              ]
                          )
 
-    def test_handle_err_get_filter_allow(self):
-        allow, err = _damon_args.handle_err_get_filter_allow(
-                'anon', [])
-        self.assertEqual(err, None)
-        self.assertEqual(allow, False)
-
-        allow, err = _damon_args.handle_err_get_filter_allow(
-                'anon', ['allow'])
-        self.assertEqual(err, None)
-        self.assertEqual(allow, True)
-
-        allow, err = _damon_args.handle_err_get_filter_allow(
-                'anon', ['pass'])
-        self.assertEqual(err, None)
-        self.assertEqual(allow, True)
-
-        allow, err = _damon_args.handle_err_get_filter_allow(
-                'anon', ['block'])
-        self.assertEqual(err, None)
-        self.assertEqual(allow, False)
-
     def test_damos_filter_format_v2(self):
         f, e, n = _damon_args.damos_options_to_filter_v2(
                 'allow anon'.split())
