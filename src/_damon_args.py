@@ -158,27 +158,6 @@ def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
     else:
         return None, 'unsupported filter type', 0
 
-def damos_options_to_filter(fields):
-    if len(fields) < 2:
-        return None, '<2 filter field length (%s)' % fields
-    ftype = fields[0]
-    fmatching = fields[1]
-    fargs = fields[2:]
-    if not fmatching in ['matching', 'nomatching']:
-        return None, 'unsupported matching keyword (%s)' % fmatching
-    fmatching = fmatching == 'matching'
-    allow, err = handle_err_get_filter_allow(ftype, fargs)
-    if err is not None:
-        return None, 'filter arguments handling failed (%s)' % fargs
-
-    if ftype in ['anon', 'young', 'hugepage']:
-        return _damon.DamosFilter(ftype, fmatching, allow=allow), None
-    filter, err, _ = damos_filter_with_optional_args(
-            ftype, fmatching, allow, fargs)
-    if err is not None:
-        return None, 'handling %s failed (%s)' % (err, fields)
-    return filter, None
-
 def damos_options_to_filter_v2(words):
     '''
     Returns filter, error, and consumed number of words
