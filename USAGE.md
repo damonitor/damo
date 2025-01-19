@@ -1496,4 +1496,3 @@ option of some DAMON control commands including `damo start` and `damo tune`.
 The command exits immediately after showing the current status.  It exits with
 exit value `0` if it successfully retrieved and shown the status of DAMON.
 Otherwise, the exit value will be non-zero.
-
