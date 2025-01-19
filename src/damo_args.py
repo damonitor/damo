@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: GPL-2.0
 
 import _damo_subcmds
-import damo_args_damon
 import damo_args_accesses_filter
 import damo_args_accesses_format
+import damo_args_damon
 
 subcmds = [
         _damo_subcmds.DamoSubCmd(

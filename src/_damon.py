@@ -9,8 +9,8 @@ import copy
 import json
 import os
 import random
-import time
 import subprocess
+import time
 
 import _damo_fmt_str
 import damo_version

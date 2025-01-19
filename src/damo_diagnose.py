@@ -3,8 +3,8 @@
 import json
 
 import _damon
-import damo_reclaim
 import damo_lru_sort
+import damo_reclaim
 
 def main(args):
     _damon.ensure_root_permission()

@@ -5,9 +5,9 @@ import damo_heatmap
 import damo_heats
 import damo_nr_regions
 import damo_report_access
+import damo_report_damon
 import damo_report_footprint
 import damo_report_holistic
-import damo_report_damon
 import damo_report_profile
 import damo_report_raw
 import damo_report_times

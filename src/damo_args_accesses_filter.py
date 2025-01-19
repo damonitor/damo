@@ -3,8 +3,8 @@
 import collections
 import json
 
-import _damo_yaml
 import _damo_records
+import _damo_yaml
 import damo_args_damon
 
 def main(args):
