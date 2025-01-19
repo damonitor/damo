@@ -1,6 +1,12 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.6.5
+- damo report access: add '<positive access samples ratio>' snapshot format keyword
+- damo report access: add '<filters passed bytes>' snapshot format keyword
+- damo report access: Show <filters passed bytes> on snapshot tail by default
+- Code cleanup
+
 v2.6.4
 - Allow more human-friendly DAMOS filter format, v2
   - <allow|reject> [none] <type> [<additional type argument>...]
