@@ -1052,6 +1052,54 @@ def handle_ls_keywords(args):
         return True
     return False
 
+class CacheSpec:
+    size = None
+    ways = None
+    sz_line = None
+    nr_cache_sets = None
+
+    def __init__(self, size, ways, sz_line):
+        self.size = size
+        self.ways = ways
+        self.sz_line = sz_line
+
+        self.nr_cache_sets = self.size / self.ways / self.sz_line
+
+    def set_for_pa(self, addr):
+        return addr / self.sz_line % self.nr_cache_sets
+
+def translate_regions_to_cache_space(regions, cache_spec):
+    set_regions = []
+    for i in range(int(cache_spec.nr_cache_sets)):
+        set_regions.append(_damon.DamonRegion(
+            start=i, end=i+1,
+            nr_accesses=0, nr_accesses_unit=_damon.unit_samples,
+            age=0, age_unit=_damon.unit_aggr_intervals))
+    for region in regions:
+        for addr in range(region.start, region.end, cache_spec.sz_line):
+            csidx = int(cache_spec.set_for_pa(addr))
+            if csidx >= len(set_regions):
+                print(csidx, len(set_regions))
+                exit(0)
+            set_regions[csidx].nr_accesses.samples += region.nr_accesses.samples
+    converted = []
+    for set_region in set_regions:
+        if len(converted) == 0:
+            converted.append(set_region)
+            continue
+        if converted[-1].nr_accesses.samples == set_region.nr_accesses.samples:
+            converted[-1].end = set_region.end
+        else:
+            converted.append(set_region)
+    return converted
+
+def translate_records_to_cache_space(records, cs, cw, cl):
+    cache_spec = CacheSpec(cs, cw, cl)
+    for record in records:
+        for snapshot in record.snapshots:
+            snapshot.regions = translate_regions_to_cache_space(
+                    snapshot.regions, cache_spec)
+
 def main(args):
     handled = handle_ls_keywords(args)
     if handled:
@@ -1097,6 +1145,14 @@ def main(args):
         fmt = ReportFormat.from_kvpairs(json.loads(fmt_string))
     else:
         fmt = set_formats(args, records)
+
+    if args.translate_cache is not None:
+        sz_cache = _damo_fmt_str.text_to_bytes(args.translate_cache[0])
+        ways_cache = _damo_fmt_str.text_to_nr(args.translate_cache[1])
+        sz_cache_line = _damo_fmt_str.text_to_bytes(args.translate_cache[2])
+        translate_records_to_cache_space(
+                records, sz_cache, ways_cache, sz_cache_line)
+
     for record in records:
         try:
             pr_records(fmt, records)
@@ -1254,3 +1310,7 @@ def set_argparser(parser):
     add_fmt_args(parser, hide_help=True)
     parser.add_argument('--format', metavar='<json string>',
                         help='visualization format in json format')
+    parser.add_argument(
+            '--translate_cache', nargs=3,
+            metavar=('<cache size>', '<cache ways>', '<cache line size>'),
+            help=argparse.SUPPRESS) # experimental
