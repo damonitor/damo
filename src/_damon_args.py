@@ -252,13 +252,15 @@ def damos_options_to_filters(filters_args):
     if v2_err is None:
         return filters, None
 
-    for fields in filters_args:
-        filter, err = damos_options_to_filter(fields)
+    full_words = []
+    for filter_args in filters_args:
+        converted_filter_args, err = convert_damos_filter_v1_to_v2(filter_args)
         if err is not None:
-            return None, 'damos_filter v2 (%s) and v1 (%s) all fail' % (
-                    v2_err, err)
-        filters.append(filter)
-    return filters, None
+            return None, 'converting format fail (%s, %s)' % (filter_args, err)
+        full_words += converted_filter_args
+
+    filters, v2_err = damos_options_to_filters_v2(full_words)
+    return filters, v2_err
 
 def damos_quotas_cons_arg(cmd_args):
     time_ms = 0
