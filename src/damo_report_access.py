@@ -186,6 +186,7 @@ default_record_head_format = 'kdamond <kdamond index> / context <context index> 
 default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<duration>)\n<heatmap>'
 default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
+default_snapshot_tail_format = 'total size: <total bytes>'
 
 def filters_passed_bytes(snapshot, fmt):
     bytes = 0
@@ -1018,6 +1019,12 @@ def set_formats(args, records):
                 fmt.format_region += ' df-passed <filters passed bytes>'
                 break
 
+    if fmt.format_snapshot_tail == default_snapshot_tail_format:
+        for record in records:
+            if len(record.scheme_filters) > 0:
+                fmt.format_snapshot_tail += '  df-passed: <filters passed bytes>'
+                break
+
     if fmt.format_snapshot_head == None:
         need_snapshot_head = False
         for record in records:
@@ -1140,7 +1147,7 @@ def add_fmt_args(parser, hide_help=False):
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--format_snapshot_tail', metavar='<template>',
-            default='total size: <total bytes>',
+            default=default_snapshot_tail_format,
             help='output format to show at the end of each snapshot'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
