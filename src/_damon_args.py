@@ -96,38 +96,6 @@ def schemes_option_to_damos(schemes):
     except Exception as json_err:
         return None, '%s' % json_err
 
-def handle_err_get_filter_allow(filter_type, optional_args):
-    '''
-    optional_args are for filter target memory type specification, and whether
-    the filter is pass filter or block filter.
-    Target memory type specification options depend on the type.
-    Whether to pass or block is optional (block by default)
-    '''
-    type_to_nr_type_args = {
-            'anon': 0,
-            'memcg': 1,
-            'young': 0,
-            'hugepage': 0,
-            'addr': 2,
-            'target': 1}
-    if not filter_type in type_to_nr_type_args:
-        return None, 'unsupported filter target type'
-    nr_type_args = type_to_nr_type_args[filter_type]
-    len_args = len(optional_args)
-    if len_args < nr_type_args:
-        return None, '<%d filter optional args (%s)' % (
-                nr_rype_args, optional_args)
-    elif len_args > nr_type_args + 1:
-        return None, '>%d filter optional args (%s)' % (
-                nr_type_args + 1, optional_args)
-
-    if len_args == nr_type_args:
-        return False, None
-    allow_keyword = optional_args[-1]
-    if not allow_keyword in ['allow', 'reject', 'pass', 'block']:
-        return None, 'wrong allow keyword (%s)' % allow_keyword
-    return allow_keyword in ['allow', 'pass'], None
-
 def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
     # return filter, error, and nuber of consumed words
     if ftype == 'memcg':
