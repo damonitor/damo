@@ -182,6 +182,35 @@ class TestDamonArgs(unittest.TestCase):
                 ['anon nomatching', 'reject none anon'],
                 ['anon nomatching allow', 'allow none anon'],
                 ['anon nomatching reject', 'reject none anon'],
+
+                ['memcg matching a/b/c', 'reject memcg a/b/c'],
+                ['memcg matching a/b/c allow', 'allow memcg a/b/c'],
+                ['memcg matching a/b/c reject', 'reject memcg a/b/c'],
+                ['memcg nomatching a/b/c', 'reject none memcg a/b/c'],
+                ['memcg nomatching a/b/c allow', 'allow none memcg a/b/c'],
+                ['memcg nomatching a/b/c reject', 'reject none memcg a/b/c'],
+
+                ['young matching', 'reject young'],
+                ['young matching allow', 'allow young'],
+                ['young matching reject', 'reject young'],
+                ['young nomatching', 'reject none young'],
+                ['young nomatching allow', 'allow none young'],
+                ['young nomatching reject', 'reject none young'],
+
+                ['addr matching 123 567', 'reject addr 123 567'],
+                ['addr matching 123 567 allow', 'allow addr 123 567'],
+                ['addr matching 123 567 reject', 'reject addr 123 567'],
+                ['addr nomatching 123 567', 'reject none addr 123 567'],
+                ['addr nomatching 123 567 allow', 'allow none addr 123 567'],
+                ['addr nomatching 123 567 reject', 'reject none addr 123 567'],
+
+                ['target matching 1', 'reject target 1'],
+                ['target matching 1 allow', 'allow target 1'],
+                ['target matching 1 reject', 'reject target 1'],
+                ['target nomatching 1', 'reject none target 1'],
+                ['target nomatching 1 allow', 'allow none target 1'],
+                ['target nomatching 1 reject', 'reject none target 1'],
+
                 ]
         for question, expect in question_expects:
             answer, err = _damon_args.convert_damos_filter_v1_to_v2(
