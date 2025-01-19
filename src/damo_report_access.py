@@ -121,6 +121,11 @@ snapshot_formatters = [
             lambda snapshot, record, fmt: filters_pass_type_of(record),
             'type of <filters passed bytes> memory'),
         Formatter(
+                '<filters passed bytes>',
+                lambda snapshot, record, fmt:
+                filters_passed_bytes(snapshot, fmt),
+                'bytes of regions that passed DAMOS filters'),
+        Formatter(
                 '<positive access samples ratio>',
                 lambda snapshot, record, fmt:
                 positive_access_sample_ratio(snapshot, record),
@@ -181,6 +186,14 @@ default_record_head_format = 'kdamond <kdamond index> / context <context index> 
 default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<duration>)\n<heatmap>'
 default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
+
+def filters_passed_bytes(snapshot, fmt):
+    bytes = 0
+    for region in snapshot.regions:
+        if region.sz_filter_passed is None:
+            return 'N/A'
+        bytes += region.sz_filter_passed
+    return _damo_fmt_str.format_sz(bytes, fmt.raw_number)
 
 def positive_access_sample_ratio(snapshot, record):
     max_samples_per_region = record.intervals.aggr / record.intervals.sample
