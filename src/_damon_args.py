@@ -218,6 +218,28 @@ def damos_options_to_filters_v2(words):
         words = words[nr_consumed_words:]
     return filters, None
 
+def convert_damos_filter_v1_to_v2(filter_args):
+    if len(filter_args) < 2:
+        return None, '<2 filter argument'
+    filter_type = filter_args[0]
+    matching = filter_args[1] == 'matching'
+    optional_args = filter_args[2:]
+    if len(optional_args) == 0:
+        allow_reject = 'reject'
+    else:
+        if optional_args[-1] in ['allow', 'pass', 'reject', 'block']:
+            if optional_args[-1] in ['allow', 'pass']:
+                allow_reject = 'allow'
+            else:
+                allow_reject = 'reject'
+            optional_args = optional_args[:-1]
+        else:
+            allow_reject = 'reject'
+    v2_args = [allow_reject]
+    if matching is False:
+        v2_args.append('none')
+    return v2_args + [filter_type] + optional_args, None
+
 def damos_options_to_filters(filters_args):
     filters = []
     if filters_args == None:
