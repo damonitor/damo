@@ -128,7 +128,7 @@ snapshot_formatters = [
         Formatter(
                 '<positive access samples ratio>',
                 lambda snapshot, record, fmt:
-                positive_access_sample_ratio(snapshot, record),
+                positive_access_sample_ratio(snapshot, record, fmt),
                 'positive access samples ratio'),
         ]
 
@@ -195,14 +195,15 @@ def filters_passed_bytes(snapshot, fmt):
         bytes += region.sz_filter_passed
     return _damo_fmt_str.format_sz(bytes, fmt.raw_number)
 
-def positive_access_sample_ratio(snapshot, record):
+def positive_access_sample_ratio(snapshot, record, fmt):
     max_samples_per_region = record.intervals.aggr / record.intervals.sample
     max_samples = max_samples_per_region * len(snapshot.regions)
     nr_samples = 0
     for region in snapshot.regions:
         region.nr_accesses.add_unset_unit(record.intervals)
         nr_samples += region.nr_accesses.samples
-    return _damo_fmt_str.format_percent(nr_samples * 100 / max_samples, False)
+    return _damo_fmt_str.format_percent(
+            nr_samples * 100 / max_samples, fmt.raw_number)
 
 def filters_pass_type_of(record):
     ops_filters = [f for f in record.scheme_filters if f.handled_by_ops()]
