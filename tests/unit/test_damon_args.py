@@ -218,5 +218,127 @@ class TestDamonArgs(unittest.TestCase):
             self.assertEqual(err, None)
             self.assertEqual(answer, expect.split())
 
+    def test_damos_options_to_filters(self):
+        question_expects = [
+                [['anon matching', 'reject anon'],
+                 _damon.DamosFilter(
+                     filter_type='anon', matching=True, allow=False)],
+                [['anon matching allow', 'allow anon'],
+                 _damon.DamosFilter(
+                     filter_type='anon', matching=True, allow=True)],
+                [['anon matching reject', 'reject anon'],
+                 _damon.DamosFilter(
+                     filter_type='anon', matching=True, allow=False)],
+                [['anon nomatching', 'reject none anon'],
+                 _damon.DamosFilter(
+                     filter_type='anon', matching=False, allow=False)],
+                [['anon nomatching allow', 'allow none anon'],
+                 _damon.DamosFilter(
+                     filter_type='anon', matching=False, allow=True)],
+                [['anon nomatching reject', 'reject none anon'],
+                 _damon.DamosFilter(
+                     filter_type='anon', matching=False, allow=False)],
+
+                [['memcg matching a/b/c', 'reject memcg a/b/c'],
+                 _damon.DamosFilter(
+                     filter_type='memcg', matching=True, allow=False,
+                     memcg_path='a/b/c')],
+                [['memcg matching a/b/c allow', 'allow memcg a/b/c'],
+                 _damon.DamosFilter(
+                     filter_type='memcg', matching=True, allow=True,
+                     memcg_path='a/b/c')],
+                [['memcg matching a/b/c reject', 'reject memcg a/b/c'],
+                 _damon.DamosFilter(
+                     filter_type='memcg', matching=True, allow=False,
+                     memcg_path='a/b/c')],
+                [['memcg nomatching a/b/c', 'reject none memcg a/b/c'],
+                 _damon.DamosFilter(
+                     filter_type='memcg', matching=False, allow=False,
+                     memcg_path='a/b/c')],
+                [['memcg nomatching a/b/c allow', 'allow none memcg a/b/c'],
+                 _damon.DamosFilter(
+                     filter_type='memcg', matching=False, allow=True,
+                     memcg_path='a/b/c')],
+                [['memcg nomatching a/b/c reject', 'reject none memcg a/b/c'],
+                 _damon.DamosFilter(
+                     filter_type='memcg', matching=False, allow=False,
+                     memcg_path='a/b/c')],
+
+                [['young matching', 'reject young'],
+                 _damon.DamosFilter(
+                     filter_type='young', matching=True, allow=False)],
+                [['young matching allow', 'allow young'],
+                 _damon.DamosFilter(
+                     filter_type='young', matching=True, allow=True)],
+                [['young matching reject', 'reject young'],
+                 _damon.DamosFilter(
+                     filter_type='young', matching=True, allow=False)],
+                [['young nomatching', 'reject none young'],
+                 _damon.DamosFilter(
+                     filter_type='young', matching=False, allow=False)],
+                [['young nomatching allow', 'allow none young'],
+                 _damon.DamosFilter(
+                     filter_type='young', matching=False, allow=True)],
+                [['young nomatching reject', 'reject none young'],
+                 _damon.DamosFilter(
+                     filter_type='young', matching=False, allow=False)],
+
+                [['addr matching 123 456', 'reject addr 123 456'],
+                 _damon.DamosFilter(
+                     filter_type='addr', matching=True, allow=False,
+                     address_range=_damon.DamonRegion(123, 456))],
+                [['addr matching 123 456 allow', 'allow addr 123 456'],
+                 _damon.DamosFilter(
+                     filter_type='addr', matching=True, allow=True,
+                     address_range=_damon.DamonRegion(123, 456))],
+                [['addr matching 123 456 reject', 'reject addr 123 456'],
+                 _damon.DamosFilter(
+                     filter_type='addr', matching=True, allow=False,
+                     address_range=_damon.DamonRegion(123, 456))],
+                [['addr nomatching 123 456', 'reject none addr 123 456'],
+                 _damon.DamosFilter(
+                     filter_type='addr', matching=False, allow=False,
+                     address_range=_damon.DamonRegion(123, 456))],
+                [['addr nomatching 123 456 allow', 'allow none addr 123 456'],
+                 _damon.DamosFilter(
+                     filter_type='addr', matching=False, allow=True,
+                     address_range=_damon.DamonRegion(123, 456))],
+                [['addr nomatching 123 456 reject', 'reject none addr 123 456'],
+                 _damon.DamosFilter(
+                     filter_type='addr', matching=False, allow=False,
+                     address_range=_damon.DamonRegion(123, 456))],
+
+                [['target matching 1', 'reject target 1'],
+                 _damon.DamosFilter(
+                     filter_type='target', matching=True, allow=False,
+                     damon_target_idx='1')],
+                [['target matching 1 allow', 'allow target 1'],
+                 _damon.DamosFilter(
+                     filter_type='target', matching=True, allow=True,
+                     damon_target_idx='1')],
+                [['target matching 1 reject', 'reject target 1'],
+                 _damon.DamosFilter(
+                     filter_type='target', matching=True, allow=False,
+                     damon_target_idx='1')],
+                [['target nomatching 1', 'reject none target 1'],
+                 _damon.DamosFilter(
+                     filter_type='target', matching=False, allow=False,
+                     damon_target_idx='1')],
+                [['target nomatching 1 allow', 'allow none target 1'],
+                 _damon.DamosFilter(
+                     filter_type='target', matching=False, allow=True,
+                     damon_target_idx='1')],
+                [['target nomatching 1 reject', 'reject none target 1'],
+                 _damon.DamosFilter(
+                     filter_type='target', matching=False, allow=False,
+                     damon_target_idx='1')],
+                ]
+        for questions, expect in question_expects:
+            for question in questions:
+                answer, err = _damon_args.damos_options_to_filters(
+                        [question.split()])
+                self.assertEqual(err, None)
+                self.assertEqual(answer, [expect])
+
 if __name__ == '__main__':
     unittest.main()
