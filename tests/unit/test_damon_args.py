@@ -174,5 +174,20 @@ class TestDamonArgs(unittest.TestCase):
                     memcg_path='a/b/c'))
         self.assertEqual(n, 3)
 
+    def test_convert_damos_filter_v1_to_v2(self):
+        question_expects = [
+                ['anon matching', 'reject anon'],
+                ['anon matching allow', 'allow anon'],
+                ['anon matching reject', 'reject anon'],
+                ['anon nomatching', 'reject none anon'],
+                ['anon nomatching allow', 'allow none anon'],
+                ['anon nomatching reject', 'reject none anon'],
+                ]
+        for question, expect in question_expects:
+            answer, err = _damon_args.convert_damos_filter_v1_to_v2(
+                    question.split())
+            self.assertEqual(err, None)
+            self.assertEqual(answer, expect.split())
+
 if __name__ == '__main__':
     unittest.main()
