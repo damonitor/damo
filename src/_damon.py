@@ -1015,7 +1015,7 @@ class Kdamond:
 
     def __hash__(self):
         return hash(self.__str__())
-    
+
     def get_cpu_usage(self):
         if self.state == "off":
             return "0.0"

@@ -1073,7 +1073,7 @@ percentile               0              25              50              75      
 # Samples: 680K of event 'cpu-clock:pppH'
 # Event count (approx.): 170020000000
 #
-# Overhead  Command          Shared Object                          Symbol                               
+# Overhead  Command          Shared Object                          Symbol
 # ........  ...............  .....................................  ...........................................
 #
     63.01%  swapper          [kernel.vmlinux]                       [k] pv_native_safe_halt
