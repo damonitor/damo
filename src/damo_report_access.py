@@ -1146,10 +1146,10 @@ def main(args):
     else:
         fmt = set_formats(args, records)
 
-    if args.translate_cache is not None:
-        sz_cache = _damo_fmt_str.text_to_bytes(args.translate_cache[0])
-        ways_cache = _damo_fmt_str.text_to_nr(args.translate_cache[1])
-        sz_cache_line = _damo_fmt_str.text_to_bytes(args.translate_cache[2])
+    if args.on_cache is not None:
+        sz_cache = _damo_fmt_str.text_to_bytes(args.on_cache[0])
+        ways_cache = _damo_fmt_str.text_to_nr(args.on_cache[1])
+        sz_cache_line = _damo_fmt_str.text_to_bytes(args.on_cache[2])
         translate_records_to_cache_space(
                 records, sz_cache, ways_cache, sz_cache_line)
 
@@ -1311,6 +1311,6 @@ def set_argparser(parser):
     parser.add_argument('--format', metavar='<json string>',
                         help='visualization format in json format')
     parser.add_argument(
-            '--translate_cache', nargs=3,
+            '--on_cache', nargs=3,
             metavar=('<cache size>', '<cache ways>', '<cache line size>'),
             help=argparse.SUPPRESS) # experimental
