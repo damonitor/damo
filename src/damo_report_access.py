@@ -1313,4 +1313,4 @@ def set_argparser(parser):
     parser.add_argument(
             '--on_cache', nargs=3,
             metavar=('<cache size>', '<cache ways>', '<cache line size>'),
-            help=argparse.SUPPRESS) # experimental
+            help='visualize access patterns on a virtual cache (EXPERIMENTAL)')
