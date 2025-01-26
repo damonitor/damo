@@ -1320,6 +1320,13 @@ and save the single kdamond parameters to `kdamond_hot.json`.
 
     # damo args damon --remove kdamonds.json 1 > kdamond_hot.json
 
+To read the generated parameters in more human-readable way, `damo report
+damon` can be useful.  Especially `--damon_params` and `--input_file` could be
+useful.  For example, commands like below could be useful to check currently
+modified DAMON parameter json or yaml files.
+
+    # damo report damon --input_file kdamonds.json --damon_params
+
 `damo dianose`
 --------------
 
