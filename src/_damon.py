@@ -839,14 +839,17 @@ class Damos:
 
     def to_str(self, raw):
         lines = [self.str_action_line(raw)]
-        lines.append('target access pattern')
-        lines.append(_damo_fmt_str.indent_lines(
-            self.access_pattern.to_str(raw), 4))
-        lines.append('quotas')
-        lines.append(_damo_fmt_str.indent_lines(self.quotas.to_str(raw), 4))
-        lines.append('watermarks')
-        lines.append(_damo_fmt_str.indent_lines(
-            self.watermarks.to_str(raw), 4))
+        if self.access_pattern is not None:
+            lines.append('target access pattern')
+            lines.append(_damo_fmt_str.indent_lines(
+                self.access_pattern.to_str(raw), 4))
+        if self.quotas is not None:
+            lines.append('quotas')
+            lines.append(_damo_fmt_str.indent_lines(self.quotas.to_str(raw), 4))
+        if self.watermarks is not None:
+            lines.append('watermarks')
+            lines.append(_damo_fmt_str.indent_lines(
+                self.watermarks.to_str(raw), 4))
         for idx, damos_filter in enumerate(self.filters):
             lines.append('filter %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(
