@@ -6,6 +6,7 @@ v2.6.6
   - damo args damon: add '--out' and '--replace' option
   - update documentation
 - Deprecate 'damo report heats', 'damo show' and 'damo status'
+- Add experimental option, 'damo report damon --damon_params_omit_defaults'
 
 v2.6.5
 - damo report access: add '<positive access samples ratio>' snapshot format keyword
