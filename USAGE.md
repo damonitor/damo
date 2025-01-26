@@ -1134,64 +1134,11 @@ percentile               0              25              50              75      
 
 ### `damo report heats`
 
-`damo report heats` will be deprecated by 2025-01-20, in favor of [`damo report
+`damo report heats` is deprecated in favor of [`damo report
 heatmap`](#damo-report-heatmap).  `damo report heatmap` can replace all usages
 of `damo report heats'.  Please refer to
 [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
-more details.
-
-The `raw` output is very detailed but hard to manually read.  `heats`
-sub-subcommand plots the data in 3-dimensional form, which represents the time
-in x-axis, address of regions in y-axis, and the access frequency in z-axis.
-Users can optionally set the resolution of the map (`--resol`) and start/end
-point of each axis (`--time_range` and `--address_range`).  For example:
-
-    # damo report heats --resol 3 3
-    0               0               0.0
-    0               7609002         0.0
-    0               15218004        0.0
-    66112620851     0               0.0
-    66112620851     7609002         0.0
-    66112620851     15218004        0.0
-    132225241702    0               0.0
-    132225241702    7609002         0.0
-    132225241702    15218004        0.0
-
-This command shows a recorded access pattern in a heatmap of 3x3 resolution.
-Therefore it shows 9 data points in total.  Each line shows each of the data
-points.  The three numbers in each line represent time in nanoseconds, address
-in bytes and the observed access frequency.
-
-Users can convert this text output into a heatmap image (represents z-axis
-values with colors) or other 3D representations using various tools such as
-`gnuplot`.  For more convenience, `heats` sub-subcommand provides the `gnuplot`
-based heatmap image creation.  For this, `--heatmap` option can be used.  Also,
-note that because it uses `gnuplot` internally, it will fail if `gnuplot` is
-not installed on your system.  For example:
-
-    $ ./damo report heats --heatmap heatmap.png
-
-Creates the heatmap image in ``heatmap.png`` file.  It supports ``pdf``,
-``png``, ``jpeg``, and ``svg``.
-
-If the target address space is a virtual memory address space and the user
-plots the entire address space, the huge unmapped regions will make the picture
-looks only black.  Therefore the user should do proper zoom in / zoom out using
-the resolution and axis boundary-setting arguments.  To make this effort
-minimal, `--guide` option can be used as below:
-
-    $ ./damo report heats --guide
-    target_id:18446623438842320000
-    time: 539914032967-596606618651 (56.693 s)
-    region   0: 00000094827419009024-00000094827452162048 (31.617 MiB)
-    region   1: 00000140271510761472-00000140271717171200 (196.848 MiB)
-    region   2: 00000140734916239360-00000140734916927488 (672.000 KiB)
-
-The output shows unions of monitored regions (start and end addresses in byte)
-and the union of monitored time duration (start and end time in nanoseconds) of
-each target task.  Therefore, it would be wise to plot the data points in each
-union.  If no axis boundary option is given, it will automatically find the
-biggest union in ``--guide`` output and set the boundary in it.
+more details.  This section will be removed by 2025-02-26.
 
 
 ### `damo report raw`

@@ -58,8 +58,8 @@ def set_argparser(parser):
     parser.description = 'Show when which address ranges were how frequently accessed'
 
 def main(args=None):
-    _damo_deprecation_notice.will_be_deprecated(
-            feature='"damo report heats"', deadline='2025-01-20',
+    _damo_deprecation_notice.deprecated(
+            feature='"damo report heats"', deadline='2025-02-26',
             additional_notice='Use "damo report heatmap" instead.')
 
     # --plot_ascii and --ascii_color is used in the demo screenshop[1].
