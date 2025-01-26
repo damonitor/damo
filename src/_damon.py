@@ -828,10 +828,19 @@ class Damos:
             for region in self.tried_regions:
                 self.tried_bytes += region.size()
 
-    def to_str(self, raw):
-        lines = ['action: %s per %s' % (self.action,
+    def str_action_line(self, raw):
+        action_words = ['action: %s' % self.action]
+        if is_damos_migrate_action(self.action):
+            action_words.append('to node %s' % self.target_nid)
+        action_words.append('per %s' %
             _damo_fmt_str.format_time_us(self.apply_interval_us, raw)
-            if self.apply_interval_us != 0 else 'aggr interval')]
+            if self.apply_interval_us != 0 else 'per aggr interval')
+        return ' '.join(action_words)
+
+    def to_str(self, raw):
+        lines = [self.str_action_line(raw)]
+        if is_damos_migrate_action(self.action):
+            lines.append('target_nid: %s' % self.target_nid)
         lines.append('target access pattern')
         lines.append(_damo_fmt_str.indent_lines(
             self.access_pattern.to_str(raw), 4))
@@ -840,8 +849,6 @@ class Damos:
         lines.append('watermarks')
         lines.append(_damo_fmt_str.indent_lines(
             self.watermarks.to_str(raw), 4))
-        if is_damos_migrate_action(self.action):
-            lines.append('target_nid: %s' % self.target_nid)
         for idx, damos_filter in enumerate(self.filters):
             lines.append('filter %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(
