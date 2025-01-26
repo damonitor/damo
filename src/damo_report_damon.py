@@ -93,8 +93,6 @@ def pr_kdamonds_summary(input_file, json_format, raw_nr, show_cpu):
     if json_format:
         print(json.dumps(summary, indent=4))
         return
-    if len(summary) == 1:
-        print(summary)
     for idx, line in enumerate(summary):
         print('%d\t%s' % (idx, line))
 
