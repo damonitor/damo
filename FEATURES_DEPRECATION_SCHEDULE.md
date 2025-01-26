@@ -13,8 +13,7 @@ Will be deprecated by 2025-01-27.  Use `damo report access --raw_form' instead.
 `damo show`, `damo status`
 --------------------------
 
-Will be deprecated by 2025-01-20.  Use `damo report access` and `damo report
-damon` instead.
+Deprecated.  Use `damo report access` and `damo report damon` instead.
 
 `DAMON` and `damo` were initially designed with offline recording-based usages.
 Therefore `damo record` and `damo report` were the main subcommands.  Later,

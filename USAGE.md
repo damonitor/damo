@@ -1347,11 +1347,10 @@ Snapshot and Visualization of DAMON Monitoring Results and Running Status
 =========================================================================
 
 This section describes two `damo` subcommands that specialized for retrieving
-and visualizing snapshot data.  Those will be deprecated by 2025-01-20, though,
-in favor of [`record`](#damo-record) and [`report`](#damo-report) subcommands.
-Please refer to
-[FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
-more details.
+and visualizing snapshot data.  Those are deprecated in favor of
+[`record`](#damo-record) and [`report`](#damo-report) subcommands.  Please
+refer to [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md)
+file for more details.  This section will be removed by 2025-02-26.
 
 `damo show`
 -----------
@@ -1365,21 +1364,8 @@ more details.  This section will be removed by 2025-02-26.
 `damo status`
 -------------
 
-`damo status` will be deprecated by 2025-01-20, in favor of [`damo report
-damon`](#damo-report-damon).  `damo report damon` can replace all usages
-of `damo status'.  Please refer to
+`damo status` is deprecated in favor of [`damo report
+damon`](#damo-report-damon).  `damo report damon` can replace all usages of
+`damo status'.  Please refer to
 [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
-more details.
-
-`damo status` shows the status of DAMON.  It shows every kdamond with the
-parameters that applied to it, running status (`on` or `off`), and DAMOS
-schemes status including their statistics and detailed applied regions
-information.
-
-Note that users can use `--json` to represent the status in a json format.  And
-the json format output can again be used for `--kdamonds` or the positional
-option of some DAMON control commands including `damo start` and `damo tune`.
-
-The command exits immediately after showing the current status.  It exits with
-exit value `0` if it successfully retrieved and shown the status of DAMON.
-Otherwise, the exit value will be non-zero.
+more details.  This section will be removed by 2025-02-26.
