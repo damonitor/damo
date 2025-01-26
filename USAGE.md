@@ -405,8 +405,8 @@ report formats.
 
 `damo report damon` shows the current or recorded status of DAMON.  It gets
 snapshot of the current status of DAMON and shows it by default.  Users can use
-`--input_file` option to show the `damo record`-recorded DAMON status file as
-the source.
+`--input_file` option to show the `damo record`-recorded DAMON status file or
+`damo args damon`-generated DAMON parameters as the source.
 
 It shows every kdamond with the parameters that applied to it, running status
 (`on` or `off`), and DAMOS schemes status including their statistics and
@@ -1278,13 +1278,9 @@ DAMON configuration that same to one that can be made with `damo start
 --damos_action stat`.  In other words, `damo start $(damo args damon
 --damos_action stat)` will be same to `damo start --damos_action stat`.
 
-#### report format
-
-The command also supports `report` format, which is similar to the output of
-[`damo report damon`](#damo-report-damon).  The format is for human users who
-feels `json` or even `yaml` format outputs being too verbose or difficult to
-read.  It means it is not for machines, and therefore cannot feed to other damo
-commands.
+The output can be saved in a file instead of printing using `--out` option.  To
+read the output in more human-friendly way,
+[`damo report damon`](#damo-report-damon) can be used.
 
 #### Multiple kdamonds
 
