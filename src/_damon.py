@@ -288,7 +288,9 @@ class DamonTarget:
         self.regions = regions
 
     def to_str(self, raw):
-        lines = ['pid: %s' % self.pid]
+        lines = []
+        if self.pid is not None:
+            lines.append('pid: %s' % self.pid)
         for region in self.regions:
             lines.append('region %s' % region.to_str(raw))
         return '\n'.join(lines)
