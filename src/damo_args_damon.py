@@ -37,6 +37,16 @@ def main(args):
             exit(1)
         del kdamonds[kdamond_idx]
 
+    if args.replace is not None:
+        filepath = args.replace[0]
+        kdamond_idx = int(args.replace[1])
+        old_kdamonds, err = _damon_args.kdamonds_from_json_arg(filepath)
+        if err is not None:
+            print('cannot parse %s (%s)' % (filepath, err))
+            exit(1)
+        old_kdamonds[kdamond_idx] = kdamonds[0]
+        kdamonds = old_kdamonds
+
     kvpairs = {'kdamonds': [k.to_kvpairs(args.raw) for k in kdamonds]}
     if args.format == 'json':
         text = json.dumps(kvpairs, indent=4)
@@ -67,5 +77,8 @@ def set_argparser(parser):
     parser.add_argument(
             '--remove', nargs=2, metavar=('<file>', '<kdamond index>'),
             help='remove a kdamond of given index from those of the given file')
+    parser.add_argument(
+            '--replace', nargs=2, metavar=('<file>', '<kdamond index>'),
+            help='replace a kdamond of given index in the given file')
     parser.add_argument(
             '--out', metavar='<file>', help='save the output to the given file')
