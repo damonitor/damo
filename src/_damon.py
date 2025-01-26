@@ -839,8 +839,6 @@ class Damos:
 
     def to_str(self, raw):
         lines = [self.str_action_line(raw)]
-        if is_damos_migrate_action(self.action):
-            lines.append('target_nid: %s' % self.target_nid)
         lines.append('target access pattern')
         lines.append(_damo_fmt_str.indent_lines(
             self.access_pattern.to_str(raw), 4))
