@@ -39,13 +39,17 @@ def main(args):
 
     kvpairs = {'kdamonds': [k.to_kvpairs(args.raw) for k in kdamonds]}
     if args.format == 'json':
-        print(json.dumps(kvpairs, indent=4))
+        text = json.dumps(kvpairs, indent=4)
     elif args.format == 'yaml':
         text, err = _damo_yaml.dump(kvpairs)
         if err is not None:
             print('yaml dump failed (%s)' % err)
             exit(1)
+    if args.out is None:
         print(text)
+    else:
+        with open(args.out, 'w') as f:
+            f.write(text)
 
 def set_argparser(parser):
     _damon_args.set_argparser(parser, add_record_options=False, min_help=False)
@@ -63,3 +67,5 @@ def set_argparser(parser):
     parser.add_argument(
             '--remove', nargs=2, metavar=('<file>', '<kdamond index>'),
             help='remove a kdamond of given index from those of the given file')
+    parser.add_argument(
+            '--out', metavar='<file>', help='save the output to the given file')
