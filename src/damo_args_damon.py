@@ -31,9 +31,9 @@ def main(args):
     if args.remove is not None:
         filepath = args.remove[0]
         kdamond_idx = int(args.remove[1])
-        kdamonds, err = _damon_args.kdamonds_from_json_arg(args.remove[0])
+        kdamonds, err = _damon_args.kdamonds_from_json_arg(filepath)
         if err is not None:
-            print('cannot parse %s (%s)' % (args.add, err))
+            print('cannot parse %s (%s)' % (filepath, err))
             exit(1)
         del kdamonds[kdamond_idx]
 
