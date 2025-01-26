@@ -995,13 +995,20 @@ class Kdamond:
             ctx.kdamond = self
 
     def summary_str(self, show_cpu=False):
-        ret = 'state: %s, pid: %s' % (self.state, self.pid)
+        words = []
+        if self.state is not None:
+            words.append('state: %s' % self.state)
+        if self.pid is not None:
+            words.append('pid: %s' % self.pid)
         if show_cpu:
-            ret += ', cpu usage: %s' % self.get_cpu_usage()
-        return ret
+            words.append('cpu usage: %s' % self.get_cpu_usage())
+        return ', '.join(words)
 
     def to_str(self, raw, show_cpu=False):
-        lines = [self.summary_str(show_cpu)]
+        lines = []
+        summary_line = self.summary_str(show_cpu)
+        if summary_line != '':
+            lines.append(summary_line)
         for idx, ctx in enumerate(self.contexts):
             lines.append('context %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(ctx.to_str(raw), 4))
