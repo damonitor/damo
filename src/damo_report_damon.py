@@ -20,7 +20,7 @@ def read_kdamonds_from_file(input_file):
         return None, 'reading %s failed (%s)' % (input_file, err)
     return kdamonds, None
 
-def pr_damon_parameters(input_file, json_format, raw_nr):
+def pr_damon_parameters(input_file, json_format, raw_nr, omit_defaults):
     if input_file is None:
         kdamonds = _damon.current_kdamonds()
     else:
@@ -32,6 +32,13 @@ def pr_damon_parameters(input_file, json_format, raw_nr):
     for k in kdamonds:
         for c in k.contexts:
             for s in c.schemes:
+                if omit_defaults:
+                    if s.access_pattern == _damon.DamosAccessPattern():
+                        s.access_pattern = None
+                    if s.quotas == _damon.DamosQuotas():
+                        s.quotas = None
+                    if s.watermarks == _damon.DamosWatermarks():
+                        s.watermarks = None
                 s.stats = None
                 s.tried_regions = None
 
@@ -107,8 +114,9 @@ def pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu):
 def main(args):
     _damon.ensure_root_and_initialized(args)
 
-    if args.damon_params:
-        return pr_damon_parameters(args.input_file, args.json, args.raw)
+    if args.damon_params or args.damon_params_omit_defaults:
+        return pr_damon_parameters(args.input_file, args.json, args.raw,
+                                   args.damon_params_omit_defaults)
 
     if args.kdamonds_summary:
         return pr_kdamonds_summary(args.input_file, args.json, args.raw,
@@ -149,6 +157,8 @@ def set_argparser(parser):
             help='DAMOS stat fields to print')
     parser.add_argument('--damon_params', action='store_true',
             help='print entered DAMON parameters only')
+    parser.add_argument('--damon_params_omit_defaults', action='store_true',
+            help='print entered DAMON parameters only, omitting defaults')
     parser.add_argument(
             '--input_file', metavar='<file>', help=' '.join([
                 'A json file containing the status of kdamonds to show.',
