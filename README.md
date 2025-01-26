@@ -59,16 +59,20 @@ like below:
 FAQs
 ====
 
-How can I ensure DAMON is enabled on my kernel?
------------------------------------------------
-
-Please refer to 'Install'
-[section](https://damonitor.github.io/#install) of the project webpage.
+What kernels are supported by `damo`?
+-------------------------------------
 
 `damo` aims to support any Linux kernel that enables DAMON, regardless of the
 version and downstream changes.  Of course, `damo` will be unable to support
 some of such kernels in some special cases.  That said, please reach out to the
 development community for discussions.
+
+
+How can I ensure DAMON is enabled on my kernel?
+-----------------------------------------------
+
+Please refer to 'Install'
+[section](https://damonitor.github.io/#install) of the project webpage.
 
 
 Where can I get more detailed usage?
