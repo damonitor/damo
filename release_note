@@ -5,6 +5,7 @@ v2.6.6
 - Improve multiple kdamonds parameters edit
   - damo args damon: add '--out' and '--replace' option
   - update documentation
+- Deprecate 'damo report heats', 'damo show' and 'damo status'
 
 v2.6.5
 - damo report access: add '<positive access samples ratio>' snapshot format keyword
