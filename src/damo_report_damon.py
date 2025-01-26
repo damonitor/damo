@@ -15,12 +15,9 @@ import _damon_args
 
 def read_kdamonds_from_file(input_file):
     # returns read kdamonds and error
-    try:
-        with open(input_file, 'r') as f:
-            kdamonds = [_damon.Kdamond.from_kvpairs(kvp)
-                        for kvp in json.load(f)]
-    except Exception as e:
-        return None, 'reading %s failed (%s)' % (input_file, e)
+    kdamonds, err = _damon_args.kdamonds_from_json_arg(input_file)
+    if err is not None:
+        return None, 'reading %s failed (%s)' % (input_file, err)
     return kdamonds, None
 
 def pr_damon_parameters(input_file, json_format, raw_nr):
