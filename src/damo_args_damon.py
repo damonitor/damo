@@ -6,7 +6,6 @@ import json
 import _damo_yaml
 import _damon
 import _damon_args
-import damo_report_damon
 
 def main(args):
     _damon.ensure_root_permission()
@@ -47,16 +46,13 @@ def main(args):
             print('yaml dump failed (%s)' % err)
             exit(1)
         print(text)
-    elif args.format == 'report':
-        damo_report_damon.pr_kdamonds(
-                kdamonds, json_format=False, raw_nr=args.raw, show_cpu=False)
 
 def set_argparser(parser):
     _damon_args.set_argparser(parser, add_record_options=False, min_help=False)
     parser.description = ' '.join([
         'format DAMON parameters'])
     parser.add_argument(
-            '--format', choices=['json', 'yaml', 'report'], default='json',
+            '--format', choices=['json', 'yaml'], default='json',
             help='format of the output')
     parser.add_argument(
             '--raw', action='store_true',
