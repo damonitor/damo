@@ -1391,6 +1391,13 @@ def commit(kdamonds, commit_quota_goals_only=False):
         return 'commit staged updates filed (%s)' % err
     return None
 
+def update_tuned_intervals(kdamond_idxs=None):
+    if kdamond_idxs is None:
+        kdamond_idxs = running_kdamond_idxs()
+    if _damon_fs == _damon_dbgfs:
+        return None
+    return _damon_fs.update_tuned_intervals(kdamond_idxs)
+
 def update_schemes_stats(kdamond_idxs=None):
     if kdamond_idxs == None:
         kdamond_idxs = running_kdamond_idxs()
