@@ -33,6 +33,8 @@
   - shows when what virtual address has mappend and unmapped
 - Implement an official feature to check if 'damo' supports the system
   - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
+- Automatically translate single allow filter to reject filter
+- Support df-passed only snapshot heatmap
 
 - Deprecate old features
   - Deprecate 'damo report raw'
