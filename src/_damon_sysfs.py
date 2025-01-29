@@ -61,6 +61,10 @@ def is_kdamond_running(kdamond_idx):
     return content.strip() == 'on'
 
 'Return error'
+def update_tuned_intervals(kdamond_idxs):
+    return __write_state_file(kdamond_idxs, 'update_tuned_intervals')
+
+'Return error'
 def update_schemes_stats(kdamond_idxs):
     return __write_state_file(kdamond_idxs, 'update_schemes_stats')
 
