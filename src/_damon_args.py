@@ -67,8 +67,11 @@ def init_regions_for(args):
 
 def damon_intervals_for(args):
     default_intervals = _damon.DamonIntervals()
-    intervals1 = _damon.DamonIntervals(args.sample, args.aggr, args.updr)
-    intervals2 = _damon.DamonIntervals(*args.monitoring_intervals)
+    intervals_goal = _damon.DamonIntervalsGoal(*args.monitoring_intervals_goal)
+    intervals1 = _damon.DamonIntervals(args.sample, args.aggr, args.updr,
+                                       intervals_goal)
+    intervals2 = _damon.DamonIntervals(*args.monitoring_intervals,
+                                       intervals_goal)
     if not intervals1 == default_intervals:
         return intervals1
     if not intervals2 == default_intervals:
@@ -667,6 +670,11 @@ def set_monitoring_attrs_argparser(parser, hide_help=False):
                         metavar=('<sample>', '<aggr>', '<update>'),
                         help='monitoring intervals (us)'
                         if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--monitoring_intervals_goal', nargs=4,
+            metavar=('<samples_bp>', '<aggrs>', '<min_sample_us>',
+                     '<max_sample_us>'), default=['0%', '0', '0us', '0us'],
+            help='monitoring intervals auto-tuning goal')
     parser.add_argument('--monitoring_nr_regions_range', nargs=2,
                         metavar=('<min>', '<max>'), default=[10, 1000],
                         help='min/max number of monitoring regions'
