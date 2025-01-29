@@ -642,10 +642,18 @@ def files_content_to_target(files_content):
 def files_content_to_context(files_content):
     mon_attrs_content = files_content['monitoring_attrs']
     intervals_content = mon_attrs_content['intervals']
+    if 'intervals_goal' in intervals_content:
+        kvpairs = intervals_content['intervals_goal']
+        intervals_goal = _damon.DamonIntervalsGoal(
+                int(kvpairs['samples_bp']), int(kvpairs['aggrs']),
+                int(kvpairs['min_sample_us']), int(kvpairs['max_sample_us']))
+    else:
+        intervals_goal = _damon.DamonIntervalsGoal()
     intervals = _damon.DamonIntervals(
             int(intervals_content['sample_us']),
             int(intervals_content['aggr_us']),
-            int(intervals_content['update_us']))
+            int(intervals_content['update_us']),
+            intervals_goal)
     nr_regions_content = mon_attrs_content['nr_regions']
     nr_regions = _damon.DamonNrRegionsRange(
             int(nr_regions_content['min']),
