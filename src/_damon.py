@@ -1010,7 +1010,13 @@ class DamonCtx:
         for idx, target in enumerate(self.targets):
             lines.append('target %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(target.to_str(raw), 4))
-        lines.append('intervals: %s' % self.intervals.to_str(raw))
+        intervals_lines = self.intervals.to_str(raw).split('\n')
+        if len(intervals_lines) == 1:
+            lines.append('intervals: %s' % intervals_lines[0])
+        else:
+            lines.append('intervals')
+            lines.append(
+                    _damo_fmt_str.indent_lines(self.intervals.to_str(raw), 4))
         lines.append('nr_regions: %s' % self.nr_regions.to_str(raw))
         for idx, scheme in enumerate(self.schemes):
             lines.append('scheme %d' % idx)
