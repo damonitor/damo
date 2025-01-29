@@ -58,21 +58,30 @@ class DamonIntervalsGoal:
                 self.max_sample_us, raw)),
             ])
 
+    def enabled(self):
+        return self.aggrs != 0
+
 class DamonIntervals:
     sample = None
     aggr = None
     ops_update = None
+    intervals_goal = None
 
-    def __init__(self, sample='5ms', aggr='100ms', ops_update='1s'):
+    def __init__(self, sample='5ms', aggr='100ms', ops_update='1s',
+                 intervals_goal=DamonIntervalsGoal()):
         self.sample = _damo_fmt_str.text_to_us(sample)
         self.aggr = _damo_fmt_str.text_to_us(aggr)
         self.ops_update = _damo_fmt_str.text_to_us(ops_update)
+        self.intervals_goal = intervals_goal
 
     def to_str(self, raw):
-        return 'sample %s, aggr %s, update %s' % (
+        lines = ['sample %s, aggr %s, update %s' % (
                 _damo_fmt_str.format_time_us(self.sample, raw),
                 _damo_fmt_str.format_time_us(self.aggr, raw),
-                _damo_fmt_str.format_time_us(self.ops_update, raw))
+                _damo_fmt_str.format_time_us(self.ops_update, raw))]
+        if self.intervals_goal.enabled():
+            lines.append('%s' % self.intervals_goal.to_str(raw))
+        return '\n'.join(lines)
 
     def __str__(self):
         return self.to_str(False)
@@ -82,9 +91,14 @@ class DamonIntervals:
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
+        if not 'intervals_goal' in kvpairs:
+            return DamonIntervals(
+                    kvpairs['sample_us'], kvpairs['aggr_us'],
+                    kvpairs['ops_update_us'])
         return DamonIntervals(
                 kvpairs['sample_us'], kvpairs['aggr_us'],
-                kvpairs['ops_update_us'])
+                kvpairs['ops_update_us'],
+                DamonIntervalsGoal.from_kvpairs(kvpairs['intervals_goal']))
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
@@ -92,6 +106,7 @@ class DamonIntervals:
             ('aggr_us', _damo_fmt_str.format_time_us(self.aggr, raw)),
             ('ops_update_us',
                 _damo_fmt_str.format_time_us(self.ops_update, raw)),
+            ('intervals_goal', self.intervals_goal.to_kvpairs(raw)),
             ])
 
 class DamonNrRegionsRange:
