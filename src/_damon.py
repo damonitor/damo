@@ -1120,6 +1120,7 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
             'pass_filter',              # was developing, renamed to
                                         # pass_filter after v1 patch
             'allow_filter',             # merged in mainline
+            'intervals_goal',           # under development
             ]
 
 _damon_fs = None
