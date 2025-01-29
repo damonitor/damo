@@ -780,6 +780,10 @@ def infer_damon_version():
                                 )])])]
     err = stage_kdamonds(kdamonds)
     if err is None:
+        if os.path.isdir(
+                os.path.join(ctx_dir_of(0, 0),
+                             'monitoring_attrs', 'intervals', 'intervals_goal')):
+            version = '>v6.14'
         if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'stats',
                                        'sz_ops_filter_passed')):
             version = '>v6.13'
@@ -895,6 +899,11 @@ def update_supported_features():
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0), 'filters', '0', 'allow')):
         feature_supports['allow_filter'] = True
+
+    if os.path.isdir(
+            os.path.join(ctx_dir_of(0, 0),
+                         'monitoring_attrs', 'intervals', 'intervals_goal')):
+        feature_supports['intervals_goal'] = True
 
     avail_ops, err = _avail_ops()
     if err == None:
