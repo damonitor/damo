@@ -405,6 +405,24 @@ def write_targets_dir(dir_path, targets):
             return err
     return None
 
+def write_monitoring_intervals_goal_dir(dir_path, goal):
+    err = _damo_fs.write_file(os.path.join(dir_path, 'samples_bp'), '%d' %
+                              goal.samples_bp)
+    if err is not None:
+        return err
+    err = _damo_fs.write_file(os.path.join(dir_path, 'aggrs'), '%d' %
+                              goal.aggrs)
+    if err is not None:
+        return err
+    err = _damo_fs.write_file(os.path.join(dir_path, 'min_sample_us'), '%d' %
+                              goal.min_sample_us)
+    if err is not None:
+        return err
+    err = _damo_fs.write_file(os.path.join(dir_path, 'max_sample_us'), '%d' %
+                              goal.max_sample_us)
+    if err is not None:
+        return err
+
 def write_monitoring_attrs_dir(dir_path, context):
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'intervals', 'sample_us'),
@@ -423,6 +441,13 @@ def write_monitoring_attrs_dir(dir_path, context):
             '%d' % context.intervals.ops_update)
     if err is not None:
         return err
+
+    intervals_goal_path = os.path.join(dir_path, 'intervals', 'intervals_goal')
+    if os.path.isdir(intervals_goal_path):
+        err = write_monitoring_intervals_goal_dir(
+                intervals_goal_path, context.intervals.intervals_goal)
+        if err is not None:
+            return err
 
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'nr_regions', 'min'),
