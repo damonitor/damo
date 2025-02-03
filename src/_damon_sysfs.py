@@ -118,6 +118,19 @@ def write_filter_dir(dir_path, filter_):
         if err is not None:
             return err
 
+    if filter_.hugepage_size is not None:
+        err = _damo_fs.write_file(
+                os.path.join(dir_path, 'min'),
+                '%d' % filter_.hugepage_size.start)
+        if err is not None:
+            return err
+
+        err = _damo_fs.write_file(
+                os.path.join(dir_path, 'max'),
+                '%d' % filter_.hugepage_size.end)
+        if err is not None:
+            return err
+
     if filter_.address_range is not None:
         err = _damo_fs.write_file(
                 os.path.join(dir_path, 'addr_start'),

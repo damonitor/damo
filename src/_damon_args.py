@@ -123,7 +123,16 @@ def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
         except Exception as e:
             return None, 'target filter creation failed (%s, %s)' % (
                     optional_words[0], e), 0
-    else:
+    elif ftype == 'hugepage':
+        if len(optional_words) < 2:
+            return None, 'no range for hugepage sizes is given', 0
+        try:
+            hugepage_size = _damon.DamonRegion(optional_words[0], optional_words[1])
+        except Exception as e:
+            return None, 'wrong range for hugepage sizes is given (%s, %s)' % (optional_words, e), 0
+        return _damon.DamosFilter(ftype, fmatching, allow=allow,
+                                  hugepage_size=hugepage_size), None, 2
+
         return None, 'unsupported filter type', 0
 
 def damos_options_to_filter_v2(words):
@@ -145,7 +154,7 @@ def damos_options_to_filter_v2(words):
     ftype = words[nr_consumed_words]
     nr_consumed_words += 1
 
-    if ftype in ['anon', 'young', 'hugepage']:
+    if ftype in ['anon', 'young']:
         filter = _damon.DamosFilter(ftype, fmatching, allow=allow)
         return filter, None, nr_consumed_words
     else:
