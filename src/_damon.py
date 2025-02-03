@@ -634,16 +634,19 @@ class DamosFilter:
     allow = None
     memcg_path = None
     address_range = None    # DamonRegion
+    hugepage_size = None    # hugepage size in bytes
     damon_target_idx = None
     scheme = None
 
     def __init__(self, filter_type, matching, allow=False,
-                 memcg_path=None, address_range=None, damon_target_idx=None):
+                 memcg_path=None, address_range=None, damon_target_idx=None,
+                 hugepage_size=None):
         self.filter_type = filter_type
         self.matching = _damo_fmt_str.text_to_bool(matching)
         self.memcg_path = memcg_path
         self.allow = _damo_fmt_str.text_to_bool(allow)
         self.address_range = address_range
+        self.hugepage_size = hugepage_size
         if damon_target_idx != None:
             self.damon_target_idx = _damo_fmt_str.text_to_nr(damon_target_idx)
 
