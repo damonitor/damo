@@ -957,7 +957,7 @@ class Damos:
                 filters,
                 None, None)
 
-    def to_kvpairs(self, raw=False, omit_defaults=False):
+    def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
         kv = collections.OrderedDict()
         kv['action'] = self.action
         if is_damos_migrate_action(self.action):
@@ -974,7 +974,7 @@ class Damos:
             for damos_filter in self.filters:
                 filters.append(damos_filter.to_kvpairs(raw))
             kv['filters'] = filters
-        if self.stats != None:
+        if not params_only and self.stats is not None:
             kv['stats'] = self.stats.to_kvpairs(raw)
         return kv
 
