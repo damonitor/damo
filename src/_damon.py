@@ -1122,10 +1122,11 @@ class Kdamond:
                 kv['pid'] if 'pid' in kv else None,
                 [DamonCtx.from_kvpairs(c) for c in kv['contexts']])
 
-    def to_kvpairs(self, raw=False, omit_defaults=False):
+    def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
         kv = collections.OrderedDict()
-        kv['state'] = self.state
-        kv['pid'] = self.pid
+        if not params_only:
+            kv['state'] = self.state
+            kv['pid'] = self.pid
         kv['contexts'] = [c.to_kvpairs(raw, omit_defaults)
                           for c in self.contexts]
         return kv
