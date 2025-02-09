@@ -47,7 +47,8 @@ def main(args):
         old_kdamonds[kdamond_idx] = kdamonds[0]
         kdamonds = old_kdamonds
 
-    kvpairs = {'kdamonds': [k.to_kvpairs(args.raw) for k in kdamonds]}
+    kvpairs = {'kdamonds':
+               [k.to_kvpairs(args.raw, args.omit_defaults) for k in kdamonds]}
     if args.format == 'json':
         text = json.dumps(kvpairs, indent=4)
     elif args.format == 'yaml':
@@ -82,3 +83,5 @@ def set_argparser(parser):
             help='replace a kdamond of given index in the given file')
     parser.add_argument(
             '--out', metavar='<file>', help='save the output to the given file')
+    parser.add_argument( '--omit_defaults', action='store_true',
+                        help='omit default parameters')
