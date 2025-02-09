@@ -957,15 +957,17 @@ class Damos:
                 filters,
                 None, None)
 
-    def to_kvpairs(self, raw=False):
+    def to_kvpairs(self, raw=False, omit_defaults=False):
         kv = collections.OrderedDict()
         kv['action'] = self.action
         if is_damos_migrate_action(self.action):
             kv['target_nid'] = self.target_nid
         kv['access_pattern'] = self.access_pattern.to_kvpairs(raw)
         kv['apply_interval_us'] = self.apply_interval_us
-        kv['quotas'] = self.quotas.to_kvpairs(raw)
-        kv['watermarks'] = self.watermarks.to_kvpairs(raw)
+        if not omit_defaults or self.quotas != DamosQuotaGoal():
+            kv['quotas'] = self.quotas.to_kvpairs(raw)
+        if not omit_defaults or self.watermarks != DamosWatermarks():
+            kv['watermarks'] = self.watermarks.to_kvpairs(raw)
         filters = []
         for damos_filter in self.filters:
             filters.append(damos_filter.to_kvpairs(raw))
