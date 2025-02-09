@@ -6,6 +6,7 @@ import json
 import _damo_yaml
 import _damon
 import _damon_args
+import damo_report_damon
 
 def main(args):
     _damon.ensure_root_permission()
@@ -49,6 +50,14 @@ def main(args):
 
     kvpairs = {'kdamonds':
                [k.to_kvpairs(args.raw, args.omit_defaults) for k in kdamonds]}
+    if args.format == 'report':
+        if args.out is not None:
+            print('--out and report format cannot be used together')
+            exit(1)
+        damo_report_damon.pr_kdamonds(
+                kdamonds, json_format=False, raw_nr=args.raw, show_cpu=False)
+        return
+
     if args.format == 'json':
         text = json.dumps(kvpairs, indent=4)
     elif args.format == 'yaml':
@@ -67,7 +76,7 @@ def set_argparser(parser):
     parser.description = ' '.join([
         'format DAMON parameters'])
     parser.add_argument(
-            '--format', choices=['json', 'yaml'], default='json',
+            '--format', choices=['json', 'yaml', 'report'], default='json',
             help='format of the output')
     parser.add_argument(
             '--raw', action='store_true',
