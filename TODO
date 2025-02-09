@@ -34,6 +34,7 @@
 - Implement an official feature to check if 'damo' supports the system
   - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
 - Automatically translate single allow filter to reject filter
+  - Pending.  Just warning might be sufficient.
 - Support df-passed only snapshot heatmap
 
 - Deprecate old features
