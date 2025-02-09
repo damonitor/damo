@@ -555,7 +555,7 @@ Second, the visualization format supports the page level properties based
 information.  `detailed` and histogram report [styles](#access-report-styles)
 will be automatically extended to show the information when it is included in
 the access pattern.  To make custom format of the reports with the information,
-users can use `<filters passed bytes>` region format keyword and `<filters
+users can use format keywords such as `<filters passed bytes>` and `<filters
 passed type>` snapshot format keywords.  Refer to `damo args accesses_format
 --ls_{region,snapshot}_format_keywords` output for more details.
 
@@ -589,6 +589,11 @@ df-pass: 8888888888888888888888888888898888888888888888888888888888[...]00000000
 16  addr 63.580 GiB   size 295.410 MiB access 0 %   age 30 h 21 m 23 s df-passed 0 B
 total size: 59.868 GiB  df-passed: 2.902 MiB
 ```
+
+The line starting with `df-pass:` shows the access snapshot heatmap for regions
+that having the filters passed.  Regions that not having the filters passed are
+represented as a gap (`[...]`).  Note that the heatmap is in experimental
+support now.
 
 ### `--damos_filter` Option Format
 
