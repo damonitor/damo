@@ -1054,8 +1054,10 @@ class DamonCtx:
         kv = collections.OrderedDict({})
         kv['ops'] = self.ops
         kv['targets'] = [t.to_kvpairs(raw) for t in self.targets]
-        kv['intervals'] = self.intervals.to_kvpairs(raw)
-        kv['nr_regions'] = self.nr_regions.to_kvpairs(raw)
+        if not omit_defaults or self.intervals != DamonIntervals():
+            kv['intervals'] = self.intervals.to_kvpairs(raw)
+        if not omit_defaults or self.nr_regions != DamonNrRegionsRange():
+            kv['nr_regions'] = self.nr_regions.to_kvpairs(raw)
         kv['schemes'] = [s.to_kvpairs(raw, omit_defaults)
                          for s in self.schemes]
         return kv
