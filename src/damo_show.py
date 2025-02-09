@@ -46,8 +46,7 @@ def main(args):
         fmt = damo_report_access.ReportFormat.from_kvpairs(
                 json.loads(fmt_string))
     else:
-        fmt = damo_report_access.set_formats(args)
-    fmt.runtime_update(records)
+        fmt = damo_report_access.set_formats(args, records)
     for record in records:
         try:
             damo_report_access.pr_records(fmt, records)
