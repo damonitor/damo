@@ -1057,6 +1057,7 @@ def set_formats(args, records):
             fmt.format_snapshot_head = 'heatmap: <heatmap>'
     if '<filters passed bytes>' in fmt.format_region:
         fmt.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
+        fmt.format_snapshot_head += '\ndf-pass: <filters passed heatmap>'
 
     return fmt
 
