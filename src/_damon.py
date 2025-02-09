@@ -962,16 +962,18 @@ class Damos:
         kv['action'] = self.action
         if is_damos_migrate_action(self.action):
             kv['target_nid'] = self.target_nid
-        kv['access_pattern'] = self.access_pattern.to_kvpairs(raw)
+        if not omit_defaults or self.access_pattern != DamosAccessPattern():
+            kv['access_pattern'] = self.access_pattern.to_kvpairs(raw)
         kv['apply_interval_us'] = self.apply_interval_us
         if not omit_defaults or self.quotas != DamosQuotas():
             kv['quotas'] = self.quotas.to_kvpairs(raw)
         if not omit_defaults or self.watermarks != DamosWatermarks():
             kv['watermarks'] = self.watermarks.to_kvpairs(raw)
-        filters = []
-        for damos_filter in self.filters:
-            filters.append(damos_filter.to_kvpairs(raw))
-        kv['filters'] = filters
+        if not omit_defaults or self.filters != []:
+            filters = []
+            for damos_filter in self.filters:
+                filters.append(damos_filter.to_kvpairs(raw))
+            kv['filters'] = filters
         if self.stats != None:
             kv['stats'] = self.stats.to_kvpairs(raw)
         return kv
