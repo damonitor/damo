@@ -116,6 +116,10 @@ snapshot_formatters = [
                   lambda snapshot, record, fmt:
                   heatmap_str(snapshot, record, fmt),
                   'heatmap of the snapshot'),
+        Formatter('<filters passed heatmap>',
+                  lambda snapshot, record, fmt:
+                  df_passed_heatmap_str(snapshot, record, fmt),
+                  'heatmap of the snapshot for filter-passed regions'),
         Formatter(
             '<filters passed type>',
             lambda snapshot, record, fmt: filters_pass_type_of(record),
@@ -446,6 +450,19 @@ def heatmap_str(snapshot, record, fmt):
             _damo_fmt_str.format_nr(max_temperature, raw),
             _damo_fmt_str.format_sz(sz_unit, raw))
     return '%s\n%s' % (dots, comment)
+
+def df_passed_heatmap_str(snapshot, record, fmt):
+    regions = []
+    for region in snapshot.regions:
+        cp_region = copy.deepcopy(region)
+        if region.sz_filter_passed == 0:
+            continue
+        regions.append(cp_region)
+    return heatmap_str(
+            _damo_records.DamonSnapshot(
+                snapshot.start_time, snapshot.end_time, regions,
+                total_bytes=None),
+            record, fmt)
 
 def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
     '''Return a value in new scale
