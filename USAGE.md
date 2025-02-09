@@ -1204,6 +1204,14 @@ The output can be saved in a file instead of printing using `--out` option.  To
 read the output in more human-friendly way,
 [`damo report damon`](#damo-report-damon) can be used.
 
+#### report format
+
+The command also supports `report` format, which is similar to the output of
+[`damo report damon`](#damo-report-damon).  The format is for human users who
+feels `json` or even `yaml` format outputs being too verbose or difficult to
+read.  It means it is not for machines, and therefore cannot feed to other damo
+commands.
+
 #### Multiple kdamonds
 
 Note: This is an experimental feature at the moment.  Some changes could be
