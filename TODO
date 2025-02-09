@@ -43,11 +43,11 @@
   - Deprecate 'damo report raw'
     - notified as will-be-deprecated by 2025-01-27
   - Deprecate 'damo status'
-    - notified as will-be-deprecated by 2025-01-20
+    - notified as will-be-removed by 2025-02-26
   - Deprecate 'damo show'
-    - notified as will-be-deprecated by 2025-01-20
+    - notified as will-be-deprecated by 2025-02-26
   - Deprecate heats report type in favor of heatmap report type
-    - notified as will-be-deprecated by 2025-01-20
+    - notified as will-be-deprecated by 2025-02-26
   - Deprecate translate_damos (done.)
   - Deprecate single line per-scheme (done.  code moved to _damon_deprecated)
   - Deprecate v1-v3 schemes (done.  necessary code moved to _damon_deprecated)
