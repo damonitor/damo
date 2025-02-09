@@ -36,6 +36,8 @@
 - Automatically translate single allow filter to reject filter
   - Pending.  Just warning might be sufficient.
 - Support df-passed only snapshot heatmap
+- Support incomplete json/yaml DAMON parameters
+  https://github.com/damonitor/damo/issues/10
 
 - Deprecate old features
   - Deprecate 'damo report raw'
