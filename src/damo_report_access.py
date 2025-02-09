@@ -210,7 +210,10 @@ def filters_pass_type_of(record):
     ops_filters = [f for f in record.scheme_filters if f.handled_by_ops()]
     if len(ops_filters) == 0:
         return 'n/a'
-    return ', '.join(['%s' % f for f in ops_filters])
+    text = ', '.join(['%s' % f for f in ops_filters])
+    if ops_filters[-1].allow is True:
+        text += '\n# WARN: Allow filters at the end of the list means nothing'
+    return text
 
 def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
