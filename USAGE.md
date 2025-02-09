@@ -564,22 +564,30 @@ in regiosn of different access patterns, like below:
 
 ```
 $ sudo damo start
-$ sudo damo report access --snapshot_damos_dfilter anon nomatching block \
-                          --snapshot_damos_filter young matching pass
-heatmap: 99987777777775555555554333333333211111111111111111100000000000000000000000000000
-# min/max temperatures: -331,964,554,010, -73,070,000,000, column size: 644.727 MiB
-# damos filters (df): block file-backed pages, pass young pages
-0   addr 13.499 GiB   size 2.379 GiB   access 0 %   age 12 m 10.700 s df-passed 1.617 MiB
-1   addr 15.877 GiB   size 5.948 GiB   access 0 %   age 20 m 53.500 s df-passed 0 B
-2   addr 21.825 GiB   size 5.979 GiB   access 0 %   age 30 m 49.600 s df-passed 0 B
-3   addr 27.804 GiB   size 5.971 GiB   access 0 %   age 39 m 42.700 s df-passed 0 B
-4   addr 33.775 GiB   size 5.965 GiB   access 0 %   age 46 m 14.200 s df-passed 0 B
-5   addr 39.740 GiB   size 5.933 GiB   access 0 %   age 50 m 23.700 s df-passed 0 B
-6   addr 45.673 GiB   size 5.935 GiB   access 0 %   age 53 m 3.800 s  df-passed 0 B
-7   addr 51.607 GiB   size 5.983 GiB   access 0 %   age 54 m 31.800 s df-passed 0 B
-8   addr 57.590 GiB   size 5.986 GiB   access 0 %   age 55 m 13.900 s df-passed 1.371 MiB
-9   addr 63.576 GiB   size 298.734 MiB access 0 %   age 55 m 26.300 s df-passed 0 B
-total size: 50.369 GiB
+$ sudo ./damo report access --snapshot_damos_filter reject none anon reject none young
+heatmap: 99999998888888884444444422222222111111111111111000000000000000000000000000000000
+# min/max temperatures: -10,873,676,710,759, -143,980,000,000, column size: 766.312 MiB
+# damos filters (df): reject none anon, reject none young
+df-pass: 8888888888888888888888888888898888888888888888888888888888[...]000000000000005[...]000000002
+# min/max temperatures: -10,839,410,000,000, -87,800,866,934, column size: 211.892 MiB
+0   addr 4.000 GiB    size 2.511 GiB   access 0 %   age 23 m 59.800 s df-passed 260.000 KiB
+1   addr 6.511 GiB    size 1.674 GiB   access 0 %   age 23 m 59.800 s df-passed 220.000 KiB
+2   addr 8.184 GiB    size 1.793 GiB   access 0 %   age 23 m 59.800 s df-passed 2.160 MiB
+3   addr 9.977 GiB    size 183.910 MiB access 0 %   age 59 m 43.500 s df-passed 0 B
+4   addr 10.157 GiB   size 1.616 GiB   access 0 %   age 59 m 43.500 s df-passed 140.000 KiB
+5   addr 11.773 GiB   size 4.191 GiB   access 0 %   age 59 m 43.500 s df-passed 92.000 KiB
+6   addr 15.964 GiB   size 5.932 GiB   access 0 %   age 16 h 7 m 50.700 s df-passed 0 B
+7   addr 21.896 GiB   size 5.945 GiB   access 0 %   age 20 h 44 m 50.100 s df-passed 0 B
+8   addr 27.841 GiB   size 5.959 GiB   access 0 %   age 24 h 3 m 6.100 s df-passed 0 B
+9   addr 33.800 GiB   size 5.944 GiB   access 0 %   age 26 h 45 m 45.100 s df-passed 0 B
+10  addr 39.744 GiB   size 5.966 GiB   access 0 %   age 27 h 59 m 18.900 s df-passed 0 B
+11  addr 45.709 GiB   size 2.974 GiB   access 0 %   age 28 h 49 m 4 s df-passed 0 B
+12  addr 48.683 GiB   size 2.974 GiB   access 0 %   age 28 h 49 m 4 s df-passed 4.000 KiB
+13  addr 51.657 GiB   size 5.937 GiB   access 0 %   age 29 h 34 m 26 s df-passed 0 B
+14  addr 57.594 GiB   size 4.190 GiB   access 0 %   age 30 h 6 m 34.100 s df-passed 0 B
+15  addr 61.784 GiB   size 1.796 GiB   access 0 %   age 30 h 6 m 34.100 s df-passed 44.000 KiB
+16  addr 63.580 GiB   size 295.410 MiB access 0 %   age 30 h 21 m 23 s df-passed 0 B
+total size: 59.868 GiB  df-passed: 2.902 MiB
 ```
 
 ### `--damos_filter` Option Format
