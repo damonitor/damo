@@ -49,7 +49,8 @@ def main(args):
         kdamonds = old_kdamonds
 
     kvpairs = {'kdamonds':
-               [k.to_kvpairs(args.raw, args.omit_defaults) for k in kdamonds]}
+               [k.to_kvpairs(args.raw, args.omit_defaults, params_only=True)
+                for k in kdamonds]}
     if args.format == 'report':
         if args.out is not None:
             print('--out and report format cannot be used together')
