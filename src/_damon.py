@@ -100,14 +100,15 @@ class DamonIntervals:
                 kvpairs['ops_update_us'],
                 DamonIntervalsGoal.from_kvpairs(kvpairs['intervals_goal']))
 
-    def to_kvpairs(self, raw=False):
-        return collections.OrderedDict([
+    def to_kvpairs(self, raw=False, omit_defaults=False):
+        kvp = collections.OrderedDict([
             ('sample_us', _damo_fmt_str.format_time_us(self.sample, raw)),
             ('aggr_us', _damo_fmt_str.format_time_us(self.aggr, raw)),
             ('ops_update_us',
-                _damo_fmt_str.format_time_us(self.ops_update, raw)),
-            ('intervals_goal', self.intervals_goal.to_kvpairs(raw)),
-            ])
+                _damo_fmt_str.format_time_us(self.ops_update, raw))])
+        if not omit_defaults or self.intervals_goal != DamonIntervalsGoal():
+            kvp['intervals_goal'] = self.intervals_goal.to_kvpairs(raw)
+        return kvp
 
 class DamonNrRegionsRange:
     minimum = None
