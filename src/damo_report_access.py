@@ -195,7 +195,7 @@ default_record_head_format = 'kdamond <kdamond index> / context <context index> 
 default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<duration>)\n<heatmap>'
 default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
-default_snapshot_tail_format = 'total size: <total bytes>'
+default_snapshot_tail_format = 'memory bw estimate: <estimated memory bandwidth>\ntotal size: <total bytes>'
 
 def filters_passed_bytes(snapshot, fmt):
     bytes = 0
