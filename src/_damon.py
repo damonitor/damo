@@ -1050,7 +1050,7 @@ class DamonCtx:
                     if 'schemes' in kv else [])
         return ctx
 
-    def to_kvpairs(self, raw=False, omit_defaults=False):
+    def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
         kv = collections.OrderedDict({})
         kv['ops'] = self.ops
         kv['targets'] = [t.to_kvpairs(raw) for t in self.targets]
@@ -1058,7 +1058,7 @@ class DamonCtx:
             kv['intervals'] = self.intervals.to_kvpairs(raw)
         if not omit_defaults or self.nr_regions != DamonNrRegionsRange():
             kv['nr_regions'] = self.nr_regions.to_kvpairs(raw)
-        kv['schemes'] = [s.to_kvpairs(raw, omit_defaults)
+        kv['schemes'] = [s.to_kvpairs(raw, omit_defaults, params_only)
                          for s in self.schemes]
         return kv
 
@@ -1127,7 +1127,7 @@ class Kdamond:
         if not params_only:
             kv['state'] = self.state
             kv['pid'] = self.pid
-        kv['contexts'] = [c.to_kvpairs(raw, omit_defaults)
+        kv['contexts'] = [c.to_kvpairs(raw, omit_defaults, params_only)
                           for c in self.contexts]
         return kv
 
