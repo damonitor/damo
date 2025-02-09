@@ -964,7 +964,7 @@ class Damos:
             kv['target_nid'] = self.target_nid
         kv['access_pattern'] = self.access_pattern.to_kvpairs(raw)
         kv['apply_interval_us'] = self.apply_interval_us
-        if not omit_defaults or self.quotas != DamosQuotaGoal():
+        if not omit_defaults or self.quotas != DamosQuotas():
             kv['quotas'] = self.quotas.to_kvpairs(raw)
         if not omit_defaults or self.watermarks != DamosWatermarks():
             kv['watermarks'] = self.watermarks.to_kvpairs(raw)
@@ -1048,13 +1048,14 @@ class DamonCtx:
                     if 'schemes' in kv else [])
         return ctx
 
-    def to_kvpairs(self, raw=False):
+    def to_kvpairs(self, raw=False, omit_defaults=False):
         kv = collections.OrderedDict({})
         kv['ops'] = self.ops
         kv['targets'] = [t.to_kvpairs(raw) for t in self.targets]
         kv['intervals'] = self.intervals.to_kvpairs(raw)
         kv['nr_regions'] = self.nr_regions.to_kvpairs(raw)
-        kv['schemes'] = [s.to_kvpairs(raw) for s in self.schemes]
+        kv['schemes'] = [s.to_kvpairs(raw, omit_defaults)
+                         for s in self.schemes]
         return kv
 
 def target_has_pid(ops):
@@ -1117,11 +1118,12 @@ class Kdamond:
                 kv['pid'] if 'pid' in kv else None,
                 [DamonCtx.from_kvpairs(c) for c in kv['contexts']])
 
-    def to_kvpairs(self, raw=False):
+    def to_kvpairs(self, raw=False, omit_defaults=False):
         kv = collections.OrderedDict()
         kv['state'] = self.state
         kv['pid'] = self.pid
-        kv['contexts'] = [c.to_kvpairs(raw) for c in self.contexts]
+        kv['contexts'] = [c.to_kvpairs(raw, omit_defaults)
+                          for c in self.contexts]
         return kv
 
 import _damo_fs
