@@ -5,6 +5,8 @@ v2.6.7
 - Support monitoring intervals auto-tuning goal ('--monitoring_intervals_goal')
 - Visualize DAMOS filters passed regions heatmap
 - Warn allow filters usage without reject filters after that
+- Add '--omit_defaults' option to 'damo args damon'
+- Omit non-parameters from 'damo args damon' outputs
 
 v2.6.6
 - Improve multiple kdamonds parameters edit
