@@ -1143,49 +1143,11 @@ more details.  This section will be removed by 2025-02-26.
 
 ### `damo report raw`
 
-`damo report raw` will be deprecated by 2025-01-27, in favor of [`damo report
-access --raw_form`](#damo-report-access-raw-form).  `damo report access
---raw_form` can replace all usages of `damo report raw'.  Please refer to
+`damo report heats` is deprecated in favor of [`damo report access
+--raw_form`](#damo-report-access), which can can replace all usages of `damo
+report raw'.  Please refer to
 [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
-more details.
-
-`raw` sub-subcommand directly transforms the recorded access monitoring results
-into a human-readable text.  Unlike 'damo report access', this report type
-doesn't support self snapshot of DAMON's monitoring results, as of this
-writing.  Users should provide 'damo record'-generated files as data source
-using `--input` option.  It is `damon.data` by default.  For example:
-
-    $ damo report raw
-    base_time_absolute: 8 m 59.809 s
-
-    monitoring_start:                0 ns
-    monitoring_end:            104.599 ms
-    monitoring_duration:       104.599 ms
-    target_id: 18446623438842320000
-    nr_regions: 3
-    563ebaa00000-563ebc99e000(  31.617 MiB):        1
-    7f938d7e1000-7f938ddfc000(   6.105 MiB):        0
-    7fff66b0a000-7fff66bb2000( 672.000 KiB):        0
-
-    monitoring_start:          104.599 ms
-    monitoring_end:            208.590 ms
-    monitoring_duration:       103.991 ms
-    target_id: 18446623438842320000
-    nr_regions: 4
-    563ebaa00000-563ebc99e000(  31.617 MiB):        1
-    7f938d7e1000-7f938d9b5000(   1.828 MiB):        0
-    7f938d9b5000-7f938ddfc000(   4.277 MiB):        0
-    7fff66b0a000-7fff66bb2000( 672.000 KiB):        5
-
-The first line shows the recording started timestamp (`base_time_absolute`).
-Records of data access patterns follow.  Each record is separated by a blank
-line.  Each record first specifies when the record started (`monitoring_start`)
-and ended (`monitoring_end`) relative to the start time, the duration for the
-recording (`monitoring_duration`).  Recorded data access patterns of each
-target follow.  Each data access pattern for each task shows the target's id
-(``target_id``) and a number of monitored address regions in this access
-pattern (``nr_regions``) first.  After that, each line shows the start/end
-address, size, and the number of observed accesses of each region.
+more details.  This section will be removed by 2025-03-09.
 
 Miscellaneous Helper Commands
 =============================

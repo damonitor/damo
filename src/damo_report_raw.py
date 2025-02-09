@@ -50,8 +50,8 @@ def set_argparser(parser):
     parser.description='Show raw data of the monitoring results record file'
 
 def main(args):
-    _damo_deprecation_notice.will_be_deprecated(
-            feature='"damo report raw"', deadline='2025-01-27',
+    _damo_deprecation_notice.deprecated(
+            feature='"damo report raw"', deadline='2025-03-09',
             additional_notice='Use "damo report access --raw_form" instead.')
 
     file_path = args.input
