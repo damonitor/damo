@@ -7,6 +7,8 @@ v2.6.7
 - Warn allow filters usage without reject filters after that
 - Add '--omit_defaults' option to 'damo args damon'
 - Omit non-parameters from 'damo args damon' outputs
+- damo report access: add '<estimated memory bandwidth>' snapshot format keyword
+  - show it by default
 
 v2.6.6
 - Improve multiple kdamonds parameters edit
