@@ -408,6 +408,11 @@ def parse_records_file(record_file, monitoring_intervals=None):
     Return monitoring results records and error string
     '''
 
+    try:
+        subprocess.check_output(['which', 'file'], stderr=subprocess.DEVNULL)
+    except:
+        return None, "'file' command seems not installed"
+
     file_type = subprocess.check_output(
             ['file', '-b', record_file]).decode().strip()
     if file_type == 'JSON data':
