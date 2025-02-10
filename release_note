@@ -3,12 +3,12 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.6.7
 - Support monitoring intervals auto-tuning goal ('--monitoring_intervals_goal')
+- damo report access: add '<estimated memory bandwidth>' snapshot format keyword
+  - show it by default
 - Visualize DAMOS filters passed regions heatmap
 - Warn allow filters usage without reject filters after that
 - Add '--omit_defaults' option to 'damo args damon'
 - Omit non-parameters from 'damo args damon' outputs
-- damo report access: add '<estimated memory bandwidth>' snapshot format keyword
-  - show it by default
 
 v2.6.6
 - Improve multiple kdamonds parameters edit
