@@ -126,7 +126,7 @@ def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
         except Exception as e:
             return None, 'target filter creation failed (%s, %s)' % (
                     optional_words[0], e), 0
-    elif ftype == 'hugepage':
+    elif ftype == 'hugepage_size':
         if len(optional_words) < 2:
             return None, 'no range for hugepage sizes is given', 0
         try:
