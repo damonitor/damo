@@ -493,7 +493,8 @@ def deduced_target_type(target):
     if target in ['vaddr', 'paddr', 'fvaddr']:
         return target_type_explicit
     try:
-        subprocess.check_output(['which', target.split()[0]])
+        subprocess.check_output(['which', target.split()[0]],
+                                stderr=subprocess.DEVNULL)
         return target_type_cmd
     except:
         pass
