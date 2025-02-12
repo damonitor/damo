@@ -165,9 +165,9 @@ Visualizing Recorded Patterns
 Below three commands visualize the recorded access patterns into three
 image files.
 
-    $ damo report heatmap
-    $ damo report wss --range 0 101 1
-    $ damo report wss --range 0 101 1 --sortby time --plot
+    $ damo report heatmap --output access_pattern_heatmap.png
+    $ damo report wss --range 0 101 1 --plot wss_dist.png
+    $ damo report wss --range 0 101 1 --sortby time --plot wss_chron_change.png
 
 - ``access_pattern_heatmap.png`` will show the data access pattern in a
   heatmap, which shows when (x-axis) what memory region (y-axis) is how
@@ -176,13 +176,11 @@ image files.
 - ``wss_chron_change.png`` will show how the working set size has
   chronologically changed.
 
-You can show the images on a web page [1].  Those made with other realistic
-workloads are also available [2,3,4].
+Those similarly made with other realistic workloads are available [1,2,3].
 
-[1] https://damonitor.github.io/doc/html/latest/admin-guide/mm/damon/start.html#visualizing-recorded-patterns<br>
-[2] https://damonitor.github.io/test/result/visual/latest/rec.heatmap.1.png.html<br>
-[3] https://damonitor.github.io/test/result/visual/latest/rec.wss_sz.png.html<br>
-[4] https://damonitor.github.io/test/result/visual/latest/rec.wss_time.png.html
+[1] https://damonitor.github.io/test/result/visual/latest/rec.heatmap.1.png.html<br>
+[2] https://damonitor.github.io/test/result/visual/latest/rec.wss_sz.png.html<br>
+[3] https://damonitor.github.io/test/result/visual/latest/rec.wss_time.png.html
 
 
 Data Access Pattern Aware Memory Management
