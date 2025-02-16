@@ -145,8 +145,8 @@ def damos_options_to_filter_v2(words):
     '''
     if len(words) < 2:
         return None, 'wrong number of words: %s' % words, 0
-    if not words[0] in ['allow', 'reject']:
-        return None, 'first word should be allow or reject', 0
+    if not words[0] in ['allow', 'reject', 'deny', 'block']:
+        return None, 'unsupported allow-reject idntifier: %s' % words[0], 0
     allow = words[0] == 'allow'
     nr_consumed_words = 1
     word = words[nr_consumed_words]
@@ -187,7 +187,7 @@ def convert_damos_filter_v1_to_v2(filter_args):
     if len(optional_args) == 0:
         allow_reject = 'reject'
     else:
-        if optional_args[-1] in ['allow', 'pass', 'reject', 'block']:
+        if optional_args[-1] in ['allow', 'pass', 'reject', 'deny', 'block']:
             if optional_args[-1] in ['allow', 'pass']:
                 allow_reject = 'allow'
             else:
