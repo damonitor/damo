@@ -137,7 +137,7 @@ def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
         return _damon.DamosFilter(ftype, fmatching, allow=allow,
                                   hugepage_size=hugepage_size), None, 2
 
-        return None, 'unsupported filter type', 0
+    return None, 'unsupported filter type', 0
 
 def damos_options_to_filter_v2(words):
     '''
