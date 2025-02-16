@@ -1190,6 +1190,8 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
             'schemes_migrate',          # merged in v6.11-rc1
             'sz_ops_filter_passed',     # merged in v6.14-rc1
             'allow_filter',             # merged in v6.14-rc1
+            'schemes_filters_hugepage_size',
+                                        # merged in v6.14-rc1
             'intervals_goal',           # under development
             ]
 
