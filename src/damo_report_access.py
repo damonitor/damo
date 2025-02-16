@@ -5,6 +5,7 @@ import copy
 import json
 import math
 import os
+import time
 
 import _damo_ascii_color
 import _damo_fmt_str
@@ -1134,11 +1135,7 @@ def translate_records_to_cache_space(records, cs, cw, cl):
             snapshot.regions = translate_regions_to_cache_space(
                     snapshot.regions, cache_spec)
 
-def main(args):
-    handled = handle_ls_keywords(args)
-    if handled:
-        return
-
+def read_and_show(args):
     record_filter, err = _damo_records.args_to_filter(args)
     if err != None:
         print(err)
@@ -1156,43 +1153,61 @@ def main(args):
         print('wrong --snapshot_damos_filter (%s)' % err)
         exit(1)
 
-    records, err = _damo_records.get_records(
-                tried_regions_of=args.tried_regions_of,
-                record_file=args.input_file, snapshot_damos_filters=dfilters,
-                record_filter=record_filter,
-                total_sz_only=args.total_sz_only,
-                dont_merge_regions=args.dont_merge_regions)
-    if err != None:
-        print(err)
-        exit(1)
-
-    if len([r for r in records if r.intervals is None]) != 0:
-        if not args.json and not args.raw_form:
-            print('some records lack the intervals information')
+    if args.repeat is None:
+        repeat_delay = 0
+        repeat_count = 1
+    else:
+        repeat_delay = _damo_fmt_str.text_to_sec(args.repeat[0])
+        repeat_count = _damo_fmt_str.text_to_nr(args.repeat[1])
+    read_show_count = 0
+    while read_show_count < repeat_count:
+        records, err = _damo_records.get_records(
+                    tried_regions_of=args.tried_regions_of,
+                    record_file=args.input_file, snapshot_damos_filters=dfilters,
+                    record_filter=record_filter,
+                    total_sz_only=args.total_sz_only,
+                    dont_merge_regions=args.dont_merge_regions)
+        if err != None:
+            print(err)
             exit(1)
 
-    if args.format is not None:
-        fmt_string = args.format
-        if os.path.isfile(fmt_string):
-            with open(fmt_string, 'r') as f:
-                fmt_string = f.read()
-        fmt = ReportFormat.from_kvpairs(json.loads(fmt_string))
-    else:
-        fmt = set_formats(args, records)
+        if len([r for r in records if r.intervals is None]) != 0:
+            if not args.json and not args.raw_form:
+                print('some records lack the intervals information')
+                exit(1)
 
-    if args.on_cache is not None:
-        sz_cache = _damo_fmt_str.text_to_bytes(args.on_cache[0])
-        ways_cache = _damo_fmt_str.text_to_nr(args.on_cache[1])
-        sz_cache_line = _damo_fmt_str.text_to_bytes(args.on_cache[2])
-        translate_records_to_cache_space(
-                records, sz_cache, ways_cache, sz_cache_line)
+        if args.format is not None:
+            fmt_string = args.format
+            if os.path.isfile(fmt_string):
+                with open(fmt_string, 'r') as f:
+                    fmt_string = f.read()
+            fmt = ReportFormat.from_kvpairs(json.loads(fmt_string))
+        else:
+            fmt = set_formats(args, records)
 
-    for record in records:
-        try:
-            pr_records(fmt, records)
-        except BrokenPipeError as e:
-            # maybe user piped to 'less' like pager, and quit from it
-            pass
+        if args.on_cache is not None:
+            sz_cache = _damo_fmt_str.text_to_bytes(args.on_cache[0])
+            ways_cache = _damo_fmt_str.text_to_nr(args.on_cache[1])
+            sz_cache_line = _damo_fmt_str.text_to_bytes(args.on_cache[2])
+            translate_records_to_cache_space(
+                    records, sz_cache, ways_cache, sz_cache_line)
+
+        for record in records:
+            try:
+                pr_records(fmt, records)
+            except BrokenPipeError as e:
+                # maybe user piped to 'less' like pager, and quit from it
+                pass
+
+        time.sleep(repeat_delay)
+        read_show_count += 1
+
+def main(args):
+    handled = handle_ls_keywords(args)
+    if handled:
+        return
+
+    read_and_show(args)
 
 def add_fmt_args(parser, hide_help=False):
     # how to show, in simple selection
@@ -1348,3 +1363,6 @@ def set_argparser(parser):
             '--on_cache', nargs=3,
             metavar=('<cache size>', '<cache ways>', '<cache line size>'),
             help='visualize access patterns on a virtual cache (EXPERIMENTAL)')
+    parser.add_argument(
+            '--repeat', nargs=2, metavar=('<delay>', '<count>'),
+            help='repeat <count> times with <delay> time interval')
