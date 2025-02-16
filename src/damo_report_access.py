@@ -205,6 +205,7 @@ default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<dur
 default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
 default_snapshot_tail_format = 'memory bw estimate: <estimated memory bandwidth>\ntotal size: <total bytes>'
+default_snapshot_tail_format_filter_installed = 'memory bw estimate: <estimated memory bandwidth>  df-passed: <filters passed estimated memory bandwidth>\ntotal size: <total bytes>  df-passed <filters passed bytes>'
 
 def filters_passed_bytes(snapshot, fmt):
     bytes = 0
@@ -1068,7 +1069,7 @@ def set_formats(args, records):
     if fmt.format_snapshot_tail == default_snapshot_tail_format:
         for record in records:
             if len(record.scheme_filters) > 0:
-                fmt.format_snapshot_tail += '  df-passed: <filters passed bytes>'
+                fmt.format_snapshot_tail = default_snapshot_tail_format_filter_installed
                 break
 
     if fmt.format_snapshot_head == None:
