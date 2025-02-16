@@ -5,6 +5,7 @@ import copy
 import json
 import math
 import os
+import signal
 import time
 
 import _damo_ascii_color
@@ -1135,6 +1136,13 @@ def translate_records_to_cache_space(records, cs, cw, cl):
             snapshot.regions = translate_regions_to_cache_space(
                     snapshot.regions, cache_spec)
 
+signal_received = False
+
+def sighandler(signum, frame):
+    global signal_received
+    print('\nsignal %s received' % signum)
+    signal_received = True
+
 def read_and_show(args):
     record_filter, err = _damo_records.args_to_filter(args)
     if err != None:
@@ -1166,8 +1174,13 @@ def read_and_show(args):
         print('--repeat receives only zero or two arguments')
         exit(1)
 
+    signal.signal(signal.SIGINT, sighandler)
+    global signal_received
+
     read_show_count = 0
     while read_show_count < repeat_count or repeat_count == -1:
+        if signal_received is True:
+            break
         records, err = _damo_records.get_records(
                     tried_regions_of=args.tried_regions_of,
                     record_file=args.input_file, snapshot_damos_filters=dfilters,
@@ -1177,6 +1190,8 @@ def read_and_show(args):
         if err != None:
             print(err)
             exit(1)
+        if signal_received is True:
+            break
 
         if len([r for r in records if r.intervals is None]) != 0:
             if not args.json and not args.raw_form:
