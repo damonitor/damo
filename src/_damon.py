@@ -1189,8 +1189,6 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
             'schemes_filters_young',    # merged in v6.10-rc1
             'schemes_migrate',          # merged in v6.11-rc1
             'sz_ops_filter_passed',     # merged in mainline
-            'pass_filter',              # was developing, renamed to
-                                        # pass_filter after v1 patch
             'allow_filter',             # merged in mainline
             'intervals_goal',           # under development
             ]

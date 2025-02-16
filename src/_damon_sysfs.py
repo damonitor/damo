@@ -931,9 +931,6 @@ def update_supported_features():
         feature_supports['sz_ops_filter_passed'] = True
 
     if os.path.isfile(
-            os.path.join(scheme_dir_of(0, 0, 0), 'filters', '0', 'pass')):
-        feature_supports['pass_filter'] = True
-    if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0), 'filters', '0', 'allow')):
         feature_supports['allow_filter'] = True
 
