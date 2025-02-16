@@ -18,6 +18,7 @@ except ModuleNotFoundError as e:
     pass
 
 import _damo_paddr_layout
+import _damo_subproc
 import _damon
 
 # Kdamonds construction from command line arguments
@@ -492,11 +493,9 @@ target_type_unknown = None
 def deduced_target_type(target):
     if target in ['vaddr', 'paddr', 'fvaddr']:
         return target_type_explicit
-    try:
-        subprocess.check_output(['which', target.split()[0]],
-                                stderr=subprocess.DEVNULL)
+    if _damo_subproc.avail_cmd(target.split()[0]):
         return target_type_cmd
-    except:
+    else:
         pass
     try:
         pid = int(target)
