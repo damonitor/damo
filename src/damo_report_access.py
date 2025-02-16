@@ -141,6 +141,13 @@ snapshot_formatters = [
                 lambda snapshot, record, fmt:
                 estimated_mem_bw(snapshot, record, fmt),
                 'estimated memory bandwidth'),
+        Formatter(
+                '<filters passed estimated memory bandwidth>',
+                lambda snapshot, record, fmt:
+                estimated_mem_bw(snapshot, record, fmt,
+                                 filter_passed_only=True),
+                'estimated memory bandwidth'),
+
         ]
 
 region_formatters = [
@@ -217,10 +224,14 @@ def positive_access_sample_ratio(snapshot, record, fmt):
     return _damo_fmt_str.format_percent(
             nr_samples * 100 / max_samples, fmt.raw_number)
 
-def estimated_mem_bw(snapshot, record, fmt):
+def estimated_mem_bw(snapshot, record, fmt, filter_passed_only=False):
     access_bytes = 0
     for region in snapshot.regions:
-        access_bytes += region.size() * region.nr_accesses.samples
+        if filter_passed_only is True:
+            bytes = region.sz_filter_passed
+        else:
+            bytes = region.size()
+        access_bytes += bytes * region.nr_accesses.samples
     bw_per_sec = access_bytes / (record.intervals.aggr / 1000000)
     return '%s per second' % _damo_fmt_str.format_sz(
             bw_per_sec, fmt.raw_number)
