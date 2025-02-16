@@ -1062,6 +1062,14 @@ def set_formats(args, records):
         fmt.region_box_align = 'right'
         fmt.region_box_colorset = 'emotion'
         fmt.sort_regions_by = ['temperature']
+    elif args.style == 'hot':
+        fmt.format_region = '<box> <size> access <access rate> <age>'
+        fmt.region_box_min_max_height = [1, 1]
+        fmt.region_box_min_max_length = [1, 40]
+        fmt.region_box_align = 'right'
+        fmt.region_box_colorset = 'emotion'
+        fmt.sort_regions_by = ['temperature']
+        fmt.sort_regions_dsc = ['temperature']
 
     fmt.region_box_values = [v if v != 'none' else None
             for v in args.region_box_values]
@@ -1277,7 +1285,7 @@ def add_fmt_args(parser, hide_help=False):
     parser.add_argument(
             '--style', choices=['detailed', 'simple-boxes',
                                 'temperature-sz-hist', 'recency-sz-hist',
-                                'cold'],
+                                'cold', 'hot'],
             default='detailed',
             help='output format selection among pre-configures ones')
     # how to show, in highly tunable way
