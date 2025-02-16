@@ -1156,11 +1156,18 @@ def read_and_show(args):
     if args.repeat is None:
         repeat_delay = 0
         repeat_count = 1
-    else:
+    elif len(args.repeat) == 0:
+        repeat_delay = 1
+        repeat_count = -1
+    elif len(args.repeat) == 2:
         repeat_delay = _damo_fmt_str.text_to_sec(args.repeat[0])
         repeat_count = _damo_fmt_str.text_to_nr(args.repeat[1])
+    else:
+        print('--repeat receives only zero or two arguments')
+        exit(1)
+
     read_show_count = 0
-    while read_show_count < repeat_count:
+    while read_show_count < repeat_count or repeat_count == -1:
         records, err = _damo_records.get_records(
                     tried_regions_of=args.tried_regions_of,
                     record_file=args.input_file, snapshot_damos_filters=dfilters,
@@ -1364,5 +1371,5 @@ def set_argparser(parser):
             metavar=('<cache size>', '<cache ways>', '<cache line size>'),
             help='visualize access patterns on a virtual cache (EXPERIMENTAL)')
     parser.add_argument(
-            '--repeat', nargs=2, metavar=('<delay>', '<count>'),
+            '--repeat', nargs='*', metavar=('<delay>', '<count>'),
             help='repeat <count> times with <delay> time interval')
