@@ -130,7 +130,7 @@ every second.
     $ git clone https://github.com/sjp38/masim
     $ cd masim; make; ./masim ./configs/zigzag.cfg --silent &
     $ sudo damo start --target_pid $(pidof masim)
-    $ while :; do sudo damo report access; sleep 1; done
+    $ sudo damo report access --repeat
 
 The first two lines of the commands get an artificial memory access generator
 program and run it in the background.  It will repeatedly access two 100
