@@ -448,7 +448,8 @@ def heatmap_str(snapshot, record, fmt):
             next_region = region_after(end, snapshot.regions)
             if next_region is None:
                 break
-            start = next_region.start
+            start = next_region.start // sz_unit * sz_unit
+            pixels[-1].end = start
         else:
             pixel = pixels[-1]
             if min_temperature is None or pixel.temperature < min_temperature:
@@ -465,7 +466,11 @@ def heatmap_str(snapshot, record, fmt):
     dots = []
     for pixel in pixels:
         if pixel.is_void is True:
-            dots.append('[...]')
+            nr_dots = (pixel.end - pixel.start) / sz_unit
+            if nr_dots > 4:
+                dots.append('[...]')
+            else:
+                dots += ['.'] * int(nr_dots)
             continue
         temp_level = int(
                 (pixel.temperature - min_temperature) / temperature_unit)
