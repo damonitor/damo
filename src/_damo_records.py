@@ -11,6 +11,7 @@ import time
 import zlib
 
 import _damo_fmt_str
+import _damo_subproc
 import _damon
 import _damon_args
 import damo_report_access
@@ -375,8 +376,7 @@ def set_perf_path(perf_path):
 
     # Test perf record for damon event
     err = None
-    try:
-        subprocess.check_output(['which', PERF])
+    if _damo_subproc.avail_cmd(PERF):
         try:
             subprocess.check_output(
                     [PERF, 'record', '-e', perf_event_damon_aggregated, '--',
@@ -384,7 +384,7 @@ def set_perf_path(perf_path):
                     stderr=subprocess.PIPE)
         except:
             err = 'perf record not working with "%s"' % PERF
-    except:
+    else:
         err = 'perf not found at "%s"' % PERF
     return err
 
@@ -408,9 +408,7 @@ def parse_records_file(record_file, monitoring_intervals=None):
     Return monitoring results records and error string
     '''
 
-    try:
-        subprocess.check_output(['which', 'file'], stderr=subprocess.DEVNULL)
-    except:
+    if not _damo_subproc.avail_cmd('file'):
         return None, "'file' command seems not installed"
 
     file_type = subprocess.check_output(
