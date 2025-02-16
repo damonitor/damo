@@ -430,9 +430,13 @@ def heatmap_str(snapshot, record, fmt):
     if len(snapshot.regions) == 0:
         return 'n/a (no region)'
     raw = fmt.raw_number
-    total_sz = 0
-    for region in snapshot.regions:
-        total_sz += region.size()
+    static = fmt.snapshot_heatmap_static
+    if static:
+        total_sz = snapshot.regions[-1].end - snapshot.regions[0].start
+    else:
+        total_sz = 0
+        for region in snapshot.regions:
+            total_sz += region.size()
     map_length = fmt.snapshot_heatmap_width
     sz_unit = total_sz / map_length
 
@@ -467,7 +471,7 @@ def heatmap_str(snapshot, record, fmt):
     for pixel in pixels:
         if pixel.is_void is True:
             nr_dots = (pixel.end - pixel.start) / sz_unit
-            if nr_dots > 4:
+            if not static and nr_dots > 4:
                 dots.append('[...]')
             else:
                 dots += ['.'] * int(nr_dots)
@@ -899,6 +903,7 @@ class ReportFormat:
 
     snapshot_heatmap_width = None
     snapshot_heatmap_colorset = None
+    snapshot_heatmap_static = None
 
     region_box_values = None
     region_box_min_max_height = None
@@ -929,6 +934,7 @@ class ReportFormat:
         self.format_snapshot_tail = args.format_snapshot_tail
         self.format_region = args.format_region
         self.snapshot_heatmap_width = args.snapshot_heatmap_width
+        self.snapshot_heatmap_static = args.snapshot_heatmap_static
         self.snapshot_heatmap_colorset = args.snapshot_heatmap_colorset
         self.region_box_values = args.region_box_values
         self.region_box_min_max_height = args.region_box_min_max_height
@@ -960,6 +966,7 @@ class ReportFormat:
                 'format_snapshot_tail': self.format_snapshot_tail,
                 'format_region': self.format_region,
                 'snapshot_heatmap_width': self.snapshot_heatmap_width,
+                'snapshot_heatmap_static': self.snapshot_heatmap_static,
                 'snapshot_heatmap_colorset': self.snapshot_heatmap_colorset,
                 'region_box_values': self.region_box_values,
                 'region_box_min_max_height': self.region_box_min_max_height,
@@ -994,6 +1001,11 @@ class ReportFormat:
             self.snapshot_heatmap_width = kvpairs['snapshot_heatmap_width']
         else:
             self.snapshot_heatmap_width = 'gray'
+        # snapshot_heatmap_static introduced after v2.6.7
+        if 'snapshot_heatmap_static' in kvpairs:
+            self.snapshot_heatmap_static = kvpairs['snapshot_heatmap_static']
+        else:
+            self.snapshot_heatmap_static = False
         self.region_box_values = kvpairs['region_box_values']
         self.region_box_min_max_height = kvpairs['region_box_min_max_height']
         self.region_box_min_max_length = kvpairs['region_box_min_max_length']
@@ -1306,6 +1318,9 @@ def add_fmt_args(parser, hide_help=False):
             '--snapshot_heatmap_colorset', default='gray',
             choices=_damo_ascii_color.colorsets.keys(),
             help='snapshot heatmap colorset')
+    parser.add_argument(
+            '--snapshot_heatmap_static', action='store_true',
+            help='draw snapshot heatmap as static')
     parser.add_argument('--format_region', metavar='<template>',
                         default=default_region_format,
                         help='output format to show for each memory region'
