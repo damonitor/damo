@@ -866,7 +866,7 @@ def pr_records_raw_form(records, raw_number):
     lines.append('')
     _damo_print.pr_with_pager_if_needed('\n'.join(lines))
 
-def pr_records(fmt, records):
+def pr_records(fmt, records, dont_use_pager):
     if fmt.json:
         _damo_print.pr_with_pager_if_needed(
                 json.dumps([r.to_kvpairs(fmt.raw_number) for r in records],
@@ -874,7 +874,11 @@ def pr_records(fmt, records):
     elif fmt.raw:
         pr_records_raw_form(records, fmt.raw_number)
     else:
-        _damo_print.pr_with_pager_if_needed(fmt_records(fmt, records))
+        to_show = fmt_records(fmt, records)
+        if dont_use_pager:
+            print(to_show)
+        else:
+            _damo_print.pr_with_pager_if_needed(fmt_records(fmt, records))
 
 class ReportFormat:
     sort_regions_by = None
@@ -1228,7 +1232,8 @@ def read_and_show(args):
 
         for record in records:
             try:
-                pr_records(fmt, records)
+                pr_records(fmt, records,
+                           dont_use_pager = args.repeat is not None)
             except BrokenPipeError as e:
                 # maybe user piped to 'less' like pager, and quit from it
                 pass
