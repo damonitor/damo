@@ -940,6 +940,10 @@ def update_supported_features():
                          'monitoring_attrs', 'intervals', 'intervals_goal')):
         feature_supports['intervals_goal'] = True
 
+    if os.path.isdir(
+            os.path.join(scheme_dir_of(0, 0, 0), 'core_filters')):
+        feature_supports['schemes_filters_core_ops_dirs'] = True
+
     avail_ops, err = _avail_ops()
     if err == None:
         for ops in ['vaddr', 'paddr', 'fvaddr']:
