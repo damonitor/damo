@@ -185,6 +185,27 @@ def write_filters_dir(dir_path, filters):
             return err
     return None
 
+def is_core_filter(damos_filter):
+    return damos_filter.filter_type in ['addr', 'target']
+
+def write_core_ops_filters_dirs(scheme_dir_path, filters):
+    core_filters = [f for f in filters if is_core_filter(f)]
+    err = write_filters_dir(os.path.join(scheme_dir_path, 'core_filters'),
+                            core_filters)
+    if err is not None:
+        return err
+
+    ops_filters = [f for f in filters if not is_core_filter(f)]
+    err = write_filters_dir(os.path.join(scheme_dir_path, 'ops_filters'),
+                            ops_filters)
+    if err is not None:
+        return err
+
+def write_filters_dirs(scheme_dir_path, filters):
+    if os.path.isdir(os.path.join(scheme_dir_path, 'core_filters')):
+        return write_core_ops_filters_dirs(scheme_dir_path, filters)
+    return write_filters_dir(os.path.join(scheme_dir_path, 'filters'), filters)
+
 def write_watermarks_dir(dir_path, wmarks):
     if wmarks is None:
         # TODO: ensure wmarks is not None
@@ -340,7 +361,7 @@ def write_scheme_dir(dir_path, scheme):
         if err is not None:
             return err
 
-    err = write_filters_dir(os.path.join(dir_path, 'filters'), scheme.filters)
+    err = write_filters_dirs(dir_path, scheme.filters)
     if err is not None:
         return err
 
@@ -611,10 +632,19 @@ def files_content_to_damos_filter(files_content):
         files_content['damon_target_idx']
         if 'damon_target_idx' in files_content else None)
 
-def files_content_to_damos_filters(files_content):
-    return [files_content_to_damos_filter(filter_kv)
-            for filter_kv in numbered_dirs_content(
-                files_content, 'nr_filters')]
+def files_content_to_damos_filters(scheme_files_content):
+    filters = []
+    if 'core_filters' in scheme_files_content:
+        filters += [files_content_to_damos_filter(filter_kv)
+                    for filter_kv in numbered_dirs_content(
+                        scheme_files_content['core_filters'], 'nr_filters')]
+        filters += [files_content_to_damos_filter(filter_kv)
+                    for filter_kv in numbered_dirs_content(
+                        scheme_files_content['ops_filters'], 'nr_filters')]
+    filters += [files_content_to_damos_filter(filter_kv)
+                for filter_kv in numbered_dirs_content(
+                    scheme_files_content['filters'], 'nr_filters')]
+    return filters
 
 def files_content_to_damos_stats(files_content):
     return _damon.DamosStats(
@@ -645,7 +675,7 @@ def files_content_to_scheme(files_content):
                 if 'apply_interval_us' in files_content else None,
             files_content_to_quotas(files_content['quotas']),
             files_content_to_watermarks(files_content['watermarks']),
-            files_content_to_damos_filters(files_content['filters'])
+            files_content_to_damos_filters(files_content)
                 if 'filters' in files_content else [],
             files_content_to_damos_stats(files_content['stats']),
             files_content_to_damos_tried_regions(
