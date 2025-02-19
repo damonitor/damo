@@ -30,6 +30,8 @@
   - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
 - Automatically translate single allow filter to reject filter
   - Pending.  Just warning might be sufficient.
+- Show intervals auto-tuning status on 'report access'
+  - If the tuning is activated, show positive sample rate and current tuned intervals
 
 - Deprecate old features
   - Deprecate 'damo report raw'
