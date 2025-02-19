@@ -963,6 +963,9 @@ def update_supported_features():
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0), 'filters', '0', 'allow')):
         feature_supports['allow_filter'] = True
+
+    if os.path.isfile(
+            os.path.join(scheme_dir_of(0, 0, 0), 'filters', '0', 'min')):
         feature_supports['schemes_filters_hugepage_size'] = True
 
     if os.path.isdir(
