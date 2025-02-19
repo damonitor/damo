@@ -1481,11 +1481,19 @@ def is_kdamond_running(kdamond_idx):
 def current_kdamonds():
     return _damon_fs.current_kdamonds()
 
-def update_read_kdamonds(nr_retries=0, update_stats=True,
-        update_tried_regions=True, update_quota_effective_bytes=False):
+def update_read_kdamonds(
+        nr_retries=0, update_stats=True, update_tried_regions=True,
+        update_quota_effective_bytes=False, do_update_tuned_intervals=False):
     err = 'assumed error'
     nr_tries = 0
     while True:
+        if update_tuned_intervals:
+            err = update_tuned_intervals()
+            if err is not None:
+                nr_tries += 1
+                time.sleep(
+                        random.randrange(2**(nr_tries - 1), 2**nr_tries) / 100)
+                continue
         err = update_schemes_status(update_stats, update_tried_regions,
                                     update_quota_effective_bytes)
         nr_tries += 1

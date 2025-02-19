@@ -129,7 +129,9 @@ def main(args):
     if args.input_file is None:
         kdamonds, err = _damon.update_read_kdamonds(
                 nr_retries=5, update_stats=True, update_tried_regions=True,
-                update_quota_effective_bytes=True)
+                update_quota_effective_bytes=True,
+                # todo: set update_tuned_intervals as False if not needed
+                do_update_tuned_intervals=True)
         if err != None:
             print('cannot update and read kdamonds: %s' % err)
             exit(1)
