@@ -977,6 +977,8 @@ def update_supported_features():
             os.path.join(scheme_dir_of(0, 0, 0), 'core_filters')):
         feature_supports['schemes_filters_core_ops_dirs'] = True
 
+    # todo: check unmapped filter support by trying writing it to filter type
+
     avail_ops, err = _avail_ops()
     if err == None:
         for ops in ['vaddr', 'paddr', 'fvaddr']:
