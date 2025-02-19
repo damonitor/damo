@@ -30,7 +30,7 @@ class DamonIntervalsGoal:
         self.max_sample_us = _damo_fmt_str.text_to_us(max_sample_us)
 
     def to_str(self, raw):
-        return 'target %s accesses per %s aggrs, %s-%s sampling interval' % (
+        return 'target %s accesses per %s aggrs, [%s, %s] sampling interval' % (
                 _damo_fmt_str.format_bp(self.samples_bp, raw),
                 _damo_fmt_str.format_nr(self.aggrs, raw),
                 _damo_fmt_str.format_time_us(self.min_sample_us, raw),
