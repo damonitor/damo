@@ -686,7 +686,7 @@ class DamosWatermarks:
                 ])
 
 class DamosFilter:
-    filter_type = None  # anon, memcg, young, hugepage, unmapped, addr, or
+    filter_type = None  # anon, memcg, young, hugepage_size, unmapped, addr, or
                         # target
     matching = None
     allow = None
@@ -717,7 +717,7 @@ class DamosFilter:
         if self.matching is False:
             words.append('none')
         words.append(self.filter_type)
-        if self.filter_type in ['anon', 'young', 'hugepage', 'unmapped']:
+        if self.filter_type in ['anon', 'young', 'unmapped']:
             return ' '.join(words)
         if self.filter_type == 'memcg':
             return ' '.join(words + [self.memcg_path])
@@ -764,7 +764,7 @@ class DamosFilter:
 
     def handled_by_ops(self):
         # whether this filter is handled by DAMON operations set layer
-        return self.filter_type in ['anon', 'memcg', 'young', 'hugepage',
+        return self.filter_type in ['anon', 'memcg', 'young', 'hugepage_size',
                                     'unmapped']
 
 class DamosStats:
