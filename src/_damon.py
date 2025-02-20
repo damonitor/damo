@@ -726,6 +726,8 @@ class DamosFilter:
         if self.filter_type == 'target':
             return ' '.join(words + [_damo_fmt_str.format_nr(
                     self.damon_target_idx, raw)])
+        if self.filter_type == 'hugepage_size':
+            return ' '.join(words + [self.hugepage_size.to_str(raw)])
 
     def __str__(self):
         return self.to_str(False)
