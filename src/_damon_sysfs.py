@@ -620,6 +620,11 @@ def files_content_to_damos_filter(files_content):
     elif 'pass' in files_content:
         allow = files_content['pass'].strip()
 
+    hugepage_size=None
+    if 'min' in files_content and 'max' in files_content:
+        hugepage_size=_damon.DamonRegion(files_content['min'].strip(),
+                                         files_content['max'].strip())
+
     return _damon.DamosFilter(
         files_content['type'].strip(),
         files_content['matching'].strip(),
@@ -630,7 +635,8 @@ def files_content_to_damos_filter(files_content):
         if 'addr_start' in files_content and 'addr_end' in files_content
         else None,
         files_content['damon_target_idx']
-        if 'damon_target_idx' in files_content else None)
+        if 'damon_target_idx' in files_content else None,
+        hugepage_size=hugepage_size)
 
 def files_content_to_damos_filters(scheme_files_content):
     filters = []
