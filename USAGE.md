@@ -618,6 +618,7 @@ are as below.
 - anon: no additional options are required.
 - memcg: the path to the memory cgroup should be provided.
 - young: no additional options are required.
+- hugeapge_size: minimum and maximum size of hugepages should be provided.
 - addr: start and end addresses of the address range should be provided.
 - target: the DAMON target index should be provided.
 
