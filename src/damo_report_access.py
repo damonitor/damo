@@ -52,6 +52,9 @@ record_formatters = [
                 record.snapshots[-1].end_time - record.snapshots[0].start_time,
                 fmt.raw_number),
             'duration of the record'),
+        Formatter('<format strings>',
+                  lambda record, fmt: format_strings(fmt),
+                  'current format strings')
         ]
 
 snapshot_formatters = [
@@ -211,6 +214,15 @@ default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
 default_snapshot_tail_format = 'memory bw estimate: <estimated memory bandwidth>\ntotal size: <total bytes>'
 default_snapshot_tail_format_filter_installed = 'memory bw estimate: <estimated memory bandwidth>  df-passed: <filters passed estimated memory bandwidth>\ntotal size: <total bytes>  df-passed <filters passed bytes>'
+
+def format_strings(fmt):
+    return '\n'.join([
+        'record head: "%s"' % fmt.format_record_head,
+        'snapshot head: "%s"' % fmt.format_snapshot_head,
+        'region: "%s"' % fmt.format_region,
+        'snapshot tail: "%s"' % fmt.format_snapshot_tail,
+        'record tail: "%s"' % fmt.format_record_tail,
+        ])
 
 def filters_passed_bytes(snapshot, fmt):
     bytes = 0
