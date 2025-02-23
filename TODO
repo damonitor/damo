@@ -35,7 +35,7 @@
 
 - Deprecate old features
   - Deprecate 'damo report raw'
-    - notified as will-be-deprecated by 2025-01-27
+    - notified as will-be-removed by 2025-03-09
   - Deprecate 'damo status'
     - notified as will-be-removed by 2025-02-26
   - Deprecate 'damo show'
