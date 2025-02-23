@@ -3,6 +3,7 @@
 import argparse
 import os
 
+import _damo_fmt_str
 import _damon
 
 class PaddrRange:
@@ -129,11 +130,15 @@ def integrate(memblock_parsed, iomem_parsed):
 def paddr_ranges():
     return integrate(memblock_ranges(), iomem_ranges())
 
-def pr_ranges(ranges):
-    print('#%12s %13s\tnode\tstate\tresource\tsize' % ('start', 'end'))
+def pr_ranges(ranges, raw):
+    print('#%14s %14s\tnode\tstate\tresource\tsize' % ('start', 'end'))
     for r in ranges:
-        print('%13d %13d\t%s\t%s\t%s\t%d' % (r.start, r.end, r.nid,
-            r.state, r.name, r.end - r.start))
+        print('%15s %15s\t%s\t%s\t%s\t%s' % (
+            _damo_fmt_str.format_sz(r.start, raw),
+            _damo_fmt_str.format_sz(r.end, raw),
+            _damo_fmt_str.format_nr(r.nid, raw),
+            r.state, r.name,
+            _damo_fmt_str.format_sz(r.end - r.start, raw)))
 
 def default_paddr_region():
     "Largest System RAM region becomes the default"
@@ -179,11 +184,17 @@ def main(args):
             continue
         ranges.append(r)
 
-    pr_ranges(ranges)
+    pr_ranges(ranges, args.raw_number)
 
-    print('largest system RAM region: %s' % default_paddr_region())
+    start, end = default_paddr_region()
+    print('largest system RAM region: [%s, %s) (size %s)' % (
+        _damo_fmt_str.format_sz(start, args.raw_number),
+        _damo_fmt_str.format_sz(end, args.raw_number),
+        _damo_fmt_str.format_sz(end - start, args.raw_number)))
 
 def set_argparser(parser):
     parser.description = 'Show physical address space layout'
     parser.add_argument('--numa_node', type=int, metavar='<node id>',
             help='print ranges of this numa node only')
+    parser.add_argument('--raw_number', action='store_true',
+                        help='use machine-friendly raw numbers')
