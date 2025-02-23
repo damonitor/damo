@@ -170,12 +170,7 @@ def paddr_region_of(numa_node):
 
     return regions, None
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--numa_node', type=int, metavar='<node id>',
-            help='print ranges of this numa node only')
-    args = parser.parse_args()
-
+def main(args):
     _damon.ensure_root_permission()
 
     ranges = []
@@ -188,5 +183,7 @@ def main():
 
     print('largest system RAM region: %s' % default_paddr_region())
 
-if __name__ == '__main__':
-    main()
+def set_argparser(parser):
+    parser.description = 'Show physical address space layout'
+    parser.add_argument('--numa_node', type=int, metavar='<node id>',
+            help='print ranges of this numa node only')
