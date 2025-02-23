@@ -40,6 +40,8 @@
   e.g., damo report access --format_snapshot_tail_append '<access observation ratio>'
 - damo report access: show '<access observation ratio>' by default if
   auto-tuning ongoing
+- do not update monitoring intervals when doing snapshot
+  - reverting auto-tuned intervals, so make it not well working...
 
 - Deprecate old features
   - Deprecate 'damo report raw'
