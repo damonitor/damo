@@ -192,6 +192,18 @@ def numa_addr_ranges(nodes):
 def main(args):
     _damon.ensure_root_permission()
 
+    if args.numa_addr is not None:
+        ranges, err = numa_addr_ranges([args.numa_addr])
+        if err is not None:
+            print(err)
+            return 1
+        for start, end in ranges:
+            print('[%s, %s) (size %s)' % (
+                _damo_fmt_str.format_sz(start, args.raw_number),
+                _damo_fmt_str.format_sz(end, args.raw_number),
+                _damo_fmt_str.format_sz(end - start, args.raw_number)))
+        return
+
     ranges = []
     for r in paddr_ranges():
         if args.numa_node and r.nid != args.numa_node:
@@ -210,5 +222,7 @@ def set_argparser(parser):
     parser.description = 'Show physical address space layout'
     parser.add_argument('--numa_node', type=int, metavar='<node id>',
             help='print ranges of this numa node only')
+    parser.add_argument('--numa_addr', type=int, metavar='<node id>',
+                        help='show only address ranges of the numa node')
     parser.add_argument('--raw_number', action='store_true',
                         help='use machine-friendly raw numbers')
