@@ -171,8 +171,10 @@ def paddr_region_of(numa_node):
     paddr_ranges_ = paddr_ranges()
     for r in paddr_ranges_:
         if r.nid == numa_node and r.name.startswith('System RAM'):
+            if len(regions) > 0 and regions[-1][1] == r.start:
+                regions[-1][1] = r.end
+                continue
             regions.append([r.start, r.end])
-
     return regions, None
 
 def numa_addr_ranges(nodes):
@@ -186,6 +188,12 @@ def numa_addr_ranges(nodes):
         node_ranges, err = paddr_region_of(node)
         if err is not None:
             return None, err
+        if len(ranges) > 0 and len(node_ranges) > 0:
+            last_range = ranges[-1]
+            new_first_range = node_ranges[0]
+            if last_range[1] == new_first_range[0]:
+                last_range[1] = new_first_range[1]
+            node_ranges = node_ranges[1:]
         ranges += node_ranges
     return ranges, None
 
