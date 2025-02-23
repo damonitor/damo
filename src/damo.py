@@ -16,6 +16,7 @@ import damo_diagnose
 import damo_features
 import damo_lru_sort
 import damo_monitor
+import damo_pa_layout
 import damo_reclaim
 import damo_record
 import damo_record_info
@@ -82,6 +83,9 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='diagnose',
             module=damo_diagnose,
             msg='generate a report on if DAMON is malfunctioning'),
+        _damo_subcmds.DamoSubCmd(name='pa_layout',
+            module=damo_pa_layout,
+            msg='show physical address layout'),
 
         # Will be deprecated
         _damo_subcmds.DamoSubCmd(name='show', module=damo_show,
