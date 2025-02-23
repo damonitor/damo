@@ -175,6 +175,20 @@ def paddr_region_of(numa_node):
 
     return regions, None
 
+def numa_addr_ranges(nodes):
+    if not os.path.isdir('/sys/devices/system/memory'):
+        return None, ' '.join([
+            '/sys/devices/system/memory not found.',
+            'You may need CONFIG_MEMORY_HOTPLUG enabled.'])
+
+    ranges = []
+    for node in nodes:
+        node_ranges, err = paddr_region_of(node)
+        if err is not None:
+            return None, err
+        ranges += node_ranges
+    return ranges, None
+
 def main(args):
     _damon.ensure_root_permission()
 
