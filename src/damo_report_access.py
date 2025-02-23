@@ -152,10 +152,10 @@ snapshot_formatters = [
                                  filter_passed_only=True),
                 'estimated memory bandwidth'),
         Formatter(
-                '<access observation ratio>',
+                '<intervals tuning status>',
                 lambda snapshot, record, fmt:
-                access_observation_ratio(snapshot, record, fmt),
-                'access observation ratio'),
+                intervals_tuning_status(snapshot, record, fmt),
+                'intervals tuning status'),
         ]
 
 region_formatters = [
@@ -242,7 +242,7 @@ def positive_access_sample_ratio(snapshot, record, fmt):
     return _damo_fmt_str.format_percent(
             nr_samples * 100 / max_samples, fmt.raw_number)
 
-def access_observation_ratio(snapshot, record, fmt):
+def intervals_tuning_status(snapshot, record, fmt):
     max_samples_per_region = record.intervals.aggr / record.intervals.sample
     max_observation = 0
     observation = 0
@@ -250,8 +250,16 @@ def access_observation_ratio(snapshot, record, fmt):
         region.nr_accesses.add_unset_unit(record.intervals)
         max_observation += max_samples_per_region * region.size()
         observation += region.size() * region.nr_accesses.samples
-    return _damo_fmt_str.format_percent(
-            observation * 100 / max_observation, fmt.raw_number)
+    return '%s (%s / %s) %s %s' % (
+            _damo_fmt_str.format_percent(observation * 100 / max_observation,
+                                         fmt.raw_number),
+            _damo_fmt_str.format_sz(observation, fmt.raw_number),
+            _damo_fmt_str.format_sz(max_observation, fmt.raw_number),
+            _damo_fmt_str.format_time_us(record.intervals.sample,
+                                         fmt.raw_number),
+            _damo_fmt_str.format_time_us(record.intervals.aggr,
+                                         fmt.raw_number),
+            )
 
 def estimated_mem_bw(snapshot, record, fmt, filter_passed_only=False):
     access_bytes = 0
