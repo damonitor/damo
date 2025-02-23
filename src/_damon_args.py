@@ -17,9 +17,9 @@ except ModuleNotFoundError as e:
     # properly.
     pass
 
-import _damo_paddr_layout
 import _damo_subproc
 import _damon
+import damo_pa_layout
 
 # Kdamonds construction from command line arguments
 
@@ -51,13 +51,13 @@ def init_regions_for(args):
 
     if args.ops == 'paddr' and not init_regions:
         if args.numa_node != None:
-            init_regions, err = _damo_paddr_layout.paddr_region_of(
+            init_regions, err = damo_pa_layout.paddr_region_of(
                     args.numa_node)
             if err != None:
                 return None, err
             init_regions = merge_cont_ranges(init_regions)
         else:
-            init_regions = [_damo_paddr_layout.default_paddr_region()]
+            init_regions = [damo_pa_layout.default_paddr_region()]
         try:
             init_regions = [_damon.DamonRegion(r[0], r[1])
                     for r in init_regions]
