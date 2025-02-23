@@ -30,26 +30,27 @@ class Formatter:
 
 record_formatters = [
         Formatter('<kdamond index>',
-            lambda record, raw: '%s' % record.kdamond_idx,
+            lambda record, fmt: '%s' % record.kdamond_idx,
             'index of the record\'s kdamond'),
         Formatter('<context index>',
-            lambda record, raw: '%s' % record.context_idx,
+            lambda record, fmt: '%s' % record.context_idx,
             'index of the record\'s DAMON context'),
         Formatter('<scheme index>',
-            lambda record, raw: '%s' % record.scheme_idx,
+            lambda record, fmt: '%s' % record.scheme_idx,
             'index of the record\'s DAMOS scheme'),
         Formatter('<target id>',
-            lambda record, raw: '%s' % record.target_id,
+            lambda record, fmt: '%s' % record.target_id,
             'index of the record\'s DAMON target'),
         Formatter('<abs start time>',
-            lambda record, raw:
-            _damo_fmt_str.format_time_ns(record.snapshots[0].start_time, raw),
+            lambda record, fmt:
+            _damo_fmt_str.format_time_ns(record.snapshots[0].start_time,
+                                         fmt.raw_number),
             'absolute time of the start of the record'),
         Formatter('<duration>',
-            lambda record, raw:
+            lambda record, fmt:
             _damo_fmt_str.format_time_ns(
                 record.snapshots[-1].end_time - record.snapshots[0].start_time,
-                raw),
+                fmt.raw_number),
             'duration of the record'),
         ]
 
@@ -764,7 +765,7 @@ def format_output(template, formatters, fmt, record, snapshot=None,
         if template.find(formatter.keyword) == -1:
             continue
         if formatters == record_formatters:
-            txt = formatter.format_fn(record, fmt.raw_number)
+            txt = formatter.format_fn(record, fmt)
         elif formatters == snapshot_formatters:
             txt = formatter.format_fn(snapshot, record, fmt)
         elif formatters == region_formatters:
