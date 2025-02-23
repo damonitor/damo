@@ -1304,6 +1304,13 @@ def update_get_snapshot_records(kdamond_idxs, scheme_idxs,
     while err is not None and nr_tries < 5:
         nr_tries += 1
 
+        # todo: update tuned intervals only if auto-tuning is ongoing
+        err = _damon.update_tuned_intervals(kdamond_idxs)
+        if err is not None:
+            time.sleep(random.randrange(
+                2**(nr_tries - 1), 2**nr_tries) / 100)
+            continue
+
         err = _damon.update_schemes_tried_regions(kdamond_idxs)
 
         if err is not None:
