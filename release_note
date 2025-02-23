@@ -3,7 +3,9 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.6.9
 - add pa_layout subcommand (experimental)
-- add '<access observation ratio>' snapshot format keyword
+- support running DAMON for multiple NUMA nodes with --numa_node option
+- add '<intervals tuning status>' snapshot format keyword
+- add '<format strings>' record format keyword
 
 v2.6.8
 - damo report access
