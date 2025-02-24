@@ -1413,7 +1413,11 @@ def update_tuned_intervals(kdamond_idxs=None):
         kdamond_idxs = running_kdamond_idxs()
     if _damon_fs == _damon_dbgfs:
         return None
-    return _damon_fs.update_tuned_intervals(kdamond_idxs)
+    err = _damon_fs.update_tuned_intervals(kdamond_idxs)
+    # 'Invalid argument' means the feature is not supported on the kernel
+    if err is not None and not 'Invalid argument' in err:
+        return err
+    return None
 
 def update_schemes_stats(kdamond_idxs=None):
     if kdamond_idxs == None:
