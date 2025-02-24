@@ -1492,7 +1492,7 @@ def update_read_kdamonds(
     err = 'assumed error'
     nr_tries = 0
     while True:
-        if update_tuned_intervals:
+        if do_update_tuned_intervals:
             err = update_tuned_intervals()
             if err is not None:
                 nr_tries += 1
