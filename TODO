@@ -42,6 +42,9 @@
   auto-tuning ongoing
 - do not update monitoring intervals when doing snapshot
   - reverting auto-tuned intervals, so make it not well working...
+- make 'damo report heatmap' better
+  - provide three regions heatmap by default, or notice their existence
+  - better document the hidden regions
 
 - Deprecate old features
   - Deprecate 'damo report raw'
