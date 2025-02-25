@@ -18,20 +18,20 @@ import damo_version
 # Core data structures
 
 class DamonIntervalsGoal:
-    samples_bp = None
+    access_bp = None
     aggrs = None
     min_sample_us = None
     max_sample_us = None
 
-    def __init__(self, samples_bp='0%', aggrs=0, min_sample_us=0, max_sample_us=0):
-        self.samples_bp = _damo_fmt_str.text_to_bp(samples_bp)
+    def __init__(self, access_bp='0%', aggrs=0, min_sample_us=0, max_sample_us=0):
+        self.access_bp = _damo_fmt_str.text_to_bp(access_bp)
         self.aggrs = _damo_fmt_str.text_to_nr(aggrs)
         self.min_sample_us = _damo_fmt_str.text_to_us(min_sample_us)
         self.max_sample_us = _damo_fmt_str.text_to_us(max_sample_us)
 
     def to_str(self, raw):
         return 'target %s accesses per %s aggrs, [%s, %s] sampling interval' % (
-                _damo_fmt_str.format_bp(self.samples_bp, raw),
+                _damo_fmt_str.format_bp(self.access_bp, raw),
                 _damo_fmt_str.format_nr(self.aggrs, raw),
                 _damo_fmt_str.format_time_us(self.min_sample_us, raw),
                 _damo_fmt_str.format_time_us(self.max_sample_us, raw))
@@ -45,12 +45,12 @@ class DamonIntervalsGoal:
     @classmethod
     def from_kvpairs(cls, kvpairs):
         return DamonIntervalsGoal(
-                kvpairs['samples_bp'], kvpairs['aggrs'],
+                kvpairs['access_bp'], kvpairs['aggrs'],
                 kvpairs['min_sample_us'], kvpairs['max_sample_us'])
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
-            ('samples_bp', _damo_fmt_str.format_bp(self.samples_bp, raw)),
+            ('access_bp', _damo_fmt_str.format_bp(self.access_bp, raw)),
             ('aggrs', _damo_fmt_str.format_nr(self.aggrs, raw)),
             ('min_sample_us', _damo_fmt_str.format_time_us(
                 self.min_sample_us, raw)),

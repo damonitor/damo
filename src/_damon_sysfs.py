@@ -431,8 +431,8 @@ def write_targets_dir(dir_path, targets):
     return None
 
 def write_monitoring_intervals_goal_dir(dir_path, goal):
-    err = _damo_fs.write_file(os.path.join(dir_path, 'samples_bp'), '%d' %
-                              goal.samples_bp)
+    err = _damo_fs.write_file(os.path.join(dir_path, 'access_bp'), '%d' %
+                              goal.access_bp)
     if err is not None:
         return err
     err = _damo_fs.write_file(os.path.join(dir_path, 'aggrs'), '%d' %
@@ -710,7 +710,7 @@ def files_content_to_context(files_content):
     if 'intervals_goal' in intervals_content:
         kvpairs = intervals_content['intervals_goal']
         intervals_goal = _damon.DamonIntervalsGoal(
-                int(kvpairs['samples_bp']), int(kvpairs['aggrs']),
+                int(kvpairs['access_bp']), int(kvpairs['aggrs']),
                 int(kvpairs['min_sample_us']), int(kvpairs['max_sample_us']))
     else:
         intervals_goal = _damon.DamonIntervalsGoal()

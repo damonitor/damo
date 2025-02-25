@@ -672,7 +672,7 @@ def set_monitoring_attrs_argparser(parser, hide_help=False):
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--monitoring_intervals_goal', nargs=4,
-            metavar=('<samples_bp>', '<aggrs>', '<min_sample_us>',
+            metavar=('<access_bp>', '<aggrs>', '<min_sample_us>',
                      '<max_sample_us>'), default=['0%', '0', '0us', '0us'],
             help='monitoring intervals auto-tuning goal')
     parser.add_argument('--monitoring_nr_regions_range', nargs=2,
