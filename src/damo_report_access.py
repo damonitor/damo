@@ -503,6 +503,8 @@ def heatmap_str(snapshot, record, fmt):
     # single region?
     if temperature_unit == 0:
         temperature_unit = max_temperature / max_color_level
+    if temperature_unit == 0:
+        temperature_unit = 1
     dots = []
     for pixel in pixels:
         if pixel.is_void is True:
