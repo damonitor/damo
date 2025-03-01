@@ -51,10 +51,8 @@ test_report \
 
 test_report "$damo report nr_regions -r 1 101 1" "nr_regions"
 
-test_report "$damo report heats --guide" "heats_guide"
 test_report "$damo report heatmap --guide" "heats_guide"
 
-test_report "$damo report heats" "heats"
 test_report "$damo report heatmap --output raw" "heats"
 
 rm -fr results damon.adjusted.data
