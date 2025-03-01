@@ -88,6 +88,14 @@ What does the version numbers mean?
 Nothing at all but indicate which version is more fresh.  A higher version
 number means it is more recently released.
 
+This also means that there is no special versions for hotfixes.  Instead, all
+bug fixes and new features are released together in fast speed (nearly once per
+week) under the single version scheme.  We also strive a high level of
+stability across all versions.  Users are therefore recommended to use latest
+version always if possible, since it is the only way to get all bug fixes and
+new features.  If there is any problem at upgrading the version, please report
+an issue.
+
 
 Will the features of `damo` be supported forever?
 -------------------------------------------------
