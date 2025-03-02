@@ -23,7 +23,6 @@ import damo_record_info
 import damo_replay
 import damo_report
 import damo_schemes
-import damo_show
 import damo_start
 import damo_status
 import damo_stop
@@ -87,11 +86,6 @@ subcmds = [
             module=damo_pa_layout,
             msg='show physical address layout'),
 
-        # Will be deprecated
-        _damo_subcmds.DamoSubCmd(name='show', module=damo_show,
-            msg=' '.join(
-                ['show monitored access pattern',
-                 '(Will be DEPRECATED; Use "damo report access" instead.)'])),
         _damo_subcmds.DamoSubCmd(name='status',
             module=damo_status,
             msg=' '.join(
