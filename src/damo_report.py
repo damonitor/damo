@@ -2,7 +2,6 @@
 
 import _damo_subcmds
 import damo_heatmap
-import damo_heats
 import damo_nr_regions
 import damo_report_access
 import damo_report_damon
@@ -38,9 +37,6 @@ subcmds = [
             msg=' '.join([
                 'human readable raw data of access patterns',
                 '(Will be DEPRECATED; Use "access --raw_form" instead.)'])),
-        _damo_subcmds.DamoSubCmd(name='heats', module=damo_heats,
-            msg=' '.join(['heats of regions',
-                          '(Will be DEPRECATED; Use "heatmap" instead.)'])),
         _damo_subcmds.DamoSubCmd(name='nr_regions', module=damo_nr_regions,
             msg='number of DAMON-regions'),
         ]
