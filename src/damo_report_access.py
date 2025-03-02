@@ -1141,10 +1141,20 @@ def set_formats(args, records):
                 break
 
     if fmt.format_snapshot_tail == default_snapshot_tail_format:
+        ops_filters_installed = False
+        intervals_tuning_enabled = False
         for record in records:
             if len(record.scheme_filters) > 0:
-                fmt.format_snapshot_tail = default_snapshot_tail_format_filter_installed
+                ops_filters_installed = True
+            if record.intervals is not None:
+                if record.intervals.intervals_goal.enabled():
+                    intervals_tuning_enabled = True
+            if ops_filters_installed and intervals_tuning_enabled:
                 break
+        if ops_filters_installed:
+            fmt.format_snapshot_tail = default_snapshot_tail_format_filter_installed
+        if intervals_tuning_enabled:
+            fmt.format_snapshot_tail += '\nintervals tuning status: <intervals tuning status>'
 
     if fmt.format_snapshot_head == None:
         need_snapshot_head = False
