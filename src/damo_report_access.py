@@ -52,6 +52,9 @@ record_formatters = [
                 record.snapshots[-1].end_time - record.snapshots[0].start_time,
                 fmt.raw_number),
             'duration of the record'),
+        Formatter('<intervals>',
+                  lambda record, fmt: record.intervals.to_str(fmt.raw_number),
+                  'monitoring intervals'),
         Formatter('<format strings>',
                   lambda record, fmt: format_strings(fmt),
                   'current format strings')
