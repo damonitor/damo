@@ -36,8 +36,6 @@
   enabled contexts
 - Warn or error recording when intervals auto-tuning enabled.
   - Disabling auto-tuning is another option.
-- damo report access: allow appending formats
-  e.g., damo report access --format_snapshot_tail_append '<access observation ratio>'
 - damo report access: show '<access observation ratio>' by default if
   auto-tuning ongoing
 - do not update monitoring intervals when doing snapshot
