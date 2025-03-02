@@ -1317,21 +1317,3 @@ memory bandwidth more than 'damo replay' and/or replaying systems could, and as
 the difference of the performance is big, the replayed accesses would be less
 similar to the original one.  To show the real memory access performance of
 `damo replay` on specific system, users could use `--test_perf` option.
-
-Snapshot and Visualization of DAMON Monitoring Results and Running Status
-=========================================================================
-
-This section describes two `damo` subcommands that specialized for retrieving
-and visualizing snapshot data.  Those are deprecated in favor of
-[`record`](#damo-record) and [`report`](#damo-report) subcommands.  Please
-refer to [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md)
-file for more details.  This section will be removed by 2025-02-26.
-
-`damo status`
--------------
-
-`damo status` is deprecated in favor of [`damo report
-damon`](#damo-report-damon).  `damo report damon` can replace all usages of
-`damo status'.  Please refer to
-[FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
-more details.  This section will be removed by 2025-02-26.
