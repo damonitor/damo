@@ -55,6 +55,10 @@ record_formatters = [
         Formatter('<intervals>',
                   lambda record, fmt: record_intervals(record, fmt.raw_number),
                   'monitoring intervals'),
+        Formatter('<intervals goal>',
+                  lambda record, fmt:
+                  record.intervals.intervals_goal.to_str(fmt.raw_number),
+                  'monitoring intervals'),
         Formatter('<format strings>',
                   lambda record, fmt: format_strings(fmt),
                   'current format strings')
