@@ -1327,15 +1327,6 @@ and visualizing snapshot data.  Those are deprecated in favor of
 refer to [FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md)
 file for more details.  This section will be removed by 2025-02-26.
 
-`damo show`
------------
-
-`damo show` is dperecated in favor of [`damo report
-access`](#damo-report-access).  `damo report access` can replace all usages of
-`damo show'.  Please refer to
-[FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
-more details.  This section will be removed by 2025-02-26.
-
 `damo status`
 -------------
 
