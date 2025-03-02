@@ -53,7 +53,7 @@ record_formatters = [
                 fmt.raw_number),
             'duration of the record'),
         Formatter('<intervals>',
-                  lambda record, fmt: record.intervals.to_str(fmt.raw_number),
+                  lambda record, fmt: record_intervals(record, fmt.raw_number),
                   'monitoring intervals'),
         Formatter('<format strings>',
                   lambda record, fmt: format_strings(fmt),
@@ -217,6 +217,12 @@ default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
 default_snapshot_tail_format = 'memory bw estimate: <estimated memory bandwidth>\ntotal size: <total bytes>'
 default_snapshot_tail_format_filter_installed = 'memory bw estimate: <estimated memory bandwidth>  df-passed: <filters passed estimated memory bandwidth>\ntotal size: <total bytes>  df-passed <filters passed bytes>'
+
+def record_intervals(record, raw_number):
+    intervals = record.intervals
+    return 'sample %s, aggr %s' % (
+            _damo_fmt_str.format_time_us(intervals.sample, raw_number),
+            _damo_fmt_str.format_time_us(intervals.aggr, raw_number))
 
 def format_strings(fmt):
     return '\n'.join([
