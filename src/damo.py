@@ -24,7 +24,6 @@ import damo_replay
 import damo_report
 import damo_schemes
 import damo_start
-import damo_status
 import damo_stop
 import damo_tune
 import damo_validate
@@ -85,13 +84,6 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='pa_layout',
             module=damo_pa_layout,
             msg='show physical address layout'),
-
-        _damo_subcmds.DamoSubCmd(name='status',
-            module=damo_status,
-            msg=' '.join(
-                ['show DAMON status',
-                 '(Will be DEPRECATED; Use "damo report damon" instead.)'])),
-
         ]
 
 class SubCmdHelpFormatter(argparse.RawDescriptionHelpFormatter):
