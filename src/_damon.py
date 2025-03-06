@@ -1200,6 +1200,8 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
             'intervals_goal',           # merged in mm-unstable
             'schemes_filters_core_ops_dirs',
                                         # merged in mm-unstable
+            'schemes_quota_goal_node_mem_used_free',
+                                        # under development
             ]
 
 _damon_fs = None
