@@ -242,6 +242,11 @@ def write_quota_goal_dir(dir_path, goal):
         if err is not None:
             return err
 
+    if goal.has_nid():
+        err = _damo_fs.write_file(os.path.join(dir_path, 'nid'), '%d' % goal.nid)
+        if err is not None:
+            return err
+
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'target_value'),
             '%d' % goal.target_value)
@@ -582,6 +587,7 @@ def files_content_to_quota_goals(files_content):
             goals.append(
                     _damon.DamosQuotaGoal(
                         metric=goal_kv['target_metric'].strip(),
+                        nid=goal_kv['nid'] if 'nid' in goal_kv else None,
                         target_value=goal_kv['target_value'],
                         current_value=goal_kv['current_value']))
         else:
