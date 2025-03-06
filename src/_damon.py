@@ -485,28 +485,49 @@ class DamosAccessPattern:
 
 qgoal_user_input = 'user_input'
 qgoal_some_mem_psi_us = 'some_mem_psi_us'
-qgoal_metrics = [qgoal_user_input, qgoal_some_mem_psi_us]
+qgoal_node_mem_used_bp = 'node_mem_used_bp'
+qgoal_node_mem_free_bp = 'node_mem_free_bp'
+qgoal_metrics = [qgoal_user_input, qgoal_some_mem_psi_us,
+                 qgoal_node_mem_used_bp, qgoal_node_mem_free_bp]
 
 class DamosQuotaGoal:
     metric = None
     target_value = None
     current_value = None
+    nid = None
     quotas = None
 
     def __init__(self, metric=qgoal_user_input,
-                 target_value='0', current_value='0'):
+                 target_value='0', current_value='0', nid=None):
         if not metric in qgoal_metrics:
             raise Exception('unsupported DAMOS quota goal metric')
         self.metric = metric
         if metric == qgoal_some_mem_psi_us:
             self.target_value = _damo_fmt_str.text_to_us(target_value)
+        elif metric in [qgoal_node_mem_used_bp, qgoal_node_mem_free_bp]:
+            self.target_value = _damo_fmt_str.text_to_bp(target_value)
         else:
             self.target_value = _damo_fmt_str.text_to_nr(target_value)
         self.current_value = _damo_fmt_str.text_to_nr(current_value)
+        if nid is None:
+            self.nid = None
+        else:
+            self.nid = _damo_fmt_str.text_to_nr(nid)
+
+    @classmethod
+    def metric_require_nid(cls, metric):
+        return metric in [qgoal_node_mem_used_bp, qgoal_node_mem_free_bp]
+
+    def has_nid(self):
+        return DamosQuotaGoal.metric_require_nid(self.metric)
 
     def to_str(self, raw):
+        metric_str = self.metric
+        if self.has_nid():
+            metric_str = '%s (nid %s)' % (
+                    metric_str, _damo_fmt_str.format_nr(self.nid, raw))
         return 'metric %s target %s current %s' % (
-                self.metric,
+                metric_str,
                 _damo_fmt_str.format_nr(self.target_value, raw),
                 _damo_fmt_str.format_nr(self.current_value, raw),)
 
@@ -515,6 +536,7 @@ class DamosQuotaGoal:
 
     def __eq__(self, other):
         return (type(self) == type(other) and self.metric == other.metric and
+                self.nid == other.nid and
                 self.target_value == other.target_value and
                 self.current_value == other.current_value)
 
@@ -526,12 +548,15 @@ class DamosQuotaGoal:
             return DamosQuotaGoal(target_value=kv['target_value_bp'],
                                   current_value=kv['current_value_bp'])
         return DamosQuotaGoal(
-                metric=kv['metric'], target_value=kv['target_value'],
+                metric=kv['metric'], nid=kv['nid'] if 'nid' in kv else None,
+                target_value=kv['target_value'],
                 current_value=kv['current_value'])
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('metric', self.metric),
+            ('nid', _damo_fmt_str.format_nr(self.nid, raw)
+             if self.nid is not None else None),
             ('target_value', _damo_fmt_str.format_nr(self.target_value,
                 raw)),
             ('current_value', _damo_fmt_str.format_nr(self.current_value,
