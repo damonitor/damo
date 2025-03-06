@@ -1197,9 +1197,9 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
             'schemes_filters_hugepage_size',
                                         # merged in mm-unstable
             'schemes_filters_unmapped', # merged in mm-unstable
-            'intervals_goal',           # under development
+            'intervals_goal',           # merged in mm-unstable
             'schemes_filters_core_ops_dirs',
-                                        # under development
+                                        # merged in mm-unstable
             ]
 
 _damon_fs = None
