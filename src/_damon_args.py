@@ -244,21 +244,30 @@ def damos_quotas_cons_arg(cmd_args):
 
     return [time_ms, sz_bytes, reset_interval_ms, weights]
 
+def damos_options_to_quota_goal(garg):
+    # garg is the user inputs
+    # garg should be <metric> <target value> [<current value>|<nid>]
+    # [current value] is given for only 'user_input' <metric>
+    # [nid] is given for only node_mem_{used,free}_bp
+    if not len(garg) in [2, 3]:
+        return None, 'Wrong --damos_quota_goal (%s)' % garg
+    if garg[0] == 'user_input' and len(garg) != 3:
+        return None, 'Wrong --damos_quota_goal (%s)' % garg
+    if garg[0] != 'user_input' and len(garg) != 2:
+        return None, 'Wrong --damos_quota_goal (%s)' % garg
+    try:
+        return _damon.DamosQuotaGoal(*garg), None
+    except Exception as e:
+        return None, 'Wrong --damos_quota_goal (%s, %s)' % (garg, e)
+
 def damos_options_to_quotas(quotas, goals):
     gargs = goals
-    # garg should be <metric> <target value> [current value]
-    # [current value] is given for only 'user_input' <metric>
+    goals = []
     for garg in gargs:
-        if not len(garg) in [2, 3]:
-            return None, 'Wrong --damos_quota_goal (%s)' % garg
-        if garg[0] == 'user_input' and len(garg) != 3:
-            return None, 'Wrong --damos_quota_goal (%s)' % garg
-        if garg[0] != 'user_input' and len(garg) != 2:
-            return None, 'Wrong --damos_quota_goal (%s)' % garg
-    try:
-        goals = [_damon.DamosQuotaGoal(*garg) for garg in gargs]
-    except Exception as e:
-        return None, 'Wrong --damos_quota_goal (%s, %s)' % (gargs, e)
+        goal, err = damos_options_to_quota_goal(garg)
+        if err is not None:
+            return None, 'quota goals parsing fail (%s)' % err
+        goals.append(goal)
 
     qargs = quotas
     if len(qargs) > 6:
