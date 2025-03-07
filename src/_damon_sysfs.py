@@ -922,10 +922,7 @@ def update_supported_features():
             _damon.Kdamond(
                 state=None, pid=None, contexts=[
                     _damon.DamonCtx(
-                        schemes=[_damon.Damos(
-                            quotas=_damon.DamosQuotas(
-                                goals=[_damon.DamosQuotaGoal()])
-                            )])])]
+                        schemes=[_damon.Damos()])])]
     err = stage_kdamonds(kdamonds_for_feature_check)
     if err is not None:
         print('staging feature check purpose kdamond failed')
@@ -994,10 +991,25 @@ def update_supported_features():
 
     # todo: check unmapped filter support by trying writing it to filter type
 
-    if os.path.isfile(
-            os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
-                         'nid')):
-        feature_supports['schemes_quota_goal_node_mem_used_free'] = True
+    if feature_supports['schemes_quota_goals'] is True:
+        kdamonds_for_feature_check = [
+                _damon.Kdamond(
+                    state=None, pid=None, contexts=[
+                        _damon.DamonCtx(
+                            schemes=[_damon.Damos(
+                                quotas=_damon.DamosQuotas(
+                                    goals=[_damon.DamosQuotaGoal()])
+                                )])])]
+        err = stage_kdamonds(kdamonds_for_feature_check)
+        if err is not None:
+            print('staging damos goal feature check purpose kdamond failed')
+            stage_kdamonds(orig_kdamonds)
+            exit(1)
+
+        if os.path.isfile(
+                os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
+                             'nid')):
+            feature_supports['schemes_quota_goal_node_mem_used_free'] = True
 
     avail_ops, err = _avail_ops()
     if err == None:
