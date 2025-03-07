@@ -251,14 +251,23 @@ def damos_options_to_quota_goal(garg):
     # [nid] is given for only node_mem_{used,free}_bp
     if not len(garg) in [2, 3]:
         return None, 'Wrong --damos_quota_goal (%s)' % garg
-    if garg[0] == 'user_input' and len(garg) != 3:
-        return None, 'Wrong --damos_quota_goal (%s)' % garg
-    if garg[0] != 'user_input' and len(garg) != 2:
-        return None, 'Wrong --damos_quota_goal (%s)' % garg
+    metric, target_value, optionals = garg[0], garg[1], garg[2:]
+    current_value = 0
+    nid = None
+    if _damon.DamosQuotaGoal.metric_require_nid(metric):
+        if len(optionals) != 1:
+            return None, 'nid is not given or something else is given'
+        nid = optionals[0]
+    elif metric == 'user_input':
+        if len(optionals) != 1:
+            return None, 'current value is not given or something else is given'
+        current_value = optionals[0]
     try:
-        return _damon.DamosQuotaGoal(*garg), None
+        return _damon.DamosQuotaGoal(
+                metric=metric, target_value=target_value,
+                current_value=current_value, nid=nid), None
     except Exception as e:
-        return None, 'Wrong --damos_quota_goal (%s, %s)' % (garg, e)
+        return None, 'DamosQuotaGoal creation fail (%s, %s)' % (garg, e)
 
 def damos_options_to_quotas(quotas, goals):
     gargs = goals
@@ -758,7 +767,7 @@ def set_damos_argparser(parser, hide_help):
             default=[],
             metavar='<metric or value>',
             help=' '.join([
-                'damos quota goal (<metric> <target value> [current value]).',
+                'damos quota goal (<metric> <target value> [optional value]).',
                 '<metric> should be {%s}.' %
                 ','.join(_damon.qgoal_metrics)])
             if not hide_help else argparse.SUPPRESS)
