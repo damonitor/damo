@@ -50,7 +50,7 @@ def update_pr_schemes_stats(input_file, json_format, raw_nr,
         err = _damon.update_schemes_stats()
         if err:
             print(err)
-            return
+            exit(1)
         kdamonds = _damon.current_kdamonds()
     else:
         kdamonds, err = read_kdamonds_from_file(input_file)
