@@ -393,12 +393,8 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     last_used_times = sorted(hist.keys())
     min_lut = last_used_times[0]
     max_lut = last_used_times[-1]
-    if fmt.hist_logscale:
-        hist_ranges = get_logscale_hist_ranges(min_lut, max_lut, 10)
-    else:
-        hist_ranges = get_linearscale_hist_ranges(
-                min_lut, max_lut, 10, fmt.hist_logscale)
-    for min_t, max_t in hist_ranges:
+    for min_t, max_t in get_hist_ranges(
+            min_lut, max_lut, 10, fmt.hist_logscale):
         sz = sum([hist[x] for x in last_used_times if x >= min_t and x < max_t])
         trange_str = '[-%s, -%s)' % (
                 _damo_fmt_str.format_time_us(min_t, raw),
