@@ -363,7 +363,8 @@ def get_logscale_recency_hist_ranges(minv, maxv):
     # start from 1 second interval
     ranges = [[minv, minv + 1000000]]
     while ranges[-1][-1] < maxv:
-        ranges.append([ranges[-1][-1], ranges[-1][-1] * 2])
+        last_interval = ranges[-1][1] - ranges[-1][0]
+        ranges.append([ranges[-1][-1], ranges[-1][-1] + last_interval * 2])
     return ranges
 
 def recency_hist_str(snapshot, record, fmt, df_passed_sz):
