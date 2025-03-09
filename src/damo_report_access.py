@@ -381,36 +381,13 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
                        _damo_fmt_str.format_nr)
 
 def recency_hist_str(snapshot, record, fmt, df_passed_sz):
-    raw = fmt.raw_number
-    if len(snapshot.regions) == 0:
-        return 'no region in snapshot'
-    hist = {}
-    for region in snapshot.regions:
-        last_used = region.age.usec
+    def get_last_used_time(region, fmt):
         if region.nr_accesses.percent > 0:
-            last_used = 0
-        if not last_used in hist:
-            hist[last_used] = 0
-        if df_passed_sz is True:
-            hist[last_used] += region.sz_filter_passed
-        else:
-            hist[last_used] += region.size()
+            return 0
+        return region.age.usec
 
-    hist2 = []
-
-    last_used_times = sorted(hist.keys())
-    min_lut = last_used_times[0]
-    max_lut = last_used_times[-1]
-    for min_t, max_t in get_hist_ranges(
-            min_lut, max_lut, 10, fmt.hist_logscale):
-        sz = sum([hist[x] for x in last_used_times if x >= min_t and x < max_t])
-        trange_str = '[-%s, -%s)' % (
-                _damo_fmt_str.format_time_us(min_t, raw),
-                _damo_fmt_str.format_time_us(max_t, raw))
-        sz_str = _damo_fmt_str.format_sz(sz, raw)
-        hist2.append([trange_str, sz_str, sz])
-
-    return histogram_str(hist2)
+    return sz_hist_str(snapshot, fmt, df_passed_sz, get_last_used_time,
+                       _damo_fmt_str.format_time_us)
 
 def temperature_str(region, raw, fmt):
     temperature = temperature_of(region, fmt.temperature_weights)
