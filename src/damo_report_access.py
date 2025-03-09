@@ -313,17 +313,13 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
 
     temperatures = sorted(hist.keys())
     min_temp, max_temp = temperatures[0], temperatures[-1]
-    interval = max(int((max_temp - min_temp) / 10), 1)
-    max_temp = interval * math.ceil(max_temp / interval) + 1
 
     hist2 = []
     min_sz = None
     max_sz = None
     max_trange_str = None
     max_sz_str = None
-    for t in range(min_temp, max_temp, interval):
-        min_t = t
-        max_t = t + interval
+    for min_t, max_t in get_hist_ranges(min_temp, max_temp, 10):
         sz = sum([hist[x] for x in temperatures if x >= min_t and x < max_t])
         if min_sz is None or sz < min_sz:
             min_sz = sz
