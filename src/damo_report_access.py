@@ -264,8 +264,8 @@ def intervals_tuning_status(snapshot, record, fmt):
         max_observation += max_samples_per_region * region.size()
         observation += region.size() * region.nr_accesses.samples
     return '%s (%s / %s) %s %s' % (
-            _damo_fmt_str.format_percent(observation * 100 / max_observation,
-                                         fmt.raw_number),
+            _damo_fmt_str.format_percent(
+                observation * 100 / max(max_observation, 1), fmt.raw_number),
             _damo_fmt_str.format_sz(observation, fmt.raw_number),
             _damo_fmt_str.format_sz(max_observation, fmt.raw_number),
             _damo_fmt_str.format_time_us(record.intervals.sample,
