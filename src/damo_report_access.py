@@ -383,10 +383,6 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
             hist[last_used] += region.size()
 
     hist2 = []
-    min_sz = None
-    max_sz = None
-    max_trange_str = None
-    max_sz_str = None
 
     last_used_times = sorted(hist.keys())
     min_lut = last_used_times[0]
@@ -397,19 +393,17 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
         hist_ranges = get_hist_ranges(min_lut, max_lut, 10)
     for min_t, max_t in hist_ranges:
         sz = sum([hist[x] for x in last_used_times if x >= min_t and x < max_t])
-        if min_sz is None or sz < min_sz:
-            min_sz = sz
-        if max_sz is None or max_sz < sz:
-            max_sz = sz
         trange_str = '[-%s, -%s)' % (
                 _damo_fmt_str.format_time_us(min_t, raw),
                 _damo_fmt_str.format_time_us(max_t, raw))
-        if max_trange_str is None or max_trange_str < len(trange_str):
-            max_trange_str = len(trange_str)
         sz_str = _damo_fmt_str.format_sz(sz, raw)
-        if max_sz_str is None or max_sz_str < len(sz_str):
-            max_sz_str = len(sz_str)
         hist2.append([trange_str, sz_str, sz])
+
+    sizes = [entry[2] for entry in hist2]
+    min_sz = min(sizes)
+    max_sz = max(sizes)
+    max_trange_str = max([len(entry[0]) for entry in hist2])
+    max_sz_str = max([len(entry[1]) for entry in hist2])
     max_dots = 20
     sz_interval = max(int((max_sz - min_sz) / max_dots), 1)
     lines = []
