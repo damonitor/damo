@@ -49,7 +49,6 @@
   - better document the hidden regions
 - add DAMOS stat on 'damo report access' output by default if eligible
 - allow logscale histogram
-- fix temperature positive value problem
 
 - Deprecate old features
   - Deprecate 'damo report raw'
