@@ -1215,7 +1215,7 @@ def tried_regions_to_snapshot(scheme, intervals, merge_regions):
         total_bytes = None
 
     return DamonSnapshot(snapshot_start_time_ns, snapshot_end_time_ns, regions,
-            total_bytes)
+            total_bytes, scheme.stats)
 
 def tried_regions_to_records_of(idxs, merge_regions):
     '''idxs: list of kdamond/context/scheme indices to get records for.  If it
@@ -1312,6 +1312,13 @@ def update_get_snapshot_records(kdamond_idxs, scheme_idxs,
     nr_tries = 0
     while err is not None and nr_tries < 5:
         nr_tries += 1
+
+        # todo: update schemes stats only if really required
+        err = _damon.update_schemes_stats(kdamond_idxs)
+        if err is not None:
+            time.sleep(random.rndrange(
+                2**(nr_tries - 1), 2**nr_tries) / 100)
+            continue
 
         # todo: update tuned intervals only if auto-tuning is ongoing
         err = _damon.update_tuned_intervals(kdamond_idxs)
