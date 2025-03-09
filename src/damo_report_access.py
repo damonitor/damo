@@ -297,8 +297,8 @@ def filters_pass_type_of(record):
 
 def get_linearscale_hist_ranges(minv, maxv, nr_ranges):
     hist_ranges = []
-    total_interval = maxv - minv
-    interval = max(int(total_interval / nr_ranges), 1)
+    total_interval = maxv + 1 - minv
+    interval = max(math.ceil(total_interval / nr_ranges), 1)
     for i in range(nr_ranges):
         hist_ranges.append([minv + interval * i, minv + interval * (i + 1)])
     return hist_ranges
