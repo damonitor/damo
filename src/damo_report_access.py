@@ -367,6 +367,26 @@ def get_logscale_recency_hist_ranges(minv, maxv):
         ranges.append([ranges[-1][-1], ranges[-1][-1] + last_interval * 2])
     return ranges
 
+def histogram_str(hist2):
+    sizes = [entry[2] for entry in hist2]
+    min_sz = min(sizes)
+    max_sz = max(sizes)
+    max_trange_str = max([len(entry[0]) for entry in hist2])
+    max_sz_str = max([len(entry[1]) for entry in hist2])
+    max_dots = 20
+    sz_interval = max(int((max_sz - min_sz) / max_dots), 1)
+    lines = []
+    for trange_str, sz_str, sz in hist2:
+        trange_str = '%s%s' % (trange_str,
+                               ' ' * (max_trange_str - len(trange_str)))
+        sz_str = '%s%s' % (sz_str,
+                           ' ' * (max_sz_str - len(sz_str)))
+
+        nr_dots = min(math.ceil((sz - min_sz) / sz_interval), max_dots)
+        bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
+        lines.append('%s %s %s' % (trange_str, sz_str, bar))
+    return '\n'.join(lines)
+
 def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
     if len(snapshot.regions) == 0:
@@ -400,24 +420,7 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
         sz_str = _damo_fmt_str.format_sz(sz, raw)
         hist2.append([trange_str, sz_str, sz])
 
-    sizes = [entry[2] for entry in hist2]
-    min_sz = min(sizes)
-    max_sz = max(sizes)
-    max_trange_str = max([len(entry[0]) for entry in hist2])
-    max_sz_str = max([len(entry[1]) for entry in hist2])
-    max_dots = 20
-    sz_interval = max(int((max_sz - min_sz) / max_dots), 1)
-    lines = []
-    for trange_str, sz_str, sz in hist2:
-        trange_str = '%s%s' % (trange_str,
-                               ' ' * (max_trange_str - len(trange_str)))
-        sz_str = '%s%s' % (sz_str,
-                           ' ' * (max_sz_str - len(sz_str)))
-
-        nr_dots = min(math.ceil((sz - min_sz) / sz_interval), max_dots)
-        bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
-        lines.append('%s %s %s' % (trange_str, sz_str, bar))
-    return '\n'.join(lines)
+    return histogram_str(hist2)
 
 def temperature_str(region, raw, fmt):
     temperature = temperature_of(region, fmt.temperature_weights)
