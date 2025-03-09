@@ -28,29 +28,37 @@ class DamonSnapshot:
     end_time = None
     regions = None
     total_bytes = None
+    damos_stats = None
 
     def update_total_bytes(self):
         self.total_bytes = sum([r.size() for r in self.regions])
 
-    def __init__(self, start_time, end_time, regions, total_bytes):
+    def __init__(self, start_time, end_time, regions, total_bytes, damos_stats=None):
         self.start_time = start_time
         self.end_time = end_time
         self.regions = regions
         self.total_bytes = total_bytes
         if self.total_bytes is None:
             self.update_total_bytes()
+        self.damos_stats = damos_stats
 
     @classmethod
     def from_kvpairs(cls, kv):
+        damos_stats = None
+        if 'damos_stats' in kv:
+            damos_stats = _damon.DamosStats.from_kvpairs(kv['damos_stats'])
         return DamonSnapshot(
                 _damo_fmt_str.text_to_ns(kv['start_time']),
                 _damo_fmt_str.text_to_ns(kv['end_time']),
                 [_damon.DamonRegion.from_kvpairs(r) for r in kv['regions']],
                 _damo_fmt_str.text_to_bytes(kv['total_bytes'])
                 if 'total_bytes' in kv and kv['total_bytes'] is not None
-                else None)
+                else None, damos_stats)
 
     def to_kvpairs(self, raw=False):
+        damos_stats_kv = None
+        if self.damos_stats is not None:
+            damos_stats_kv = self.damos_stats.to_kvpairs(raw)
         return collections.OrderedDict([
             ('start_time', _damo_fmt_str.format_time_ns_exact(
                 self.start_time, raw)),
@@ -59,6 +67,7 @@ class DamonSnapshot:
             ('regions', [r.to_kvpairs() for r in self.regions]),
             ('total_bytes', _damo_fmt_str.format_sz(self.total_bytes, raw)
                 if self.total_bytes is not None else None),
+            ('damos_stats', damos_stats_kv)
             ])
 
 class DamonRecord:
