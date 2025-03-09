@@ -351,6 +351,14 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
+def get_hist_ranges(minv, maxv, nr_ranges):
+    hist_ranges = []
+    total_interval = maxv - minv
+    interval = max(int(total_interval / nr_ranges), 1)
+    for i in range(1, nr_ranges + 1):
+        hist_ranges.append([minv + interval * i, minv + interval * (i + 1)])
+    return hist_ranges
+
 def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
     if len(snapshot.regions) == 0:
@@ -367,19 +375,15 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
         else:
             hist[last_used] += region.size()
 
-    last_used_times = sorted(hist.keys())
-    min_lut, max_lut = last_used_times[0], last_used_times[-1]
-    interval = max(int((max_lut - min_lut) / 10), 1)
-    max_lut = interval * math.ceil(max_lut / interval) + 1
-
     hist2 = []
     min_sz = None
     max_sz = None
     max_trange_str = None
     max_sz_str = None
-    for t in range(min_lut, max_lut, interval):
-        min_t = t
-        max_t = t + interval
+
+    last_used_times = sorted(hist.keys())
+    for min_t, max_t in get_hist_ranges(
+            last_used_times[0], last_used_times[-1], 10):
         sz = sum([hist[x] for x in last_used_times if x >= min_t and x < max_t])
         if min_sz is None or sz < min_sz:
             min_sz = sz
