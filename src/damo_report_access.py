@@ -359,6 +359,14 @@ def get_hist_ranges(minv, maxv, nr_ranges):
         hist_ranges.append([minv + interval * i, minv + interval * (i + 1)])
     return hist_ranges
 
+def get_logscale_hist_ranges(minval, maxval):
+    minv = maxval * -1
+    maxv = minval * -1
+    ranges = [[0, 1000000]]
+    while ranges[-1][-1] < maxv:
+        ranges.append([ranges[-1][-1], ranges[-1][-1] * 2])
+    return [[-1 * x[1], - 1 * x[0]] for x in ranges]
+
 def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
     if len(snapshot.regions) == 0:
@@ -382,8 +390,13 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     max_sz_str = None
 
     last_used_times = sorted(hist.keys())
-    for min_t, max_t in get_hist_ranges(
-            last_used_times[0], last_used_times[-1], 10):
+    min_lut = last_used_times[0]
+    max_lut = last_used_times[-1]
+    if fmt.hist_logscale:
+        hist_ranges = get_logscale_hist_ranges(min_lut, max_lut)
+    else:
+        hist_ranges = get_hist_ranges(min_lut, max_lut, 10)
+    for min_t, max_t in hist_ranges:
         sz = sum([hist[x] for x in last_used_times if x >= min_t and x < max_t])
         if min_sz is None or sz < min_sz:
             min_sz = sz
