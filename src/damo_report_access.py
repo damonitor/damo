@@ -340,6 +340,11 @@ def get_logscale_hist_ranges(minv, maxv, nr_ranges):
         ranges.append([ranges[-1][-1], ranges[-1][-1] + last_interval * 2])
     return ranges
 
+def get_hist_ranges(minv, maxv, nr_ranges, logscale):
+    if logscale:
+        return get_logscale_hist_ranges(minv, maxv, nr_ranges)
+    return get_linearscale_hist_ranges(minv, maxv, nr_ranges)
+
 def histogram_str(hist):
     """
     Format histogram string to show.
