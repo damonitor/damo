@@ -813,10 +813,12 @@ class DamosStats:
 
     def to_str(self, raw):
         return '\n'.join([
-            'tried %d times (%s)' % (self.nr_tried,
-            _damo_fmt_str.format_sz(self.sz_tried, raw)),
-            'applied %d times (%s)' % (self.nr_applied,
-            _damo_fmt_str.format_sz(self.sz_applied, raw)),
+            'tried %s times (%s)' % (
+                _damo_fmt_str.format_nr(self.nr_tried, raw),
+                _damo_fmt_str.format_sz(self.sz_tried, raw)),
+            'applied %s times (%s)' % (
+                _damo_fmt_str.format_nr(self.nr_applied, raw),
+                _damo_fmt_str.format_sz(self.sz_applied, raw)),
             '%s passed filters' %
             _damo_fmt_str.format_sz(self.sz_ops_filter_passed, raw),
             'quota exceeded %d times' % self.qt_exceeds,
