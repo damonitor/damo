@@ -839,6 +839,12 @@ class DamosStats:
         kv['qt_exceeds'] = _damo_fmt_str.format_nr(self.qt_exceeds, raw)
         return kv
 
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return clx(kv['nr_tried'], kv['sz_tried'],
+                   kv['nr_applied'], kv['sz_applied'],
+                   kv['sz_ops_filter_passed'], kv['qt_exceeds'])
+
 # TODO: check support of pageout and lru_(de)prio
 damos_actions = [
         'willneed',
