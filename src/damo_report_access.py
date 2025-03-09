@@ -331,8 +331,8 @@ def get_linearscale_hist_ranges(minv, maxv, nr_ranges):
         hist_ranges.append([minv + interval * i, minv + interval * (i + 1)])
     return hist_ranges
 
-def get_logscale_hist_ranges(minv, maxv):
-    initial_interval = max(int((maxv - minv) / 2048), 1)
+def get_logscale_hist_ranges(minv, maxv, nr_ranges):
+    initial_interval = max(int((maxv - minv) / 2**nr_ranges), 1)
     # start from 1 second interval
     ranges = [[minv, minv + initial_interval]]
     while ranges[-1][-1] < maxv:
@@ -389,7 +389,7 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     min_lut = last_used_times[0]
     max_lut = last_used_times[-1]
     if fmt.hist_logscale:
-        hist_ranges = get_logscale_hist_ranges(min_lut, max_lut)
+        hist_ranges = get_logscale_hist_ranges(min_lut, max_lut, 10)
     else:
         hist_ranges = get_linearscale_hist_ranges(
                 min_lut, max_lut, 10, fmt.hist_logscale)
