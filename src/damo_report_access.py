@@ -360,8 +360,9 @@ def get_hist_ranges(minv, maxv, nr_ranges):
     return hist_ranges
 
 def get_logscale_recency_hist_ranges(minv, maxv):
+    initial_interval = max(int((maxv - minv) / 2048), 1)
     # start from 1 second interval
-    ranges = [[minv, minv + 1000000]]
+    ranges = [[minv, minv + initial_interval]]
     while ranges[-1][-1] < maxv:
         last_interval = ranges[-1][1] - ranges[-1][0]
         ranges.append([ranges[-1][-1], ranges[-1][-1] + last_interval * 2])
