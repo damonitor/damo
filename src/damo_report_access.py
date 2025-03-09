@@ -163,6 +163,11 @@ snapshot_formatters = [
                 lambda snapshot, record, fmt:
                 intervals_tuning_status(snapshot, record, fmt),
                 'intervals tuning status'),
+        Formatter(
+                '<damos stats>',
+                lambda snapshot, record, fmt:
+                damos_stats_str(snapshot, record, fmt),
+                'DAMOS stats for the snapshot-retrieval scheme'),
         ]
 
 region_formatters = [
@@ -273,6 +278,11 @@ def intervals_tuning_status(snapshot, record, fmt):
             _damo_fmt_str.format_time_us(record.intervals.aggr,
                                          fmt.raw_number),
             )
+
+def damos_stats_str(snapshot, record, fmt):
+    if snapshot.damos_stats is None:
+        return 'none'
+    return snapshot.damos_stats.to_str(fmt.raw_number)
 
 def estimated_mem_bw(snapshot, record, fmt, filter_passed_only=False):
     access_bytes = 0
