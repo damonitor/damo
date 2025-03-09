@@ -315,37 +315,13 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     min_temp, max_temp = temperatures[0], temperatures[-1]
 
     hist2 = []
-    min_sz = None
-    max_sz = None
-    max_trange_str = None
-    max_sz_str = None
     for min_t, max_t in get_hist_ranges(min_temp, max_temp, 10):
         sz = sum([hist[x] for x in temperatures if x >= min_t and x < max_t])
-        if min_sz is None or sz < min_sz:
-            min_sz = sz
-        if max_sz is None or max_sz < sz:
-            max_sz = sz
         trange_str = '[%s, %s)' % (_damo_fmt_str.format_nr(min_t, raw),
                                    _damo_fmt_str.format_nr(max_t, raw))
-        if max_trange_str is None or max_trange_str < len(trange_str):
-            max_trange_str = len(trange_str)
         sz_str = _damo_fmt_str.format_sz(sz, raw)
-        if max_sz_str is None or max_sz_str < len(sz_str):
-            max_sz_str = len(sz_str)
         hist2.append([trange_str, sz_str, sz])
-    max_dots = 20
-    sz_interval = max(int((max_sz - min_sz) / max_dots), 1)
-    lines = []
-    for trange_str, sz_str, sz in hist2:
-        trange_str = '%s%s' % (trange_str,
-                               ' ' * (max_trange_str - len(trange_str)))
-        sz_str = '%s%s' % (sz_str,
-                           ' ' * (max_sz_str - len(sz_str)))
-
-        nr_dots = min(math.ceil((sz - min_sz) / sz_interval), max_dots)
-        bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
-        lines.append('%s %s %s' % (trange_str, sz_str, bar))
-    return '\n'.join(lines)
+    return histogram_str(hist2)
 
 def get_hist_ranges(minv, maxv, nr_ranges):
     hist_ranges = []
