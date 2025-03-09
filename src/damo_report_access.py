@@ -355,7 +355,7 @@ def get_hist_ranges(minv, maxv, nr_ranges):
     hist_ranges = []
     total_interval = maxv - minv
     interval = max(int(total_interval / nr_ranges), 1)
-    for i in range(1, nr_ranges + 1):
+    for i in range(nr_ranges):
         hist_ranges.append([minv + interval * i, minv + interval * (i + 1)])
     return hist_ranges
 
