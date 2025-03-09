@@ -804,12 +804,13 @@ class DamosStats:
 
     def __init__(self, nr_tried=0, sz_tried=0, nr_applied=0, sz_applied=0,
                  sz_ops_filter_passed=0, qt_exceeds=0):
-        self.nr_tried = nr_tried
-        self.sz_tried = sz_tried
-        self.nr_applied = nr_applied
-        self.sz_applied = sz_applied
-        self.sz_ops_filter_passed = sz_ops_filter_passed
-        self.qt_exceeds = qt_exceeds
+        self.nr_tried = _damo_fmt_str.text_to_nr(nr_tried)
+        self.sz_tried = _damo_fmt_str.text_to_bytes(sz_tried)
+        self.nr_applied = _damo_fmt_str.text_to_nr(nr_applied)
+        self.sz_applied = _damo_fmt_str.text_to_bytes(sz_applied)
+        self.sz_ops_filter_passed = _damo_fmt_str.text_to_bytes(
+                sz_ops_filter_passed)
+        self.qt_exceeds = _damo_fmt_str.text_to_nr(qt_exceeds)
 
     def to_str(self, raw):
         return '\n'.join([
