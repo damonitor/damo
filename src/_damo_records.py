@@ -1461,6 +1461,8 @@ def filter_records_by_temperature(records, temperature_ranges,
         for snapshot in record.snapshots:
             filtered_regions = []
             for region in snapshot.regions:
+                region.nr_accesses.add_unset_unit(record.intervals)
+                region.age.add_unset_unit(record.intervals)
                 temperature = damo_report_access.temperature_of(
                         region, temperature_weights)
                 for min_t, max_t in temperature_ranges:
