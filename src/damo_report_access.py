@@ -359,13 +359,11 @@ def get_hist_ranges(minv, maxv, nr_ranges):
         hist_ranges.append([minv + interval * i, minv + interval * (i + 1)])
     return hist_ranges
 
-def get_logscale_hist_ranges(minval, maxval):
-    minv = maxval * -1
-    maxv = minval * -1
+def get_logscale_hist_ranges(minv, maxv):
     ranges = [[0, 1000000]]
     while ranges[-1][-1] < maxv:
         ranges.append([ranges[-1][-1], ranges[-1][-1] * 2])
-    return [[-1 * x[1], - 1 * x[0]] for x in ranges]
+    return ranges
 
 def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
@@ -373,7 +371,7 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
         return 'no region in snapshot'
     hist = {}
     for region in snapshot.regions:
-        last_used = -1 * region.age.usec
+        last_used = region.age.usec
         if region.nr_accesses.percent > 0:
             last_used = 0
         if not last_used in hist:
@@ -403,8 +401,8 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
         if max_sz is None or max_sz < sz:
             max_sz = sz
         trange_str = '[-%s, -%s)' % (
-                _damo_fmt_str.format_time_us(-1 * min_t, raw),
-                _damo_fmt_str.format_time_us(-1 * max_t, raw))
+                _damo_fmt_str.format_time_us(min_t, raw),
+                _damo_fmt_str.format_time_us(max_t, raw))
         if max_trange_str is None or max_trange_str < len(trange_str):
             max_trange_str = len(trange_str)
         sz_str = _damo_fmt_str.format_sz(sz, raw)
