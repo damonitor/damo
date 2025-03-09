@@ -375,7 +375,7 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     def get_temperature(region, fmt):
         # set size weight zero
         weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
-        return temperature_of(region, fmt.temperature_weights)
+        return temperature_of(region, weights)
 
     return sz_hist_str(snapshot, fmt, df_passed_sz, get_temperature,
                        _damo_fmt_str.format_nr)
