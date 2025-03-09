@@ -315,7 +315,8 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     min_temp, max_temp = temperatures[0], temperatures[-1]
 
     hist2 = []
-    for min_t, max_t in get_linearscale_hist_ranges(min_temp, max_temp, 10):
+    for min_t, max_t in get_hist_ranges(
+            min_temp, max_temp, 10, fmt.hist_logscale):
         sz = sum([hist[x] for x in temperatures if x >= min_t and x < max_t])
         trange_str = '[%s, %s)' % (_damo_fmt_str.format_nr(min_t, raw),
                                    _damo_fmt_str.format_nr(max_t, raw))
