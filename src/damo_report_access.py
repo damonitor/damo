@@ -295,35 +295,6 @@ def filters_pass_type_of(record):
         text += '\n# WARN: Allow filters at the end of the list means nothing'
     return text
 
-def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
-    raw = fmt.raw_number
-    if len(snapshot.regions) == 0:
-        return 'no region in snapshot'
-    hist = {}
-    # set size weight zero
-    weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
-    for region in snapshot.regions:
-        temperature = temperature_of(region, fmt.temperature_weights)
-        if not temperature in hist:
-            hist[temperature] = 0
-        if df_passed_sz:
-            hist[temperature] += region.sz_filter_passed
-        else:
-            hist[temperature] += region.size()
-
-    temperatures = sorted(hist.keys())
-    min_temp, max_temp = temperatures[0], temperatures[-1]
-
-    hist2 = []
-    for min_t, max_t in get_hist_ranges(
-            min_temp, max_temp, 10, fmt.hist_logscale):
-        sz = sum([hist[x] for x in temperatures if x >= min_t and x < max_t])
-        trange_str = '[%s, %s)' % (_damo_fmt_str.format_nr(min_t, raw),
-                                   _damo_fmt_str.format_nr(max_t, raw))
-        sz_str = _damo_fmt_str.format_sz(sz, raw)
-        hist2.append([trange_str, sz_str, sz])
-    return histogram_str(hist2)
-
 def get_linearscale_hist_ranges(minv, maxv, nr_ranges):
     hist_ranges = []
     total_interval = maxv - minv
@@ -372,6 +343,35 @@ def histogram_str(hist):
         bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
+
+def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
+    raw = fmt.raw_number
+    if len(snapshot.regions) == 0:
+        return 'no region in snapshot'
+    hist = {}
+    # set size weight zero
+    weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
+    for region in snapshot.regions:
+        temperature = temperature_of(region, fmt.temperature_weights)
+        if not temperature in hist:
+            hist[temperature] = 0
+        if df_passed_sz:
+            hist[temperature] += region.sz_filter_passed
+        else:
+            hist[temperature] += region.size()
+
+    temperatures = sorted(hist.keys())
+    min_temp, max_temp = temperatures[0], temperatures[-1]
+
+    hist2 = []
+    for min_t, max_t in get_hist_ranges(
+            min_temp, max_temp, 10, fmt.hist_logscale):
+        sz = sum([hist[x] for x in temperatures if x >= min_t and x < max_t])
+        trange_str = '[%s, %s)' % (_damo_fmt_str.format_nr(min_t, raw),
+                                   _damo_fmt_str.format_nr(max_t, raw))
+        sz_str = _damo_fmt_str.format_sz(sz, raw)
+        hist2.append([trange_str, sz_str, sz])
+    return histogram_str(hist2)
 
 def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
