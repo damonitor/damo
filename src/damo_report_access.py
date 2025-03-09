@@ -367,16 +367,23 @@ def get_logscale_recency_hist_ranges(minv, maxv):
         ranges.append([ranges[-1][-1], ranges[-1][-1] + last_interval * 2])
     return ranges
 
-def histogram_str(hist2):
-    sizes = [entry[2] for entry in hist2]
+def histogram_str(hist):
+    """
+    Format histogram string to show.
+    Args:
+        hist (list): List of lines of histogram to show.
+    Returns:
+        str: A string of the histogram that formatted in a user-friendly way.
+    """
+    sizes = [entry[2] for entry in hist]
     min_sz = min(sizes)
     max_sz = max(sizes)
-    max_trange_str = max([len(entry[0]) for entry in hist2])
-    max_sz_str = max([len(entry[1]) for entry in hist2])
+    max_trange_str = max([len(entry[0]) for entry in hist])
+    max_sz_str = max([len(entry[1]) for entry in hist])
     max_dots = 20
     sz_interval = max(int((max_sz - min_sz) / max_dots), 1)
     lines = []
-    for trange_str, sz_str, sz in hist2:
+    for trange_str, sz_str, sz in hist:
         trange_str = '%s%s' % (trange_str,
                                ' ' * (max_trange_str - len(trange_str)))
         sz_str = '%s%s' % (sz_str,
