@@ -48,7 +48,6 @@
   - provide three regions heatmap by default, or notice their existence
   - better document the hidden regions
 - add DAMOS stat on 'damo report access' output by default if eligible
-- allow logscale histogram
 
 - Deprecate old features
   - Deprecate 'damo report raw'
