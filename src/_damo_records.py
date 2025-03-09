@@ -45,7 +45,7 @@ class DamonSnapshot:
     @classmethod
     def from_kvpairs(cls, kv):
         damos_stats = None
-        if 'damos_stats' in kv:
+        if 'damos_stats' in kv and kv['damos_stats'] is not None:
             damos_stats = _damon.DamosStats.from_kvpairs(kv['damos_stats'])
         return DamonSnapshot(
                 _damo_fmt_str.text_to_ns(kv['start_time']),
