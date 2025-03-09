@@ -315,7 +315,7 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     min_temp, max_temp = temperatures[0], temperatures[-1]
 
     hist2 = []
-    for min_t, max_t in get_hist_ranges(min_temp, max_temp, 10):
+    for min_t, max_t in get_linearscale_hist_ranges(min_temp, max_temp, 10):
         sz = sum([hist[x] for x in temperatures if x >= min_t and x < max_t])
         trange_str = '[%s, %s)' % (_damo_fmt_str.format_nr(min_t, raw),
                                    _damo_fmt_str.format_nr(max_t, raw))
@@ -323,7 +323,7 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
         hist2.append([trange_str, sz_str, sz])
     return histogram_str(hist2)
 
-def get_hist_ranges(minv, maxv, nr_ranges):
+def get_linearscale_hist_ranges(minv, maxv, nr_ranges):
     hist_ranges = []
     total_interval = maxv - minv
     interval = max(int(total_interval / nr_ranges), 1)
@@ -391,7 +391,8 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     if fmt.hist_logscale:
         hist_ranges = get_logscale_hist_ranges(min_lut, max_lut)
     else:
-        hist_ranges = get_hist_ranges(min_lut, max_lut, 10)
+        hist_ranges = get_linearscale_hist_ranges(
+                min_lut, max_lut, 10, fmt.hist_logscale)
     for min_t, max_t in hist_ranges:
         sz = sum([hist[x] for x in last_used_times if x >= min_t and x < max_t])
         trange_str = '[-%s, -%s)' % (
