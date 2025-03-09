@@ -344,6 +344,33 @@ def histogram_str(hist):
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
+def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn):
+    raw = fmt.raw_number
+    if len(snapshot.regions) == 0:
+        return 'no region in snapshot'
+    hist = {}
+    for region in snapshot.regions:
+        metric = get_metric_fn(region, fmt)
+        if not metric in hist:
+            hist[metric] = 0
+        if df_passed_sz:
+            hist[metric] += region.sz_filter_passed
+        else:
+            hist[metric] += region.size()
+
+    metrics = sorted(hist.keys())
+    min_metric, max_metric = metrics[0], metrics[-1]
+
+    hist2 = []
+    for min_m, max_m in get_hist_ranges(
+            min_metric, max_metric, 10, fmt.hist_logscale):
+        sz = sum([hist[x] for x in metrics if x >= min_m and x < max_m])
+        metric_range_str = '[%s, %s)' % (
+                fmt_metric_fn(min_m, raw), fmt_metric_fn(max_m, raw))
+        sz_str = _damo_fmt_str.format_sz(sz, raw)
+        hist2.append([metric_range_str, sz_str, sz])
+    return histogram_str(hist2)
+
 def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     raw = fmt.raw_number
     if len(snapshot.regions) == 0:
