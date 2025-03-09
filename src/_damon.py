@@ -841,7 +841,7 @@ class DamosStats:
 
     @classmethod
     def from_kvpairs(cls, kv):
-        return clx(kv['nr_tried'], kv['sz_tried'],
+        return cls(kv['nr_tried'], kv['sz_tried'],
                    kv['nr_applied'], kv['sz_applied'],
                    kv['sz_ops_filter_passed'], kv['qt_exceeds'])
 
