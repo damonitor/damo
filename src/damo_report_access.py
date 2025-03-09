@@ -1167,6 +1167,9 @@ def set_formats(args, records):
             fmt.format_snapshot_tail = default_snapshot_tail_format_filter_installed
         if intervals_tuning_enabled:
             fmt.format_snapshot_tail += '\nintervals tuning status: <intervals tuning status>'
+        # further check if scheme action is not stat
+        if args.tried_regions_of is not None:
+            fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
 
     if fmt.format_snapshot_head == None:
         need_snapshot_head = False
