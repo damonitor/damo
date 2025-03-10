@@ -231,6 +231,87 @@ interval is 100 milliseconds, the "maximum nr_accesses" is 20 (100 milliseconds
 divided by 5 milliseconds).  And if a region has `nr_accesses` value 4, it's
 access rate is 20% (`4 / 20 * 100`).
 
+#### `--damos_filter` Option Format
+
+`--damos_filter` option's format, which is same to that of
+`--snapshot_damos_filter` for access snapshot commands, is as below:
+
+```
+<allow|reject> [none] <type> [<additional type options>...] [<damos filter>....]
+```
+
+The first argument (`allow` or `reject`) specifies if the filter should `allow`
+or `reject` the memory.  If it is not given, it applies `reject` by default.
+Note that kernel support of `allow` behavior is not yet mainlined as of
+2025-01-19.  It is expected to be supported from Linux v6.14.
+
+`<type>` is the type of the memory that the filter should work for.  Depending
+on the `<type>`, `<additional type options>` need to be given.  For example, if
+`<type>` is `memcg`, the memory cgroup's mount point should be passed as
+`<additional type options>`.  Supported types and required additional options
+are as below.
+
+- anon: no additional options are required.
+- memcg: the path to the memory cgroup should be provided.
+- young: no additional options are required.
+- hugeapge_size: minimum and maximum size of hugepages should be provided.
+- addr: start and end addresses of the address range should be provided.
+- target: the DAMON target index should be provided.
+
+If the filter is for memory exclude the given type, `none` keyword can be given
+before the `<type>` part.  For example,
+
+- `reject young`: Reject applying the DAMOS action to young pages.  In other
+  words, apply the action to non-young pages only.
+- `reject none young`: Reject applying the DAMOS action to none-young pages.
+  In other words, apply the action to young pages only.
+- `reject none addr 1234 56678`: Reject applying the DAMOS action to address
+  ranges except 1234-5678.  In other words, apply the action to only 1234-5678
+  address range.
+
+To use multiple filters, users can put the options in single
+`--[snapshot_]damos_filter` option, or do that with another
+`--[snapshot_]damos_filter` flag.  For example,
+
+```
+--damos_filter allow anon reject memcg foo
+```
+
+and
+
+```
+--damos_filter allow anon --damos_filter reject memcg foo
+```
+
+Will install two DAMOS filters in same way.
+
+Read DAMON design documentation for more details including how filters work.
+
+##### Old `--damos_filter` Format
+
+Before damo v2.6.4, only below old version of the format was supported.  The
+format is still supported, but might be deprecated in future.
+
+```
+<type> <matching|nomatching> [additional type options>...] [allow|reject]
+```
+
+Meaning of `<type>`, `<additional type options>` are same to that of the above
+format.
+
+Second argument says if the filter is for memory that matches (`matching`) or
+not matches (`nomatching`) the `<type>`.  Same to not giving `none` keyword or
+not to the above format.
+
+Finally, users can specify if the filter should `allow` of `reject` the memory.
+Same to what `allow` or `reject` on the above format means.  If it is not
+given, it applies `reject` by default.
+
+Unlike the new format, this format doesn't support specifying multiple filter
+options with single `--[snapshot]_damos_filter` flag.  For multiple filters,
+multiple `--[snapshot]_damos_filter` flags should be provided.
+
+
 ### Full DAMON Parameters Update
 
 As mentioned above, the partial DAMON parameters update command line options
@@ -608,87 +689,6 @@ The line starting with `df-pass:` shows the access snapshot heatmap for regions
 that having the filters passed.  Regions that not having the filters passed are
 represented as a gap (`[...]`).  Note that the heatmap is in experimental
 support now.
-
-### `--damos_filter` Option Format
-
-`--damos_filter` option's format, which is same to that of
-`--snapshot_damos_filter` for access snapshot commands, is as below:
-
-```
-<allow|reject> [none] <type> [<additional type options>...] [<damos filter>....]
-```
-
-The first argument (`allow` or `reject`) specifies if the filter should `allow`
-or `reject` the memory.  If it is not given, it applies `reject` by default.
-Note that kernel support of `allow` behavior is not yet mainlined as of
-2025-01-19.  It is expected to be supported from Linux v6.14.
-
-`<type>` is the type of the memory that the filter should work for.  Depending
-on the `<type>`, `<additional type options>` need to be given.  For example, if
-`<type>` is `memcg`, the memory cgroup's mount point should be passed as
-`<additional type options>`.  Supported types and required additional options
-are as below.
-
-- anon: no additional options are required.
-- memcg: the path to the memory cgroup should be provided.
-- young: no additional options are required.
-- hugeapge_size: minimum and maximum size of hugepages should be provided.
-- addr: start and end addresses of the address range should be provided.
-- target: the DAMON target index should be provided.
-
-If the filter is for memory exclude the given type, `none` keyword can be given
-before the `<type>` part.  For example,
-
-- `reject young`: Reject applying the DAMOS action to young pages.  In other
-  words, apply the action to non-young pages only.
-- `reject none young`: Reject applying the DAMOS action to none-young pages.
-  In other words, apply the action to young pages only.
-- `reject none addr 1234 56678`: Reject applying the DAMOS action to address
-  ranges except 1234-5678.  In other words, apply the action to only 1234-5678
-  address range.
-
-To use multiple filters, users can put the options in single
-`--[snapshot_]damos_filter` option, or do that with another
-`--[snapshot_]damos_filter` flag.  For example,
-
-```
---damos_filter allow anon reject memcg foo
-```
-
-and
-
-```
---damos_filter allow anon --damos_filter reject memcg foo
-```
-
-Will install two DAMOS filters in same way.
-
-Read DAMON design documentation for more details including how filters work.
-
-#### Old `--damos_filter` Format
-
-Before damo v2.6.4, only below old version of the format was supported.  The
-format is still supported, but might be deprecated in future.
-
-```
-<type> <matching|nomatching> [additional type options>...] [allow|reject]
-```
-
-Meaning of `<type>`, `<additional type options>` are same to that of the above
-format.
-
-Second argument says if the filter is for memory that matches (`matching`) or
-not matches (`nomatching`) the `<type>`.  Same to not giving `none` keyword or
-not to the above format.
-
-Finally, users can specify if the filter should `allow` of `reject` the memory.
-Same to what `allow` or `reject` on the above format means.  If it is not
-given, it applies `reject` by default.
-
-Unlike the new format, this format doesn't support specifying multiple filter
-options with single `--[snapshot]_damos_filter` flag.  For multiple filters,
-multiple `--[snapshot]_damos_filter` flags should be provided.
-
 
 ### DAMON Monitoring Results Structure
 
