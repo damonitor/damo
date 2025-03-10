@@ -212,6 +212,15 @@ regions on the Linux kernel's LRU lists, while finding memory regions that not
 accessed for >=5 seconds and deprioritizes the pages of the regions from the
 LRU lists.
 
+Some DAMOS parameters option are complicated to understand using only `damo
+args damon --help` output.  For such cases, please refer to below additional
+descriptions.
+
+For keyword parameters such as DAMOS action or DAMOS filter types, those on
+DAMOS design document is samely applied.  For example, those for
+`--damos_action` can be found from kernel doc [session for DAMOS
+action](https://docs.kernel.org/mm/damon/design.html#operation-action).
+
 #### Access rate
 
 Access rate is the ratio of
