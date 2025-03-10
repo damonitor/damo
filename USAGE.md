@@ -182,6 +182,11 @@ understanding of DAMON's core concepts, understanding what each of such options
 mean with their brief description on the help message wouldn't be that
 difficult.
 
+For keyword parameters such as operations set name (`--ops`), those on DAMON
+design document is samely applied.  For example the keywords for `--ops` can be
+found from the kernel doc
+[session for operations set](https://docs.kernel.org/mm/damon/design.html#operations-set-layer).
+
 Note that these command line options support only single kdamond, single DAMON
 context, and single monitoring target case.  Users can make requests without
 such limitation using full DAMON parameters input, or `damo args damon`
