@@ -718,7 +718,11 @@ def set_monitoring_argparser(parser, hide_help=False):
 def set_damos_argparser(parser, hide_help):
     parser.add_argument('--damos_action', metavar='<action>', nargs='+',
                         action='append', default=[],
-                        help='damos action to apply to the target regions'
+                        help=' '.join([
+                            'damos action to apply to the target regions.',
+                            '<action> should be {%s}.' %
+                            ','.join(_damon.damos_actions),
+                            ])
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--damos_sz_region', metavar=('<min>', '<max>'),
                         nargs=2, default=[], action='append',
