@@ -96,10 +96,10 @@ class TestDamonArgs(unittest.TestCase):
         nr_range = _damon_args.damon_nr_regions_range_for(args)
         self.assertEqual(nr_range, _damon.DamonNrRegionsRange(25, 5000))
 
-    def test_merge_cont_ranges(self):
-        merged = _damon_args.merge_cont_ranges(
+    def test_merge_ranges(self):
+        merged = _damon_args.merge_ranges(
                 [[10, 20], [25, 40], [40, 90], [90, 120], [125, 135],
-                 [135, 150]])
+                 [125, 145], [135, 150]])
         self.assertEqual(merged, [[10, 20], [25, 120], [125, 150]])
 
     def test_convert_add_damos_filter_out_args_to_damos_filter_args(self):

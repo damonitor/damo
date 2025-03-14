@@ -23,11 +23,25 @@ import damo_pa_layout
 
 # Kdamonds construction from command line arguments
 
-def merge_cont_ranges(ranges):
+def range_overlap_or_contig(range1, range2):
+    s1, e1 = range1
+    s2, e2 = range2
+    if e1 == s2 or e2 == s1:
+        return True
+    if e1 <= s2:
+        return False
+    if e2 <= s1:
+        return False
+    return True
+
+def merge_ranges(ranges):
+    ranges.sort(key=lambda r: r[0])
     merged_ranges = []
     for start, end in ranges:
-        if len(merged_ranges) > 0 and merged_ranges[-1][1] == start:
-            merged_ranges[-1][1] = end
+        if len(merged_ranges) > 0 and range_overlap_or_contig(
+                merged_ranges[-1], [start, end]):
+            merged_ranges[-1] = [min(merged_ranges[-1][0], start),
+                                 max(merged_ranges[-1][1], end)]
         else:
             merged_ranges.append([start, end])
     return merged_ranges
@@ -55,7 +69,7 @@ def init_regions_for(args):
                     args.numa_node)
             if err != None:
                 return None, err
-            init_regions = merge_cont_ranges(init_regions)
+            init_regions = merge_ranges(init_regions)
         else:
             init_regions = [damo_pa_layout.default_paddr_region()]
         try:
