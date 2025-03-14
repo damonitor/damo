@@ -233,8 +233,7 @@ access rate is 20% (`4 / 20 * 100`).
 
 #### `--damos_filter` Option Format
 
-`--damos_filter` option's format, which is same to that of
-`--snapshot_damos_filter` for access snapshot commands, is as below:
+`--damos_filter` option's format is as below:
 
 ```
 <allow|reject> [none] <type> [<additional type options>...] [<damos filter>....]
@@ -643,8 +642,9 @@ properties by default if following two conditions met.
 First, the access pattern to visulize should contain the information.  Such
 collection can be made by taking access snapshot with page level
 properties-based DAMOS filters.  For example, `damo record` or `damo report`
-for live snapshot use case with `--snapshot_damos_dfilter` options can generate
-such access pattern collection.
+for live snapshot use case with `--snapshot_damos_filter` options can generate
+such access pattern collection.  The input format for `--snapshot_damos_filter`
+is same to [that of `--damos_filter`](#damos_filter_option_format).
 
 Second, the visualization format supports the page level properties based
 information.  `detailed` and histogram report [styles](#access-report-styles)
