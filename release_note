@@ -1,6 +1,10 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.7.2
+- Clarify available DAMON parameters keywords
+- List available --damos_action parameters on help message
+
 v2.7.1
 - 'damo report access': support logscale histograms via --hist_logscale
 - 'damo report access': add '<damos stats>' snapshot format keyword
