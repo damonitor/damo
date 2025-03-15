@@ -613,13 +613,21 @@ class DamosQuotas:
                 goals,
                 kv['effective_sz_bytes'] if 'effective_sz_bytes' in kv else 0)
 
-    def to_str(self, raw):
-        lines = [
-            '%s / %s / %s per %s' % (
-                _damo_fmt_str.format_time_ns(self.time_ms * 1000000, raw),
-                _damo_fmt_str.format_sz(self.sz_bytes, raw),
-                _damo_fmt_str.format_sz(self.effective_sz_bytes, raw),
-                _damo_fmt_str.format_time_ms(self.reset_interval_ms, raw))]
+    def to_str(self, raw, params_only=False):
+        if params_only is False:
+            lines = [
+                '%s / %s / %s per %s' % (
+                    _damo_fmt_str.format_time_ns(self.time_ms * 1000000, raw),
+                    _damo_fmt_str.format_sz(self.sz_bytes, raw),
+                    _damo_fmt_str.format_sz(self.effective_sz_bytes, raw),
+                    _damo_fmt_str.format_time_ms(self.reset_interval_ms, raw))]
+        else:
+            lines = [
+                '%s / %s per %s' % (
+                    _damo_fmt_str.format_time_ns(self.time_ms * 1000000, raw),
+                    _damo_fmt_str.format_sz(self.sz_bytes, raw),
+                    _damo_fmt_str.format_time_ms(self.reset_interval_ms, raw))]
+
         for idx, goal in enumerate(self.goals):
             lines.append('goal %d: %s' % (idx, goal.to_str(raw)))
         lines.append(
@@ -943,7 +951,8 @@ class Damos:
                 self.access_pattern.to_str(raw), 4))
         if self.quotas is not None:
             lines.append('quotas')
-            lines.append(_damo_fmt_str.indent_lines(self.quotas.to_str(raw), 4))
+            lines.append(_damo_fmt_str.indent_lines(
+                self.quotas.to_str(raw, params_only), 4))
         if self.watermarks is not None:
             lines.append('watermarks')
             lines.append(_damo_fmt_str.indent_lines(
