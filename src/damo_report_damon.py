@@ -42,7 +42,8 @@ def pr_damon_parameters(input_file, json_format, raw_nr, omit_defaults):
                 s.stats = None
                 s.tried_regions = None
 
-    pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu=False)
+    pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu=False,
+                params_only=True)
 
 def update_pr_schemes_stats(input_file, json_format, raw_nr,
                             damos_stat_fields):
@@ -103,13 +104,14 @@ def pr_kdamonds_summary(input_file, json_format, raw_nr, show_cpu):
     for idx, line in enumerate(summary):
         print('%d\t%s' % (idx, line))
 
-def pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu):
+def pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu, params_only=False):
     if json_format:
         print(json.dumps([k.to_kvpairs(raw_nr) for k in kdamonds], indent=4))
     else:
         for idx, k in enumerate(kdamonds):
             print('kdamond %d' % idx)
-            print(_damo_fmt_str.indent_lines( k.to_str(raw_nr, show_cpu), 4))
+            print(_damo_fmt_str.indent_lines(
+                k.to_str(raw_nr, show_cpu, params_only), 4))
 
 def main(args):
     _damon.ensure_root_and_initialized(args)
