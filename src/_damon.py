@@ -935,7 +935,7 @@ class Damos:
             if self.apply_interval_us != 0 else 'per aggr interval')
         return ' '.join(action_words)
 
-    def to_str(self, raw):
+    def to_str(self, raw, params_only=False):
         lines = [self.str_action_line(raw)]
         if self.access_pattern is not None:
             lines.append('target access pattern')
@@ -952,10 +952,10 @@ class Damos:
             lines.append('filter %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(
                 damos_filter.to_str(raw), 4))
-        if self.stats != None:
+        if params_only is False and self.stats is not None:
             lines.append('statistics')
             lines.append(_damo_fmt_str.indent_lines(self.stats.to_str(raw), 4))
-        if self.tried_regions != None:
+        if params_only is False and self.tried_regions is not None:
             lines.append('tried regions (%s)' % _damo_fmt_str.format_sz(
                     self.tried_bytes, raw))
             for region in self.tried_regions:
@@ -1048,7 +1048,7 @@ class DamonCtx:
         for scheme in self.schemes:
             scheme.context = self
 
-    def to_str(self, raw):
+    def to_str(self, raw, params_only=False):
         lines = ['ops: %s' % self.ops]
         for idx, target in enumerate(self.targets):
             lines.append('target %d' % idx)
@@ -1063,7 +1063,8 @@ class DamonCtx:
         lines.append('nr_regions: %s' % self.nr_regions.to_str(raw))
         for idx, scheme in enumerate(self.schemes):
             lines.append('scheme %d' % idx)
-            lines.append(_damo_fmt_str.indent_lines(scheme.to_str(raw), 4))
+            lines.append(_damo_fmt_str.indent_lines(
+                scheme.to_str(raw, params_only), 4))
         return '\n'.join(lines)
 
     def __str__(self):
@@ -1115,24 +1116,26 @@ class Kdamond:
         for ctx in self.contexts:
             ctx.kdamond = self
 
-    def summary_str(self, show_cpu=False):
+    def summary_str(self, show_cpu=False, params_only=False,
+                    omit_defaults=False):
         words = []
-        if self.state is not None:
+        if params_only is False and self.state is not None:
             words.append('state: %s' % self.state)
-        if self.pid is not None:
+        if params_only is False and self.pid is not None:
             words.append('pid: %s' % self.pid)
         if show_cpu:
             words.append('cpu usage: %s' % self.get_cpu_usage())
         return ', '.join(words)
 
-    def to_str(self, raw, show_cpu=False):
+    def to_str(self, raw, show_cpu=False, params_only=False):
         lines = []
-        summary_line = self.summary_str(show_cpu)
+        summary_line = self.summary_str(show_cpu, params_only)
         if summary_line != '':
             lines.append(summary_line)
         for idx, ctx in enumerate(self.contexts):
             lines.append('context %d' % idx)
-            lines.append(_damo_fmt_str.indent_lines(ctx.to_str(raw), 4))
+            lines.append(_damo_fmt_str.indent_lines(
+                ctx.to_str(raw, params_only), 4))
         return '\n'.join(lines)
 
     def __str__(self):
