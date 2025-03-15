@@ -48,7 +48,6 @@
   - provide three regions heatmap by default, or notice their existence
   - better document the hidden regions
 - add DAMOS stat on 'damo report access' output by default if eligible
-- USAGE: document what --damos_action inputs are available
 
 - Deprecate old features
   - Deprecate 'damo report raw'
