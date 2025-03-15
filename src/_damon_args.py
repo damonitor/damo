@@ -757,15 +757,15 @@ def set_damos_argparser(parser, hide_help):
                         action='append', default=[],
                         help='the apply interval for the scheme'
                         if not hide_help else argparse.SUPPRESS)
+    damos_quotas_help = ' '.join([
+        'damos quotas (<time (ms)> [<size (bytes)> [<reset interval (ms)>',
+        '[<size priority weight (permil)>',
+        '[<access rate priority weight> (permil)',
+        '[<age priority weight> (permil)]]]]])'])
     parser.add_argument(
             '--damos_quotas', default=[],
             metavar='<quota parameter>', nargs='+', action='append',
-            help=' '.join([
-            'damos quotas (<time (ms)> [<size (bytes)> [<reset interval (ms)>',
-                '[<size priority weight (permil)>',
-                '[<access rate priority weight> (permil)',
-                '[<age priority weight> (permil)]]]]])'])
-            if not hide_help else argparse.SUPPRESS)
+            help=argparse.SUPPRESS)
     parser.add_argument('--damos_quota_interval', default=[],
                         metavar='<milliseconds>', action='append',
                         help='quota reset interval'
