@@ -1160,14 +1160,6 @@ percentile               0              25              50              75      
      0.03%  ps               [kernel.vmlinux]                       [k] __memcg_slab_post_alloc_hook
 ```
 
-### `damo report raw`
-
-`damo report heats` is deprecated in favor of [`damo report access
---raw_form`](#damo-report-access), which can can replace all usages of `damo
-report raw'.  Please refer to
-[FEATURES_DEPRECATION_SCHEDULE.md](FEATURES_DEPRECATION_SCHEDULE.md) file for
-more details.  This section will be removed by 2025-03-09.
-
 Miscellaneous Helper Commands
 =============================
 
