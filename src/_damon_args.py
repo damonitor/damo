@@ -811,8 +811,9 @@ def set_damos_argparser(parser, hide_help):
             '--damos_filter_out', nargs='+', action='append',
             default=[],
             metavar='<filter argument>',
-            help='damos filter (matching, type, and optional arguments)'
-            if not hide_help else argparse.SUPPRESS)
+            help=argparse.SUPPRESS)
+            # help='damos filter (matching, type, and optional arguments)'
+            # if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--damos_nr_filters', type=int, nargs='+', default=[],
             metavar='<integer>',
