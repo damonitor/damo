@@ -706,7 +706,8 @@ def set_monitoring_attrs_argparser(parser, hide_help=False):
             '--monitoring_intervals_goal', nargs=4,
             metavar=('<access_bp>', '<aggrs>', '<min_sample_us>',
                      '<max_sample_us>'), default=['0%', '0', '0us', '0us'],
-            help='monitoring intervals auto-tuning goal')
+            help='monitoring intervals auto-tuning goal'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--monitoring_nr_regions_range', nargs=2,
                         metavar=('<min>', '<max>'), default=[10, 1000],
                         help='min/max number of monitoring regions'
