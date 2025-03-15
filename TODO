@@ -52,7 +52,6 @@
 
 - Deprecate old features
   - Deprecate 'damo report raw'
-    - notified as will-be-removed by 2025-03-09
   - Deprecate 'damo status' (done.)
   - Deprecate 'damo show' (done.)
   - Deprecate heats report type in favor of heatmap report type (done.)
