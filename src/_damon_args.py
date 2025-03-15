@@ -840,7 +840,7 @@ def set_argparser(parser, add_record_options, min_help):
         parser.add_argument('-o', '--out', metavar='<file path>', type=str,
                 default='damon.data', help='output file path')
     set_common_argparser(parser)
-    set_monitoring_attrs_pinpoint_argparser(parser, min_help)
+    set_monitoring_attrs_pinpoint_argparser(parser, hide_help=True)
     if min_help:
         if parser.epilog is None:
             parser.epilog = ''
