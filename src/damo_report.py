@@ -8,7 +8,6 @@ import damo_report_damon
 import damo_report_footprint
 import damo_report_holistic
 import damo_report_profile
-import damo_report_raw
 import damo_report_times
 import damo_wss
 
@@ -32,11 +31,6 @@ subcmds = [
             msg='hotspot functions for specific access pattern'),
         _damo_subcmds.DamoSubCmd(name='times', module=damo_report_times,
             msg='times of record having specific access pattern'),
-
-        _damo_subcmds.DamoSubCmd(name='raw', module=damo_report_raw,
-            msg=' '.join([
-                'human readable raw data of access patterns',
-                '(Will be DEPRECATED; Use "access --raw_form" instead.)'])),
         _damo_subcmds.DamoSubCmd(name='nr_regions', module=damo_nr_regions,
             msg='number of DAMON-regions'),
         ]
