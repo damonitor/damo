@@ -805,9 +805,8 @@ def set_damos_argparser(parser, hide_help):
     parser.add_argument(
             '--damos_filter', nargs='+', action='append',
             default=[],
-            metavar='<filter argument>',
-            help='damos filter (type, matching, and optional arguments)'
-            if not hide_help else argparse.SUPPRESS)
+            metavar='<<allow|reject> [none] <type> [option]...>',
+            help='damos filter' if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--damos_filter_out', nargs='+', action='append',
             default=[],
