@@ -7,9 +7,9 @@ import _damo_dist
 import _damo_fmt_str
 import _damo_print
 import _damo_records
-import damo_heatmap
 import damo_record_info
 import damo_report_footprint
+import damo_report_heatmap
 import damo_wss
 
 def fmt_report_short(args):
@@ -26,7 +26,7 @@ def fmt_report_short(args):
         for region in guide.regions():
             lines.append('# target %d, address range %d-%d' % (
                 guide.tid, region[0], region[1]))
-            heatmap = damo_heatmap.fmt_heats(
+            heatmap = damo_report_heatmap.fmt_heats(
                     argparse.Namespace(
                         tid=guide.tid, resol=[5, 80],
                         time_range=[guide.start_time, guide.end_time],
@@ -114,7 +114,7 @@ def fmt_report(args):
         lines.append('# target %d' % guide.tid)
         for region in guide.regions():
             lines.append('# address range %d-%d' % (region[0], region[1]))
-            heatmap = damo_heatmap.fmt_heats(
+            heatmap = damo_report_heatmap.fmt_heats(
                     argparse.Namespace(
                         tid=guide.tid, resol=[10, 80],
                         time_range=[guide.start_time, guide.end_time],

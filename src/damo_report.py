@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: GPL-2.0
 
 import _damo_subcmds
-import damo_heatmap
 import damo_nr_regions
 import damo_report_access
 import damo_report_damon
 import damo_report_footprint
+import damo_report_heatmap
 import damo_report_holistic
 import damo_report_profile
 import damo_report_times
@@ -20,7 +20,7 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(
             name='holistic', module=damo_report_holistic,
             msg='holistic report'),
-        _damo_subcmds.DamoSubCmd(name='heatmap', module=damo_heatmap,
+        _damo_subcmds.DamoSubCmd(name='heatmap', module=damo_report_heatmap,
             msg='heatmap of access patterns'),
         _damo_subcmds.DamoSubCmd(name='wss', module=damo_wss,
             msg='working set size'),
