@@ -5,6 +5,7 @@ v2.7.2
 - Clarify available DAMON parameters keywords
 - List available --damos_action parameters on help message
 - Remove 'damo report raw' support
+- Add '--draw_range' option to 'damo report heatmap'
 
 v2.7.1
 - 'damo report access': support logscale histograms via --hist_logscale

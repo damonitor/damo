@@ -44,9 +44,6 @@
     False due to auto-tuned interval.
   - Works without committing intervals again, only if --tried_regions_of is
     given.
-- make 'damo report heatmap' better
-  - provide three regions heatmap by default, or notice their existence
-  - better document the hidden regions
 - add DAMOS stat on 'damo report access' output by default if eligible
 
 - Deprecate old features
