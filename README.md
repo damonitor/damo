@@ -47,7 +47,7 @@ pattern of your workload.
     $ sudo damo start $(pidof <your workload>)
     $ sudo damo report access
     $ sudo damo record ongoing
-    $ sudo damo report heatmap --stdout_colorset emotion
+    $ sudo damo report heatmap --draw_range hottest
 
 The second and last commands will show the access pattern of your workload,
 like below:
@@ -170,16 +170,20 @@ workload.  The last line asks ``damo`` to record the access pattern in
 Visualizing Recorded Patterns
 -----------------------------
 
-Below three commands visualize the recorded access patterns into three
+Below three commands visualize the recorded access patterns into five
 image files.
 
-    $ damo report heatmap --output access_pattern_heatmap.png
+    $ damo report heatmap --output access_pattern_heatmap.png --draw_range all
     $ damo report wss --range 0 101 1 --plot wss_dist.png
     $ damo report wss --range 0 101 1 --sortby time --plot wss_chron_change.png
 
-- ``access_pattern_heatmap.png`` will show the data access pattern in a
-  heatmap, which shows when (x-axis) what memory region (y-axis) is how
-  frequently accessed (color).
+The first command will create three files, namely `access_pattern_heatmap.png`,
+`access_patern_heatmap.1.png`, and `access_pattern_heatmap.2.png`.
+
+- ``access_pattern_heatmap{,1,2}.png`` will show the data access pattern of
+  three address ranges nearby stack, `mmap()`-ed region, and heat in heatmaps,
+  which shows when (x-axis) what memory region (y-axis) is how frequently
+  accessed (color).
 - ``wss_dist.png`` will show the distribution of the working set size.
 - ``wss_chron_change.png`` will show how the working set size has
   chronologically changed.
