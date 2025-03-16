@@ -154,14 +154,14 @@ def fmt_ascii_heatmap(pixels, time_range, addr_range, resols, colorset,
             float(time_range[1] - time_range[0]) / len(pixels), False)))
     return '\n'.join(lines)
 
-def fmt_heats(args, __records):
+def fmt_heats(args, address_range_idx, __records):
     tid = args.tid
     tres = args.resol[0]
     tmin = args.time_range[0]
     tmax = args.time_range[1]
     ares = args.resol[1]
-    amin = args.address_range[0]
-    amax = args.address_range[1]
+    amin = args.address_range[address_range_idx][0]
+    amax = args.address_range[address_range_idx][1]
 
     tunit = (tmax - tmin) // tres
     aunit = (amax - amin) // ares
@@ -201,7 +201,8 @@ def fmt_heats(args, __records):
     return '\n'.join(lines)
 
 def pr_heats(args, __records):
-    print(fmt_heats(args, __records))
+    for idx in range(len(args.address_range)):
+        print(fmt_heats(args, idx, __records))
 
 def set_missed_args(args, records):
     if args.tid and args.time_range and args.address_range:
@@ -223,8 +224,8 @@ def set_missed_args(args, records):
             hottest_contig_region = sorted(
                     guide.contig_regions, key=lambda x: x.heat_per_byte(),
                     reverse=True)[0]
-            args.address_range = [hottest_contig_region.start_addr,
-                                  hottest_contig_region.end_addr]
+            args.address_range = [[hottest_contig_region.start_addr,
+                                  hottest_contig_region.end_addr]]
 
 def plot_range(orig_range, use_absolute_val):
     plot_range = [x for x in orig_range]
@@ -233,15 +234,19 @@ def plot_range(orig_range, use_absolute_val):
         plot_range[1] -= orig_range[0]
     return plot_range
 
-def plot_heatmap(data_file, output_file, args):
+def plot_heatmap(data_file, output_file, args, address_range, range_idx):
     terminal = output_file.split('.')[-1]
     if not terminal in ['pdf', 'jpeg', 'png', 'svg']:
         os.remove(data_file)
         print("Unsupported plot output type.")
         exit(-1)
+    if range_idx > 0:
+        tokens = output_file.split('.')
+        tokens.insert(-1, '%d' % range_idx)
+        output_file = '.'.join(tokens)
 
     x_range = plot_range(args.time_range, args.abs_time)
-    y_range = plot_range(args.address_range, args.abs_addr)
+    y_range = plot_range(address_range, args.abs_addr)
 
     gnuplot_cmd = """
     set term %s;
@@ -277,7 +282,8 @@ def set_argparser(parser):
     parser.add_argument('--draw_range', choices=['hottest'], default='hottest',
                         help='which ranges to draw heatmap for')
     parser.add_argument('--address_range', metavar='<address>', type=int,
-            nargs=2, help='start and end address of the output')
+                        nargs=2, action='append',
+                        help='start and end address of the output')
     parser.add_argument('--abs_time', action='store_true', default=False,
             help='display absolute time in output')
     parser.add_argument('--abs_addr', action='store_true', default=False,
@@ -316,8 +322,9 @@ def main(args=None):
         pr_heats(args, records)
         return
 
-    # use gnuplot-based image plot
-    tmp_path = tempfile.mkstemp()[1]
-    with open(tmp_path, 'w') as f:
-        f.write(fmt_heats(args, records))
-    plot_heatmap(tmp_path, args.output, args)
+    for idx, address_range in enumerate(args.address_range):
+        # use gnuplot-based image plot
+        tmp_path = tempfile.mkstemp()[1]
+        with open(tmp_path, 'w') as f:
+            f.write(fmt_heats(args, idx, records))
+        plot_heatmap(tmp_path, args.output, args, address_range, idx)
