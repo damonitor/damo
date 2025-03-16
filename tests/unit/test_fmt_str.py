@@ -285,5 +285,16 @@ class TestDamoFmtStr(unittest.TestCase):
                     'False': False,
                     })
 
+    def test_text_to_nr(self):
+        _test_damo_common.test_input_expects(
+                self, _damo_fmt_str.text_to_nr,
+                {
+                    123: 123,
+                    '123': 123,
+                    '1,234': 1234,
+                    '12,345': 12345,
+                    '123,456': 123456,
+                    })
+
 if __name__ == '__main__':
     unittest.main()
