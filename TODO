@@ -45,6 +45,9 @@
   - Works without committing intervals again, only if --tried_regions_of is
     given.
 - add DAMOS stat on 'damo report access' output by default if eligible
+- Support 'max' for numbers
+- Fix Damos.effectively_same() failure for age max.
+- Remove unnecessary options from 'damo args damon'
 
 - Deprecate old features
   - Deprecate 'damo report raw'
