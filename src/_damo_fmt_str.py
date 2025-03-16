@@ -213,6 +213,9 @@ def text_to_nr(txt):
     if type(txt) in number_types:
         return txt
 
+    if txt == 'max':
+        return ulong_max
+
     new_txt = ''.join([c for c in txt if c != ','])
     try:
         return int(new_txt)
