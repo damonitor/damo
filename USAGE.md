@@ -938,6 +938,14 @@ each target task.  Therefore, it would be wise to plot the data points in each
 union.  If no axis boundary option is given, it will automatically find the
 biggest union in ``--guide`` output and set the boundary in it.
 
+For a case that the user still unsure which range to draw heatmap for,
+`--draw_range` option can be used.  The option receives either `all` or
+`hottest`.  If `all` is passed, `damo report heatmap` draws heatmaps for all
+the three regions.  If file output is requested, the output for first region
+will have the user-specified file name.  For those of second and third regions,
+`.1` and `.2` will be added to the file name, before the file format extension
+part (e.g., `heatmap.1.png`).  If `hottest` is passed, `damo report heatmap`
+will draw the heatmap for hottest region among the three regions.
 
 ### `damo report wss`
 
