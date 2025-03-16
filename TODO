@@ -39,7 +39,6 @@
 - damo report access: show '<access observation ratio>' by default if
   auto-tuning ongoing
 - add DAMOS stat on 'damo report access' output by default if eligible
-- Support 'max' for numbers
 - Make 'damo report access' under auto-tuning smoother
   - It is not smooth since installing monitoring scheme updates
     sampling/aggregation intervals together.
