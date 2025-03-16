@@ -45,6 +45,9 @@
   - Even if a monitoring scheme is installed, scheme target age comparison
     mismatches, since the comparison is done with age in aggregation unit that
     translated from max using the auto-tuned sampling interval.
+    - Ideas
+      - use min sampling interval?
+      - treat larger than a value as same
   - Current workaround is using --tried_regions_of
   - Having to wait one aggregation interval for tried_regions update is too long.
     - DAMON sysfs may be able to be updated for this, for stat-only scheme.
