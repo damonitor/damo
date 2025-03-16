@@ -219,11 +219,12 @@ def set_missed_args(args, records):
         args.time_range = [guide.start_time, guide.end_time]
 
     if not args.address_range:
-        hottest_contig_region = sorted(
-                guide.contig_regions, key=lambda x: x.heat_per_byte(),
-                reverse=True)[0]
-        args.address_range = [hottest_contig_region.start_addr,
-                              hottest_contig_region.end_addr]
+        if args.draw_range == 'hottest':
+            hottest_contig_region = sorted(
+                    guide.contig_regions, key=lambda x: x.heat_per_byte(),
+                    reverse=True)[0]
+            args.address_range = [hottest_contig_region.start_addr,
+                                  hottest_contig_region.end_addr]
 
 def plot_range(orig_range, use_absolute_val):
     plot_range = [x for x in orig_range]
@@ -273,6 +274,8 @@ def set_argparser(parser):
             help='resolutions for time and address axes')
     parser.add_argument('--time_range', metavar='<time>', type=int, nargs=2,
             help='start and end time of the output')
+    parser.add_argument('--draw_range', choices=['hottest'], default='hottest',
+                        help='which ranges to draw heatmap for')
     parser.add_argument('--address_range', metavar='<address>', type=int,
             nargs=2, help='start and end address of the output')
     parser.add_argument('--abs_time', action='store_true', default=False,
