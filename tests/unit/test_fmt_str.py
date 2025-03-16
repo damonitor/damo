@@ -294,6 +294,7 @@ class TestDamoFmtStr(unittest.TestCase):
                     '1,234': 1234,
                     '12,345': 12345,
                     '123,456': 123456,
+                    'max': _damo_fmt_str.ulong_max,
                     })
 
 if __name__ == '__main__':
