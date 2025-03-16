@@ -267,6 +267,36 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx):
         print('executing gnuplot failed (%s)' % e)
     os.remove(data_file)
 
+def main(args):
+    records, err = _damo_records.get_records(record_file=args.input)
+    if err != None:
+        print('monitoring result file (%s) parsing failed (%s)' %
+                (args.input, err))
+        exit(1)
+
+    # Use 80x40 or 500x500 resolution as default for stdout or image plots
+    if args.resol is None:
+        if args.output == 'stdout':
+            args.resol = [40, 80]
+        else:
+            args.resol = [500, 500]
+
+    if args.guide:
+        damo_record_info.pr_guide(records)
+        return
+
+    set_missed_args(args, records)
+    if args.output in ['stdout', 'raw']:
+        pr_heats(args, records)
+        return
+
+    for idx, address_range in enumerate(args.address_range):
+        # use gnuplot-based image plot
+        tmp_path = tempfile.mkstemp()[1]
+        with open(tmp_path, 'w') as f:
+            f.write(fmt_heats(args, idx, records))
+        plot_heatmap(tmp_path, args.output, args, address_range, idx)
+
 def set_argparser(parser):
     parser.add_argument('--output', metavar='<output>', default='stdout',
                         help=' '.join(
@@ -302,33 +332,3 @@ def set_argparser(parser):
             action='store_true',
             help='skip printing example colors at the output')
     parser.description = 'Show when which address ranges were how frequently accessed'
-
-def main(args=None):
-    records, err = _damo_records.get_records(record_file=args.input)
-    if err != None:
-        print('monitoring result file (%s) parsing failed (%s)' %
-                (args.input, err))
-        exit(1)
-
-    # Use 80x40 or 500x500 resolution as default for stdout or image plots
-    if args.resol is None:
-        if args.output == 'stdout':
-            args.resol = [40, 80]
-        else:
-            args.resol = [500, 500]
-
-    if args.guide:
-        damo_record_info.pr_guide(records)
-        return
-
-    set_missed_args(args, records)
-    if args.output in ['stdout', 'raw']:
-        pr_heats(args, records)
-        return
-
-    for idx, address_range in enumerate(args.address_range):
-        # use gnuplot-based image plot
-        tmp_path = tempfile.mkstemp()[1]
-        with open(tmp_path, 'w') as f:
-            f.write(fmt_heats(args, idx, records))
-        plot_heatmap(tmp_path, args.output, args, address_range, idx)
