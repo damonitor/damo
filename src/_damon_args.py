@@ -172,7 +172,7 @@ def damos_options_to_filter_v2(words):
     ftype = words[nr_consumed_words]
     nr_consumed_words += 1
 
-    if ftype in ['anon', 'young', 'unmapped']:
+    if ftype in ['anon', 'active', 'young', 'unmapped']:
         filter = _damon.DamosFilter(ftype, fmatching, allow=allow)
         return filter, None, nr_consumed_words
     else:

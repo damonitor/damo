@@ -719,8 +719,8 @@ class DamosWatermarks:
                 ])
 
 class DamosFilter:
-    filter_type = None  # anon, memcg, young, hugepage_size, unmapped, addr, or
-                        # target
+    filter_type = None  # anon, active, memcg, young, hugepage_size, unmapped,
+                        # addr, or target
     matching = None
     allow = None
     memcg_path = None
@@ -750,7 +750,7 @@ class DamosFilter:
         if self.matching is False:
             words.append('none')
         words.append(self.filter_type)
-        if self.filter_type in ['anon', 'young', 'unmapped']:
+        if self.filter_type in ['anon', 'active', 'young', 'unmapped']:
             return ' '.join(words)
         if self.filter_type == 'memcg':
             return ' '.join(words + [self.memcg_path])
@@ -799,8 +799,8 @@ class DamosFilter:
 
     def handled_by_ops(self):
         # whether this filter is handled by DAMON operations set layer
-        return self.filter_type in ['anon', 'memcg', 'young', 'hugepage_size',
-                                    'unmapped']
+        return self.filter_type in ['anon', 'active', 'memcg', 'young',
+                                    'hugepage_size', 'unmapped']
 
 class DamosStats:
     nr_tried = None
@@ -1247,6 +1247,8 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
             'schemes_filters_core_ops_dirs',
                                         # merged in mm-unstable
             'schemes_quota_goal_node_mem_used_free',
+                                        # under development
+            'schemes_filters_active',
                                         # under development
             ]
 
