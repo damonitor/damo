@@ -45,7 +45,7 @@ def readfile(file_path):
         return f.read()
 
 def collapse_ranges(ranges):
-    ranges = sorted(ranges, key=lambda x: x.start)
+    ranges = sorted(ranges, key=lambda x: (x.nid, x.start))
     merged = []
     for r in ranges:
         if not merged:
