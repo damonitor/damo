@@ -80,31 +80,27 @@ def init_regions_for(args):
 
     return init_regions, None
 
-def override_intervals(intervals, override_intervals):
-    if override_intervals is None:
+def override_vals(to_override, new_vals):
+    if new_vals is None:
         return
-    for idx, interval in enumerate(override_intervals):
-        if interval is not None:
-            intervals[idx] = interval
+    for idx, new_val in enumerate(new_vals):
+        if new_val is not None:
+            to_override[idx] = new_val
 
 def damon_intervals_for(args):
     intervals = ['5ms', '100ms', '1s']
-    override_intervals(intervals, args.monitoring_intervals)
-    override_intervals(intervals, [args.sample, args.aggr, args.updr])
+    override_vals(intervals, args.monitoring_intervals)
+    override_vals(intervals, [args.sample, args.aggr, args.updr])
 
     intervals_goal = _damon.DamonIntervalsGoal(*args.monitoring_intervals_goal)
 
     return _damon.DamonIntervals(*intervals, intervals_goal)
 
 def damon_nr_regions_range_for(args):
-    default_range = _damon.DamonNrRegionsRange()
-    range1 = _damon.DamonNrRegionsRange(args.minr, args.maxr)
-    range2 = _damon.DamonNrRegionsRange(*args.monitoring_nr_regions_range)
-    if not range1 == default_range:
-        return range1
-    if not range2 == default_range:
-        return range2
-    return default_range
+    nr_range = ['10', '1000']
+    override_vals(nr_range, args.monitoring_nr_regions_range)
+    override_vals(nr_range, [args.minr, args.maxr])
+    return _damon.DamonNrRegionsRange(*nr_range)
 
 def schemes_option_to_damos(schemes):
     if os.path.isfile(schemes):
@@ -661,11 +657,11 @@ def set_monitoring_attrs_pinpoint_argparser(parser, hide_help=False):
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '-n', '--minr', metavar='<# regions>',
-            default=10, help='minimal number of regions'
+            help='minimal number of regions'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '-m', '--maxr', metavar='<# regions>',
-            default=1000, help='maximum number of regions'
+            help='maximum number of regions'
             if not hide_help else argparse.SUPPRESS)
 
 def set_monitoring_attrs_argparser(parser, hide_help=False):
@@ -681,7 +677,7 @@ def set_monitoring_attrs_argparser(parser, hide_help=False):
             help='monitoring intervals auto-tuning goal'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--monitoring_nr_regions_range', nargs=2,
-                        metavar=('<min>', '<max>'), default=[10, 1000],
+                        metavar=('<min>', '<max>'),
                         help='min/max number of monitoring regions'
                         if not hide_help else argparse.SUPPRESS)
 
