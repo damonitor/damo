@@ -53,6 +53,7 @@
     - DAMON sysfs may be able to be updated for this, for stat-only scheme.
 - Support multiple kdamonds from command line interface
   (https://github.com/damonitor/damo/issues/3#issuecomment-2764663341)
+- Support active page filter feature check
 
 - Deprecate old features
   - Deprecate 'damo report raw'
