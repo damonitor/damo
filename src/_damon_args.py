@@ -80,18 +80,21 @@ def init_regions_for(args):
 
     return init_regions, None
 
+def override_intervals(intervals, override_intervals):
+    if override_intervals is None:
+        return
+    for idx, interval in enumerate(override_intervals):
+        if interval is not None:
+            intervals[idx] = interval
+
 def damon_intervals_for(args):
-    default_intervals = _damon.DamonIntervals()
+    intervals = ['5ms', '100ms', '1s']
+    override_intervals(intervals, args.monitoring_intervals)
+    override_intervals(intervals, [args.sample, args.aggr, args.updr])
+
     intervals_goal = _damon.DamonIntervalsGoal(*args.monitoring_intervals_goal)
-    intervals1 = _damon.DamonIntervals(args.sample, args.aggr, args.updr,
-                                       intervals_goal)
-    intervals2 = _damon.DamonIntervals(*args.monitoring_intervals,
-                                       intervals_goal)
-    if not intervals1 == default_intervals:
-        return intervals1
-    if not intervals2 == default_intervals:
-        return intervals2
-    return default_intervals
+
+    return _damon.DamonIntervals(*intervals, intervals_goal)
 
 def damon_nr_regions_range_for(args):
     default_range = _damon.DamonNrRegionsRange()
@@ -646,15 +649,15 @@ def set_monitoring_attrs_pinpoint_argparser(parser, hide_help=False):
     # for easier pinpoint setup
     parser.add_argument(
             '-s', '--sample', metavar='<microseconds>',
-            default=5000, help='sampling interval (us)'
+            help='sampling interval (us)'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '-a', '--aggr', metavar='<microseconds>',
-            default=100000, help='aggregate interval (us)'
+            help='aggregate interval (us)'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '-u', '--updr', metavar='<microseconds>',
-            default=1000000, help='regions update interval (us)'
+            help='regions update interval (us)'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '-n', '--minr', metavar='<# regions>',
@@ -668,7 +671,6 @@ def set_monitoring_attrs_pinpoint_argparser(parser, hide_help=False):
 def set_monitoring_attrs_argparser(parser, hide_help=False):
     # for easier total setup
     parser.add_argument('--monitoring_intervals', nargs=3,
-                        default=['5ms', '100ms', '1s'],
                         metavar=('<sample>', '<aggr>', '<update>'),
                         help='monitoring intervals (us)'
                         if not hide_help else argparse.SUPPRESS)
