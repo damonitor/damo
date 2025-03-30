@@ -22,8 +22,6 @@
   - add option to add snapshot as (optional) alternate of heatmap
 - Show temperature histogram on holistic report
 - heatmap: Support interactive zoom in/out/scrolling
-- Implement single report formatter
-  - Extend 'report access' format arguments for wss, memfootprint, etc
 - Provide virtual memory mapping information
   - shows when what virtual address has mappend and unmapped
 - Implement an official feature to check if 'damo' supports the system
