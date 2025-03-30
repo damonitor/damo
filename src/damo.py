@@ -14,6 +14,7 @@ import damo_args
 import damo_convert_record_format
 import damo_diagnose
 import damo_features
+import damo_help
 import damo_lru_sort
 import damo_monitor
 import damo_pa_layout
@@ -56,6 +57,9 @@ subcmds = [
             msg='control DAMON_LRU_SORT'),
 
         # For convenient use of damo and DAMON
+        _damo_subcmds.DamoSubCmd(
+            name='help', module=damo_help,
+            msg='provide help for given topics'),
         _damo_subcmds.DamoSubCmd(name='args',
             module=damo_args,
             msg='generate complex arguments for other commands'),
