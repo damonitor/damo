@@ -811,5 +811,5 @@ def set_argparser(parser, add_record_options, min_help):
         if parser.epilog is None:
             parser.epilog = ''
         parser.epilog += ' '.join([
-            "DAMON parameters options from 'damo args damon' are also",
-            "supported. Do 'damo args damon -h' for the options."])
+            "DAMON parameters options are also supported.",
+            "Do 'damo help damon_param_options -h' for the options."])
