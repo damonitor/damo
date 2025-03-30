@@ -766,13 +766,6 @@ def set_damos_argparser(parser, hide_help):
             help='number of quota goals for each scheme (in order)'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
-            '--damos_wmarks', nargs=5, action='append', default=[],
-            metavar=('<metric (none|free_mem_rate)>', '<interval (us)>',
-                '<high mark (permil)>', '<mid mark (permil)>',
-                '<low mark (permil)>'),
-            help='damos watermarks'
-            if not hide_help else argparse.SUPPRESS)
-    parser.add_argument(
             '--damos_filter', nargs='+', action='append',
             default=[],
             metavar='<<allow|reject> [none] <type> [option]...>',
@@ -781,6 +774,13 @@ def set_damos_argparser(parser, hide_help):
             '--damos_nr_filters', type=int, nargs='+', default=[],
             metavar='<integer>',
             help='number of filters for each scheme (in order)'
+            if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--damos_wmarks', nargs=5, action='append', default=[],
+            metavar=('<metric (none|free_mem_rate)>', '<interval (us)>',
+                '<high mark (permil)>', '<mid mark (permil)>',
+                '<low mark (permil)>'),
+            help='damos watermarks'
             if not hide_help else argparse.SUPPRESS)
 
 def set_misc_damon_params_argparser(parser):
