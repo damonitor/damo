@@ -783,9 +783,7 @@ def set_damos_argparser(parser, hide_help):
             help='number of filters for each scheme (in order)'
             if not hide_help else argparse.SUPPRESS)
 
-def set_damon_params_argparser(parser, min_help):
-    set_monitoring_argparser(parser, min_help)
-    set_damos_argparser(parser, min_help)
+def set_misc_damon_params_argparser(parser):
     parser.add_argument('-c', '--schemes', metavar='<json string or file>',
 	    help='data access monitoring-based operation schemes')
     parser.add_argument('--kdamonds', metavar='<json/yaml string or file>',
@@ -799,6 +797,11 @@ def set_damon_params_argparser(parser, min_help):
                 'The implicit monitoring requests.',
                 'It could be a command, process id, special keywords, or full',
                 'DAMON parameters (same to that for --kdamonds)']))
+
+def set_damon_params_argparser(parser, min_help):
+    set_monitoring_argparser(parser, min_help)
+    set_damos_argparser(parser, min_help)
+    set_misc_damon_params_argparser(parser)
     set_monitoring_attrs_pinpoint_argparser(parser, hide_help=True)
 
 def set_argparser(parser, add_record_options, min_help):
