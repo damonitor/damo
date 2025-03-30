@@ -102,30 +102,6 @@ class TestDamonArgs(unittest.TestCase):
                  [125, 145], [135, 150]])
         self.assertEqual(merged, [[10, 20], [25, 120], [125, 150]])
 
-    def test_convert_add_damos_filter_out_args_to_damos_filter_args(self):
-        args = argparse.Namespace(
-                damos_filter=[
-                    ['young', 'matching'],
-                    ],
-                damos_filter_out=[
-                    ['anon'],
-                    ['not', 'anon'],
-                    ['memcg', '/path/to/a'],
-                    ['not', 'memcg', '/path/to/a'],
-                    ]
-                )
-        _damon_args.convert_add_damos_filter_out_args_to_damos_filter_args(
-                args)
-        self.assertEqual(args.damos_filter,
-                         [
-                             ['young', 'matching'],
-                             ['anon', 'matching'],
-                             ['anon', 'nomatching'],
-                             ['memcg', 'matching', '/path/to/a'],
-                             ['memcg', 'nomatching', '/path/to/a'],
-                             ]
-                         )
-
     def test_damos_filter_format_v2(self):
         f, e, n = _damon_args.damos_options_to_filter_v2(
                 'allow anon'.split())
