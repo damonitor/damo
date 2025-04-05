@@ -87,12 +87,13 @@ def override_vals(to_override, new_vals):
         if new_val is not None:
             to_override[idx] = new_val
 
-def damon_intervals_for(args):
+def damon_intervals_for(args_intervals, args_sample, args_aggr, args_updr,
+                        args_intervals_goal):
     intervals = ['5ms', '100ms', '1s']
-    override_vals(intervals, args.monitoring_intervals)
-    override_vals(intervals, [args.sample, args.aggr, args.updr])
+    override_vals(intervals, args_intervals)
+    override_vals(intervals, [args_sample, args_aggr, args_updr])
 
-    intervals_goal = _damon.DamonIntervalsGoal(*args.monitoring_intervals_goal)
+    intervals_goal = _damon.DamonIntervalsGoal(*args_intervals_goal)
 
     return _damon.DamonIntervals(*intervals, intervals_goal)
 
@@ -433,7 +434,9 @@ def damos_for(args):
 
 def damon_ctx_for(args):
     try:
-        intervals = damon_intervals_for(args)
+        intervals = damon_intervals_for(
+                args.monitoring_intervals, args.sample, args.aggr, args.updr,
+                args.monitoring_intervals_goal)
     except Exception as e:
         return None, 'invalid intervals arguments (%s)' % e
     try:

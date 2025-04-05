@@ -78,12 +78,17 @@ class TestDamonArgs(unittest.TestCase):
 
         args = parser.parse_args(
                 '--monitoring_intervals 4ms 120ms 1.5s'.split())
-        intervals = _damon_args.damon_intervals_for(args)
+        intervals = _damon_args.damon_intervals_for(
+                args.monitoring_intervals, args.sample, args.aggr, args.updr,
+                args.monitoring_intervals_goal)
         self.assertEqual(intervals, _damon.DamonIntervals('4ms', '120ms',
             '1.5s'))
 
         args = parser.parse_args('--sample 7ms'.split())
-        intervals = _damon_args.damon_intervals_for(args)
+        intervals = _damon_args.damon_intervals_for(
+                args.monitoring_intervals, args.sample, args.aggr, args.updr,
+                args.monitoring_intervals_goal)
+
         self.assertEqual(intervals, _damon.DamonIntervals('7ms'))
 
     def test_damon_nr_regions_range_for(self):
