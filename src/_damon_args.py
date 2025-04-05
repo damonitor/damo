@@ -457,12 +457,8 @@ def damon_ctx_for(args):
     except Exception as e:
         return 'Wrong \'--target_pid\' argument (%s)' % e
 
-    schemes, err = damos_for(args)
-    if err:
-        return None, err
-
     try:
-        ctx = _damon.DamonCtx(ops, [target], intervals, nr_regions, schemes)
+        ctx = _damon.DamonCtx(ops, [target], intervals, nr_regions, schemes=[])
         return ctx, None
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
@@ -471,6 +467,12 @@ def damon_ctxs_for(args):
     ctx, err = damon_ctx_for(args)
     if err is not None:
         return None, err
+
+    schemes, err = damos_for(args)
+    if err is not None:
+        return None, err
+    ctx.schemes = schemes
+
     return [ctx], err
 
 def kdamonds_from_json_arg(arg):
