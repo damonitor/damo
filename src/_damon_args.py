@@ -467,13 +467,21 @@ def damon_ctxs_for(args):
     ctx, err = damon_ctx_for(args)
     if err is not None:
         return None, err
+    ctxs = [ctx]
 
     schemes, err = damos_for(args)
     if err is not None:
         return None, err
-    ctx.schemes = schemes
+    if args.nr_schemes is None:
+        args.nr_schemes = [len(schemes)]
+    ctx_idx = 0
+    scheme_idx = 0
+    for nr in args.nr_schemes:
+        ctxs[ctx_idx].schemes = schemes[scheme_idx:scheme_idx + nr]
+        ctx_idx += 1
+        scheme_idx += nr
 
-    return [ctx], err
+    return ctxs, err
 
 def kdamonds_from_json_arg(arg):
     try:
@@ -793,6 +801,9 @@ def set_damos_argparser(parser, hide_help):
                 '<low mark (permil)>'),
             help='damos watermarks'
             if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--nr_schemes', nargs='+', type=int,
+                        help='number of schemes for each context (in order)'
+                        if not hide_help else argparse.SUPPRESS)
 
 def set_misc_damon_params_argparser(parser):
     parser.add_argument('-c', '--schemes', metavar='<json string or file>',
