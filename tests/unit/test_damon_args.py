@@ -13,7 +13,7 @@ import _damon_args
 import _damon_sysfs
 
 class TestDamonArgs(unittest.TestCase):
-    def test_damon_ctx_for(self):
+    def test_damon_ctxs_for(self):
         _damon._damon_fs = _damon_sysfs
         _damon.set_feature_supports({'init_regions': True, 'schemes': True,
                 'schemes_stat_qt_exceed': True, 'init_regions_target_idx':
@@ -32,8 +32,9 @@ class TestDamonArgs(unittest.TestCase):
                     '--minr 10 --maxr 1000 --regions=123-456 paddr').split())
         err = _damon_args.deduce_target_update_args(args)
         self.assertEqual(err, None)
-        ctx, err = _damon_args.damon_ctx_for(args)
+        ctxs, err = _damon_args.damon_ctxs_for(args)
         self.assertEqual(err, None)
+        ctx = ctxs[0]
         self.assertEqual(ctx, _damon.DamonCtx('paddr',
             [_damon.DamonTarget(None, [_damon.DamonRegion(123, 456)])],
             _damon.DamonIntervals(5000, 100000, 1000000),
@@ -49,8 +50,9 @@ class TestDamonArgs(unittest.TestCase):
                     '--minr 10 --maxr 1,000 --regions=1K-4K paddr').split())
         err = _damon_args.deduce_target_update_args(args)
         self.assertEqual(err, None)
-        ctx, err = _damon_args.damon_ctx_for(args)
+        ctxs, err = _damon_args.damon_ctxs_for(args)
         self.assertEqual(err, None)
+        ctx = ctxs[0]
         self.assertEqual(ctx, _damon.DamonCtx('paddr',
             [_damon.DamonTarget(None, [_damon.DamonRegion(1024, 4096)])],
             _damon.DamonIntervals(5000, 100000, 1000000),
@@ -64,8 +66,9 @@ class TestDamonArgs(unittest.TestCase):
                 ('--sample 5ms --aggr 100ms --updr 1s ' +
                     '--minr 10 --maxr 1,000 --regions=1K-4K ' +
                     '--ops paddr').split())
-        ctx, err = _damon_args.damon_ctx_for(args)
+        ctxs, err = _damon_args.damon_ctxs_for(args)
         self.assertEqual(err, None)
+        ctx = ctxs[0]
         self.assertEqual(ctx, _damon.DamonCtx('paddr',
             [_damon.DamonTarget(None, [_damon.DamonRegion(1024, 4096)])],
             _damon.DamonIntervals(5000, 100000, 1000000),
