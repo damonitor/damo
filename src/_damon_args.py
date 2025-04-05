@@ -97,10 +97,10 @@ def damon_intervals_for(args_intervals, args_sample, args_aggr, args_updr,
 
     return _damon.DamonIntervals(*intervals, intervals_goal)
 
-def damon_nr_regions_range_for(args):
+def damon_nr_regions_range_for(args_range, args_minr, args_maxr):
     nr_range = ['10', '1000']
-    override_vals(nr_range, args.monitoring_nr_regions_range)
-    override_vals(nr_range, [args.minr, args.maxr])
+    override_vals(nr_range, args_range)
+    override_vals(nr_range, [args_minr, args_maxr])
     return _damon.DamonNrRegionsRange(*nr_range)
 
 def schemes_option_to_damos(schemes):
@@ -440,7 +440,8 @@ def damon_ctx_for(args):
     except Exception as e:
         return None, 'invalid intervals arguments (%s)' % e
     try:
-        nr_regions = damon_nr_regions_range_for(args)
+        nr_regions = damon_nr_regions_range_for(
+                args.monitoring_nr_regions_range, args.minr, args.maxr)
     except Exception as e:
         return None, 'invalid nr_regions arguments (%s)' % e
     ops = args.ops

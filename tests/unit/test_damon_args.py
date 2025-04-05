@@ -98,7 +98,8 @@ class TestDamonArgs(unittest.TestCase):
 
         args = parser.parse_args(
                 '--monitoring_nr_regions_range 25 5000'.split())
-        nr_range = _damon_args.damon_nr_regions_range_for(args)
+        nr_range = _damon_args.damon_nr_regions_range_for(
+                args.monitoring_nr_regions_range, args.minr, args.maxr)
         self.assertEqual(nr_range, _damon.DamonNrRegionsRange(25, 5000))
 
     def test_merge_ranges(self):
