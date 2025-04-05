@@ -46,10 +46,10 @@ def merge_ranges(ranges):
             merged_ranges.append([start, end])
     return merged_ranges
 
-def init_regions_for(args):
+def init_regions_for(args_regions, args_ops, args_numa_node):
     init_regions = []
-    if args.regions:
-        for region in args.regions.split():
+    if args_regions:
+        for region in args_regions.split():
             addrs = region.split('-')
             try:
                 if len(addrs) != 2:
@@ -63,10 +63,10 @@ def init_regions_for(args):
                 return None, 'Wrong \'--regions\' argument (%s)' % e
             init_regions.append(region)
 
-    if args.ops == 'paddr' and not init_regions:
-        if args.numa_node != None:
+    if args_ops == 'paddr' and not init_regions:
+        if args_numa_node != None:
             init_regions, err = damo_pa_layout.numa_addr_ranges(
-                    args.numa_node)
+                    args_numa_node)
             if err != None:
                 return None, err
             init_regions = merge_ranges(init_regions)
@@ -446,7 +446,8 @@ def damon_ctx_for(args):
         return None, 'invalid nr_regions arguments (%s)' % e
     ops = args.ops
 
-    init_regions, err = init_regions_for(args)
+    init_regions, err = init_regions_for(args.regions, args.ops,
+                                         args.numa_node)
     if err:
         return None, err
 
