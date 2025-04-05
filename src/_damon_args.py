@@ -467,6 +467,12 @@ def damon_ctx_for(args):
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
 
+def damon_ctxs_for(args):
+    ctx, err = damon_ctx_for(args)
+    if err is not None:
+        return None, err
+    return [ctx], err
+
 def kdamonds_from_json_arg(arg):
     try:
         if os.path.isfile(arg):
@@ -598,10 +604,10 @@ def kdamonds_for(args):
         else:
             args.ops = 'vaddr'
 
-    ctx, err = damon_ctx_for(args)
+    ctxs, err = damon_ctxs_for(args)
     if err:
         return None, err
-    return [_damon.Kdamond(state=None, pid=None, contexts=[ctx])], None
+    return [_damon.Kdamond(state=None, pid=None, contexts=ctxs)], None
 
 def self_started_target(args):
     return 'self_started_target' in args and args.self_started_target
