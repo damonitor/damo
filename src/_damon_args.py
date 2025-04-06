@@ -481,8 +481,8 @@ def get_nr_ctxs(args):
     candidates = []
     for v in [args.ops, args.sample, args.aggr, args.updr, args.minr,
               args.maxr, args.monitoring_intervals,
-              args.monitoring_intervals_goal, args.monitoring_nr_regions_range,
-              args.target_pid, args.regions, args.numa_node]:
+              args.monitoring_intervals_goal,
+              args.monitoring_nr_regions_range]:
         if v is not None:
             candidates.append(len(v))
     return max(candidates)
