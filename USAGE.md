@@ -244,9 +244,11 @@ kdamond 1
 
 Command line options having prefix of `--damos_` are for DAMON-based operation
 schemes.  Those options are allowed to be specified multiple times for
-requesting multiple schemes.  For example, below shows how you can start DAMON
-with two DAMOS schemes, one for proactive LRU-prioritization of hot pages and
-the other one for proactive LRU-deprioritization of cold pages.
+requesting multiple schemes.  When user creates schemes with multiple DAMON
+contexts, `--nr_schemes` should also be provided for assigning the schemes to
+each context.  For example, below shows how you can start DAMON with two DAMOS
+schemes, one for proactive LRU-prioritization of hot pages and the other one
+for proactive LRU-deprioritization of cold pages.
 
     # damo start \
         --damos_action lru_prio --damos_access_rate 50% max --damos_age 5s max \
@@ -258,12 +260,12 @@ regions on the Linux kernel's LRU lists, while finding memory regions that not
 accessed for >=5 seconds and deprioritizes the pages of the regions from the
 LRU lists.
 
-Some DAMOS parameters option are complicated to understand using only `damo
-args damon --help` output.  For such cases, please refer to below additional
-descriptions.
+For the list and brief explanations of the command line options, `damo help
+damon_param_options damos` can help.  For options that need more explanations
+of usage, please read below additional section.
 
 For keyword parameters such as DAMOS action or DAMOS filter types, those on
-DAMOS design document is samely applied.  For example, those for
+DAMOS design document are samely applied.  For example, those for
 `--damos_action` can be found from kernel doc [session for DAMOS
 action](https://docs.kernel.org/mm/damon/design.html#operation-action).
 
