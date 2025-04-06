@@ -93,6 +93,9 @@ def damon_intervals_for(args_intervals, args_sample, args_aggr, args_updr,
     override_vals(intervals, args_intervals)
     override_vals(intervals, [args_sample, args_aggr, args_updr])
 
+    if args_intervals_goal is None:
+        args_intervals_goal = ['0%', '0', '0us', '0us']
+
     intervals_goal = _damon.DamonIntervalsGoal(*args_intervals_goal)
 
     return _damon.DamonIntervals(*intervals, intervals_goal)
@@ -432,33 +435,35 @@ def damos_for(args):
         return None, 'failed damo schemes arguments parsing (%s)' % err
     return schemes, None
 
-def damon_ctx_for(args):
-    if args.ops is None:
-        if args.target_pid is None:
-            args.ops = 'paddr'
+def damon_ctx_for(args, idx):
+    if args.ops[idx] is None:
+        if args.target_pid[idx] is None:
+            args.ops[idx] = 'paddr'
         else:
-            args.ops = 'vaddr'
+            args.ops[idx] = 'vaddr'
 
     try:
         intervals = damon_intervals_for(
-                args.monitoring_intervals, args.sample, args.aggr, args.updr,
-                args.monitoring_intervals_goal)
+                args.monitoring_intervals[idx], args.sample[idx],
+                args.aggr[idx], args.updr[idx],
+                args.monitoring_intervals_goal[idx])
     except Exception as e:
         return None, 'invalid intervals arguments (%s)' % e
     try:
         nr_regions = damon_nr_regions_range_for(
-                args.monitoring_nr_regions_range, args.minr, args.maxr)
+                args.monitoring_nr_regions_range[idx],
+                args.minr[idx], args.maxr[idx])
     except Exception as e:
         return None, 'invalid nr_regions arguments (%s)' % e
-    ops = args.ops
+    ops = args.ops[idx]
 
-    init_regions, err = init_regions_for(args.regions, args.ops,
-                                         args.numa_node)
+    init_regions, err = init_regions_for(args.regions[idx], ops,
+                                         args.numa_node[idx])
     if err:
         return None, err
 
     try:
-        target = _damon.DamonTarget(args.target_pid
+        target = _damon.DamonTarget(args.target_pid[idx]
                 if _damon.target_has_pid(ops) else None, init_regions)
     except Exception as e:
         return 'Wrong \'--target_pid\' argument (%s)' % e
@@ -469,11 +474,39 @@ def damon_ctx_for(args):
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
 
+def get_nr_ctxs(args):
+    candidates = []
+    for v in [args.ops, args.sample, args.aggr, args.updr, args.minr,
+              args.maxr, args.monitoring_intervals,
+              args.monitoring_intervals_goal, args.monitoring_nr_regions_range,
+              args.target_pid, args.regions, args.numa_node]:
+        if v is not None:
+            candidates.append(len(v))
+    return max(candidates)
+
+def fillup_none_ctx_args(args):
+    nr_ctxs = get_nr_ctxs(args)
+    for attr_name in [
+            'ops', 'sample', 'aggr', 'updr', 'minr', 'maxr',
+            'monitoring_intervals', 'monitoring_intervals_goal',
+            'monitoring_nr_regions_range', 'target_pid', 'regions',
+            'numa_node']:
+        attr_val = getattr(args, attr_name)
+        if attr_val is None:
+            setattr(args, attr_name, [None] * nr_ctxs)
+        elif len(attr_val) < nr_ctxs:
+            print(attr_name, attr_val)
+            setattr(args, attr_name,
+                    attr_val + [None] * (nr_ctxs - len(attr_val)))
+
 def damon_ctxs_for(args):
-    ctx, err = damon_ctx_for(args)
-    if err is not None:
-        return None, err
-    ctxs = [ctx]
+    fillup_none_ctx_args(args)
+    ctxs = []
+    for idx in range(get_nr_ctxs(args)):
+        ctx, err = damon_ctx_for(args, idx)
+        if err is not None:
+            return None, err
+        ctxs.append(ctx)
 
     schemes, err = damos_for(args)
     if err is not None:
@@ -543,14 +576,15 @@ def warn_option_override(option_name):
     print('warning: %s is overridden by <deducible target>' % option_name)
 
 def deduce_target_update_args(args):
+    'deducible target supports only single context/single kdamond'
     args.self_started_target = False
     target_type = deduced_target_type(args.deducible_target)
     if target_type == target_type_unknown:
         return 'target \'%s\' is not supported' % args.deducible_target
     if target_type == target_type_explicit and args.deducible_target == 'paddr':
-        if not args.ops in ['paddr', None]:
+        if not args.ops in [['paddr'], None]:
             warn_option_override('--ops')
-        args.ops = 'paddr'
+        args.ops = ['paddr']
         if args.target_pid != None:
             warn_option_override('--target_pid')
         args.target_pid = None
@@ -564,15 +598,15 @@ def deduce_target_update_args(args):
         pid = int(args.deducible_target)
     if args.target_pid != None:
         print('warning: --target_pid will be ignored')
-    args.target_pid = pid
+    args.target_pid = [pid]
     if not args.regions:
-        if not args.ops in ['vaddr', None]:
+        if not args.ops in [['vaddr'], None]:
             warn_option_override('--ops')
-        args.ops = 'vaddr'
+        args.ops = ['vaddr']
     if args.regions:
-        if not args.ops in ['fvaddr', None]:
+        if not args.ops in [['fvaddr'], None]:
             print('warning: override --ops by <deducible target> and --regions')
-        args.ops = 'fvaddr'
+        args.ops = ['fvaddr']
 
 def evaluate_args(args):
     '''
@@ -689,56 +723,59 @@ def set_common_argparser(parser):
 def set_monitoring_attrs_pinpoint_argparser(parser, hide_help=False):
     # for easier pinpoint setup
     parser.add_argument(
-            '-s', '--sample', metavar='<microseconds>',
+            '-s', '--sample', metavar='<microseconds>', action='append',
             help='sampling interval (us)'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
-            '-a', '--aggr', metavar='<microseconds>',
+            '-a', '--aggr', metavar='<microseconds>', action='append',
             help='aggregate interval (us)'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
-            '-u', '--updr', metavar='<microseconds>',
+            '-u', '--updr', metavar='<microseconds>', action='append',
             help='regions update interval (us)'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
-            '-n', '--minr', metavar='<# regions>',
+            '-n', '--minr', metavar='<# regions>', action='append',
             help='minimal number of regions'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
-            '-m', '--maxr', metavar='<# regions>',
+            '-m', '--maxr', metavar='<# regions>', action='append',
             help='maximum number of regions'
             if not hide_help else argparse.SUPPRESS)
 
 def set_monitoring_attrs_argparser(parser, hide_help=False):
     # for easier total setup
-    parser.add_argument('--monitoring_intervals', nargs=3,
+    parser.add_argument('--monitoring_intervals', nargs=3, action='append',
                         metavar=('<sample>', '<aggr>', '<update>'),
                         help='monitoring intervals (us)'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
-            '--monitoring_intervals_goal', nargs=4,
+            '--monitoring_intervals_goal', nargs=4, action='append',
             metavar=('<access_bp>', '<aggrs>', '<min_sample_us>',
-                     '<max_sample_us>'), default=['0%', '0', '0us', '0us'],
+                     '<max_sample_us>'),
             help='monitoring intervals auto-tuning goal'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--monitoring_nr_regions_range', nargs=2,
-                        metavar=('<min>', '<max>'),
+                        metavar=('<min>', '<max>'), action='append',
                         help='min/max number of monitoring regions'
                         if not hide_help else argparse.SUPPRESS)
 
 def set_monitoring_argparser(parser, hide_help=False):
     parser.add_argument('--ops', choices=['vaddr', 'paddr', 'fvaddr'],
+                        action='append',
                         help='monitoring operations set'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--target_pid', type=int, metavar='<pid>',
+                        action='append',
                         help='pid of monitoring target process'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('-r', '--regions', metavar='"<start>-<end> ..."',
-                        type=str, default='',
+                        type=str, action='append',
                         help='monitoring target address regions'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--numa_node', metavar='<node id>', type=int, nargs='+',
+            action='append',
             help='if target is \'paddr\', limit it to the numa node'
             if not hide_help else argparse.SUPPRESS)
     set_monitoring_attrs_argparser(parser, hide_help)

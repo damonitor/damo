@@ -76,33 +76,36 @@ class TestDamonArgs(unittest.TestCase):
 
     def test_damon_intervals_for(self):
         parser = argparse.ArgumentParser()
-        _damon_args.set_monitoring_attrs_argparser(parser)
+        _damon_args.set_monitoring_argparser(parser)
         _damon_args.set_monitoring_attrs_pinpoint_argparser(parser)
 
         args = parser.parse_args(
                 '--monitoring_intervals 4ms 120ms 1.5s'.split())
+        _damon_args.fillup_none_ctx_args(args)
         intervals = _damon_args.damon_intervals_for(
-                args.monitoring_intervals, args.sample, args.aggr, args.updr,
-                args.monitoring_intervals_goal)
+                args.monitoring_intervals[0], args.sample[0], args.aggr[0],
+                args.updr[0], args.monitoring_intervals_goal[0])
         self.assertEqual(intervals, _damon.DamonIntervals('4ms', '120ms',
             '1.5s'))
 
         args = parser.parse_args('--sample 7ms'.split())
+        _damon_args.fillup_none_ctx_args(args)
         intervals = _damon_args.damon_intervals_for(
-                args.monitoring_intervals, args.sample, args.aggr, args.updr,
-                args.monitoring_intervals_goal)
+                args.monitoring_intervals[0], args.sample[0], args.aggr[0],
+                args.updr[0], args.monitoring_intervals_goal[0])
 
         self.assertEqual(intervals, _damon.DamonIntervals('7ms'))
 
     def test_damon_nr_regions_range_for(self):
         parser = argparse.ArgumentParser()
-        _damon_args.set_monitoring_attrs_argparser(parser)
+        _damon_args.set_monitoring_argparser(parser)
         _damon_args.set_monitoring_attrs_pinpoint_argparser(parser)
 
         args = parser.parse_args(
                 '--monitoring_nr_regions_range 25 5000'.split())
+        _damon_args.fillup_none_ctx_args(args)
         nr_range = _damon_args.damon_nr_regions_range_for(
-                args.monitoring_nr_regions_range, args.minr, args.maxr)
+                args.monitoring_nr_regions_range[0], args.minr[0], args.maxr[0])
         self.assertEqual(nr_range, _damon.DamonNrRegionsRange(25, 5000))
 
     def test_merge_ranges(self):
