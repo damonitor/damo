@@ -125,8 +125,8 @@ DAMON and retrieval/interpretation of the results.
 `damo start` starts DAMON as users request.  Specifically, users can specify
 how and to what address spaces DAMON should do monitor accesses, and what
 access monitoring-based system optimizations to do.  The request can be made
-via several command line options of the command.  You can get the full list of
-the options via `damo start --help`.
+via several command line options of the command.  For more details about the
+command line options, use `damo help damon_param_options -h`.
 
 The command exits immediately after starting DAMON as requested.  It exits with
 exit value `0` if it successfully started DAMON.  Otherwise, the exit value
