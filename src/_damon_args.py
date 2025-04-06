@@ -520,6 +520,7 @@ def damon_ctxs_for(args):
         return None, err
     if args.nr_schemes is None:
         args.nr_schemes = [len(schemes)]
+        args.nr_schemes += [0] * (len(ctxs) - 1)
     if sum(args.nr_schemes) != len(schemes):
         return (None,
                 '--nr_schemes and number of schemes mismatch (%d != %d)' % (
