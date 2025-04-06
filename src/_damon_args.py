@@ -435,6 +435,20 @@ def damos_for(args):
         return None, 'failed damo schemes arguments parsing (%s)' % err
     return schemes, None
 
+def damon_target_for(args, idx):
+    ops = args.ops[idx]
+    init_regions, err = init_regions_for(
+            args.regions[idx], ops, args.numa_node[idx])
+    if err:
+        return None, err
+
+    try:
+        target = _damon.DamonTarget(args.target_pid[idx]
+                if _damon.target_has_pid(ops) else None, init_regions)
+    except Exception as e:
+        return 'Wrong \'--target_pid\' argument (%s)' % e
+    return target, None
+
 def damon_ctx_for(args, idx):
     if args.ops[idx] is None:
         if args.target_pid[idx] is None:
@@ -457,16 +471,9 @@ def damon_ctx_for(args, idx):
         return None, 'invalid nr_regions arguments (%s)' % e
     ops = args.ops[idx]
 
-    init_regions, err = init_regions_for(args.regions[idx], ops,
-                                         args.numa_node[idx])
-    if err:
-        return None, err
-
-    try:
-        target = _damon.DamonTarget(args.target_pid[idx]
-                if _damon.target_has_pid(ops) else None, init_regions)
-    except Exception as e:
-        return 'Wrong \'--target_pid\' argument (%s)' % e
+    target, err = damon_target_for(args, idx)
+    if err is not None:
+        return None, 'target creation fail (%s)' % err
 
     try:
         ctx = _damon.DamonCtx(ops, [target], intervals, nr_regions, schemes=[])
