@@ -471,12 +471,8 @@ def damon_ctx_for(args, idx):
         return None, 'invalid nr_regions arguments (%s)' % e
     ops = args.ops[idx]
 
-    target, err = damon_target_for(args, idx)
-    if err is not None:
-        return None, 'target creation fail (%s)' % err
-
     try:
-        ctx = _damon.DamonCtx(ops, [target], intervals, nr_regions, schemes=[])
+        ctx = _damon.DamonCtx(ops, None, intervals, nr_regions, schemes=[])
         return ctx, None
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
@@ -514,6 +510,29 @@ def damon_ctxs_for(args):
         if err is not None:
             return None, err
         ctxs.append(ctx)
+
+    targets = []
+    for idx in range(get_nr_ctxs(args)):
+        target, err = damon_target_for(args, idx)
+        if err is not None:
+            return None, err
+        targets.append(target)
+    if args.nr_targets is None:
+        args.nr_targets = [len(targets)]
+        args.nr_targets += [0] * (len(ctxs) - 1)
+    if sum(args.nr_targets) != len(targets):
+        return (None,
+                '--nr_targets and number of targets mismatch (%d != %d)' % (
+                    sum(args.nr_targets), len(targets)))
+    if len(args.nr_targets) != len(ctxs):
+        return None, '--nr_targets and number of ctxs mismatch (%d != %d)' % (
+                len(args.nr_targets), len(ctxs))
+    ctx_idx = 0
+    target_idx = 0
+    for nr in args.nr_targets:
+        ctxs[ctx_idx].targets = targets[target_idx:target_idx + nr]
+        ctx_idx += 1
+        target_idx += nr
 
     schemes, err = damos_for(args)
     if err is not None:
@@ -787,6 +806,10 @@ def set_monitoring_argparser(parser, hide_help=False):
             help='if target is \'paddr\', limit it to the numa node'
             if not hide_help else argparse.SUPPRESS)
     set_monitoring_attrs_argparser(parser, hide_help)
+    parser.add_argument(
+            '--nr_targets', nargs='+', type=int,
+            help='number of monitoring targets for each context (in order)'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--nr_ctxs', nargs='+', type=int,
                         help='number of contexts for each kdamond (in order)'
                         if not hide_help else argparse.SUPPRESS)
