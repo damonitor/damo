@@ -551,6 +551,29 @@ def gen_assign_targets(ctxs, args):
         target_idx += nr
     return None
 
+def gen_assign_schemes(ctxs, args):
+    schemes, err = damos_for(args)
+    if err is not None:
+        return err
+    if args.nr_schemes is None:
+        if len(ctxs) != 1 and len(schemes) > 0:
+            return '--nr_schemes is required for multiple contexts'
+        args.nr_schemes = [len(schemes)]
+        args.nr_schemes += [0] * (len(ctxs) - 1)
+    if sum(args.nr_schemes) != len(schemes):
+        return '--nr_schemes and number of schemes mismatch (%d != %d)' % (
+                sum(args.nr_schemes), len(schemes))
+    if len(args.nr_schemes) != len(ctxs):
+        return '--nr_schemes and number of ctxs mismatch (%d != %d)' % (
+                len(args.nr_schemes), len(ctxs))
+    ctx_idx = 0
+    scheme_idx = 0
+    for nr in args.nr_schemes:
+        ctxs[ctx_idx].schemes = schemes[scheme_idx:scheme_idx + nr]
+        ctx_idx += 1
+        scheme_idx += nr
+    return None
+
 def damon_ctxs_for(args):
     fillup_none_ctx_args(args)
     fillup_none_target_args(args)
@@ -565,27 +588,9 @@ def damon_ctxs_for(args):
     if err is not None:
         return None, err
 
-    schemes, err = damos_for(args)
+    err = gen_assign_schemes(ctxs, args)
     if err is not None:
         return None, err
-    if args.nr_schemes is None:
-        if len(ctxs) != 1 and len(schemes) > 0:
-            return None, '--nr_schemes is required for multiple contexts'
-        args.nr_schemes = [len(schemes)]
-        args.nr_schemes += [0] * (len(ctxs) - 1)
-    if sum(args.nr_schemes) != len(schemes):
-        return (None,
-                '--nr_schemes and number of schemes mismatch (%d != %d)' % (
-                    sum(args.nr_schemes), len(schemes)))
-    if len(args.nr_schemes) != len(ctxs):
-        return None, '--nr_schemes and number of ctxs mismatch (%d != %d)' % (
-                len(args.nr_schemes), len(ctxs))
-    ctx_idx = 0
-    scheme_idx = 0
-    for nr in args.nr_schemes:
-        ctxs[ctx_idx].schemes = schemes[scheme_idx:scheme_idx + nr]
-        ctx_idx += 1
-        scheme_idx += nr
 
     return ctxs, err
 
