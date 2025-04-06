@@ -169,18 +169,18 @@ RAM' region specified in `/proc/iomem` file.  Note that the initial monitoring
 target region is maintained rather than dynamically updated like the virtual
 memory address spaces monitoring case.
 
-Users can specify full DAMON parameters at once.  Refer to "Full DAMON
+Users can also specify full DAMON parameters at once.  Refer to "Full DAMON
 Parameters Update" [section](#full-damon-parameters-update) below for the
 detail of the concept, and "`damo args damon`" [section](#damo-args-damon)
 below for the format of the input.
 
 ### Partial DAMON Parameters Update
 
-The command line options basically support specification of partial DAMON
-parameters such as monitoring intervals and DAMOS action.  With a good
-understanding of DAMON's core concepts, understanding what each of such options
-mean with their brief description on the help message wouldn't be that
-difficult.
+The command line options support specification of partial DAMON
+parameters such as monitoring intervals and DAMOS action.  Please read DAMON
+core concepts
+[document](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#core-logics)
+to understand what each of the command line options mean.
 
 For keyword parameters such as operations set name (`--ops`), those on DAMON
 design document is samely applied.  For example the keywords for `--ops` can be
