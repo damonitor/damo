@@ -779,6 +779,9 @@ def set_monitoring_argparser(parser, hide_help=False):
             help='if target is \'paddr\', limit it to the numa node'
             if not hide_help else argparse.SUPPRESS)
     set_monitoring_attrs_argparser(parser, hide_help)
+    parser.add_argument('--nr_ctxs', nargs='+', type=int,
+                        help='number of contexts for each kdamond (in order)'
+                        if not hide_help else argparse.SUPPRESS)
 
 def set_damos_argparser(parser, hide_help):
     parser.add_argument('--damos_action', metavar='<action>', nargs='+',
@@ -864,9 +867,6 @@ def set_damos_argparser(parser, hide_help):
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--nr_schemes', nargs='+', type=int,
                         help='number of schemes for each context (in order)'
-                        if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--nr_ctxs', nargs='+', type=int,
-                        help='number of contexts for each kdamond (in order)'
                         if not hide_help else argparse.SUPPRESS)
 
 def set_misc_damon_params_argparser(parser):
