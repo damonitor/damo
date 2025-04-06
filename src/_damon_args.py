@@ -531,12 +531,13 @@ def damon_ctxs_for(args):
             return None, err
         ctxs.append(ctx)
 
+    nr_targets = get_nr_targets(args)
     targets = []
     if args.nr_targets is None:
         if len(ctxs) != 1:
             return None, '--nr_targets is required for multiple contexts'
-        args.nr_targets = [get_nr_targets(args)]
-    for idx in range(get_nr_targets(args)):
+        args.nr_targets = [nr_targets]
+    for idx in range(nr_targets):
         for i in range(len(args.nr_targets)):
             if idx < sum(args.nr_targets[:i + 1]):
                 ops = args.ops[i]
