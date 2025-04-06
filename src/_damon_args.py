@@ -433,6 +433,12 @@ def damos_for(args):
     return schemes, None
 
 def damon_ctx_for(args):
+    if args.ops is None:
+        if args.target_pid is None:
+            args.ops = 'paddr'
+        else:
+            args.ops = 'vaddr'
+
     try:
         intervals = damon_intervals_for(
                 args.monitoring_intervals, args.sample, args.aggr, args.updr,
@@ -615,11 +621,6 @@ def kdamonds_for(args):
         err = deduce_target_update_args(args)
         if err:
             return None, err
-    if args.ops == None:
-        if args.target_pid == None:
-            args.ops = 'paddr'
-        else:
-            args.ops = 'vaddr'
 
     ctxs, err = damon_ctxs_for(args)
     if err:
