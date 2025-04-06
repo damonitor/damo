@@ -487,13 +487,20 @@ def get_nr_ctxs(args):
             candidates.append(len(v))
     return max(candidates)
 
+def get_nr_targets(args):
+    candidates = []
+    for v in [args.target_pid, args.regions, args.numa_node]:
+        if v is not None:
+            candidates.append(len(v))
+    candidates.append(get_nr_ctxs(args))
+    return max(candidates)
+
 def fillup_none_ctx_args(args):
     nr_ctxs = get_nr_ctxs(args)
     for attr_name in [
             'ops', 'sample', 'aggr', 'updr', 'minr', 'maxr',
             'monitoring_intervals', 'monitoring_intervals_goal',
-            'monitoring_nr_regions_range', 'target_pid', 'regions',
-            'numa_node']:
+            'monitoring_nr_regions_range']:
         attr_val = getattr(args, attr_name)
         if attr_val is None:
             setattr(args, attr_name, [None] * nr_ctxs)
@@ -502,8 +509,20 @@ def fillup_none_ctx_args(args):
             setattr(args, attr_name,
                     attr_val + [None] * (nr_ctxs - len(attr_val)))
 
+def fillup_none_target_args(args):
+    nr_targets = get_nr_targets(args)
+    for attr_name in ['target_pid', 'regions', 'numa_node']:
+        attr_val = getattr(args, attr_name)
+        if attr_val is None:
+            setattr(args, attr_name, [None] * nr_targets)
+        elif len(attr_val) < nr_targets:
+            print(attr_name, attr_val)
+            setattr(args, attr_name,
+                    attr_val + [None] * (nr_targets - len(attr_val)))
+
 def damon_ctxs_for(args):
     fillup_none_ctx_args(args)
+    fillup_none_target_args(args)
     ctxs = []
     for idx in range(get_nr_ctxs(args)):
         ctx, err = damon_ctx_for(args, idx)
@@ -512,7 +531,7 @@ def damon_ctxs_for(args):
         ctxs.append(ctx)
 
     targets = []
-    for idx in range(get_nr_ctxs(args)):
+    for idx in range(get_nr_targets(args)):
         target, err = damon_target_for(args, idx)
         if err is not None:
             return None, err
