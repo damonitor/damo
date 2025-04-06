@@ -624,7 +624,23 @@ def kdamonds_for(args):
     ctxs, err = damon_ctxs_for(args)
     if err:
         return None, err
-    return [_damon.Kdamond(state=None, pid=None, contexts=ctxs)], None
+
+    if args.nr_ctxs is None:
+        args.nr_ctxs = [len(ctxs)]
+    if sum(args.nr_ctxs) != len(ctxs):
+        return None, '--nr_ctxs and number of ctxs mismatch (%d != %d)' % (
+                sum(args.nr_ctxs), len(ctxs))
+
+    kdamonds = []
+    ctx_idx = 0
+    for nr in args.nr_ctxs:
+        try:
+            kdamonds.append(_damon.Kdamond(
+                state=None, pid=None, contexts=ctxs[ctx_idx:ctx_idx + nr]))
+        except Exception as e:
+            return None, 'kdamond creation fail (%s)' % e
+        ctx_idx += nr
+    return kdamonds, None
 
 def self_started_target(args):
     return 'self_started_target' in args and args.self_started_target
@@ -810,6 +826,9 @@ def set_damos_argparser(parser, hide_help):
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--nr_schemes', nargs='+', type=int,
                         help='number of schemes for each context (in order)'
+                        if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--nr_ctxs', nargs='+', type=int,
+                        help='number of contexts for each kdamond (in order)'
                         if not hide_help else argparse.SUPPRESS)
 
 def set_misc_damon_params_argparser(parser):
