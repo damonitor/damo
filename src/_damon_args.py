@@ -518,8 +518,9 @@ def damon_ctxs_for(args):
             return None, err
         targets.append(target)
     if args.nr_targets is None:
+        if len(ctxs) != 1:
+            return None, '--nr_targets is required for multiple contexts'
         args.nr_targets = [len(targets)]
-        args.nr_targets += [0] * (len(ctxs) - 1)
     if sum(args.nr_targets) != len(targets):
         return (None,
                 '--nr_targets and number of targets mismatch (%d != %d)' % (
@@ -538,8 +539,9 @@ def damon_ctxs_for(args):
     if err is not None:
         return None, err
     if args.nr_schemes is None:
+        if len(ctxs) != 1:
+            return None, '--nr_schemes is required for multiple contexts'
         args.nr_schemes = [len(schemes)]
-        args.nr_schemes += [0] * (len(ctxs) - 1)
     if sum(args.nr_schemes) != len(schemes):
         return (None,
                 '--nr_schemes and number of schemes mismatch (%d != %d)' % (
