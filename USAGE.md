@@ -171,23 +171,74 @@ memory address spaces monitoring case.
 
 ### Partial DAMON Parameters Update
 
-The command line options support specification of partial DAMON
-parameters such as monitoring intervals and DAMOS action.  Please read DAMON
-core concepts
-[document](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#core-logics)
-to understand what each of the command line options mean.
+`damo` sets DAMON parameters such as monitoring intervals with its default
+values.  Users can continue using the default values but set specific
+parameters as they want, via command line options.  For the list and brief
+explanation of the options for those options, use `damo help
+damon_param_options monitoring`.
+
+To understand what each of the command line options really mean, you may need
+to read DAMON core concepts
+[document](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#core-logics).
 
 For keyword parameters such as operations set name (`--ops`), those on DAMON
 design document is samely applied.  For example the keywords for `--ops` can be
 found from the kernel doc
 [session for operations set](https://docs.kernel.org/mm/damon/design.html#operations-set-layer).
 
-Note that these command line options support only single kdamond, single DAMON
-context, and single monitoring target case.  Users can make requests without
-such limitation using full DAMON parameters input, or `damo args damon`
-command.  Refer to 'Full DAMON Parameters Update'
-[section](#full-damon-parameters-update) or "`damo args damon`"
-[section](#damo-args-damon) below for details.
+Users can create multiple monitoring targets, multiple DAMON contexts and
+multiple kdamonds.  For that, users can specify related options multiple times
+to set the parameter values with non-default ones.  Users should also set
+`--nr_targets` and `--nr_ctxs` when multiple contexts are used, for assigning
+monitoring targets to each context, and contexts to each kdamond.
+
+To see what full DAMON parameters are created with given command line, users
+can use `damo args damon --format report`.  For example:
+
+```
+$ sudo ./damo args damon --format report \
+	--ops paddr --regions 100-200 --damos_action migrate_cold 1 \
+	--ops paddr --regions 400-700 --damos_action migrate_hot 0 \
+	--nr_targets 1 1 --nr_schemes 1 1 --nr_ctxs 1 1
+kdamond 0
+    context 0
+        ops: paddr
+        target 0
+            region [100, 200) (100 B)
+        intervals: sample 5 ms, aggr 100 ms, update 1 s
+        nr_regions: [10, 1,000]
+        scheme 0
+            action: migrate_cold to node 1 per aggr interval
+            target access pattern
+                sz: [0 B, max]
+                nr_accesses: [0 %, 18,446,744,073,709,551,615 %]
+                age: [0 ns, max]
+            quotas
+                0 ns / 0 B / 0 B per max
+                priority: sz 0 %, nr_accesses 0 %, age 0 %
+            watermarks
+                metric none, interval 0 ns
+                0 %, 0 %, 0 %
+kdamond 1
+    context 0
+        ops: paddr
+        target 0
+            region [400, 700) (300 B)
+        intervals: sample 5 ms, aggr 100 ms, update 1 s
+        nr_regions: [10, 1,000]
+        scheme 0
+            action: migrate_hot to node 0 per aggr interval
+            target access pattern
+                sz: [0 B, max]
+                nr_accesses: [0 %, 18,446,744,073,709,551,615 %]
+                age: [0 ns, max]
+            quotas
+                0 ns / 0 B / 0 B per max
+                priority: sz 0 %, nr_accesses 0 %, age 0 %
+            watermarks
+                metric none, interval 0 ns
+                0 %, 0 %, 0 %
+```
 
 ### Partial DAMOS Parameters Update
 
