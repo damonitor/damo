@@ -521,21 +521,12 @@ def fillup_none_target_args(args):
             setattr(args, attr_name,
                     attr_val + [None] * (nr_targets - len(attr_val)))
 
-def damon_ctxs_for(args):
-    fillup_none_ctx_args(args)
-    fillup_none_target_args(args)
-    ctxs = []
-    for idx in range(get_nr_ctxs(args)):
-        ctx, err = damon_ctx_for(args, idx)
-        if err is not None:
-            return None, err
-        ctxs.append(ctx)
-
+def gen_assign_targets(ctxs, args):
     nr_targets = get_nr_targets(args)
     targets = []
     if args.nr_targets is None:
         if len(ctxs) != 1:
-            return None, '--nr_targets is required for multiple contexts'
+            return '--nr_targets is required for multiple contexts'
         args.nr_targets = [nr_targets]
     for idx in range(nr_targets):
         for i in range(len(args.nr_targets)):
@@ -547,11 +538,10 @@ def damon_ctxs_for(args):
             return None, err
         targets.append(target)
     if sum(args.nr_targets) != len(targets):
-        return (None,
-                '--nr_targets and number of targets mismatch (%d != %d)' % (
-                    sum(args.nr_targets), len(targets)))
+        return '--nr_targets and number of targets mismatch (%d != %d)' % (
+                sum(args.nr_targets), len(targets))
     if len(args.nr_targets) != len(ctxs):
-        return None, '--nr_targets and number of ctxs mismatch (%d != %d)' % (
+        return '--nr_targets and number of ctxs mismatch (%d != %d)' % (
                 len(args.nr_targets), len(ctxs))
     ctx_idx = 0
     target_idx = 0
@@ -559,6 +549,21 @@ def damon_ctxs_for(args):
         ctxs[ctx_idx].targets = targets[target_idx:target_idx + nr]
         ctx_idx += 1
         target_idx += nr
+    return None
+
+def damon_ctxs_for(args):
+    fillup_none_ctx_args(args)
+    fillup_none_target_args(args)
+    ctxs = []
+    for idx in range(get_nr_ctxs(args)):
+        ctx, err = damon_ctx_for(args, idx)
+        if err is not None:
+            return None, err
+        ctxs.append(ctx)
+
+    err = gen_assign_targets(ctxs, args)
+    if err is not None:
+        return None, err
 
     schemes, err = damos_for(args)
     if err is not None:
