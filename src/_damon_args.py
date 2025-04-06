@@ -532,22 +532,19 @@ def damon_ctxs_for(args):
         ctxs.append(ctx)
 
     targets = []
+    if args.nr_targets is None:
+        if len(ctxs) != 1:
+            return None, '--nr_targets is required for multiple contexts'
+        args.nr_targets = [get_nr_targets(args)]
     for idx in range(get_nr_targets(args)):
-        if args.nr_targets is None:
-            ops = args.ops[0]
-        else:
-            for i in range(len(args.nr_targets)):
-                if idx < sum(args.nr_targets[:i + 1]):
-                    ops = args.ops[i]
-                    break
+        for i in range(len(args.nr_targets)):
+            if idx < sum(args.nr_targets[:i + 1]):
+                ops = args.ops[i]
+                break
         target, err = damon_target_for(args, idx, ops)
         if err is not None:
             return None, err
         targets.append(target)
-    if args.nr_targets is None:
-        if len(ctxs) != 1:
-            return None, '--nr_targets is required for multiple contexts'
-        args.nr_targets = [len(targets)]
     if sum(args.nr_targets) != len(targets):
         return (None,
                 '--nr_targets and number of targets mismatch (%d != %d)' % (
