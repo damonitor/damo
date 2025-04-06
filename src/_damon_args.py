@@ -484,6 +484,8 @@ def get_nr_ctxs(args):
               args.monitoring_nr_regions_range]:
         if v is not None:
             candidates.append(len(v))
+    if len(candidates) == 0:
+        return 1
     return max(candidates)
 
 def get_nr_targets(args):
