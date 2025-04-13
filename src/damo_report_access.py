@@ -354,11 +354,7 @@ def histogram_str(hist):
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
-def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
-                parse_metric_fn):
-    raw = fmt.raw_number
-    if len(snapshot.regions) == 0:
-        return 'no region in snapshot'
+def get_unsorted_histogram(snapshot, fmt, df_passed_sz, get_metric_fn):
     hist = {}
     for region in snapshot.regions:
         metric = get_metric_fn(region, fmt)
@@ -368,9 +364,15 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
             hist[metric] += region.sz_filter_passed
         else:
             hist[metric] += region.size()
+    return hist
 
+def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
+                parse_metric_fn):
+    raw = fmt.raw_number
+    if len(snapshot.regions) == 0:
+        return 'no region in snapshot'
+    hist = get_unsorted_histogram(snapshot, fmt, df_passed_sz, get_metric_fn)
     metrics = sorted(hist.keys())
-    min_metric, max_metric = metrics[0], metrics[-1]
 
     hist2 = []
     if fmt.hist_ranges is not None:
@@ -380,6 +382,7 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
                     [parse_metric_fn(fmt.hist_ranges[i]),
                      parse_metric_fn(fmt.hist_ranges[i + 1])])
     else:
+        min_metric, max_metric = metrics[0], metrics[-1]
         hist_ranges = get_hist_ranges(
                 min_metric, max_metric, 10, fmt.hist_logscale)
     for min_m, max_m in hist_ranges:
