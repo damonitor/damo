@@ -937,6 +937,7 @@ class ReportFormat:
     temperature_weights = None
     dont_merge_regions = None
     hist_logscale = None
+    hist_ranges = None
 
     format_record_head = None
     format_record_tail = None
@@ -972,6 +973,7 @@ class ReportFormat:
         self.temperature_weights = args.temperature_weights
         self.dont_merge_regions = args.dont_merge_regions
         self.hist_logscale = args.hist_logscale
+        self.hist_ranges = args.hist_ranges
         self.format_record_head = args.format_record_head
         self.format_record_tail = args.format_record_tail
         self.format_snapshot_head = args.format_snapshot_head
@@ -1005,6 +1007,7 @@ class ReportFormat:
                 'temperature_weights': self.temperature_weights,
                 'dont_merge_regions': self.dont_merge_regions,
                 'hist_logscale': self.hist_logscale,
+                'hist_ranges': self.hist_ranges,
                 'format_record_head': self.format_record_head,
                 'format_record_tail': self.format_record_tail,
                 'format_snapshot_head': self.format_snapshot_head,
@@ -1036,6 +1039,11 @@ class ReportFormat:
             self.hist_logscale = kvpairs['hist_logscale']
         else:
             self.hist_logscale = False
+        # hist_ranges introduced after v2.7.5
+        if 'hist_ranges' in kvpairs:
+            self.hist_ranges = kvpairs['hist_ranges']
+        else:
+            self.hist_ranges = None
         self.format_record_head = kvpairs['format_record_head']
         self.format_record_tail = kvpairs['format_record_tail']
         self.format_snapshot_head = kvpairs['format_snapshot_head']
