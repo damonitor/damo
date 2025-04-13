@@ -850,10 +850,10 @@ def set_monitoring_argparser(parser, hide_help=False):
             if not hide_help else argparse.SUPPRESS)
     set_monitoring_attrs_argparser(parser, hide_help)
     parser.add_argument(
-            '--nr_targets', nargs='+', type=int,
+            '--nr_targets', metavar='<number>', nargs='+', type=int,
             help='number of monitoring targets for each context (in order)'
             if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--nr_ctxs', nargs='+', type=int,
+    parser.add_argument('--nr_ctxs', metavar='<number>', nargs='+', type=int,
                         help='number of contexts for each kdamond (in order)'
                         if not hide_help else argparse.SUPPRESS)
 
@@ -939,7 +939,7 @@ def set_damos_argparser(parser, hide_help):
                 '<low mark (permil)>'),
             help='damos watermarks'
             if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--nr_schemes', nargs='+', type=int,
+    parser.add_argument('--nr_schemes', metavar='<number>', nargs='+', type=int,
                         help='number of schemes for each context (in order)'
                         if not hide_help else argparse.SUPPRESS)
 
