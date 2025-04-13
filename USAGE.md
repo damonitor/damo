@@ -1237,12 +1237,16 @@ for showing such hidden options.
 -----------
 
 Some commands including `damo start` and `damo report access` have long lists
-of command line options.  Those makes flexible usage of `damo`, but makes the
-help message too verbose.  For easy handling of such arguments, `damo args`
-receives such command line options and outputs compiled parameters.  The output
-is in a format like json, which users can read and modify using dedicated
-editors, and easily maintain as files.  The output can also be passed to
-relevant commands instead of the command line options.
+of available (and hidden) command line options.  Those makes flexible usage of
+`damo`, but makes the usage bit complicated.  For easy handling of such
+arguments, `damo args` receives such partial command line options, compile
+into full options, and print out in various formats including jsong and yaml.
+The formatted outputs allow users easily understand what full options will be
+generated.  The json or yaml format can also be passed to relevant commands
+instead of the command line options.  Hence, if a user prefer editing the
+options in json or yaml format using their personal favorite editor tools
+rather than `damo`'s command line interface, they can use the 'damo args'
+outputs as a template.
 
 ### `damo args damon`
 
