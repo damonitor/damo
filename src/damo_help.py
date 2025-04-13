@@ -20,7 +20,7 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(
             name='access_format_options',
             module=damo_help_access_format_options,
-            msg="visualization options for 'damo report access'"),
+            msg="DAMON monitoring results visualization options"),
         ]
 
 def main(args):
