@@ -1381,24 +1381,29 @@ def add_fmt_args(parser, hide_help=False):
             '--sort_regions_by', nargs='+',
             choices=['address', 'access_rate', 'age', 'size', 'temperature'],
             default=['address'],
-            help='fields to sort regions by')
+            help='fields to sort regions by'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--sort_regions_dsc',
             choices=['address', 'access_rate', 'age', 'size', 'temperature',
                      'all'],
             nargs='+',
-            help='sort regions in descending order for the given keys')
+            help='sort regions in descending order for the given keys'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--temperature_weights', type=int, metavar='<int>', nargs=3,
             default=[0, 100, 100],
             help=' '.join(
                 ['temperature weights for size, access rate, and age',
-                 'of each region']))
+                 'of each region']) if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--dont_merge_regions', action='store_true',
-            help='don\'t merge contiguous regions of same access pattern')
+            help='don\'t merge contiguous regions of same access pattern'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--hist_logscale', action='store_true',
-                        help='draw histograms in logscale')
+                        help='draw histograms in logscale'
+                        if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--hist_ranges', nargs='+',
-                        help='histogram range values')
+                        help='histogram range values'
+                        if not hide_help else argparse.SUPPRESS)
 
     # don't set default for record head and snapshot head because it depends on
     # given number of record and snapshots.  Decide those in set_formats().
@@ -1421,14 +1426,17 @@ def add_fmt_args(parser, hide_help=False):
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--snapshot_heatmap_width', default=80, type=int,
-            help='width of snapshot heatmap')
+            help='width of snapshot heatmap'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--snapshot_heatmap_colorset', default='gray',
             choices=_damo_ascii_color.colorsets.keys(),
-            help='snapshot heatmap colorset')
+            help='snapshot heatmap colorset'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--snapshot_heatmap_static', action='store_true',
-            help='draw snapshot heatmap as static')
+            help='draw snapshot heatmap as static'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--format_region', metavar='<template>',
                         default=default_region_format,
                         help='output format to show for each memory region'
@@ -1475,7 +1483,8 @@ def add_fmt_args(parser, hide_help=False):
             help='minimum character for each keyword of the format'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--region_box', action='store_true',
-            help='show region access pattern as a box')
+            help='show region access pattern as a box'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--total_sz_only', action='store_true',
             help='print only total size of the regions for each snapshot')
     parser.add_argument('--raw_number', action='store_true',
@@ -1483,7 +1492,8 @@ def add_fmt_args(parser, hide_help=False):
     parser.add_argument('--json', action='store_true',
             help='print in json format')
     parser.add_argument('--raw_form', action='store_true',
-                        help='print in raw format')
+                        help='print in raw format'
+                        if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--ls_record_format_keywords', action='store_true',
                         help='list available record format keywords'
                         if not hide_help else argparse.SUPPRESS)
@@ -1499,9 +1509,8 @@ def add_fmt_args(parser, hide_help=False):
         else:
             parser.epilog += ' '
         parser.epilog += ' '.join([
-            "Accesses format options from 'damo args accesses_format' are",
-            "also supported. Do 'damo args accesses_format -h' for the",
-            "options.",
+            "More options for customized format are available.",
+            "Do 'damo help access_format_options -h' for those options.",
             ])
 
 def set_argparser(parser):
