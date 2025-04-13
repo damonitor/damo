@@ -49,7 +49,7 @@
     - DAMON sysfs may be able to be updated for this, for stat-only scheme.
 
 - Deprecate old features
-  - Deprecate 'damo report raw'
+  - Deprecate 'damo report raw' (done.)
   - Deprecate 'damo status' (done.)
   - Deprecate 'damo show' (done.)
   - Deprecate heats report type in favor of heatmap report type (done.)
