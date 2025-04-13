@@ -1495,14 +1495,14 @@ def add_fmt_args(parser, hide_help=False):
                         help='print in raw format'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--ls_record_format_keywords', action='store_true',
-                        help='list available record format keywords'
-                        if not hide_help else argparse.SUPPRESS)
+                        # help='list available record format keywords'
+                        help=argparse.SUPPRESS)
     parser.add_argument('--ls_snapshot_format_keywords', action='store_true',
-                        help='list available snapshot format keywords'
-                        if not hide_help else argparse.SUPPRESS)
+                        # help='list available snapshot format keywords'
+                        help=argparse.SUPPRESS)
     parser.add_argument('--ls_region_format_keywords', action='store_true',
-                        help='list available region format keywords'
-                        if not hide_help else argparse.SUPPRESS)
+                        # help='list available region format keywords'
+                        help=argparse.SUPPRESS)
     if hide_help:
         if parser.epilog is None:
             parser.epilog = ''
