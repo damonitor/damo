@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
+import argparse
 import collections
 import copy
 import json
@@ -1713,32 +1714,48 @@ def args_to_filter(args):
                         snapshot_index_ranges,
                         args.temperature, temperature_weights), None
 
-def set_filter_argparser(parser):
+def set_filter_argparser(parser, hide_help=False):
     parser.add_argument('--sz_region', metavar=('<min>', '<max>'), nargs=2,
+                        default=['min', 'max'],
+                        help='min/max size of regions (bytes) to filter in'
+                        if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--access_rate', metavar=('<min>', '<max>'), nargs=2,
             default=['min', 'max'],
-            help='min/max size of regions (bytes) to filter in')
-    parser.add_argument('--access_rate', metavar=('<min>', '<max>'), nargs=2,
+            help='min/max access rate of regions (percent) to filter in'
+            if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--age', metavar=('<min>', '<max>'), nargs=2,
             default=['min', 'max'],
-            help='min/max access rate of regions (percent) to filter in')
-    parser.add_argument('--age', metavar=('<min>', '<max>'), nargs=2,
-            default=['min', 'max'],
-            help='min/max age of regions (seconds) to filter in')
-    parser.add_argument('--address', metavar=('<start>', '<end>'), nargs=2,
+            help='min/max age of regions (seconds) to filter in'
+            if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--address', metavar=('<start>', '<end>'), nargs=2,
             action='append',
-            help='address ranges to filter in')
+            help='address ranges to filter in'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--sz_snapshot', metavar=('<min>', '<max>'), nargs=2,
             action='append',
-            help='min/max total size of regions of snapshots to filter in')
+            help='min/max total size of regions of snapshots to filter in'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--snapshot_time', metavar=('<start (ns)>', '<end (ns)>'), nargs=2,
             action='append',
-            help='show snapshots generated in these time intervals')
+            help='show snapshots generated in these time intervals'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--snapshot_idx', metavar=('<start>', '<end>'), nargs=2,
             action='append',
-            help='show snapshots of these indices range')
+            help='show snapshots of these indices range'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--temperature', metavar=('<min>', '<max>'), nargs=2, type=int,
             action='append',
-            help='min/max temperature of regions to filter in')
+            help='min/max temperature of regions to filter in'
+            if not hide_help else argparse.SUPPRESS)
+    if hide_help is True:
+        parser.epilog += ' '.join([
+            " More options for filtering are available.",
+            "Do 'damo help access_filter_options -h' for those options.",
+            ])
