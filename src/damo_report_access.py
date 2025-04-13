@@ -354,7 +354,8 @@ def histogram_str(hist):
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
-def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn):
+def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
+                parse_metric_fn):
     raw = fmt.raw_number
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
@@ -376,7 +377,8 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn):
         hist_ranges = []
         for i in range(0, len(fmt.hist_ranges), 2):
             hist_ranges.append(
-                    [int(fmt.hist_ranges[i]), int(fmt.hist_ranges[i + 1])])
+                    [parse_metric_fn(fmt.hist_ranges[i]),
+                     parse_metric_fn(fmt.hist_ranges[i + 1])])
     else:
         hist_ranges = get_hist_ranges(
                 min_metric, max_metric, 10, fmt.hist_logscale)
@@ -395,7 +397,7 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
         return temperature_of(region, weights)
 
     return sz_hist_str(snapshot, fmt, df_passed_sz, get_temperature,
-                       _damo_fmt_str.format_nr)
+                       _damo_fmt_str.format_nr, _damo_fmt.text_to_nr)
 
 def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     def get_last_used_time(region, fmt):
@@ -404,7 +406,7 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
         return region.age.usec
 
     return sz_hist_str(snapshot, fmt, df_passed_sz, get_last_used_time,
-                       _damo_fmt_str.format_time_us)
+                       _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
 
 def temperature_str(region, raw, fmt):
     temperature = temperature_of(region, fmt.temperature_weights)
