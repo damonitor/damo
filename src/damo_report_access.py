@@ -372,8 +372,15 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn):
     min_metric, max_metric = metrics[0], metrics[-1]
 
     hist2 = []
-    for min_m, max_m in get_hist_ranges(
-            min_metric, max_metric, 10, fmt.hist_logscale):
+    if fmt.hist_ranges is not None:
+        hist_ranges = []
+        for i in range(0, len(fmt.hist_ranges), 2):
+            hist_ranges.append(
+                    [int(fmt.hist_ranges[i]), int(fmt.hist_ranges[i + 1])])
+    else:
+        hist_ranges = get_hist_ranges(
+                min_metric, max_metric, 10, fmt.hist_logscale)
+    for min_m, max_m in hist_ranges:
         sz = sum([hist[x] for x in metrics if x >= min_m and x < max_m])
         metric_range_str = '[%s, %s)' % (
                 fmt_metric_fn(min_m, raw), fmt_metric_fn(max_m, raw))
