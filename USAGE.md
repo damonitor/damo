@@ -699,8 +699,8 @@ information.  `detailed` and histogram report [styles](#access-report-styles)
 will be automatically extended to show the information when it is included in
 the access pattern.  To make custom format of the reports with the information,
 users can use format keywords such as `<filters passed bytes>` and `<filters
-passed type>` snapshot format keywords.  Refer to `damo args accesses_format
---ls_{region,snapshot}_format_keywords` output for more details.
+passed type>` snapshot format keywords.  Use `damo help access_format_options
+{region,snapshot,record}_format_keywords` for list and meaning of the keywords.
 
 For example, users can show how much of anonymous and `PG_young` pages reside
 in regiosn of different access patterns, like below:
