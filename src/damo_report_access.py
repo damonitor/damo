@@ -1395,9 +1395,6 @@ def add_fmt_args(parser, hide_help=False):
             help=' '.join(
                 ['temperature weights for size, access rate, and age',
                  'of each region']) if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--dont_merge_regions', action='store_true',
-            help='don\'t merge contiguous regions of same access pattern'
-            if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--hist_logscale', action='store_true',
                         help='draw histograms in logscale'
                         if not hide_help else argparse.SUPPRESS)
@@ -1424,8 +1421,15 @@ def add_fmt_args(parser, hide_help=False):
             default=default_snapshot_tail_format,
             help='output format to show at the end of each snapshot'
             if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--format_region', metavar='<template>',
+                        default=default_region_format,
+                        help='output format to show for each memory region'
+                        if not hide_help else argparse.SUPPRESS)
+
+    # for snapshot heatmap
     parser.add_argument(
-            '--snapshot_heatmap_width', default=80, type=int,
+            '--snapshot_heatmap_width', metavar='<number>', default=80,
+            type=int,
             help='width of snapshot heatmap'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
@@ -1437,10 +1441,11 @@ def add_fmt_args(parser, hide_help=False):
             '--snapshot_heatmap_static', action='store_true',
             help='draw snapshot heatmap as static'
             if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--format_region', metavar='<template>',
-                        default=default_region_format,
-                        help='output format to show for each memory region'
-                        if not hide_help else argparse.SUPPRESS)
+
+    # for region box
+    parser.add_argument('--region_box', action='store_true',
+            help='show region access pattern as a box'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--region_box_values',
             choices=['size', 'access_rate', 'age', 'none'], nargs=3,
@@ -1471,6 +1476,8 @@ def add_fmt_args(parser, hide_help=False):
             '--region_box_align', choices=['left', 'right'], default='left',
             help='where to align the region box'
             if not hide_help else argparse.SUPPRESS)
+
+    # misc control
     parser.add_argument(
             '--min_chars_for', nargs=2,
             metavar=('<keyword>', '<number>'), action='append',
@@ -1482,11 +1489,12 @@ def add_fmt_args(parser, hide_help=False):
                      ],
             help='minimum character for each keyword of the format'
             if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--region_box', action='store_true',
-            help='show region access pattern as a box'
-            if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--total_sz_only', action='store_true',
             help='print only total size of the regions for each snapshot')
+    parser.add_argument('--dont_merge_regions', action='store_true',
+            help='don\'t merge contiguous regions of same access pattern'
+            if not hide_help else argparse.SUPPRESS)
+
     parser.add_argument('--raw_number', action='store_true',
             help='use machine-friendly raw numbers')
     parser.add_argument('--json', action='store_true',
