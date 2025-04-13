@@ -1214,13 +1214,13 @@ def set_formats(args, records):
 
 def handle_ls_keywords(args):
     if args.ls_record_format_keywords:
-        print('\n\n'.join(['%s' % f for f in record_formatters]))
+        print("use 'damo help access_format_options record_format_keywords' instead")
         return True
     if args.ls_snapshot_format_keywords:
-        print('\n\n'.join(['%s' % f for f in snapshot_formatters]))
+        print("use 'damo help access_format_options snapshot_format_keywords' instead")
         return True
     if args.ls_region_format_keywords:
-        print('\n\n'.join(['%s' % f for f in region_formatters]))
+        print("use 'damo help access_format_options region_format_keywords' instead")
         return True
     return False
 
