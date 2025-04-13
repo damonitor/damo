@@ -5,6 +5,7 @@ Provides manual for given topics.
 """
 
 import _damo_subcmds
+import damo_help_access_filter_options
 import damo_help_access_format_options
 import damo_help_damon_param_options
 
@@ -12,6 +13,10 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(
             name='damon_param_options', module=damo_help_damon_param_options,
             msg='DAMON parameter command line options'),
+        _damo_subcmds.DamoSubCmd(
+            name='access_filter_options',
+            module=damo_help_access_filter_options,
+            msg="DAMON monitoring results filtering options"),
         _damo_subcmds.DamoSubCmd(
             name='access_format_options',
             module=damo_help_access_format_options,
