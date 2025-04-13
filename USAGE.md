@@ -1224,6 +1224,15 @@ convenient use of `damo` and debugging of DAMON or `damo` itself, `damo`
 supports more commands.  This section explains some of those that could be
 useful for some cases.
 
+`damo help`
+-----------
+
+Some commands including `damo start` and `damo report access` have long lists
+of command line options.  Those makes flexible usage of `damo`.  Because the
+long list makes the help message too verbose, many of the options that
+unessential for simple usages are hidden by default.  `damo help` can be used
+for showing such hidden options.
+
 `damo args`
 -----------
 
