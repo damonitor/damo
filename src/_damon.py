@@ -1241,14 +1241,15 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
             'sz_ops_filter_passed',     # merged in v6.14-rc1
             'allow_filter',             # merged in v6.14-rc1
             'schemes_filters_hugepage_size',
-                                        # merged in mm-unstable
-            'schemes_filters_unmapped', # merged in mm-unstable
-            'intervals_goal',           # merged in mm-unstable
+                                        # merged in v6.15-rc1
+            'schemes_filters_unmapped', # merged in v6.15-rc1
+            'intervals_goal',           # merged in v6.15-rc1
             'schemes_filters_core_ops_dirs',
-                                        # merged in mm-unstable
-            'schemes_quota_goal_node_mem_used_free',
-                                        # under development
+                                        # merged in v6.15-rc1
             'schemes_filters_active',
+                                        # merged in v6.15-rc1
+
+            'schemes_quota_goal_node_mem_used_free',
                                         # under development
             ]
 
