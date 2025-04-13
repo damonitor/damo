@@ -1372,6 +1372,8 @@ def add_fmt_args(parser, hide_help=False):
             help='don\'t merge contiguous regions of same access pattern')
     parser.add_argument('--hist_logscale', action='store_true',
                         help='draw histograms in logscale')
+    parser.add_argument('--hist_ranges', nargs='+',
+                        help='histogram range values')
 
     # don't set default for record head and snapshot head because it depends on
     # given number of record and snapshots.  Decide those in set_formats().
