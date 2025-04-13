@@ -1271,8 +1271,14 @@ commands.
 Note: This is an experimental feature at the moment.  Some changes could be
 made, or the support can be dropped in future.
 
-`damo args damon` supports only single kdamond by default.  Users can edit
-DAMON parameters for multiple kdamonds as below.
+`damo args damon` was supporting only single kdamond by default, and hence
+provided below ways to edit DAMON parameters for multiple kdamonds.  From
+v2.7.5, partial DAMON parameters update command line options support multiple
+kdamonds use case via `--nr_ctxs`, `--nr_schemes` and `--nr_targets`.  Read the
+[section](#partial-damon-parameters-update) for more details.  Below ways for
+handling multiple kdamonds are still be supported for users who still prefer
+it.  If partial DAMON parameters command line options are proven to be useful
+and stable, below ways might be deprecated in future.
 
 `--add` option of `damo args damon` receives a file containing output from
 other `damo args damon` execution.  If the option is given, `damo args damon`
