@@ -358,16 +358,13 @@ def histogram_str(hist):
         lines.append('%s %s %s' % (trange_str, sz_str, bar))
     return '\n'.join(lines)
 
-def get_unsorted_histogram(snapshot, fmt, df_passed_sz, get_metric_fn):
+def get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn):
     hist = {}
     for region in snapshot.regions:
-        metric = get_metric_fn(region, fmt)
-        if not metric in hist:
-            hist[metric] = 0
-        if df_passed_sz:
-            hist[metric] += region.sz_filter_passed
-        else:
-            hist[metric] += region.size()
+        xval = get_x_fn(region, fmt)
+        if not xval in hist:
+            hist[xval] = 0
+        hist[xval] += get_y_fn(region)
     return hist
 
 def get_sorted_ranged_historgram(hist, fmt, fmt_metric_fn, parse_metric_fn):
@@ -392,11 +389,21 @@ def get_sorted_ranged_historgram(hist, fmt, fmt_metric_fn, parse_metric_fn):
         hist2.append([metric_range_str, sz_str, sz])
     return hist2
 
+def get_sz_region(region):
+    return region.size()
+
+def get_df_passed_sz_region(region):
+    return region.sz_filter_passed
+
 def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
                 parse_metric_fn):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
-    hist = get_unsorted_histogram(snapshot, fmt, df_passed_sz, get_metric_fn)
+    if df_passed_sz is True:
+        get_y_fn = get_df_passed_sz_region
+    else:
+        get_y_fn = get_sz_region
+    hist = get_unsorted_histogram(snapshot, fmt, get_metric_fn, get_y_fn)
     hist2 = get_sorted_ranged_historgram(
             hist, fmt, fmt_metric_fn, parse_metric_fn)
 
@@ -421,6 +428,9 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
                        _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
 
 def hist_str(snapshot, record, fmt):
+    if fmt.hist_xy is None:
+        return '--hist_xy is not set'
+
     return 'to be implemented'
 
 def temperature_str(region, raw, fmt):
