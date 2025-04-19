@@ -364,7 +364,7 @@ def get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn):
         xval = get_x_fn(region, fmt)
         if not xval in hist:
             hist[xval] = 0
-        hist[xval] += get_y_fn(region)
+        hist[xval] += get_y_fn(region, fmt)
     return hist
 
 def get_sorted_ranged_historgram(hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn):
@@ -389,7 +389,7 @@ def get_sorted_ranged_historgram(hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn):
         hist2.append([metric_range_str, yval_str, yval])
     return hist2
 
-def get_sz_region(region):
+def get_sz_region(region, fmt):
     return region.size()
 
 def get_df_passed_sz_region(region):
@@ -427,6 +427,23 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     return sz_hist_str(snapshot, fmt, df_passed_sz, get_last_used_time,
                        _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
 
+class HistFns:
+    get = None
+    fmt = None
+    parse = None
+
+    def __init__(self, get, fmt, parse):
+        self.get = get
+        self.fmt = fmt
+        self.parse = parse
+
+hist_fns_map = {
+        'recency': HistFns(get_last_used_time, _damo_fmt_str.format_time_us,
+                           _damo_fmt_str.text_to_us),
+        'sz': HistFns(get_sz_region, _damo_fmt_str.format_sz,
+                      _damo_fmt_str.text_to_bytes),
+        }
+
 def hist_str(snapshot, record, fmt):
     if fmt.hist_xy is None:
         return '--hist_xy is not set'
@@ -435,22 +452,16 @@ def hist_str(snapshot, record, fmt):
         return 'no region in snapshot'
 
     xmetric, ymetric = fmt.hist_xy
+    if not xmetric in hist_fns_map:
+        return 'unsupported histogram x metric'
+    if not ymetric in hist_fns_map:
+        return 'unsupported histogram y metric'
+    x_fns = hist_fns_map[xmetric]
+    y_fns = hist_fns_map[ymetric]
 
-    if xmetric == 'recency':
-        get_x_fn = get_last_used_time
-        fmt_x_fn = _damo_fmt_str.format_time_us
-        parse_x_fn = _damo_fmt_str.text_to_us
-    else:
-        return 'unsupported x metric'
-    if ymetric == 'sz':
-        get_y_fn = get_sz_region
-        fmt_y_fn = _damo_fmt_str.format_sz
-    else:
-        return 'unsupported y metric'
-
-    hist = get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn)
+    hist = get_unsorted_histogram(snapshot, fmt, x_fns.get, y_fns.get)
     hist2 = get_sorted_ranged_historgram(
-            hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn)
+            hist, fmt, x_fns.fmt, x_fns.parse, y_fns.fmt)
     return histogram_str(hist2)
 
 def temperature_str(region, raw, fmt):
