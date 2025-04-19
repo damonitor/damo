@@ -124,6 +124,10 @@ snapshot_formatters = [
                   recency_hist_str(snapshot, record, fmt, True),
                   ' '.join(['last accessed time to total size of',
                             'DAMOS filters (df) passed regions histogram'])),
+        Formatter('<histogram>',
+                  lambda snapshot, record, fmt:
+                  hist_str(snapshot, record, fmt),
+                  ' '.join(['customizable histogram'])),
 
         Formatter('<heatmap>',
                   lambda snapshot, record, fmt:
@@ -415,6 +419,9 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
 
     return sz_hist_str(snapshot, fmt, df_passed_sz, get_last_used_time,
                        _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
+
+def hist_str(snapshot, record, fmt):
+    return 'to be implemented'
 
 def temperature_str(region, raw, fmt):
     temperature = temperature_of(region, fmt.temperature_weights)
