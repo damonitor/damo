@@ -309,27 +309,35 @@ def filters_pass_type_of(record):
         text += '\n# WARN: Allow filters at the end of the list means nothing on <6.15'
     return text
 
-def get_linearscale_hist_ranges(minv, maxv, nr_ranges):
+def get_linearscale_hist_ranges(minv, maxv, nr_ranges, cumulate):
     hist_ranges = []
     total_interval = maxv + 1 - minv
     interval = max(math.ceil(total_interval / nr_ranges), 1)
     for i in range(nr_ranges):
-        hist_ranges.append([minv + interval * i, minv + interval * (i + 1)])
+        if cumulate:
+            start_range = minv
+        else:
+            start_range = minv + interval * i
+        hist_ranges.append([start_range, minv + interval * (i + 1)])
     return hist_ranges
 
-def get_logscale_hist_ranges(minv, maxv, nr_ranges):
+def get_logscale_hist_ranges(minv, maxv, nr_ranges, cumulate):
     initial_interval = max(int((maxv - minv) / 2**nr_ranges), 1)
     # start from 1 second interval
     ranges = [[minv, minv + initial_interval]]
     while ranges[-1][-1] < maxv:
         last_interval = ranges[-1][1] - ranges[-1][0]
-        ranges.append([ranges[-1][-1], ranges[-1][-1] + last_interval * 2])
+        if cumulate:
+            start_range = minv
+        else:
+            start_range = ranges[-1][-1]
+        ranges.append([start_range, ranges[-1][-1] + last_interval * 2])
     return ranges
 
-def get_hist_ranges(minv, maxv, nr_ranges, logscale):
+def get_hist_ranges(minv, maxv, nr_ranges, logscale, cumulate):
     if logscale:
-        return get_logscale_hist_ranges(minv, maxv, nr_ranges)
-    return get_linearscale_hist_ranges(minv, maxv, nr_ranges)
+        return get_logscale_hist_ranges(minv, maxv, nr_ranges, cumulate)
+    return get_linearscale_hist_ranges(minv, maxv, nr_ranges, cumulate)
 
 def histogram_str(hist):
     """
@@ -379,7 +387,8 @@ def get_sorted_ranged_historgram(hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn):
     else:
         min_metric, max_metric = metrics[0], metrics[-1]
         hist_ranges = get_hist_ranges(
-                min_metric, max_metric, 10, fmt.hist_logscale)
+                min_metric, max_metric, 10, fmt.hist_logscale,
+                fmt.hist_cumulate)
     raw = fmt.raw_number
     for min_m, max_m in hist_ranges:
         yval = sum([hist[x] for x in metrics if x >= min_m and x < max_m])
@@ -1004,6 +1013,7 @@ class ReportFormat:
 
     hist_xy = None
     hist_logscale = None
+    hist_cumulate = None
     hist_ranges = None
 
     format_record_head = None
@@ -1041,6 +1051,7 @@ class ReportFormat:
         self.dont_merge_regions = args.dont_merge_regions
         self.hist_xy = args.hist_xy
         self.hist_logscale = args.hist_logscale
+        self.hist_cumulate = args.hist_cumulate
         self.hist_ranges = args.hist_ranges
         self.format_record_head = args.format_record_head
         self.format_record_tail = args.format_record_tail
@@ -1076,6 +1087,7 @@ class ReportFormat:
                 'dont_merge_regions': self.dont_merge_regions,
                 'hist_xy': self.hist_xy,
                 'hist_logscale': self.hist_logscale,
+                'hist_cumulate': self.hist_cumulate,
                 'hist_ranges': self.hist_ranges,
                 'format_record_head': self.format_record_head,
                 'format_record_tail': self.format_record_tail,
@@ -1108,6 +1120,11 @@ class ReportFormat:
             self.hist_logscale = kvpairs['hist_logscale']
         else:
             self.hist_logscale = False
+        # hist_cumulate introduced after v2.7.6
+        if 'hist_cumulate' in kvpairs:
+            self.hist_cumulate = kvpairs['hist_cumulate']
+        else:
+            self.hist_cumulate = False
         # hist_xy introduced after v2.7.6
         if 'hist_xy' in kvpairs:
             self.hist_xy = kvpairs['hist_xy']
@@ -1461,6 +1478,8 @@ def add_fmt_args(parser, hide_help=False):
     parser.add_argument('--hist_xy', choices=['recency', 'sz'], nargs=2,
                         default=['recency', 'sz'],
                         help='x and y axis metrics for <histogram>')
+    parser.add_argument('--hist_cumulate', action='store_true',
+                        help='draw histogram in cumulative way')
 
     # don't set default for record head and snapshot head because it depends on
     # given number of record and snapshots.  Decide those in set_formats().
