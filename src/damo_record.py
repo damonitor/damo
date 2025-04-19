@@ -167,7 +167,8 @@ def main(args):
 
     data_for_cleanup.record_handle = record_handle
 
-    print('Press Ctrl+C to stop')
+    if record_handle.will_take_awhile():
+        print('Press Ctrl+C to stop')
     _damo_records.start_recording(record_handle)
     cleanup_exit(0)
 

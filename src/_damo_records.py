@@ -1055,6 +1055,11 @@ class RecordingHandle:
 
         self.timeout = timeout
 
+    def will_take_awhile(self):
+        if self.snapshot_interval_sec == 0 and self.snapshot_count < 5:
+            return False
+        return True
+
 def start_recording(handle):
     kdamonds_file_path = '%s.kdamonds' % handle.file_path
     with open(kdamonds_file_path, 'w') as f:
