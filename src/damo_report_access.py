@@ -367,7 +367,7 @@ def get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn):
         hist[xval] += get_y_fn(region)
     return hist
 
-def get_sorted_ranged_historgram(hist, fmt, fmt_x_fn, parse_x_fn):
+def get_sorted_ranged_historgram(hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn):
     metrics = sorted(hist.keys())
     hist2 = []
     if fmt.hist_ranges is not None:
@@ -382,11 +382,11 @@ def get_sorted_ranged_historgram(hist, fmt, fmt_x_fn, parse_x_fn):
                 min_metric, max_metric, 10, fmt.hist_logscale)
     raw = fmt.raw_number
     for min_m, max_m in hist_ranges:
-        sz = sum([hist[x] for x in metrics if x >= min_m and x < max_m])
+        yval = sum([hist[x] for x in metrics if x >= min_m and x < max_m])
         metric_range_str = '[%s, %s)' % (
                 fmt_x_fn(min_m, raw), fmt_x_fn(max_m, raw))
-        sz_str = _damo_fmt_str.format_sz(sz, raw)
-        hist2.append([metric_range_str, sz_str, sz])
+        yval_str = fmt_y_fn(yval, raw)
+        hist2.append([metric_range_str, yval_str, yval])
     return hist2
 
 def get_sz_region(region):
@@ -405,7 +405,7 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
         get_y_fn = get_sz_region
     hist = get_unsorted_histogram(snapshot, fmt, get_metric_fn, get_y_fn)
     hist2 = get_sorted_ranged_historgram(
-            hist, fmt, fmt_metric_fn, parse_metric_fn)
+            hist, fmt, fmt_metric_fn, parse_metric_fn, _damo_fmt_str.format_sz)
 
     return histogram_str(hist2)
 
@@ -449,7 +449,7 @@ def hist_str(snapshot, record, fmt):
 
     hist = get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn)
     hist2 = get_sorted_ranged_historgram(
-            hist, fmt, fmt_x_fn, parse_x_fn)
+            hist, fmt, fmt_x_fn, parse_x_fn, _damo_fmt_str.format_sz)
     return histogram_str(hist2)
 
 def temperature_str(region, raw, fmt):
