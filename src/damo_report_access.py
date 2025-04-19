@@ -1356,7 +1356,7 @@ def sighandler(signum, frame):
     print('\nsignal %s received' % signum)
     signal_received = True
 
-def handle_format_script(cmd, records):
+def handle_exec(cmd, records):
     if cmd == 'interpreter':
         code.interact(
                 local=locals(),
@@ -1427,8 +1427,8 @@ def read_and_show(args):
         if signal_received is True:
             break
 
-        if args.format_script:
-            err = handle_format_script(args.format_script, records)
+        if args.exec:
+            err = handle_exec(args.exec, records)
             if err is not None:
                 print('format_script handling fail (%s)' % err)
                 exit(1)
@@ -1655,8 +1655,8 @@ def set_argparser(parser):
     add_fmt_args(parser, hide_help=True)
     parser.add_argument('--format', metavar='<json string>',
                         help='visualization format in json format')
-    parser.add_argument('--format_script', metavar='<command>',
-                        help='execute given python script with records')
+    parser.add_argument('--exec', metavar='<command or \'interpreter\'>',
+                        help='execute python code with the records')
     parser.add_argument(
             '--on_cache', nargs=3,
             metavar=('<cache size>', '<cache ways>', '<cache line size>'),
