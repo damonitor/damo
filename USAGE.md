@@ -738,6 +738,71 @@ that having the filters passed.  Regions that not having the filters passed are
 represented as a gap (`[...]`).  Note that the heatmap is in experimental
 support now.
 
+### `damo report access`: Programming Visualization
+
+Note: This is an experimental feature at the moment.  Some changes could be
+made, or the support can be dropped in future.
+
+`damo report access` provides a highly customizable visualization formats.  It
+cannot fits all, though.  Users can implement and use their own visualization
+of the given access monitoring results in Python code using `--exec` option of
+`damo report access` be below two ways.
+
+Users can implement the visualization in a Python script and pass the path to
+the script with optional arguments via `--exec`.  The `--exec` parameter value
+can also have optional inputs for the script.  The given Python script should
+have a function name `main()`, which receives two parameters.  `damo report
+access` will call the `main()` function.  The invocation will pass monitoring
+results record information to the first parameter.  The tokens of `--exec`
+parameter value will be passed as the second parameter.  For example:
+
+    $ cat foo.py
+    def main(records, cmd_fields):
+        print('hello')
+        print(records)
+        print(cmd_fields)
+        for r in records:
+            for s in r.snapshots:
+                for r in s.regions:
+                    print(r.start, r.end)
+    $ sudo ./damo report access --exec "./foo.py a b c"
+    hello
+    [<_damo_records.DamonRecord object at 0x7f24e3678190>]
+    ['./foo.py', 'a', 'b', 'c']
+    4294967296 10660085760
+    10660085760 17044361216
+    17044361216 68577918976
+
+Users can also start Python interpreter with the access information records by
+passing `interpreter` as `--exec` value.  For example:
+
+    $ sudo ./damo report access --exec interpreter
+    DAMON records are available as 'records'
+    >>> print(records)
+    [<_damo_records.DamonRecord object at 0x7fe468d13d90>]
+    >>> help(records[0])
+    Help on DamonRecord in module _damo_records object:
+
+    class DamonRecord(builtins.object)
+     |  DamonRecord(kd_idx, ctx_idx, intervals, scheme_idx, target_id, scheme_filters)
+     |
+     |  Contains data access monitoring results for single target
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, kd_idx, ctx_idx, intervals, scheme_idx, target_id, scheme_filters)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+    [...]
+
+`records` is a list of `DamonRecord` class that defined on
+`src/_damo_records.py` of `damo` repo.  The methods and fields could be changed
+in future, so no strict script backward compatibility is guaranteed.  Instead,
+we provide a compatibility strategy that is similar to that of Linux kernel's
+in-tree modules only API compatibility guarantee.  We will keep some `--exec`
+scripts on `report_access_exec_scripts` directory of `damo` repo, and do our
+best to keep those not broken.  Hence, if you need backward compatibility of
+your `--exec` script, please consider upstreaming it into `damo` repo.
+
 ### DAMON Monitoring Results Structure
 
 The biggest unit of the monitoring result is called 'record'.  Each record
