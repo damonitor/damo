@@ -416,7 +416,7 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
         return temperature_of(region, weights)
 
     return sz_hist_str(snapshot, fmt, df_passed_sz, get_temperature,
-                       _damo_fmt_str.format_nr, _damo_fmt.text_to_nr)
+                       _damo_fmt_str.format_nr, _damo_fmt_str.text_to_nr)
 
 def get_last_used_time(region, fmt):
     if region.nr_accesses.percent > 0:
