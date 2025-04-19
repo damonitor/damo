@@ -444,12 +444,13 @@ def hist_str(snapshot, record, fmt):
         return 'unsupported x metric'
     if ymetric == 'sz':
         get_y_fn = get_sz_region
+        fmt_y_fn = _damo_fmt_str.format_sz
     else:
         return 'unsupported y metric'
 
     hist = get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn)
     hist2 = get_sorted_ranged_historgram(
-            hist, fmt, fmt_x_fn, parse_x_fn, _damo_fmt_str.format_sz)
+            hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn)
     return histogram_str(hist2)
 
 def temperature_str(region, raw, fmt):
