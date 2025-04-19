@@ -339,23 +339,23 @@ def histogram_str(hist):
     Returns:
         str: A string of the histogram that formatted in a user-friendly way.
     """
-    sizes = [entry[2] for entry in hist]
-    min_sz = min(sizes)
-    max_sz = max(sizes)
-    max_trange_str = max([len(entry[0]) for entry in hist])
-    max_sz_str = max([len(entry[1]) for entry in hist])
+    yvals = [entry[2] for entry in hist]
+    min_yval = min(yvals)
+    max_yval = max(yvals)
+    max_xval_range_str = max([len(entry[0]) for entry in hist])
+    max_yval_str = max([len(entry[1]) for entry in hist])
     max_dots = 20
-    sz_interval = max(int((max_sz - min_sz) / max_dots), 1)
+    yval_dot_interval = max(int((max_yval - min_yval) / max_dots), 1)
     lines = []
-    for trange_str, sz_str, sz in hist:
-        trange_str = '%s%s' % (trange_str,
-                               ' ' * (max_trange_str - len(trange_str)))
-        sz_str = '%s%s' % (sz_str,
-                           ' ' * (max_sz_str - len(sz_str)))
+    for xrange_str, y_str, yval in hist:
+        xrange_str = '%s%s' % (xrange_str,
+                               ' ' * (max_xval_range_str - len(xrange_str)))
+        y_str = '%s%s' % (y_str,
+                           ' ' * (max_yval_str - len(y_str)))
 
-        nr_dots = min(math.ceil((sz - min_sz) / sz_interval), max_dots)
+        nr_dots = min(math.ceil((yval - min_yval) / yval_dot_interval), max_dots)
         bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
-        lines.append('%s %s %s' % (trange_str, sz_str, bar))
+        lines.append('%s %s %s' % (xrange_str, y_str, bar))
     return '\n'.join(lines)
 
 def get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn):
