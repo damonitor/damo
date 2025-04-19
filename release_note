@@ -1,6 +1,10 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.7.7
+- damo report access: allow visualizing given access information with arbitrary
+  Python code (--exec)
+
 v2.7.6
 - damo help: add topics for DAMON record filtering and formatting
 - damo report access: add option for manual histogram ranges setup
