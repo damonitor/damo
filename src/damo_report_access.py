@@ -367,15 +367,15 @@ def get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn):
         hist[xval] += get_y_fn(region)
     return hist
 
-def get_sorted_ranged_historgram(hist, fmt, fmt_metric_fn, parse_metric_fn):
+def get_sorted_ranged_historgram(hist, fmt, fmt_x_fn, parse_x_fn):
     metrics = sorted(hist.keys())
     hist2 = []
     if fmt.hist_ranges is not None:
         hist_ranges = []
         for i in range(0, len(fmt.hist_ranges), 2):
             hist_ranges.append(
-                    [parse_metric_fn(fmt.hist_ranges[i]),
-                     parse_metric_fn(fmt.hist_ranges[i + 1])])
+                    [parse_x_fn(fmt.hist_ranges[i]),
+                     parse_x_fn(fmt.hist_ranges[i + 1])])
     else:
         min_metric, max_metric = metrics[0], metrics[-1]
         hist_ranges = get_hist_ranges(
@@ -384,7 +384,7 @@ def get_sorted_ranged_historgram(hist, fmt, fmt_metric_fn, parse_metric_fn):
     for min_m, max_m in hist_ranges:
         sz = sum([hist[x] for x in metrics if x >= min_m and x < max_m])
         metric_range_str = '[%s, %s)' % (
-                fmt_metric_fn(min_m, raw), fmt_metric_fn(max_m, raw))
+                fmt_x_fn(min_m, raw), fmt_x_fn(max_m, raw))
         sz_str = _damo_fmt_str.format_sz(sz, raw)
         hist2.append([metric_range_str, sz_str, sz])
     return hist2
