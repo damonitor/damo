@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0
 
 import argparse
+import code
 import copy
 import json
 import math
@@ -1356,6 +1357,12 @@ def sighandler(signum, frame):
     signal_received = True
 
 def handle_format_script(cmd, records):
+    if cmd == 'interpreter':
+        code.interact(
+                local=locals(),
+                banner="DAMON records are available as 'records'",
+                exitmsg='Exit the session.')
+        return None
     cmd_fields = cmd.split()
     if not os.path.isfile(cmd_fields[0]):
         return 'first token is not file'
