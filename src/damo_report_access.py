@@ -960,6 +960,8 @@ class ReportFormat:
     sort_regions_dsc = None
     temperature_weights = None
     dont_merge_regions = None
+
+    hist_xy = None
     hist_logscale = None
     hist_ranges = None
 
@@ -996,6 +998,7 @@ class ReportFormat:
         self.sort_regions_dsc = args.sort_regions_dsc
         self.temperature_weights = args.temperature_weights
         self.dont_merge_regions = args.dont_merge_regions
+        self.hist_xy = args.hist_xy
         self.hist_logscale = args.hist_logscale
         self.hist_ranges = args.hist_ranges
         self.format_record_head = args.format_record_head
@@ -1030,6 +1033,7 @@ class ReportFormat:
                 'sort_regions_dsc': self.sort_regions_dsc,
                 'temperature_weights': self.temperature_weights,
                 'dont_merge_regions': self.dont_merge_regions,
+                'hist_xy': self.hist_xy,
                 'hist_logscale': self.hist_logscale,
                 'hist_ranges': self.hist_ranges,
                 'format_record_head': self.format_record_head,
@@ -1063,6 +1067,11 @@ class ReportFormat:
             self.hist_logscale = kvpairs['hist_logscale']
         else:
             self.hist_logscale = False
+        # hist_xy introduced after v2.7.6
+        if 'hist_xy' in kvpairs:
+            self.hist_xy = kvpairs['hist_xy']
+        else:
+            self.hist_xy = None
         # hist_ranges introduced after v2.7.5
         if 'hist_ranges' in kvpairs:
             self.hist_ranges = kvpairs['hist_ranges']
@@ -1408,6 +1417,9 @@ def add_fmt_args(parser, hide_help=False):
     parser.add_argument('--hist_ranges', nargs='+',
                         help='histogram range values'
                         if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--hist_xy', choices=['recency', 'sz'], nargs=2,
+                        default=['recency', 'sz'],
+                        help='x and y axis metrics for <histogram>')
 
     # don't set default for record head and snapshot head because it depends on
     # given number of record and snapshots.  Decide those in set_formats().
