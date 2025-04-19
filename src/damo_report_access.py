@@ -6,6 +6,8 @@ import json
 import math
 import os
 import signal
+import sys
+import tempfile
 import time
 
 import _damo_ascii_color
@@ -1353,6 +1355,21 @@ def sighandler(signum, frame):
     print('\nsignal %s received' % signum)
     signal_received = True
 
+def handle_format_script(cmd, records):
+    cmd_fields = cmd.split()
+    if not os.path.isfile(cmd_fields[0]):
+        return 'first token is not file'
+    script_dir_path = tempfile.mkdtemp(prefix='damo_script_')
+    script_module_name = 'damo_report_access_script'
+    script_file_name = '%s.py' % script_module_name
+    with open(cmd_fields[0], 'r') as f:
+        with open(os.path.join(script_dir_path, script_file_name), 'w') as f2:
+            f2.write(f.read())
+    sys.path.append(script_dir_path)
+    import damo_report_access_script
+    damo_report_access_script.main(records, cmd_fields)
+    return None
+
 def read_and_show(args):
     record_filter, err = _damo_records.args_to_filter(args)
     if err != None:
@@ -1402,6 +1419,15 @@ def read_and_show(args):
             exit(1)
         if signal_received is True:
             break
+
+        if args.format_script:
+            err = handle_format_script(args.format_script, records)
+            if err is not None:
+                print('format_script handling fail (%s)' % err)
+                exit(1)
+            time.sleep(repeat_delay)
+            read_show_count += 1
+            continue
 
         if len([r for r in records if r.intervals is None]) != 0:
             if not args.json and not args.raw_form:
@@ -1622,6 +1648,8 @@ def set_argparser(parser):
     add_fmt_args(parser, hide_help=True)
     parser.add_argument('--format', metavar='<json string>',
                         help='visualization format in json format')
+    parser.add_argument('--format_script', metavar='<command>',
+                        help='execute given python script with records')
     parser.add_argument(
             '--on_cache', nargs=3,
             metavar=('<cache size>', '<cache ways>', '<cache line size>'),
