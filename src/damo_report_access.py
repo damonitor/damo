@@ -1356,6 +1356,15 @@ def sighandler(signum, frame):
     print('\nsignal %s received' % signum)
     signal_received = True
 
+def recursive_del(dirpath):
+    for filename in os.listdir(dirpath):
+        filepath = os.path.join(dirpath, filename)
+        if os.path.isdir(filepath):
+            recursive_del(filepath)
+        else:
+            os.remove(filepath)
+    os.rmdir(dirpath)
+
 def handle_exec(cmd, records):
     if cmd == 'interpreter':
         code.interact(
@@ -1375,6 +1384,7 @@ def handle_exec(cmd, records):
     sys.path.append(script_dir_path)
     import damo_report_access_script
     damo_report_access_script.main(records, cmd_fields)
+    recursive_del(script_dir_path)
     return None
 
 def read_and_show(args):
