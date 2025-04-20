@@ -127,11 +127,6 @@ snapshot_formatters = [
                   recency_hist_str(snapshot, record, fmt, True),
                   ' '.join(['last accessed time to total size of',
                             'DAMOS filters (df) passed regions histogram'])),
-        Formatter('<histogram>',
-                  lambda snapshot, record, fmt:
-                  hist_str(snapshot, record, fmt),
-                  ' '.join(['customizable histogram'])),
-
         Formatter('<heatmap>',
                   lambda snapshot, record, fmt:
                   heatmap_str(snapshot, record, fmt),
@@ -455,26 +450,6 @@ hist_fns_map = {
         'sz': HistFns(get_sz_region, _damo_fmt_str.format_sz,
                       _damo_fmt_str.text_to_bytes),
         }
-
-def hist_str(snapshot, record, fmt):
-    if fmt.hist_xy is None:
-        return '--hist_xy is not set'
-
-    if len(snapshot.regions) == 0:
-        return 'no region in snapshot'
-
-    xmetric, ymetric = fmt.hist_xy
-    if not xmetric in hist_fns_map:
-        return 'unsupported histogram x metric'
-    if not ymetric in hist_fns_map:
-        return 'unsupported histogram y metric'
-    x_fns = hist_fns_map[xmetric]
-    y_fns = hist_fns_map[ymetric]
-
-    hist = get_unsorted_histogram(snapshot, fmt, x_fns.get, y_fns.get)
-    hist2 = get_sorted_ranged_historgram(
-            hist, fmt, x_fns.fmt, x_fns.parse, y_fns.fmt)
-    return histogram_str(hist2)
 
 def temperature_str(region, raw, fmt):
     temperature = temperature_of(region, fmt.temperature_weights)
@@ -1014,7 +989,6 @@ class ReportFormat:
     temperature_weights = None
     dont_merge_regions = None
 
-    hist_xy = None
     hist_logscale = None
     hist_cumulate = None
     hist_ranges = None
@@ -1052,7 +1026,6 @@ class ReportFormat:
         self.sort_regions_dsc = args.sort_regions_dsc
         self.temperature_weights = args.temperature_weights
         self.dont_merge_regions = args.dont_merge_regions
-        self.hist_xy = args.hist_xy
         self.hist_logscale = args.hist_logscale
         self.hist_cumulate = args.hist_cumulate
         self.hist_ranges = args.hist_ranges
@@ -1088,7 +1061,6 @@ class ReportFormat:
                 'sort_regions_dsc': self.sort_regions_dsc,
                 'temperature_weights': self.temperature_weights,
                 'dont_merge_regions': self.dont_merge_regions,
-                'hist_xy': self.hist_xy,
                 'hist_logscale': self.hist_logscale,
                 'hist_cumulate': self.hist_cumulate,
                 'hist_ranges': self.hist_ranges,
@@ -1128,11 +1100,6 @@ class ReportFormat:
             self.hist_cumulate = kvpairs['hist_cumulate']
         else:
             self.hist_cumulate = False
-        # hist_xy introduced after v2.7.6
-        if 'hist_xy' in kvpairs:
-            self.hist_xy = kvpairs['hist_xy']
-        else:
-            self.hist_xy = None
         # hist_ranges introduced after v2.7.5
         if 'hist_ranges' in kvpairs:
             self.hist_ranges = kvpairs['hist_ranges']
@@ -1518,9 +1485,6 @@ def add_fmt_args(parser, hide_help=False):
     parser.add_argument('--hist_ranges', nargs='+',
                         help='histogram range values'
                         if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--hist_xy', choices=['recency', 'sz'], nargs=2,
-                        default=['recency', 'sz'],
-                        help='x and y axis metrics for <histogram>')
     parser.add_argument('--hist_cumulate', action='store_true',
                         help='draw histogram in cumulative way')
 
