@@ -1103,12 +1103,15 @@ class DamonCtx:
                 DamonNrRegionsRange.from_kvpairs(kv['nr_regions'])
                     if 'nr_regions' in kv else DAmonNrRegionsRange(),
                 [Damos.from_kvpairs(s) for s in kv['schemes']]
-                    if 'schemes' in kv else [])
+                    if 'schemes' in kv else [],
+                    kv['addr_unit']
+                    if 'addr_unit' in kv else None)
         return ctx
 
     def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
         kv = collections.OrderedDict({})
         kv['ops'] = self.ops
+        kv['addr_unit'] = self.addr_unit
         kv['targets'] = [t.to_kvpairs(raw) for t in self.targets]
         if not omit_defaults or self.intervals != DamonIntervals():
             kv['intervals'] = self.intervals.to_kvpairs(raw)
