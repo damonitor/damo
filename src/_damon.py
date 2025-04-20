@@ -1251,6 +1251,7 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
 
             'schemes_quota_goal_node_mem_used_free',
                                         # under development
+            'addr_unit'                 # under development
             ]
 
 _damon_fs = None
