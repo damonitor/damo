@@ -1037,6 +1037,7 @@ class Damos:
 
 class DamonCtx:
     ops = None
+    addr_unit = None
     targets = None
     intervals = None
     nr_regions = None
@@ -1044,8 +1045,11 @@ class DamonCtx:
     kdamond = None
 
     def __init__(self, ops='paddr', targets=None, intervals=None,
-                 nr_regions=None, schemes=None):
+                 nr_regions=None, schemes=None, addr_unit=None):
         self.ops = ops
+        if addr_unit is not None:
+            self.addr_unit = _damo_fmt_str.text_to_bytes(addr_unit)
+        self.addr_unit = addr_unit
         self.targets = targets if targets is not None else []
         for target in self.targets:
             target.context = self
