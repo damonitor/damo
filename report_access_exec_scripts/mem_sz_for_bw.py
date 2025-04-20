@@ -41,7 +41,7 @@ def pr_membw_memsz_percentile(snapshot):
                total_sz * 100))
         next_percentile_to_print = math.floor(bw_cumulated /
                                               total_bw_consumption * 100 + 5)
-    
+
 def main(records, cmdline_fields):
     for ridx, record in enumerate(records):
         print('%d-th record' % ridx)
