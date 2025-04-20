@@ -1062,7 +1062,11 @@ class DamonCtx:
             scheme.context = self
 
     def to_str(self, raw, params_only=False):
-        lines = ['ops: %s' % self.ops]
+        ops_line = 'ops: %s' % self.ops
+        if self.addr_unit is not None:
+            ops_line = '%s (addr_unit %s)' % (
+                    ops_line, _damo_fmt_str.format_sz(self.addr_unit, raw))
+        lines = [ops_line]
         for idx, target in enumerate(self.targets):
             lines.append('target %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(target.to_str(raw), 4))
