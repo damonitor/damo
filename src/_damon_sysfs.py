@@ -495,6 +495,12 @@ def write_context_dir(dir_path, context):
     if err is not None:
         return err
 
+    if context.addr_unit is not None:
+        err = _damo_fs.write_file(os.path.join(dir_path, 'addr_unit'),
+                                  context.addr_unit)
+        if err is not None:
+            return err
+
     err = write_monitoring_attrs_dir(
             os.path.join(dir_path, 'monitoring_attrs'), context)
     if err is not None:
@@ -730,6 +736,10 @@ def files_content_to_context(files_content):
             int(nr_regions_content['min']),
             int(nr_regions_content['max']))
     ops = files_content['operations'].strip()
+    if 'addr_unit' in files_content:
+        addr_unit = files_content['addr_unit']
+    else:
+        addr_unit = None
 
     targets_content = files_content['targets']
     targets = [files_content_to_target(content)
@@ -741,7 +751,8 @@ def files_content_to_context(files_content):
             for content in numbered_dirs_content(
                 schemes_content, 'nr_schemes')]
 
-    return _damon.DamonCtx(ops, targets, intervals, nr_regions, schemes)
+    return _damon.DamonCtx(ops, targets, intervals, nr_regions, schemes,
+                           addr_unit=addr_unit)
 
 def files_content_to_kdamond(files_content):
     contexts_content = files_content['contexts']
