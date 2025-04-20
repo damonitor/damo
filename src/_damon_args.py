@@ -471,7 +471,8 @@ def damon_ctx_for(args, idx):
     ops = args.ops[idx]
 
     try:
-        ctx = _damon.DamonCtx(ops, None, intervals, nr_regions, schemes=[])
+        ctx = _damon.DamonCtx(ops, None, intervals, nr_regions, schemes=[],
+                              addr_unit=args.ops_addr_unit)
         return ctx, None
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
@@ -834,6 +835,9 @@ def set_monitoring_argparser(parser, hide_help=False):
     parser.add_argument('--ops', choices=['vaddr', 'paddr', 'fvaddr'],
                         action='append',
                         help='monitoring operations set'
+                        if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--ops_addr_unit', metavar='<bytes>',
+                        help='operations set address unit'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--target_pid', type=int, metavar='<pid>',
                         action='append',
