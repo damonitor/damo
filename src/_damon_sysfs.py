@@ -861,11 +861,11 @@ def infer_damon_version():
     if err is None:
         if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'addr_unit')):
             version = '>v6.15'
-        if os.path.isdir(
+        elif os.path.isdir(
                 os.path.join(ctx_dir_of(0, 0),
                              'monitoring_attrs', 'intervals', 'intervals_goal')):
             version = '>v6.14'
-        if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'stats',
+        elif os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'stats',
                                        'sz_ops_filter_passed')):
             version = '>v6.13'
         elif os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'target_nid')):
