@@ -9,10 +9,13 @@ def pr_percentile(percentile, idle_time_us):
     print('%18s %20.3f s'
           % ('%d-th percentile:' % percentile, idle_time_us / 1000000))
 
-def pr_idle_time_dist(regions):
+def pr_idle_time_dist(regions, percentile_interval):
     regions = sorted(regions, key=lambda r: idle_time(r))
     total_sz = sum([r.size() for r in regions])
-    percentiles_to_print = [0, 1, 25, 50, 75, 99]
+    if percentile_interval is None:
+        percentiles_to_print = [0, 1, 25, 50, 75, 99]
+    else:
+        percentiles_to_print = list(range(0, 100, percentile_interval))
     percentile = 0
     for r in regions:
         percentile += r.size() * 100 / total_sz
@@ -24,9 +27,13 @@ def pr_idle_time_dist(regions):
     pr_percentile(100, idle_time(regions[-1]))
 
 def main(records, cmdline_fields):
+    if len(cmdline_fields) == 2:
+        percentile_interval = int(cmdline_fields[1])
+    else:
+        percentile_interval = None
     for ridx, record in enumerate(records):
         for sidx, snapshot in enumerate(record.snapshots):
             print('%d-th record, %d-th snapshot' % (ridx, sidx))
             for region in snapshot.regions:
                 region.age.add_unset_unit(record.intervals)
-            pr_idle_time_dist(snapshot.regions)
+            pr_idle_time_dist(snapshot.regions, percentile_interval)
