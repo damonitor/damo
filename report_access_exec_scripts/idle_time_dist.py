@@ -3,11 +3,11 @@
 def idle_time(region):
     if region.nr_accesses.samples > 0:
         return 0
-    return region.age.aggr_intervals
+    return region.age.usec
 
-def pr_percentile(percentile, val):
-    print('%18s %20s'
-          % ('%d-th percentile:' % percentile, val))
+def pr_percentile(percentile, idle_time_us):
+    print('%18s %20.3f s'
+          % ('%d-th percentile:' % percentile, idle_time_us / 1000000))
 
 def pr_idle_time_dist(regions):
     regions = sorted(regions, key=lambda r: idle_time(r))
@@ -28,4 +28,6 @@ def main(records, cmdline_fields):
     for ridx, record in enumerate(records):
         for sidx, snapshot in enumerate(record.snapshots):
             print('%d-th record, %d-th snapshot' % (ridx, sidx))
+            for region in snapshot.regions:
+                region.age.add_unset_unit(record.intervals)
             pr_idle_time_dist(snapshot.regions)
