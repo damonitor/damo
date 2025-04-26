@@ -373,7 +373,8 @@ def get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn):
         hist[xval] += get_y_fn(region, fmt)
     return hist
 
-def get_sorted_ranged_historgram(hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn):
+def get_sorted_ranged_historgram(
+        hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn, y_aggr_fn):
     metrics = sorted(hist.keys())
     hist2 = []
     if fmt.hist_ranges is not None:
@@ -389,7 +390,8 @@ def get_sorted_ranged_historgram(hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn):
                 fmt.hist_cumulate)
     raw = fmt.raw_number
     for min_m, max_m in hist_ranges:
-        yval = sum([hist[x] for x in metrics if x >= min_m and x < max_m])
+        yval = y_aggr_fn(
+                [hist[x] for x in metrics if x >= min_m and x < max_m])
         metric_range_str = '[%s, %s)' % (
                 fmt_x_fn(min_m, raw), fmt_x_fn(max_m, raw))
         yval_str = fmt_y_fn(yval, raw)
@@ -412,7 +414,8 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
         get_y_fn = get_sz_region
     hist = get_unsorted_histogram(snapshot, fmt, get_metric_fn, get_y_fn)
     hist2 = get_sorted_ranged_historgram(
-            hist, fmt, fmt_metric_fn, parse_metric_fn, _damo_fmt_str.format_sz)
+            hist, fmt, fmt_metric_fn, parse_metric_fn, _damo_fmt_str.format_sz,
+            lambda sz_list: sum(sz_list))
 
     return histogram_str(hist2)
 
