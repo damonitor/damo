@@ -1158,6 +1158,21 @@ def finish_recording(handle):
 
 # for snapshot
 
+def current_kdamonds_interval_updated():
+    kdamonds = _damon.current_kdamonds()
+    intervals_autotuning = False
+    for kd in kdamonds:
+        for ctx in kd.contexts:
+            if ctx.intervals.intervals_goal.enabled():
+                intervals_autotuning = True
+                break
+        if intervals_autotuning:
+            break
+    if not intervals_autotuning:
+        return kdamonds
+    _damon.update_tuned_intervals()
+    return _damon.current_kdamonds()
+
 def find_install_scheme(scheme_to_find):
     '''Install given scheme to all contexts if effectively same scheme is not
     installed.
@@ -1166,7 +1181,7 @@ def find_install_scheme(scheme_to_find):
     '''
     installed = False
     indices = []
-    kdamonds = _damon.current_kdamonds()
+    kdamonds = current_kdamonds_interval_updated()
     for kidx, kdamond in enumerate(kdamonds):
         for cidx, ctx in enumerate(kdamond.contexts):
             ctx_has_the_scheme = False
