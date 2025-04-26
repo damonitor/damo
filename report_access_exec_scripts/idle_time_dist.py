@@ -12,8 +12,7 @@ def pr_percentile(percentile, idle_time_us):
 def pr_idle_time_dist(regions):
     regions = sorted(regions, key=lambda r: idle_time(r))
     total_sz = sum([r.size() for r in regions])
-    pr_percentile(0, idle_time(regions[0]))
-    percentiles_to_print = [1, 25, 50, 75, 99]
+    percentiles_to_print = [0, 1, 25, 50, 75, 99]
     percentile = 0
     for r in regions:
         percentile += r.size() * 100 / total_sz
