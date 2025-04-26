@@ -1203,9 +1203,9 @@ def find_install_scheme(scheme_to_find):
     if installed:
         err = _damon.commit(kdamonds)
         if err is not None:
-            return (False, [],
+            return (False, [], None,
                     'committing scheme installed kdamonds failed: %s' % err)
-    return installed, indices, None
+    return installed, indices, kdamonds, None
 
 def can_merge(left_region, right_region):
     if left_region.sz_filter_passed or right_region.sz_filter_passed:
@@ -1359,6 +1359,17 @@ def update_get_snapshot_records(kdamond_idxs, scheme_idxs,
     records = tried_regions_to_records_of(scheme_idxs, merge_regions)
     return records, None
 
+def kdamonds_copy_intervals(src_kdamonds, dst_kdamonds):
+    for kidx, kdamond in enumerate(src_kdamonds):
+        if kidx >= len(dst_kdamonds):
+            continue
+        dst_kdamond = dst_kdamonds[kidx]
+        for cidx, ctx in enumerate(kdamond.contexts):
+            if cidx >= len(dst_kdamond.contexts):
+                continue
+            dst_ctx = dst_kdamond.contexts[cidx]
+            dst_ctx.intervals = ctx.intervals
+
 def get_snapshot_records(monitor_scheme, total_sz_only, merge_regions):
     'return DamonRecord objects each having single DamonSnapshot and an error'
     running_kdamond_idxs = _damon.running_kdamond_idxs()
@@ -1371,7 +1382,8 @@ def get_snapshot_records(monitor_scheme, total_sz_only, merge_regions):
     if err is not None:
         return None, 'vaddr region install failed (%s)' % err
 
-    installed, idxs, err = find_install_scheme(monitor_scheme)
+    installed, idxs, updated_kdamonds, err = find_install_scheme(
+            monitor_scheme)
     if err:
         return None, 'monitoring scheme install failed: %s' % err
 
@@ -1379,6 +1391,7 @@ def get_snapshot_records(monitor_scheme, total_sz_only, merge_regions):
             total_sz_only, merge_regions)
 
     if installed:
+        kdamonds_copy_intervals(updated_kdamonds, orig_kdamonds)
         uninstall_err = _damon.commit(orig_kdamonds)
         if uninstall_err:
             errmsg = 'monitoring scheme uninstall failed: %s' % uninstall_err
