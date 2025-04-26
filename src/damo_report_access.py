@@ -445,11 +445,12 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
         get_y_fn = get_df_passed_sz_region
     else:
         get_y_fn = get_sz_region
+    y_fmt_fn = _damo_fmt_str.format_sz
+    y_aggr_fn = lambda vals: sum(vals)
 
     hist = get_unsorted_histogram(snapshot, fmt, get_metric_fn, get_y_fn)
     hist2 = get_sorted_ranged_historgram(
-            hist, fmt, fmt_metric_fn, parse_metric_fn, _damo_fmt_str.format_sz,
-            lambda sz_list: sum(sz_list))
+            hist, fmt, fmt_metric_fn, parse_metric_fn, y_fmt_fn, y_aggr_fn)
 
     return histogram_str(hist2)
 
