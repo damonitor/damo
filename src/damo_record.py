@@ -77,22 +77,8 @@ def mk_handle(args, kdamonds, monitoring_intervals):
     else:
         tracepoint = _damo_records.perf_event_damos_before_apply
 
-    handle = _damo_records.RecordingHandle(
-            # for access pattern monitoring
-            tracepoint=tracepoint, file_path=args.out,
-            file_format=args.output_type,
-            file_permission=args.output_permission,
-            monitoring_intervals=monitoring_intervals,
-            # for perf profile
-            do_profile='cpu_profile' in args.do_record,
-            # for children processes recording and memory footprint
-            kdamonds=kdamonds, add_child_tasks=args.include_child_tasks,
-            record_mem_footprint='mem_footprint' in args.do_record,
-            record_vmas='vmas' in args.do_record, record_proc_stats=True,
-            timeout=args.timeout)
-
     if args.snapshot is not None:
-        handle.tracepoint = None
+        tracepoint = None
         tried_regions_of = None
         if args.schemes_target_regions:
             tried_regions_of = []
@@ -112,14 +98,36 @@ def mk_handle(args, kdamonds, monitoring_intervals):
             print('record filter creation fail (%s)' % err)
             cleanup_exit(1)
 
-        handle.snapshot_request = _damo_records.RecordGetRequest(
+        snapshot_request = _damo_records.RecordGetRequest(
                 tried_regions_of=tried_regions_of, record_file=None,
                 snapshot_damos_filters=dfilters,
                 record_filter=record_filter, total_sz_only=False,
                 dont_merge_regions=False)
-        handle.snapshot_interval_sec = _damo_fmt_str.text_to_sec(
+        snapshot_interval_sec = _damo_fmt_str.text_to_sec(
                 args.snapshot[0])
-        handle.snapshot_count = _damo_fmt_str.text_to_nr(args.snapshot[1])
+        snapshot_count = _damo_fmt_str.text_to_nr(args.snapshot[1])
+    else:
+        snapshot_requst = None
+        snapshot_interval_sec = None
+        snapshot_count = None
+
+    handle = _damo_records.RecordingHandle(
+            # for access pattern monitoring
+            tracepoint=tracepoint, file_path=args.out,
+            file_format=args.output_type,
+            file_permission=args.output_permission,
+            monitoring_intervals=monitoring_intervals,
+            # for perf profile
+            do_profile='cpu_profile' in args.do_record,
+            # for children processes recording and memory footprint
+            kdamonds=kdamonds, add_child_tasks=args.include_child_tasks,
+            record_mem_footprint='mem_footprint' in args.do_record,
+            record_vmas='vmas' in args.do_record, record_proc_stats=True,
+            timeout=args.timeout)
+
+    handle.snapshot_request = snapshot_request
+    handle.snapshot_interval_sec = snapshot_interval_sec
+    handle.snapshot_count = snapshot_count
 
     if not 'access' in args.do_record:
         handle.tracepoint = None
