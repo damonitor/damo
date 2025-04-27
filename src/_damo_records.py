@@ -1034,7 +1034,8 @@ class RecordingHandle:
                  monitoring_intervals,
                  do_profile,
                  kdamonds, add_child_tasks, record_mem_footprint,
-                 record_vmas, record_proc_stats, timeout):
+                 record_vmas, record_proc_stats, timeout, snapshot_request,
+                 snapshot_interval_sec, snapshot_count):
         self.tracepoint = tracepoint
         self.file_path = file_path
         self.file_format = file_format
@@ -1054,6 +1055,10 @@ class RecordingHandle:
             self.proc_stats = []
 
         self.timeout = timeout
+
+        self.snapshot_request = snapshot_request
+        self.snapshot_interval_sec = snapshot_interval_sec
+        self.snapshot_count = snapshot_count
 
     def will_take_awhile(self):
         if self.snapshot_interval_sec == 0 and self.snapshot_count < 5:

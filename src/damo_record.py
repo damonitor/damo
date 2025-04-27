@@ -133,11 +133,9 @@ def mk_handle(args, kdamonds, monitoring_intervals):
             record_mem_footprint='mem_footprint' in args.do_record,
             record_vmas='vmas' in args.do_record,
             record_proc_stats='proc_stats' in args.do_record,
-            timeout=args.timeout)
-
-    handle.snapshot_request = snapshot_request
-    handle.snapshot_interval_sec = snapshot_interval_sec
-    handle.snapshot_count = snapshot_count
+            timeout=args.timeout, snapshot_request=snapshot_request,
+            snapshot_interval_sec=snapshot_interval_sec,
+            snapshot_count=snapshot_count)
 
     return handle
 
