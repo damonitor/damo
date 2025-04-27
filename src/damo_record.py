@@ -71,14 +71,15 @@ def handle_args(args):
         print(err)
         exit(-3)
 
+def tracepoint_from_args(args):
+    if not 'access' in args.do_record or args.snapshot is not None:
+        return None
+    if args.schemes_target_regions is False:
+        return _damo_records.perf_event_damon_aggregated
+    return _damo_records.perf_event_damos_before_apply
+
 def mk_handle(args, kdamonds, monitoring_intervals):
-    if 'access' in args.do_record:
-        if args.schemes_target_regions == False:
-            tracepoint = _damo_records.perf_event_damon_aggregated
-        else:
-            tracepoint = _damo_records.perf_event_damos_before_apply
-    else:
-        tracepoint = None
+    tracepoint = tracepoint_from_args(args)
 
     if 'access' in args.do_record and args.snapshot is not None:
         tracepoint = None
