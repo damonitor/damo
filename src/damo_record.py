@@ -72,12 +72,15 @@ def handle_args(args):
         exit(-3)
 
 def mk_handle(args, kdamonds, monitoring_intervals):
-    if args.schemes_target_regions == False:
-        tracepoint = _damo_records.perf_event_damon_aggregated
+    if 'access' in args.do_record:
+        if args.schemes_target_regions == False:
+            tracepoint = _damo_records.perf_event_damon_aggregated
+        else:
+            tracepoint = _damo_records.perf_event_damos_before_apply
     else:
-        tracepoint = _damo_records.perf_event_damos_before_apply
+        tracepoint = None
 
-    if args.snapshot is not None:
+    if 'access' in args.do_record and args.snapshot is not None:
         tracepoint = None
         tried_regions_of = None
         if args.schemes_target_regions:
@@ -129,10 +132,6 @@ def mk_handle(args, kdamonds, monitoring_intervals):
     handle.snapshot_request = snapshot_request
     handle.snapshot_interval_sec = snapshot_interval_sec
     handle.snapshot_count = snapshot_count
-
-    if not 'access' in args.do_record:
-        handle.tracepoint = None
-        handle.snapshot_request = None
 
     return handle
 
