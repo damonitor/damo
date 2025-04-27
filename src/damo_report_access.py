@@ -1184,6 +1184,14 @@ def set_formats_hist_style(args, fmt, records):
     fmt.format_region = ''
 
 def set_formats(args, records):
+    if args.format is not None:
+        fmt_string = args.format
+        if os.path.isfile(fmt_string):
+            with open(fmt_string, 'r') as f:
+                fmt_string = f.read()
+        fmt = ReportFormat.from_kvpairs(json.loads(fmt_string))
+        return fmt
+
     fmt = ReportFormat.from_args(args)
     if args.style == 'simple-boxes':
         fmt.format_snapshot_head = default_snapshot_head_format_without_heatmap
@@ -1442,14 +1450,7 @@ def read_and_show(args):
                 print('some records lack the intervals information')
                 exit(1)
 
-        if args.format is not None:
-            fmt_string = args.format
-            if os.path.isfile(fmt_string):
-                with open(fmt_string, 'r') as f:
-                    fmt_string = f.read()
-            fmt = ReportFormat.from_kvpairs(json.loads(fmt_string))
-        else:
-            fmt = set_formats(args, records)
+        fmt = set_formats(args, records)
 
         if args.on_cache is not None:
             sz_cache = _damo_fmt_str.text_to_bytes(args.on_cache[0])
