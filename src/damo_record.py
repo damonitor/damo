@@ -78,40 +78,45 @@ def tracepoint_from_args(args):
         return _damo_records.perf_event_damon_aggregated
     return _damo_records.perf_event_damos_before_apply
 
+def snapshot_requests_from_args(args):
+    ''' Returns snapshot_request and error '''
+    if not 'access' in args.do_record or args.snapshot is None:
+        return None, None
+
+    tried_regions_of = None
+    if args.schemes_target_regions:
+        tried_regions_of = []
+        for kidx, kd in enumerate(kdamonds):
+            for cidx, ctx in enumerate(kd.contexts):
+                for sidx, scheme in enumerate(ctx.schemes):
+                    tried_regions_of.append([kidx, cidx, sidx])
+
+    dfilters, err = _damon_args.damos_options_to_filters(
+            args.snapshot_damos_filter)
+    if err is not None:
+        return None, 'wrong --snapshot_damos_filters (%s)' % err
+
+    record_filter, err = _damo_records.args_to_filter(args)
+    if err is not None:
+        return None, err
+
+    return _damo_records.RecordGetRequest(
+            tried_regions_of=tried_regions_of, record_file=None,
+            snapshot_damos_filters=dfilters,
+            record_filter=record_filter, total_sz_only=False,
+            dont_merge_regions=False), None
+
 def mk_handle(args, kdamonds, monitoring_intervals):
     tracepoint = tracepoint_from_args(args)
-
-    if 'access' in args.do_record and args.snapshot is not None:
-        tracepoint = None
-        tried_regions_of = None
-        if args.schemes_target_regions:
-            tried_regions_of = []
-            for kidx, kd in enumerate(kdamonds):
-                for cidx, ctx in enumerate(kd.contexts):
-                    for sidx, scheme in enumerate(ctx.schemes):
-                        tried_regions_of.append([kidx, cidx, sidx])
-
-        dfilters, err = _damon_args.damos_options_to_filters(
-                args.snapshot_damos_filter)
-        if err is not None:
-            print('wrong --snapshot_damos_filters (%s)' % err)
-            cleanup_exit(1)
-
-        record_filter, err = _damo_records.args_to_filter(args)
-        if err is not None:
-            print('record filter creation fail (%s)' % err)
-            cleanup_exit(1)
-
-        snapshot_request = _damo_records.RecordGetRequest(
-                tried_regions_of=tried_regions_of, record_file=None,
-                snapshot_damos_filters=dfilters,
-                record_filter=record_filter, total_sz_only=False,
-                dont_merge_regions=False)
+    snapshot_request, err = snapshot_requests_from_args(args)
+    if err is not None:
+        print(err)
+        cleanup_exit(1)
+    if snapshot_request is not None:
         snapshot_interval_sec = _damo_fmt_str.text_to_sec(
                 args.snapshot[0])
         snapshot_count = _damo_fmt_str.text_to_nr(args.snapshot[1])
     else:
-        snapshot_requst = None
         snapshot_interval_sec = None
         snapshot_count = None
 
