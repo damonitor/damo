@@ -1559,27 +1559,29 @@ def add_fmt_args(parser, hide_help=False):
 
     # don't set default for record head and snapshot head because it depends on
     # given number of record and snapshots.  Decide those in set_formats().
+    # below five options can be replaced with --format.  Keep backward
+    # compatibility support, but hide from help messages.
     parser.add_argument(
             '--format_record_head', metavar='<template>',
-            help='output format to show at the beginning of each record'
-            if not hide_help else argparse.SUPPRESS)
+            # help='output format to show at the beginning of each record'
+            help=argparse.SUPPRESS)
     parser.add_argument('--format_record_tail', metavar='<template>',
                         default='',
-                        help='output format to show at the end of each record'
-                        if not hide_help else argparse.SUPPRESS)
+                        # help='output format to show at the end of each record'
+                        help=argparse.SUPPRESS)
     parser.add_argument(
             '--format_snapshot_head', metavar='<template>',
-            help='output format to show at the beginning of each snapshot'
-            if not hide_help else argparse.SUPPRESS)
+            # help='output format to show at the beginning of each snapshot'
+            help=argparse.SUPPRESS)
     parser.add_argument(
             '--format_snapshot_tail', metavar='<template>',
             default=default_snapshot_tail_format,
-            help='output format to show at the end of each snapshot'
-            if not hide_help else argparse.SUPPRESS)
+            # help='output format to show at the end of each snapshot'
+            help=argparse.SUPPRESS)
     parser.add_argument('--format_region', metavar='<template>',
                         default=default_region_format,
-                        help='output format to show for each memory region'
-                        if not hide_help else argparse.SUPPRESS)
+                        # help='output format to show for each memory region'
+                        help=argparse.SUPPRESS)
 
     # for snapshot heatmap
     parser.add_argument(
