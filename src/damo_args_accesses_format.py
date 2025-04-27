@@ -13,9 +13,9 @@ def main(args):
     fmt = damo_report_access.set_formats(args, records=[])
     kvpairs = fmt.to_kvpairs(raw=args.raw)
 
-    if args.format == 'json':
+    if args.output_format == 'json':
         print(json.dumps(kvpairs, indent=4))
-    elif args.format == 'yaml':
+    elif args.output_format == 'yaml':
         text, err = _damo_yaml.dump(kvpairs)
         if err is not None:
             print('yaml dump failed (%s)' % err)
@@ -27,7 +27,7 @@ def set_argparser(parser):
         'format DAMON monitoring results visualization parameters'])
     damo_report_access.add_fmt_args(parser)
     parser.add_argument(
-            '--format', choices=['json', 'yaml'], default='json',
+            '--output_format', choices=['json', 'yaml'], default='json',
             help='format of the output')
     parser.add_argument(
             '--raw', action='store_true',
