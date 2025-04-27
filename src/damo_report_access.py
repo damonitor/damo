@@ -1241,17 +1241,18 @@ def set_formats(args, records):
                 fmt.format_region += ' df-passed <filters passed bytes>'
                 break
 
+    ops_filters_installed = False
+    intervals_tuning_enabled = False
+    for record in records:
+        if len(record.scheme_filters) > 0:
+            ops_filters_installed = True
+        if record.intervals is not None:
+            if record.intervals.intervals_goal.enabled():
+                intervals_tuning_enabled = True
+        if ops_filters_installed and intervals_tuning_enabled:
+            break
+
     if fmt.format_snapshot_tail == default_snapshot_tail_format:
-        ops_filters_installed = False
-        intervals_tuning_enabled = False
-        for record in records:
-            if len(record.scheme_filters) > 0:
-                ops_filters_installed = True
-            if record.intervals is not None:
-                if record.intervals.intervals_goal.enabled():
-                    intervals_tuning_enabled = True
-            if ops_filters_installed and intervals_tuning_enabled:
-                break
         if ops_filters_installed:
             fmt.format_snapshot_tail = default_snapshot_tail_format_filter_installed
         if intervals_tuning_enabled:
@@ -1273,6 +1274,9 @@ def set_formats(args, records):
     if '<filters passed bytes>' in fmt.format_region:
         fmt.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
         fmt.format_snapshot_head += '\ndf-pass: <filters passed heatmap>'
+
+    if fmt.format_record_tail == '' and intervals_tuning_enabled:
+        fmt.format_record_tail = 'monitoring intervals: <intervals>'
 
     return fmt
 
