@@ -1551,6 +1551,12 @@ def add_fmt_args(parser, hide_help=False):
     parser.add_argument('--hist_cumulate', action='store_true',
                         help='draw histogram in cumulative way')
 
+    fmt_flexible_metavar='<set|append> <record_head|snapshot_head|region|snapshot_tail|record_tail> <format string>'
+
+    parser.add_argument('--format', metavar='<%s> or <json string>' %
+                        fmt_flexible_metavar, action='append', nargs='+',
+                        help='visualization format in json format')
+
     # don't set default for record head and snapshot head because it depends on
     # given number of record and snapshots.  Decide those in set_formats().
     parser.add_argument(
@@ -1691,11 +1697,6 @@ def set_argparser(parser):
     _damo_records.set_snapshot_damos_filters_option(parser)
     add_fmt_args(parser, hide_help=True)
 
-    fmt_flexible_metavar='<set|append> <record_head|snapshot_head|region|snapshot_tail|record_tail> <format string>'
-
-    parser.add_argument('--format', metavar='<%s> or <json string>' %
-                        fmt_flexible_metavar, action='append', nargs='+',
-                        help='visualization format in json format')
     parser.add_argument('--exec', metavar='<command or \'interpreter\'>',
                         help='execute python code with the records')
     parser.add_argument(
