@@ -1184,15 +1184,39 @@ def set_formats_hist_style(args, fmt, records):
     fmt.format_region = ''
 
 def set_formats(args, records):
-    if args.format is not None:
-        fmt_string = args.format
-        if os.path.isfile(fmt_string):
-            with open(fmt_string, 'r') as f:
-                fmt_string = f.read()
-        fmt = ReportFormat.from_kvpairs(json.loads(fmt_string))
-        return fmt
-
     fmt = ReportFormat.from_args(args)
+
+    if args.format is not None:
+        if len(args.format) == 1 and len(args.format[0]) == 1:
+            fmt_string = args.format[0][0]
+            if os.path.isfile(fmt_string):
+                with open(fmt_string, 'r') as f:
+                    fmt_string = f.read()
+            try:
+                return ReportFormat.from_kvpairs(json.loads(fmt_string)), None
+            except:
+                return None, 'wrong --format option'
+        for format_fields in args.format:
+            if len(format_fields) != 3:
+                return None, 'wrong --format option (%s)' % format_fields
+            action, target_area, fmt_string = format_fields
+            if not action in ['set', 'append']:
+                return None, 'wrong --format action (%s)' % format_fields
+            if not target_area in ['record_head', 'snapshot_head', 'region',
+                                   'snapshot_tail', 'record_tail']:
+                return None, 'wrong --format target area (%s)' % format_fields
+            if action == 'set':
+                if target_area == 'record_head':
+                    fmt.format_record_head = fmt_string
+                elif target_area == 'snapshot_head':
+                    fmt.format_snapshot_head = fmt_string
+                elif target_area == 'region':
+                    fmt.format_region = fmt_string
+                elif target_area == 'snapshot_tail':
+                    fmt.format_snapshot_tail = fmt_string
+                elif target_area == 'record_tail':
+                    fmt.format_record_tail = fmt_string
+
     if args.style == 'simple-boxes':
         fmt.format_snapshot_head = default_snapshot_head_format_without_heatmap
         fmt.format_region = '<box> size <size> access rate <access rate> age <age>'
@@ -1235,7 +1259,7 @@ def set_formats(args, records):
             fmt.format_snapshot_tail = ('%s\n<region box description>' %
                     fmt.format_record_tail)
     if len(records) == 0:
-        return fmt
+        return fmt, None
 
     if fmt.format_record_head == None:
         if len(records) > 1:
@@ -1286,7 +1310,21 @@ def set_formats(args, records):
     if fmt.format_record_tail == '' and intervals_tuning_enabled:
         fmt.format_record_tail = 'monitoring intervals: <intervals>'
 
-    return fmt
+    if args.format is not None:
+        for action, target_area, fmt_String in args.format:
+            if action == 'append':
+                if target_area == 'record_head':
+                    fmt.format_record_head += fmt_string
+                elif target_area == 'snapshot_head':
+                    fmt.format_snapshot_head += fmt_string
+                elif target_area == 'region':
+                    fmt.format_region += fmt_string
+                elif target_area == 'snapshot_tail':
+                    fmt.format_snapshot_tail += fmt_string
+                elif target_area == 'record_tail':
+                    fmt.format_record_tail += fmt_string
+
+    return fmt, None
 
 def handle_ls_keywords(args):
     if args.ls_record_format_keywords:
@@ -1450,7 +1488,9 @@ def read_and_show(args):
                 print('some records lack the intervals information')
                 exit(1)
 
-        fmt = set_formats(args, records)
+        fmt, err = set_formats(args, records)
+        if err is not None:
+            print('format setting failed (%s)' % err)
 
         if args.on_cache is not None:
             sz_cache = _damo_fmt_str.text_to_bytes(args.on_cache[0])
@@ -1652,7 +1692,11 @@ def set_argparser(parser):
             help='show tried regions of given schemes')
     _damo_records.set_snapshot_damos_filters_option(parser)
     add_fmt_args(parser, hide_help=True)
-    parser.add_argument('--format', metavar='<json string>',
+
+    fmt_flexible_metavar='<set|append> <record_head|snapshot_head|region|snapshot_tail|record_tail> <format string>'
+
+    parser.add_argument('--format', metavar='<%s> or <json string>' %
+                        fmt_flexible_metavar, action='append', nargs='+',
                         help='visualization format in json format')
     parser.add_argument('--exec', metavar='<command or \'interpreter\'>',
                         help='execute python code with the records')
