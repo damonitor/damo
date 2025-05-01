@@ -401,7 +401,7 @@ def get_sorted_ranged_historgram(
 def get_sz_region(region, fmt):
     return region.size()
 
-def get_df_passed_sz_region(region):
+def get_df_passed_sz_region(region, fmt):
     return region.sz_filter_passed
 
 def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
