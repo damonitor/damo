@@ -811,23 +811,25 @@ your `--exec` script, please consider upstreaming it into `damo` repo.
 
 ### DAMON Monitoring Results Structure
 
-The biggest unit of the monitoring result is called 'record'.  Each record
-contains monitoring results snapshot that retrieved for each
-kdamond/context/target combination.  Hence, the number of records that `damo
-report access` will show depends on how many kdamond/context/target combination
-exists.
+The monitoring results are constructed with three data structures called
+'record', 'snapshot', and 'region'.
 
-Each record contains multiple snapshots of the monitoring results that
-retrieved for each `aggregation interval`.  For the default use case of `damo
-report access`, which retrieves the access monitoring results snapshot of
-current DAMON, therefore, each record will contain only one single snapshot.
+'Record' contains monitoring results for each kdamond/context/target
+combination.
 
-Each snapshot contains regions information.  Each region information contains
-the monitoring results for the region including the start and end addresses of
-the memory region, `nr_accesses`, and `age`.  The number of regions per
-snapshot would depend on the `min_nr_regions` and `max_nr_regions` DAMON
-parameters, and actual data access pattern of the monitoring target address
-space.
+Each 'record' contains multiple 'snapshots' of the monitoring results.  If it
+was made with `--snapshot` option, the snapshots are retrieved for each
+`--snapshot`-specified snapshot dealy time.  If it was made as a result of full
+recording (no `--snapshot` given), the snapshots are retrieved for each
+`aggregation interval`.  For example, if `damo report access` was used for live
+snapshot visualization, each record will contain only one single snapshot.
+
+Each 'snapshot' contains multiple 'regions' information.  Each region
+information contains the monitoring results for the region including the start
+and end addresses of the memory region, `nr_accesses`, and `age`.  The number
+of regions per snapshot would depend on the `min_nr_regions` and
+`max_nr_regions` DAMON parameters, and actual data access pattern of the
+monitoring target address space.
 
 ### `damo`'s way of showing DAMON Monitoring Results
 
