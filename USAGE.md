@@ -897,11 +897,11 @@ For region information customization, a special keyword called `<box>` is
 provided.  It represents each region's access pattern with its shape and color.
 By default it represents each region's relative age, [access
 rate](#access-rate), and size with its length, color, and height, respectively.
-That is, `damo report access --format_region "<box>"` shows visualization of
-the access pattern, by showing location of each region in Y-axis, the hotness
-with color of each box, and how long the hotness has continued in X-axis.
-Showing only the first column of the output would be somewhat similar to an
-access heatmap of the target address space.
+For example, `damo report access --format set region "<box>"` shows
+visualization of the access pattern, by showing location of each region in
+Y-axis, the hotness with color of each box, and how long the hotness has
+continued in X-axis.  Showing only the first column of the output would be
+somewhat similar to an access heatmap of the target address space.
 
 For convenient use of it with a default format, `damo report access` provides
 `--region_box` option.  Output of the command with the option would help users
