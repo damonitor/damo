@@ -332,7 +332,8 @@ and
 
 Will install two DAMOS filters in same way.
 
-Read DAMON design documentation for more details including how filters work.
+Read DAMON design documentation for more details including [how filters
+work](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#filters).
 
 ##### Old `--damos_filter` Format
 
