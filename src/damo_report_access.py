@@ -127,6 +127,10 @@ snapshot_formatters = [
                   recency_hist_str(snapshot, record, fmt, True),
                   ' '.join(['last accessed time to total size of',
                             'DAMOS filters (df) passed regions histogram'])),
+        Formatter('<recency percentiles>',
+                  lambda snapshot, record, fmt:
+                  recency_percentiles(snapshot, record, fmt),
+                  'per-byte last accessed time distribution in percentiles'),
         Formatter('<heatmap>',
                   lambda snapshot, record, fmt:
                   heatmap_str(snapshot, record, fmt),
@@ -453,6 +457,30 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
             hist, fmt, fmt_metric_fn, parse_metric_fn, y_fmt_fn, y_aggr_fn)
 
     return histogram_str(hist2)
+
+def recency_percentiles(snapshot, record, fmt):
+    if len(snapshot.regions) == 0:
+        return 'no region in snapshot'
+    regions = sorted(snapshot.regions,
+                     key=lambda r: get_last_used_time(r, fmt))
+    total_sz = sum(r.size() for r in regions)
+    percentiles_to_show = [0, 1, 25, 50, 75, 99]
+    percentile = 0
+    lines = []
+    lines.append('<percentile> <last accessed time>')
+    for r in regions:
+        percentile += r.size() * 100 / total_sz
+        while len(percentiles_to_show) > 0:
+            if percentile < percentiles_to_show[0]:
+                break
+            lines.append('%3d %s' %
+                         (percentiles_to_show[0],
+                          _damo_fmt_str.format_time_us(
+                              get_last_used_time(r, fmt), fmt.raw)))
+            percentiles_to_show = percentiles_to_show[1:]
+    lines.append('100 %s' %
+           _damo_fmt_str.format_time_us(get_last_used_time(r, fmt), fmt.raw))
+    return '\n'.join(lines)
 
 class HistFns:
     get = None
