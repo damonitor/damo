@@ -827,9 +827,9 @@ snapshot visualization, each record will contain only one single snapshot.
 Each 'snapshot' contains multiple 'regions' information.  Each region
 information contains the monitoring results for the region including the start
 and end addresses of the memory region, `nr_accesses`, and `age`.  The number
-of regions per snapshot would depend on the `min_nr_regions` and
-`max_nr_regions` DAMON parameters, and actual data access pattern of the
-monitoring target address space.
+of regions per snapshot depends on the `min_nr_regions` and `max_nr_regions`
+DAMON parameters, and actual data access pattern of the monitoring target
+address space.
 
 ### `damo`'s way of showing DAMON Monitoring Results
 
@@ -845,33 +845,48 @@ below:
      <record 0 tail>
      [...]
 
-That is, information of record and snapshot can be
-shown twice, once at the beginning (before showing it's internal data), and
-once at the end.  Meanwhile, the information of regions can be shown only once
-since it is the lowest level that not encloses anything.  By default, record
-and snapshot head/tail are skipped if there is only one record and one
-snapshot.  That's why above `damo report access` example output shows only
-regions information.
+That is, information of record and snapshot can be shown twice, once at the
+beginning (before showing it's internal data), and once at the end.  Meanwhile,
+the information of regions can be shown only once since it is the lowest level
+that not encloses anything.  By default, record and snapshot head/tail are
+skipped if there is only one record that has only one snapshot.  That's why
+above `damo report access` example output shows only regions information.
 
 ### Customization of The Output
 
 Users can customize what information to be shown in which way for the each
-position using `--format_{record,snapshot,region}[_{head,tail}]` option.  Each
-of the option receives a string for the template.  The template can have any words and
-special format keywords for each position.  For example, `<start address>`, `<end
-address>`, [`<access rate>`](#access-rate), or
+position using `--format` option.  The option receives fine-grained format
+command for each position of the hierarchical output structure (head and tail
+of record and snapshot, and region), or a `json` format file that specifies the
+whole format of the whole structure.  The fine-grained per-output position
+format command is constructed in below format.
+
+    <action> <position> <format string>
+
+`<position>` specifies the output position on the hierarchical structure.  It
+can be one of `record_head`, `snapshot_head`, `region`, `snapshot_tail`, and
+`record_tail`.
+
+`<action>` can be `set` or `append`.  `set` is for setting the format of the
+`<position>` output.  `append` is for append a line of specific format to the
+current output of the `<position>`.
+
+Finally, `<format string>` is the template string for the output.  The template
+can have any words and special format keywords for each position.  For example,
+`<start address>`, `<end address>`, [`<access rate>`](#access-rate), or
 [`<age>`](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)
-keywords are available for `--foramt_region` option's value.  The template can
-also have arbitrary strings.  The newline character (`\n`) is also supported.
-Each of the keywords for each position and their brief description can be shown
-via `--ls_{record,snapshot,region}_format_keywords` option.  Actually, `damo
-report access` also internally uses the customization feature with its default
-templates.
+keywords are available for `region` position.  The template can also have
+arbitrary strings.  The newline character (`\n`) is also supported.  Each of
+the keywords for each position and their brief description can be shown via
+`damo help access_format_options {record,snapshot,region}_format_keywords`
+command.
 
 For example:
 
     # damo start
-    # damo report access --format_region "region that starts from <start address> and ends at <end address> was having <access rate> access rate for <age>."
+    # damo report access \
+        --format set region "region that starts from <start address> and ends at <end address> was having <access rate> access rate for <age>." \
+        --format set snapshot_tail "total size: <total bytes>"
     region that starts from 4.000 GiB    and ends at 16.251 GiB  was having 0 %   access rate for 40.700 s.
     region that starts from 16.251 GiB   and ends at 126.938 GiB was having 0 %   access rate for 47.300 s.
     total size: 122.938 GiB
