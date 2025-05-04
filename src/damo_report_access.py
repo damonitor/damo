@@ -1553,8 +1553,10 @@ def add_fmt_args(parser, hide_help=False):
 
     fmt_flexible_metavar='<set|append> <record_head|snapshot_head|region|snapshot_tail|record_tail> <format string>'
 
-    parser.add_argument('--format', metavar='<%s> or <json string>' %
-                        fmt_flexible_metavar, action='append', nargs='+',
+    # This option also receives json string or file.  But, no real use case is
+    # found.  Keep supporting for now, but hide from the help message.
+    parser.add_argument('--format', metavar=fmt_flexible_metavar,
+                        action='append', nargs='+',
                         help='visualization format in json format')
 
     # don't set default for record head and snapshot head because it depends on
