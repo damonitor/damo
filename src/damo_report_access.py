@@ -474,11 +474,11 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
         total_sz = sum(r.size() for r in regions)
     percentiles_to_show = [0, 1, 25, 50, 75, 99]
     percentile = 0
-    lines = []
+    percentile_values = []
     if df_passed is True:
-        lines.append('<df-passed percentile> <last accessed time>')
+        lines = ['<df-passed percentile> <last accessed time>']
     else:
-        lines.append('<percentile> <last accessed time>')
+        lines = ['<percentile> <last accessed time>']
     for r in regions:
         if df_passed is True:
             percentile += r.sz_filter_passed * 100 / total_sz
@@ -487,15 +487,26 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
         while len(percentiles_to_show) > 0:
             if percentile < percentiles_to_show[0]:
                 break
-            lines.append('%3d %s' %
-                         (percentiles_to_show[0],
-                          _damo_fmt_str.format_time_us(
-                              get_last_used_time(r, fmt), fmt.raw)))
+            percentile_values.append(
+                    [percentiles_to_show[0], get_last_used_time(r, fmt)])
             percentiles_to_show = percentiles_to_show[1:]
         if percentile >= 100.0:
             break
-    lines.append('100 %s' %
-           _damo_fmt_str.format_time_us(get_last_used_time(r, fmt), fmt.raw))
+    percentile_values.append([100, get_last_used_time(r, fmt)])
+
+    min_val = percentile_values[0][-1]
+    max_val = percentile_values[-1][-1]
+    max_dots = 20
+    if max_val != min_val:
+        val_per_dot = (max_val - min_val) / max_dots
+    else:
+        val_per_dot = 1
+    for percentile, val in percentile_values:
+        bar_length = int((val - min_val) / val_per_dot)
+        bar = '|%s%s|' % ('*' * bar_length, ' ' * (max_dots - bar_length))
+        lines.append(
+                '%3d %18s %s' %
+                (percentile, _damo_fmt_str.format_time_us(val, fmt.raw), bar))
     return '\n'.join(lines)
 
 def temperature_str(region, raw, fmt):
