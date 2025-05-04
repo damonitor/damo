@@ -498,23 +498,6 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
            _damo_fmt_str.format_time_us(get_last_used_time(r, fmt), fmt.raw))
     return '\n'.join(lines)
 
-class HistFns:
-    get = None
-    fmt = None
-    parse = None
-
-    def __init__(self, get, fmt, parse):
-        self.get = get
-        self.fmt = fmt
-        self.parse = parse
-
-hist_fns_map = {
-        'recency': HistFns(get_last_used_time, _damo_fmt_str.format_time_us,
-                           _damo_fmt_str.text_to_us),
-        'sz': HistFns(get_sz_region, _damo_fmt_str.format_sz,
-                      _damo_fmt_str.text_to_bytes),
-        }
-
 def temperature_str(region, raw, fmt):
     temperature = temperature_of(region, fmt.temperature_weights)
     return _damo_fmt_str.format_nr(temperature, raw)
