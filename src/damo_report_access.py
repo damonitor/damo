@@ -1353,7 +1353,7 @@ def set_formats(args, records):
         fmt.format_record_tail = 'monitoring intervals: <intervals>'
 
     if args.format is not None:
-        for action, target_area, fmt_String in args.format:
+        for action, target_area, fmt_string in args.format:
             if action == 'append':
                 if target_area == 'record_head':
                     fmt.format_record_head += fmt_string
