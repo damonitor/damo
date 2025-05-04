@@ -147,10 +147,7 @@ def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
     elif ftype == 'hugepage_size':
         if len(optional_words) < 2:
             return None, 'no range for hugepage sizes is given', 0
-        try:
-            hugepage_size = _damon.DamonRegion(optional_words[0], optional_words[1])
-        except Exception as e:
-            return None, 'wrong range for hugepage sizes is given (%s, %s)' % (optional_words, e), 0
+        hugepage_size = [optional_words[0], optional_words[1]]
         return _damon.DamosFilter(ftype, fmatching, allow=allow,
                                   hugepage_size=hugepage_size), None, 2
 

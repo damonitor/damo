@@ -725,7 +725,7 @@ class DamosFilter:
     allow = None
     memcg_path = None
     address_range = None    # DamonRegion
-    hugepage_size = None    # hugepage size in bytes
+    hugepage_size = None    # list of min/max hugepage size in bytes
     damon_target_idx = None
     scheme = None
 
@@ -737,7 +737,11 @@ class DamosFilter:
         self.memcg_path = memcg_path
         self.allow = _damo_fmt_str.text_to_bool(allow)
         self.address_range = address_range
-        self.hugepage_size = hugepage_size
+        if hugepage_size is not None:
+            if not type(hugepage_size) is list and len(hugepage_size) != 2:
+                raise Exception('wrong hugepage_size for DamosFilter()')
+            self.hugepage_size = [
+                    _damo_fmt_str.text_to_bytes(x) for x in hugepage_size]
         if damon_target_idx != None:
             self.damon_target_idx = _damo_fmt_str.text_to_nr(damon_target_idx)
 
@@ -760,9 +764,12 @@ class DamosFilter:
             return ' '.join(words + [_damo_fmt_str.format_nr(
                     self.damon_target_idx, raw)])
         if self.filter_type == 'hugepage_size':
-            if self.hugepage_size is None:
-                return ' '.join(words)
-            return ' '.join(words + [self.hugepage_size.to_str(raw)])
+            if self.hugepage_size is not None:
+                words.append(
+                        '[%s, %s]' %
+                        (_damo_fmt_str.format_sz(self.hugepage_size[0], raw),
+                         _damo_fmt_str.format_sz(self.hugepage_size[1], raw)))
+            return ' '.join(words)
 
     def __str__(self):
         return self.to_str(False)

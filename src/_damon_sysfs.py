@@ -125,13 +125,13 @@ def write_filter_dir(dir_path, filter_):
     if filter_.hugepage_size is not None:
         err = _damo_fs.write_file(
                 os.path.join(dir_path, 'min'),
-                '%d' % filter_.hugepage_size.start)
+                '%d' % filter_.hugepage_size[0])
         if err is not None:
             return err
 
         err = _damo_fs.write_file(
                 os.path.join(dir_path, 'max'),
-                '%d' % filter_.hugepage_size.end)
+                '%d' % filter_.hugepage_size[1])
         if err is not None:
             return err
 
@@ -634,8 +634,8 @@ def files_content_to_damos_filter(files_content):
 
     hugepage_size=None
     if 'min' in files_content and 'max' in files_content:
-        hugepage_size=_damon.DamonRegion(files_content['min'].strip(),
-                                         files_content['max'].strip())
+        hugepage_size = [_damo_fmt_str.text_to_bytes(x)
+                         for x in [files_content['min'], files_content['max']]]
 
     return _damon.DamosFilter(
         files_content['type'].strip(),
