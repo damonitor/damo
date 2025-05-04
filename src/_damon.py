@@ -785,6 +785,10 @@ class DamosFilter:
         # filter_pass has renamed to allow
         elif 'filter_pass' in kv:
             allow = kv['filter_pass']
+        if 'hugepage_size' in kv:
+            hugepage_size = kv['hugepage_size']
+        else:
+            hugepage_size = None
         return DamosFilter(
                 kv['filter_type'], kv['matching'],
                 allow,
@@ -792,7 +796,8 @@ class DamosFilter:
                 DamonRegion.from_kvpairs(kv['address_range'])
                     if kv['filter_type'] == 'addr' else None,
                 kv['damon_target_idx']
-                    if kv['filter_type'] == 'target' else None)
+                    if kv['filter_type'] == 'target' else None,
+                    hugepage_size=hugepage_size)
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
