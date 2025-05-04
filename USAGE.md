@@ -857,8 +857,7 @@ above `damo report access` example output shows only regions information.
 Users can customize what information to be shown in which way for the each
 position using `--format` option.  The option receives fine-grained format
 command for each position of the hierarchical output structure (head and tail
-of record and snapshot, and region), or a `json` format file that specifies the
-whole format of the whole structure.  The fine-grained per-output position
+of record and snapshot, and region).  The fine-grained per-output position
 format command is constructed in below format.
 
     <action> <position> <format string>
