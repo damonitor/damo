@@ -804,7 +804,11 @@ class DamosFilter:
                 self.address_range != None else None),
             ('damon_target_idx',
                 _damo_fmt_str.format_nr(self.damon_target_idx, raw)
-                if self.damon_target_idx != None else None)])
+                if self.damon_target_idx != None else None),
+            ('hugepage_size',
+             [_damo_fmt_str.format_sz(x, raw) for x in self.hugepage_size]
+             if self.hugepage_size is not None else None),
+            ])
 
     def handled_by_ops(self):
         # whether this filter is handled by DAMON operations set layer
