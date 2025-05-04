@@ -451,8 +451,8 @@ permission via `--output_permission` option.
 For the DAMON's monitoring results, it retrieves and saves every
 DAMON-generated monitoring result snapshots.  Because DAMON's monitoring result
 snapshot contains `age` information, the full record is not always required.
-Users can retrieve and save only specific number of snapshots with a period,
-using `--snapshot` option.
+Users can retrieve and save only specific number of snapshots with a specific
+time delay between snapshots, using `--snapshot` option.
 
 `damo record` records monitoring results and status of running DAMON by
 default.  If no DAMON is running, users can start DAMON first using `damo
@@ -562,42 +562,47 @@ for retrieving status of specific parts.
 customizable formats.  Users can set it to use `damo record`-generated
 monitoring results record as the source using `--input_file` option.  If
 `--input_file` is not provided and DAMON is running, it captures snapshot from
-the running DAMON and uses it as the source. If `--input_file` is not provided,
-DAMON is not running, but `./damon.data` file eoes exist, use `./damon.data` as
+the running DAMON and uses it as the source.  If `--input_file` is not provided,
+DAMON is not running, but `./damon.data` file does exist, use `./damon.data` as
 `--input_file`.
 
 For example:
 
     # damo start
     # damo report access
-    heatmap: 99999998666666653333333322222222111111110000000000000000000000000000000000000000
-    # min/max temperatures: -61,598,582,038, -55,200,000,000, column size: 766.312 MiB
-    0   addr 4.000 GiB    size 5.962 GiB   access 0 %   age 9 m 12 s
-    1   addr 9.962 GiB    size 5.947 GiB   access 0 %   age 9 m 32.300 s
-    2   addr 15.910 GiB   size 5.960 GiB   access 0 %   age 9 m 50.300 s
-    3   addr 21.870 GiB   size 5.946 GiB   access 0 %   age 10 m 0.500 s
-    4   addr 27.816 GiB   size 5.953 GiB   access 0 %   age 10 m 6.600 s
-    5   addr 33.769 GiB   size 5.965 GiB   access 0 %   age 10 m 10.100 s
-    6   addr 39.734 GiB   size 5.961 GiB   access 0 %   age 10 m 12.300 s
-    7   addr 45.694 GiB   size 5.939 GiB   access 0 %   age 10 m 13.900 s
-    8   addr 51.633 GiB   size 5.971 GiB   access 0 %   age 10 m 15 s
-    9   addr 57.604 GiB   size 5.986 GiB   access 0 %   age 10 m 15.800 s
-    10  addr 63.590 GiB   size 284.793 MiB access 0 %   age 10 m 16.300 s
+    heatmap: 88999988887777777555555533333332222222111111110000000000000000000000000000000000
+    # min/max temperatures: -664,810,000,000, 130,001,000, column size: 766.312 MiB
+    0   addr 4.000 GiB    size 1.366 GiB   access 0 %   age 3.400 s
+    1   addr 5.366 GiB    size 8.000 KiB   access 100 % age 700 ms
+    2   addr 5.366 GiB    size 4.000 KiB   access 35 %  age 0 ns
+    [...]
+    130 addr 55.494 GiB   size 5.792 GiB   access 0 %   age 1 h 49 m 49.500 s
+    131 addr 61.285 GiB   size 2.583 GiB   access 0 %   age 1 h 50 m 48.100 s
+    memory bw estimate: 75.464 GiB per second
     total size: 59.868 GiB
 
-The line of the output shows the hotness of regions on the address range via a
-heatmap visualization.  Each column represents the memory region of the
-address-wise position on the monitoring target address space.  The number shows
-[access temperature](#access-temperature) of the region.  Higher number means
-warmer.  The second line shows scales of the temperature and size.
+The first line of the output shows the hotness (temperature) of regions on the
+address range as a heatmap visualization.  The location and value of each
+column on the line represents the relative location and the
+[access temperature](#access-temperature) of each memory region on the
+monitoring target address space.  The second line shows scales of the
+temperature number and size of the heatmap.
 
-Lines showing more detailed properties of each region follows.  The detailed
+Lines showing more detailed properties of each region follow.  The detailed
 properties include the start address, (`addr`), size (`size`), [access
 rate](#access-rate) (`access`), and the
 [age](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)
-of the region.
+of the region.  “Access rate” represents the probability to show access on the
+region, if you periodically check accesses on the region.  “Age” means how long
+the access frequency to the region was kept.  For example the fourth line
+(starts with “2”) says it found 8 KiB memory region that starts from ~5.366 GiB
+address on the address space.  The region kept an access frequency that an
+observer could find it accessed about 100% of the time, and the frequency was
+kept for last 700 milliseconds.
 
-Final line shows the total size of the regions that listed on the output.
+Final two lines show the memory bandwidth usage that is estimated from the
+snapshot, and the total size of the regions that are listed on the output,
+respectively.
 
 #### Access temperature
 
