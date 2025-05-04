@@ -26,8 +26,6 @@
   - shows when what virtual address has mappend and unmapped
 - Implement an official feature to check if 'damo' supports the system
   - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
-- Show intervals auto-tuning status on 'report access'
-  - If the tuning is activated, show positive sample rate and current tuned intervals
 - Update tuned intervals when getting snapshot, for only intervals auto-tuning
   enabled contexts
 - Warn or error recording when intervals auto-tuning enabled.
