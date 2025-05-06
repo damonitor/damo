@@ -3,7 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.7.9
 - fix wrong hugepage_size handling from 'damo report access --input' case
-- add '<recency percentile>' and '<df-passed recency percentile>' snapshot
+- add '<recency percentiles>' and '<df-passed recency percentiles>' snapshot
   format keywords
 
 v2.7.8
