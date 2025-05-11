@@ -1287,26 +1287,12 @@ def set_formats_handle_styles(fmt, args, records):
         fmt.sort_regions_dsc = ['temperature']
 
 def set_formats_update_default_formats(fmt, records, args):
-    if args.region_box:
-        if fmt.region_box_min_max_height[1] > 1:
-            fmt.format_region = '<box>%s' % default_region_format
-        else:
-            fmt.format_region = '<box>\n%s' % default_region_format
-        if fmt.format_snapshot_tail.find('<region box description>') == -1:
-            fmt.format_snapshot_tail = ('%s\n<region box description>' %
-                    fmt.format_record_tail)
-
+    # handle record head and tail
     if fmt.format_record_head == None:
         if len(records) > 1:
             fmt.format_record_head = default_record_head_format
         else:
             fmt.format_record_head = ''
-
-    if fmt.format_region == default_region_format:
-        for record in records:
-            if len(record.scheme_filters) > 0:
-                fmt.format_region += ' df-passed <filters passed bytes>'
-                break
 
     ops_filters_installed = False
     intervals_tuning_enabled = False
@@ -1319,13 +1305,10 @@ def set_formats_update_default_formats(fmt, records, args):
         if ops_filters_installed and intervals_tuning_enabled:
             break
 
-    if fmt.format_snapshot_tail == default_snapshot_tail_format:
-        if ops_filters_installed:
-            fmt.format_snapshot_tail = default_snapshot_tail_format_filter_installed
-        # further check if scheme action is not stat
-        if args.tried_regions_of is not None:
-            fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
+    if fmt.format_record_tail == '' and intervals_tuning_enabled:
+        fmt.format_record_tail = 'monitoring intervals: <intervals>'
 
+    # handle snapshot head and tail
     if fmt.format_snapshot_head == None:
         need_snapshot_head = False
         for record in records:
@@ -1340,8 +1323,30 @@ def set_formats_update_default_formats(fmt, records, args):
         fmt.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
         fmt.format_snapshot_head += '\ndf-pass: <filters passed heatmap>'
 
-    if fmt.format_record_tail == '' and intervals_tuning_enabled:
-        fmt.format_record_tail = 'monitoring intervals: <intervals>'
+    if args.region_box:
+        if fmt.format_snapshot_tail.find('<region box description>') == -1:
+            fmt.format_snapshot_tail = ('%s\n<region box description>' %
+                    fmt.format_record_tail)
+
+    if fmt.format_snapshot_tail == default_snapshot_tail_format:
+        if ops_filters_installed:
+            fmt.format_snapshot_tail = default_snapshot_tail_format_filter_installed
+        # further check if scheme action is not stat
+        if args.tried_regions_of is not None:
+            fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
+
+    # handle region
+    if args.region_box:
+        if fmt.region_box_min_max_height[1] > 1:
+            fmt.format_region = '<box>%s' % default_region_format
+        else:
+            fmt.format_region = '<box>\n%s' % default_region_format
+
+    if fmt.format_region == default_region_format:
+        for record in records:
+            if len(record.scheme_filters) > 0:
+                fmt.format_region += ' df-passed <filters passed bytes>'
+                break
 
 def set_formats_handle_format_append_arg(fmt, format_args):
     if format_args is not None:
