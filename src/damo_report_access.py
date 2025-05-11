@@ -1253,12 +1253,7 @@ def set_formats_handle_format_set_arg(fmt, format_arg):
             elif target_area == 'record_tail':
                 fmt.format_record_tail = fmt_string
 
-def set_formats(args, records):
-    fmt = ReportFormat.from_args(args)
-
-    if args.format is not None:
-        set_formats_handle_format_set_arg(fmt, args.format)
-
+def set_formats_handle_styles(fmt, args, records):
     if args.style == 'simple-boxes':
         fmt.format_snapshot_head = default_snapshot_head_format_without_heatmap
         fmt.format_region = '<box> size <size> access rate <access rate> age <age>'
@@ -1268,6 +1263,8 @@ def set_formats(args, records):
         fmt.region_box_colorset = 'emotion'
     elif args.style in ['temperature-sz-hist', 'recency-sz-hist']:
         set_formats_hist_style(args, fmt, records)
+    elif args.style == 'recency-percentiles':
+        set_formats_recency_percentile(args, fmt, records)
     elif args.style == 'cold':
         fmt.format_region = '<box> <size> access <access rate> <age>'
         fmt.region_box_min_max_height = [1, 1]
@@ -1283,6 +1280,15 @@ def set_formats(args, records):
         fmt.region_box_colorset = 'emotion'
         fmt.sort_regions_by = ['temperature']
         fmt.sort_regions_dsc = ['temperature']
+
+def set_formats(args, records):
+    fmt = ReportFormat.from_args(args)
+
+    if args.format is not None:
+        set_formats_handle_format_set_arg(fmt, args.format)
+
+    if args.style is not None:
+        set_formats_handle_styles(fmt, args, records)
 
     fmt.region_box_values = [v if v != 'none' else None
             for v in args.region_box_values]
