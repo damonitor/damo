@@ -1295,20 +1295,7 @@ def set_formats_record_default(fmt, records, intervals_tuning_enabled):
     if fmt.format_record_tail == '' and intervals_tuning_enabled:
         fmt.format_record_tail = 'monitoring intervals: <intervals>'
 
-def set_formats_update_default_formats(fmt, records, args):
-    ops_filters_installed = False
-    intervals_tuning_enabled = False
-    for record in records:
-        if len(record.scheme_filters) > 0:
-            ops_filters_installed = True
-        if record.intervals is not None:
-            if record.intervals.intervals_goal.enabled():
-                intervals_tuning_enabled = True
-        if ops_filters_installed and intervals_tuning_enabled:
-            break
-
-    set_formats_record_default(fmt, records, intervals_tuning_enabled)
-
+def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     # handle snapshot head and tail
     if fmt.format_snapshot_head == None:
         need_snapshot_head = False
@@ -1335,6 +1322,21 @@ def set_formats_update_default_formats(fmt, records, args):
         # further check if scheme action is not stat
         if args.tried_regions_of is not None:
             fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
+
+def set_formats_update_default_formats(fmt, records, args):
+    ops_filters_installed = False
+    intervals_tuning_enabled = False
+    for record in records:
+        if len(record.scheme_filters) > 0:
+            ops_filters_installed = True
+        if record.intervals is not None:
+            if record.intervals.intervals_goal.enabled():
+                intervals_tuning_enabled = True
+        if ops_filters_installed and intervals_tuning_enabled:
+            break
+
+    set_formats_record_default(fmt, records, intervals_tuning_enabled)
+    set_formats_snapshot_default(fmt, records, args, ops_filters_installed)
 
     # handle region
     if args.region_box:
