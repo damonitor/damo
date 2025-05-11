@@ -1095,7 +1095,8 @@ class ReportFormat:
         self.snapshot_heatmap_width = args.snapshot_heatmap_width
         self.snapshot_heatmap_static = args.snapshot_heatmap_static
         self.snapshot_heatmap_colorset = args.snapshot_heatmap_colorset
-        self.region_box_values = args.region_box_values
+        self.region_box_values = [
+                v if v != 'none' else None for v in args.region_box_values]
         self.region_box_min_max_height = args.region_box_min_max_height
         self.region_box_min_max_length = args.region_box_min_max_length
         self.region_box_colorset = args.region_box_colorset
@@ -1353,9 +1354,6 @@ def set_formats(args, records):
 
     set_formats_handle_format_set_arg(fmt, args.format)
     set_formats_handle_styles(fmt, args, records)
-
-    fmt.region_box_values = [v if v != 'none' else None
-            for v in args.region_box_values]
 
     if args.total_sz_only:
         fmt.format_snapshot_head = ''
