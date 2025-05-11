@@ -1323,6 +1323,19 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
         if args.tried_regions_of is not None:
             fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
 
+def set_formats_region_default(fmt, records, args):
+    if args.region_box:
+        if fmt.region_box_min_max_height[1] > 1:
+            fmt.format_region = '<box>%s' % default_region_format
+        else:
+            fmt.format_region = '<box>\n%s' % default_region_format
+
+    if fmt.format_region == default_region_format:
+        for record in records:
+            if len(record.scheme_filters) > 0:
+                fmt.format_region += ' df-passed <filters passed bytes>'
+                break
+
 def set_formats_update_default_formats(fmt, records, args):
     ops_filters_installed = False
     intervals_tuning_enabled = False
@@ -1337,19 +1350,7 @@ def set_formats_update_default_formats(fmt, records, args):
 
     set_formats_record_default(fmt, records, intervals_tuning_enabled)
     set_formats_snapshot_default(fmt, records, args, ops_filters_installed)
-
-    # handle region
-    if args.region_box:
-        if fmt.region_box_min_max_height[1] > 1:
-            fmt.format_region = '<box>%s' % default_region_format
-        else:
-            fmt.format_region = '<box>\n%s' % default_region_format
-
-    if fmt.format_region == default_region_format:
-        for record in records:
-            if len(record.scheme_filters) > 0:
-                fmt.format_region += ' df-passed <filters passed bytes>'
-                break
+    set_formats_region_default(fmt, records, args)
 
 def set_formats_handle_format_append_arg(fmt, format_args):
     if format_args is not None:
