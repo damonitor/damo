@@ -1222,6 +1222,21 @@ def set_formats_hist_style(args, fmt, records):
     fmt.format_snapshot_head = '\n'.join(snapshot_head_content)
     fmt.format_region = ''
 
+def set_formats_recency_percentiles(args, fmt, records):
+    snapshot_head_content = []
+    if has_ops_filters(records):
+        snapshot_head_content += [
+                '# damos filters (df): <filters passed type>',
+                '# df-passed recency percentiles',
+                '<df-passed recency percentiles>',
+                '']
+    snapshot_head_content += [
+            '# total recency percentiles',
+            '<recency percentiles>',
+            ]
+    fmt.format_snapshot_head = '\n'.join(snapshot_head_content)
+    fmt.format_region = ''
+
 def set_formats_handle_format_set_arg(fmt, format_arg):
     '''Handle --format inputs except 'append' ones'''
     if format_arg is None:
@@ -1269,7 +1284,7 @@ def set_formats_handle_styles(fmt, args, records):
     elif args.style in ['temperature-sz-hist', 'recency-sz-hist']:
         set_formats_hist_style(args, fmt, records)
     elif args.style == 'recency-percentiles':
-        set_formats_recency_percentile(args, fmt, records)
+        set_formats_recency_percentiles(args, fmt, records)
     elif args.style == 'cold':
         fmt.format_region = '<box> <size> access <access rate> <age>'
         fmt.region_box_min_max_height = [1, 1]
@@ -1578,6 +1593,7 @@ def add_fmt_args(parser, hide_help=False):
     parser.add_argument(
             '--style', choices=['detailed', 'simple-boxes',
                                 'temperature-sz-hist', 'recency-sz-hist',
+                                'recency-percentiles',
                                 'cold', 'hot'],
             default='detailed',
             help='output format selection among pre-configures ones')
