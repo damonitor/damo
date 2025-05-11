@@ -1287,6 +1287,15 @@ def set_formats_handle_styles(fmt, args, records):
         fmt.sort_regions_dsc = ['temperature']
 
 def set_formats_update_default_formats(fmt, records, args):
+    if args.region_box:
+        if fmt.region_box_min_max_height[1] > 1:
+            fmt.format_region = '<box>%s' % default_region_format
+        else:
+            fmt.format_region = '<box>\n%s' % default_region_format
+        if fmt.format_snapshot_tail.find('<region box description>') == -1:
+            fmt.format_snapshot_tail = ('%s\n<region box description>' %
+                    fmt.format_record_tail)
+
     if fmt.format_record_head == None:
         if len(records) > 1:
             fmt.format_record_head = default_record_head_format
@@ -1359,15 +1368,6 @@ def set_formats(args, records):
         fmt.format_snapshot_head = ''
         fmt.format_region = ''
         fmt.format_snapshot_tail = '<total bytes>'
-
-    if args.region_box:
-        if fmt.region_box_min_max_height[1] > 1:
-            fmt.format_region = '<box>%s' % default_region_format
-        else:
-            fmt.format_region = '<box>\n%s' % default_region_format
-        if fmt.format_snapshot_tail.find('<region box description>') == -1:
-            fmt.format_snapshot_tail = ('%s\n<region box description>' %
-                    fmt.format_record_tail)
 
     set_formats_update_default_formats(fmt, records, args)
     set_formats_handle_format_append_arg(fmt, args.format)
