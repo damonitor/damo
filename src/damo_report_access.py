@@ -1223,6 +1223,8 @@ def set_formats_hist_style(args, fmt, records):
 
 def set_formats_handle_format_set_arg(fmt, format_arg):
     '''Handle --format inputs except 'append' ones'''
+    if format_arg is None:
+        return
     if len(format_arg) == 1 and len(format_arg[0]) == 1:
         fmt_string = format_arg[0][0]
         if os.path.isfile(fmt_string):
@@ -1254,6 +1256,8 @@ def set_formats_handle_format_set_arg(fmt, format_arg):
                 fmt.format_record_tail = fmt_string
 
 def set_formats_handle_styles(fmt, args, records):
+    if args.style is None:
+        return
     if args.style == 'simple-boxes':
         fmt.format_snapshot_head = default_snapshot_head_format_without_heatmap
         fmt.format_region = '<box> size <size> access rate <access rate> age <age>'
@@ -1347,11 +1351,8 @@ def set_formats_handle_format_append_arg(fmt, format_args):
 def set_formats(args, records):
     fmt = ReportFormat.from_args(args)
 
-    if args.format is not None:
-        set_formats_handle_format_set_arg(fmt, args.format)
-
-    if args.style is not None:
-        set_formats_handle_styles(fmt, args, records)
+    set_formats_handle_format_set_arg(fmt, args.format)
+    set_formats_handle_styles(fmt, args, records)
 
     fmt.region_box_values = [v if v != 'none' else None
             for v in args.region_box_values]
@@ -1373,9 +1374,7 @@ def set_formats(args, records):
         return fmt, None
 
     set_formats_update_default_formats(fmt, records, args)
-
     set_formats_handle_format_append_arg(fmt, args.format)
-
     return fmt, None
 
 def handle_ls_keywords(args):
