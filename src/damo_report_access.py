@@ -1286,14 +1286,16 @@ def set_formats_handle_styles(fmt, args, records):
         fmt.sort_regions_by = ['temperature']
         fmt.sort_regions_dsc = ['temperature']
 
-def set_formats_update_default_formats(fmt, records, args):
-    # handle record head and tail
+def set_formats_record_default(fmt, records, intervals_tuning_enabled):
     if fmt.format_record_head == None:
         if len(records) > 1:
             fmt.format_record_head = default_record_head_format
         else:
             fmt.format_record_head = ''
+    if fmt.format_record_tail == '' and intervals_tuning_enabled:
+        fmt.format_record_tail = 'monitoring intervals: <intervals>'
 
+def set_formats_update_default_formats(fmt, records, args):
     ops_filters_installed = False
     intervals_tuning_enabled = False
     for record in records:
@@ -1305,8 +1307,7 @@ def set_formats_update_default_formats(fmt, records, args):
         if ops_filters_installed and intervals_tuning_enabled:
             break
 
-    if fmt.format_record_tail == '' and intervals_tuning_enabled:
-        fmt.format_record_tail = 'monitoring intervals: <intervals>'
+    set_formats_record_default(fmt, records, intervals_tuning_enabled)
 
     # handle snapshot head and tail
     if fmt.format_snapshot_head == None:
