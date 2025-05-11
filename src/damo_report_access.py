@@ -506,7 +506,8 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
         bar = '|%s%s|' % ('*' * bar_length, ' ' * (max_dots - bar_length))
         lines.append(
                 '%3d %18s %s' %
-                (percentile, _damo_fmt_str.format_time_us(val, fmt.raw), bar))
+                (percentile, _damo_fmt_str.format_time_us(val, fmt.raw_number),
+                 bar))
     return '\n'.join(lines)
 
 def temperature_str(region, raw, fmt):
