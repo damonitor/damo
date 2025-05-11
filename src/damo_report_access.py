@@ -1281,34 +1281,7 @@ def set_formats_handle_styles(fmt, args, records):
         fmt.sort_regions_by = ['temperature']
         fmt.sort_regions_dsc = ['temperature']
 
-def set_formats(args, records):
-    fmt = ReportFormat.from_args(args)
-
-    if args.format is not None:
-        set_formats_handle_format_set_arg(fmt, args.format)
-
-    if args.style is not None:
-        set_formats_handle_styles(fmt, args, records)
-
-    fmt.region_box_values = [v if v != 'none' else None
-            for v in args.region_box_values]
-
-    if args.total_sz_only:
-        fmt.format_snapshot_head = ''
-        fmt.format_region = ''
-        fmt.format_snapshot_tail = '<total bytes>'
-
-    if args.region_box:
-        if fmt.region_box_min_max_height[1] > 1:
-            fmt.format_region = '<box>%s' % default_region_format
-        else:
-            fmt.format_region = '<box>\n%s' % default_region_format
-        if fmt.format_snapshot_tail.find('<region box description>') == -1:
-            fmt.format_snapshot_tail = ('%s\n<region box description>' %
-                    fmt.format_record_tail)
-    if len(records) == 0:
-        return fmt, None
-
+def set_formats_update_default_formats(fmt, records, args):
     if fmt.format_record_head == None:
         if len(records) > 1:
             fmt.format_record_head = default_record_head_format
@@ -1355,6 +1328,36 @@ def set_formats(args, records):
 
     if fmt.format_record_tail == '' and intervals_tuning_enabled:
         fmt.format_record_tail = 'monitoring intervals: <intervals>'
+
+def set_formats(args, records):
+    fmt = ReportFormat.from_args(args)
+
+    if args.format is not None:
+        set_formats_handle_format_set_arg(fmt, args.format)
+
+    if args.style is not None:
+        set_formats_handle_styles(fmt, args, records)
+
+    fmt.region_box_values = [v if v != 'none' else None
+            for v in args.region_box_values]
+
+    if args.total_sz_only:
+        fmt.format_snapshot_head = ''
+        fmt.format_region = ''
+        fmt.format_snapshot_tail = '<total bytes>'
+
+    if args.region_box:
+        if fmt.region_box_min_max_height[1] > 1:
+            fmt.format_region = '<box>%s' % default_region_format
+        else:
+            fmt.format_region = '<box>\n%s' % default_region_format
+        if fmt.format_snapshot_tail.find('<region box description>') == -1:
+            fmt.format_snapshot_tail = ('%s\n<region box description>' %
+                    fmt.format_record_tail)
+    if len(records) == 0:
+        return fmt, None
+
+    set_formats_update_default_formats(fmt, records, args)
 
     if args.format is not None:
         for action, target_area, fmt_string in args.format:
