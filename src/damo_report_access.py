@@ -475,10 +475,14 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
     percentiles_to_show = [0, 1, 25, 50, 75, 99]
     percentile = 0
     percentile_values = []
-    if df_passed is True:
-        lines = ['<df-passed percentile> <last accessed time>']
+    if fmt.raw_number:
+        last_accessed_time_str = '<last accessed time (us)>'
     else:
-        lines = ['<percentile> <last accessed time>']
+        last_accessed_time_str = '<last accessed time>'
+    if df_passed is True:
+        lines = ['<df-passed percentile> %s' % last_accessed_time_str]
+    else:
+        lines = ['<percentile> %s' % last_accessed_time_str]
     for r in regions:
         if df_passed is True:
             percentile += r.sz_filter_passed * 100 / total_sz
