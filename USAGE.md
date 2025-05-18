@@ -621,43 +621,73 @@ are 0, 100, and 100, respectively.  Users can set custom weights using
 style for commonly useful cases.  The default style is 'detailed', which shown
 on example of the previous [section](#damo-report-access).
 
-`recency-sz-hist` style provides last accessed time to total size of the
-regions histogram for each snapshot.  For example,
+`recency-percentiles` style shows the distribution of per-byte idle time in
+percentiles.  For example,
 
-    $ sudo damo report access --style recency-sz-hist
-    <last accessed time (us)> <total size>
-    [-1 h 31 m 34.300 s, -1 h 22 m 27.650 s) 41.991 GiB |********************|
-    [-1 h 22 m 27.650 s, -1 h 13 m 21 s)     5.957 GiB  |***                 |
-    [-1 h 13 m 21 s, -1 h 4 m 14.350 s)      0 B        |                    |
-    [-1 h 4 m 14.350 s, -55 m 7.700 s)       5.941 GiB  |***                 |
-    [-55 m 7.700 s, -46 m 1.050 s)           0 B        |                    |
-    [-46 m 1.050 s, -36 m 54.400 s)          0 B        |                    |
-    [-36 m 54.400 s, -27 m 47.750 s)         0 B        |                    |
-    [-27 m 47.750 s, -18 m 41.100 s)         0 B        |                    |
-    [-18 m 41.100 s, -9 m 34.450 s)          0 B        |                    |
-    [-9 m 34.450 s, -27.800 s)               0 B        |                    |
-    [-27.800 s, --518850000000 ns)           5.979 GiB  |***                 |
+    $ sudo damo report access --style recency-percentiles
+    # total recency percentiles
+    <percentile> <idle time>
+      0               0 ns |                    |
+      1               0 ns |                    |
+     25        5 m 3.500 s |********            |
+     50       8 m 56.400 s |**************      |
+     75       11 m 9.500 s |******************  |
+     99      11 m 56.300 s |********************|
+    100      11 m 56.300 s |********************|
+    memory bw estimate: 5.886 GiB per second
     total size: 59.868 GiB
 
-`temperature-sz-hist` style provides [access temperature](#access-temperature)
-to total size of the regions histogram for each snapshot.  This is useful if
-you want to further differentiate hot pages that accessed recently.  For
-example,
+`temperature-sz-hist` style shows the distribution of per-byte [access
+temperature](#access-temperature) in percentiles.  For example,
+
+    $ sudo damo report access --style temperature-percentiles
+    # total temperature percentiles
+    <percentile> <temperature (weights: [0, 100, 100])>
+      0   -337,330,000,000 |                    |
+      1   -337,330,000,000 |                    |
+     25   -312,180,000,000 |*                   |
+     50   -209,510,000,000 |*******             |
+     75    -85,890,000,000 |**************      |
+     99        120,000,500 |********************|
+    100        120,000,500 |********************|
+    memory bw estimate: 10.402 GiB per second
+    total size: 59.868 GiB
+
+`recency-sz-hist` style shows the distribution of per-byte idle time in
+histogram.  For example,
+
+    $ sudo damo report access --style recency-sz-hist
+    <idle time (us)> <total size>
+    [0 ns, 1 m 11.500 s)           12.101 GiB |***************     |
+    [1 m 11.500 s, 2 m 23.000 s)   0 B        |                    |
+    [2 m 23.000 s, 3 m 34.500 s)   4.435 GiB  |******              |
+    [3 m 34.500 s, 4 m 46.000 s)   0 B        |                    |
+    [4 m 46.000 s, 5 m 57.500 s)   5.441 GiB  |*******             |
+    [5 m 57.500 s, 7 m 9.000 s)    5.816 GiB  |*******             |
+    [7 m 9.000 s, 8 m 20.500 s)    0 B        |                    |
+    [8 m 20.500 s, 9 m 32.000 s)   5.666 GiB  |*******             |
+    [9 m 32.000 s, 10 m 43.500 s)  9.545 GiB  |************        |
+    [10 m 43.500 s, 11 m 55.000 s) 16.864 GiB |********************|
+    memory bw estimate: 9.180 MiB per second
+    total size: 59.868 GiB
+
+`temperature-sz-hist` style shows the distribution of per-byte [access
+temperature](#access-temperature) in histogram.  For example,
 
     $ sudo damo report access --style temperature-sz-hist
     <temperature> <total size>
-    [-2210000000, -1773999000) 793.051 MiB  |********************|
-    [-1773999000, -1337998000) 0 B          |                    |
-    [-1337998000, -901997000)  0 B          |                    |
-    [-901997000, -465996000)   23.707 MiB   |*                   |
-    [-465996000, -29995000)    66.766 MiB   |**                  |
-    [-29995000, 406006000)     9.508 MiB    |*                   |
-    [406006000, 842007000)     1008.000 KiB |*                   |
-    [842007000, 1278008000)    0 B          |                    |
-    [1278008000, 1714009000)   0 B          |                    |
-    [1714009000, 2150010000)   0 B          |                    |
-    [2150010000, 2586011000)   4.000 KiB    |*                   |
-    total size: 894.020 MiB
+    [-71,450,000,000, -63,707,998,999) 18.284 GiB |********************|
+    [-63,707,998,999, -55,965,997,998) 5.729 GiB  |*******             |
+    [-55,965,997,998, -48,223,996,997) 5.650 GiB  |*******             |
+    [-48,223,996,997, -40,481,995,996) 5.953 GiB  |*******             |
+    [-40,481,995,996, -32,739,994,995) 5.732 GiB  |*******             |
+    [-32,739,994,995, -24,997,993,994) 0 B        |                    |
+    [-24,997,993,994, -17,255,992,993) 5.954 GiB  |*******             |
+    [-17,255,992,993, -9,513,991,992)  0 B        |                    |
+    [-9,513,991,992, -1,771,990,991)   12.567 GiB |**************      |
+    [-1,771,990,991, 5,970,010,010)    92.000 KiB |*                   |
+    memory bw estimate: 10.625 MiB per second
+    total size: 59.868 GiB
 
 `simple-boxes` style is similar to `detailed` style, but provides a box
 visualization for access frequency and age of each region.  It is useful for
