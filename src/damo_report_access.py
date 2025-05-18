@@ -451,22 +451,8 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
 
-    get_metric_fn = get_idle_time_wrong
-    fmt_metric_fn = _damo_fmt_str.format_time_us
-    parse_metric_fn = _damo_fmt_str.text_to_us
-
-    if df_passed_sz is True:
-        get_y_fn = get_df_passed_sz_region
-    else:
-        get_y_fn = get_sz_region
-    y_fmt_fn = _damo_fmt_str.format_sz
-    y_aggr_fn = lambda vals: sum(vals)
-
-    hist = get_unsorted_histogram(snapshot, fmt, get_metric_fn, get_y_fn)
-    hist2 = get_sorted_ranged_historgram(
-            hist, fmt, fmt_metric_fn, parse_metric_fn, y_fmt_fn, y_aggr_fn)
-
-    return histogram_str(hist2)
+    return sz_hist_str(snapshot, fmt, df_passed_sz, get_idle_time_wrong,
+                       _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
 
 def recency_percentiles(snapshot, record, fmt, df_passed):
     if len(snapshot.regions) == 0:
