@@ -121,20 +121,20 @@ snapshot_formatters = [
         Formatter('<recency-sz histogram>',
                   lambda snapshot, record, fmt:
                   recency_hist_str(snapshot, record, fmt, False),
-                  'last accessed time to total size of the regions histogram'),
+                  'idle time to total size of the regions histogram'),
         Formatter('<recency-df-passed-sz histogram>',
                   lambda snapshot, record, fmt:
                   recency_hist_str(snapshot, record, fmt, True),
-                  ' '.join(['last accessed time to total size of',
+                  ' '.join(['idle time to total size of',
                             'DAMOS filters (df) passed regions histogram'])),
         Formatter('<recency percentiles>',
                   lambda snapshot, record, fmt:
                   recency_percentiles(snapshot, record, fmt, False),
-                  'per-byte last accessed time distribution in percentiles'),
+                  'per-byte idle time distribution in percentiles'),
         Formatter('<df-passed recency percentiles>',
                   lambda snapshot, record, fmt:
                   recency_percentiles(snapshot, record, fmt, True),
-                  ' '.join(['per-df-passed byte last accessed time',
+                  ' '.join(['per-df-passed byte idle time',
                             'distribution in percentiles'])),
         Formatter('<heatmap>',
                   lambda snapshot, record, fmt:
@@ -483,9 +483,9 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
     percentile = 0
     percentile_values = []
     if fmt.raw_number:
-        last_accessed_time_str = '<last accessed time (us)>'
+        last_accessed_time_str = '<idle time (us)>'
     else:
-        last_accessed_time_str = '<last accessed time>'
+        last_accessed_time_str = '<idle time>'
     if df_passed is True:
         lines = ['<df-passed percentile> %s' % last_accessed_time_str]
     else:
@@ -1227,7 +1227,7 @@ def set_formats_hist_style(args, fmt, records):
         filter_passed_hist_keyword = '<temperature-df-passed-sz histogram>'
     else:
         # args.style == 'recency-sz-hist':
-        legend = '<last accessed time (us)>'
+        legend = '<idle time (us)>'
         hist_keyword = '<recency-sz histogram>'
         filter_passed_hist_keyword = '<recency-df-passed-sz histogram>'
 
