@@ -136,6 +136,16 @@ snapshot_formatters = [
                   recency_percentiles(snapshot, record, fmt, True),
                   ' '.join(['per-df-passed byte idle time',
                             'distribution in percentiles'])),
+        Formatter('<temperature percentiles>',
+                  lambda snapshot, record, fmt:
+                  temperature_percentiles(snapshot, record, fmt, False),
+                  'per-byte access temperature distribution in percentiles'),
+        Formatter('<df-passed temperature percentiles>',
+                  lambda snapshot, record, fmt:
+                  temperature_percentiles(snapshot, record, fmt, True),
+                  ' '.join(['per-df-passed byte access temperature',
+                            'distribution in percentiles'])),
+
         Formatter('<heatmap>',
                   lambda snapshot, record, fmt:
                   heatmap_str(snapshot, record, fmt),
@@ -429,12 +439,12 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, aggr_us,
 
     return histogram_str(hist)
 
-def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
-    def get_temperature(region, fmt, aggr_us):
-        # set size weight zero
-        weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
-        return temperature_of(region, weights)
+def get_temperature(region, fmt, aggr_us):
+    # set size weight zero
+    weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
+    return temperature_of(region, weights)
 
+def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     return sz_hist_str(
             snapshot, fmt, df_passed_sz, get_temperature,
             record.intervals.aggr, _damo_fmt_str.format_nr,
@@ -510,6 +520,64 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
         lines.append(
                 '%3d %18s %s' %
                 (percentile, _damo_fmt_str.format_time_us(val, fmt.raw_number),
+                 bar))
+    return '\n'.join(lines)
+
+def temperature_percentiles(snapshot, record, fmt, df_passed):
+    if len(snapshot.regions) == 0:
+        return 'no region in snapshot'
+    aggr_us = record.intervals.aggr
+    regions = sorted(snapshot.regions,
+                     key=lambda r: get_temperature(r, fmt, aggr_us))
+    if df_passed is True:
+        total_sz = sum(r.sz_filter_passed for r in regions)
+    else:
+        total_sz = sum(r.size() for r in regions)
+    percentiles_range = fmt.percentiles_range
+    if percentiles_range is None:
+        percentiles_to_show = [0, 1, 25, 50, 75, 99, 100]
+    else:
+        if len(percentiles_range) <= 3:
+            percentiles_to_show = list(range(*percentiles_range))
+        else:
+            percentiles_to_show = sorted(percentiles_range)
+    percentile = 0
+    percentile_values = []
+    temperature_legend_str = '<temperature (weights: %s)>' % (
+            fmt.temperature_weights)
+    if df_passed is True:
+        lines = ['<df-passed percentile> %s' % temperature_legend_str]
+    else:
+        lines = ['<percentile> %s' % temperature_legend_str]
+    for r in regions:
+        if df_passed is True:
+            percentile += r.sz_filter_passed * 100 / total_sz
+        else:
+            percentile += r.size() * 100 / total_sz
+        while len(percentiles_to_show) > 0:
+            if percentile < percentiles_to_show[0]:
+                break
+            percentile_values.append(
+                    [percentiles_to_show[0], get_temperature(r, fmt, aggr_us)])
+            percentiles_to_show = percentiles_to_show[1:]
+        if percentile >= 100.0:
+            break
+    if 100 in percentiles_to_show:
+        percentile_values.append([100, get_temperature(r, fmt, aggr_us)])
+
+    min_val = percentile_values[0][-1]
+    max_val = percentile_values[-1][-1]
+    max_dots = 20
+    if max_val != min_val:
+        val_per_dot = (max_val - min_val) / max_dots
+    else:
+        val_per_dot = 1
+    for percentile, val in percentile_values:
+        bar_length = int((val - min_val) / val_per_dot)
+        bar = '|%s%s|' % ('*' * bar_length, ' ' * (max_dots - bar_length))
+        lines.append(
+                '%3d %18s %s' %
+                (percentile, _damo_fmt_str.format_nr(val, fmt.raw_number),
                  bar))
     return '\n'.join(lines)
 
