@@ -373,10 +373,10 @@ def histogram_str(hist):
         lines.append('%s %s %s' % (xrange_str, y_str, bar))
     return '\n'.join(lines)
 
-def get_unsorted_histogram(snapshot, fmt, get_x_fn, get_y_fn):
+def get_unsorted_histogram(snapshot, fmt, get_x_fn, aggr_us, get_y_fn):
     hist = {}
     for region in snapshot.regions:
-        xval = get_x_fn(region, fmt)
+        xval = get_x_fn(region, fmt, aggr_us)
         if not xval in hist:
             hist[xval] = 0
         hist[xval] += get_y_fn(region, fmt)
@@ -413,15 +413,16 @@ def get_sz_region(region, fmt):
 def get_df_passed_sz_region(region, fmt):
     return region.sz_filter_passed
 
-def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
-                parse_metric_fn):
+def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, aggr_us,
+                fmt_metric_fn, parse_metric_fn):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
     if df_passed_sz is True:
         get_y_fn = get_df_passed_sz_region
     else:
         get_y_fn = get_sz_region
-    hist = get_unsorted_histogram(snapshot, fmt, get_metric_fn, get_y_fn)
+    hist = get_unsorted_histogram(
+            snapshot, fmt, get_metric_fn, aggr_us, get_y_fn)
     hist2 = get_sorted_ranged_historgram(
             hist, fmt, fmt_metric_fn, parse_metric_fn, _damo_fmt_str.format_sz,
             lambda sz_list: sum(sz_list))
@@ -429,7 +430,7 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, fmt_metric_fn,
     return histogram_str(hist2)
 
 def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
-    def get_temperature(region, fmt):
+    def get_temperature(region, fmt, aggr_us):
         # set size weight zero
         weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
         return temperature_of(region, weights)
@@ -438,11 +439,6 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
             snapshot, fmt, df_passed_sz, get_temperature,
             record.intervals.aggr, _damo_fmt_str.format_nr,
             _damo_fmt_str.text_to_nr)
-
-def get_idle_time_wrong(region, fmt):
-    if region.nr_accesses.percent > 0:
-        return 0
-    return region.age.usec
 
 def get_idle_time(region, fmt, aggr_interval):
     if region.nr_accesses.percent > 0:
