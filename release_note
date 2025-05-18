@@ -1,6 +1,11 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.8.1
+- damo report access: support <temperture percentiles> snapshot format keyword.
+- damo report access: extend --style for 'temperature percentiles'.
+- add damo command module, for controlling DAMON modules.
+
 v2.8.0
 - damo report access: extend --style for 'recency percentiles'
 
