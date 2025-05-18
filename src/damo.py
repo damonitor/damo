@@ -29,6 +29,7 @@ import damo_stop
 import damo_tune
 import damo_validate
 import damo_version
+import damo_modules
 
 def pr_damo_version(args_not_use):
     print(damo_version.__version__)
@@ -51,6 +52,8 @@ subcmds = [
             msg='replay the recorded data accesses'),
 
         # DAMON modules control
+        _damo_subcmds.DamoSubCmd(name='modules', module=damo_modules,
+                                 msg='control DAMON kernel modules'),
         _damo_subcmds.DamoSubCmd(name='reclaim', module=damo_reclaim,
             msg='control DAMON_RECLAIM'),
         _damo_subcmds.DamoSubCmd(name='lru_sort', module=damo_lru_sort,
