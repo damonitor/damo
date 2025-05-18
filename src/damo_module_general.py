@@ -8,25 +8,25 @@ def main(args):
     _damon.ensure_root_permission()
 
     module_name = args.module_name
-    parm_dir = '/sys/module/damon_%s/parameters' % module_name
+    param_dir = '/sys/module/damon_%s/parameters' % module_name
     if args.action == 'read':
         if args.parameter is not None:
-            with open(os.path.join(parm_dir, args.parameter), 'r') as f:
+            with open(os.path.join(param_dir, args.parameter), 'r') as f:
                 print(f.read().strip())
         else:
-            for parm in os.listdir(parm_dir):
-                with open(os.path.join(parm_dir, parm), 'r') as f:
-                    print('%s: %s' % (parm, f.read().strip()))
+            for param in os.listdir(param_dir):
+                with open(os.path.join(param_dir, param), 'r') as f:
+                    print('%s: %s' % (param, f.read().strip()))
     elif args.action == 'write':
         if len(args.parameter_value) % 2 != 0:
             print('wrong paramter_value')
             exit(1)
 
         for i in range(0, len(args.parameter_value), 2):
-            parm_name = args.parameter_value[i]
-            parm_val = args.parameter_value[i + 1]
-            with open(os.path.join(parm_dir, parm_name), 'w') as f:
-                f.write(parm_val)
+            param_name = args.parameter_value[i]
+            param_val = args.parameter_value[i + 1]
+            with open(os.path.join(param_dir, param_name), 'w') as f:
+                f.write(param_val)
 
 def set_argparser(parser):
     subparsers = parser.add_subparsers(
