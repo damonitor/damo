@@ -1299,18 +1299,27 @@ def set_formats_hist_style(args, fmt, records):
     fmt.format_snapshot_head = '\n'.join(snapshot_head_content)
     fmt.format_region = ''
 
-def set_formats_recency_percentiles(args, fmt, records):
+def set_formats_percentiles(args, fmt, records, recency_or_temperature):
     snapshot_head_content = []
     if has_ops_filters(records):
         snapshot_head_content += [
                 '# damos filters (df): <filters passed type>',
-                '# df-passed recency percentiles',
-                '<df-passed recency percentiles>',
-                '']
-    snapshot_head_content += [
-            '# total recency percentiles',
-            '<recency percentiles>',
-            ]
+                '# df-passed %s percentiles' % recency_or_temperature]
+        if recency_or_temperature == 'recency':
+            snapshot_head_content.append('<df-passed recency percentiles>')
+        else:
+            snapshot_head_content.append('<df-passed temperature percentiles>')
+        snapshot_head_content.append('')
+    if recency_or_temperature == 'recency':
+        snapshot_head_content += [
+                '# total recency percentiles',
+                '<recency percentiles>',
+                ]
+    else:
+        snapshot_head_content += [
+                '# total temperature percentiles',
+                '<temperature percentiles>',
+                ]
     fmt.format_snapshot_head = '\n'.join(snapshot_head_content)
     fmt.format_region = ''
 
@@ -1361,7 +1370,9 @@ def set_formats_handle_styles(fmt, args, records):
     elif args.style in ['temperature-sz-hist', 'recency-sz-hist']:
         set_formats_hist_style(args, fmt, records)
     elif args.style == 'recency-percentiles':
-        set_formats_recency_percentiles(args, fmt, records)
+        set_formats_percentiles(args, fmt, records, 'recency')
+    elif args.style == 'temperature-percentiles':
+        set_formats_percentiles(args, fmt, records, 'temperature')
     elif args.style == 'cold':
         fmt.format_region = '<box> <size> access <access rate> <age>'
         fmt.region_box_min_max_height = [1, 1]
@@ -1671,6 +1682,7 @@ def add_fmt_args(parser, hide_help=False):
             '--style', choices=['detailed', 'simple-boxes',
                                 'temperature-sz-hist', 'recency-sz-hist',
                                 'recency-percentiles',
+                                'temperature-percentiles',
                                 'cold', 'hot'],
             default='detailed',
             help='output format selection among pre-configures ones')
