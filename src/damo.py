@@ -16,6 +16,7 @@ import damo_diagnose
 import damo_features
 import damo_help
 import damo_lru_sort
+import damo_module
 import damo_monitor
 import damo_pa_layout
 import damo_reclaim
@@ -29,7 +30,6 @@ import damo_stop
 import damo_tune
 import damo_validate
 import damo_version
-import damo_module
 
 def pr_damo_version(args_not_use):
     print(damo_version.__version__)
