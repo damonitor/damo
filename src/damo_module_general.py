@@ -18,9 +18,15 @@ def main(args):
                 with open(os.path.join(parm_dir, parm), 'r') as f:
                     print('%s: %s' % (parm, f.read().strip()))
     elif args.action == 'write':
-        parm_name, parm_val = args.parameter_value
-        with open(os.path.join(parm_dir, parm_name), 'w') as f:
-            f.write(parm_val)
+        if len(args.parameter_value) % 2 != 0:
+            print('wrong paramter_value')
+            exit(1)
+
+        for i in range(0, len(args.parameter_value), 2):
+            parm_name = args.parameter_value[i]
+            parm_val = args.parameter_value[i + 1]
+            with open(os.path.join(parm_dir, parm_name), 'w') as f:
+                f.write(parm_val)
 
 def set_argparser(parser):
     subparsers = parser.add_subparsers(
@@ -34,6 +40,6 @@ def set_argparser(parser):
 
     parser_write = subparsers.add_parser('write', help='write parameters')
     parser_write.add_argument(
-            'parameter_value', metavar=('<parameter name> <value>'), nargs=2,
+            'parameter_value', metavar=('<parameter name> <value>'), nargs='+',
             help='name of the parameter and the value to write')
     return parser
