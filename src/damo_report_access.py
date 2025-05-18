@@ -437,16 +437,21 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     return sz_hist_str(snapshot, fmt, df_passed_sz, get_temperature,
                        _damo_fmt_str.format_nr, _damo_fmt_str.text_to_nr)
 
-def get_idle_time(region, fmt):
+def get_idle_time_wrong(region, fmt):
     if region.nr_accesses.percent > 0:
         return 0
     return region.age.usec
+
+def get_idle_time(region, fmt, aggr_interval):
+    if region.nr_accesses.percent > 0:
+        return 0
+    return region.age.usec + aggr_interval
 
 def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
 
-    get_metric_fn = get_idle_time
+    get_metric_fn = get_idle_time_wrong
     fmt_metric_fn = _damo_fmt_str.format_time_us
     parse_metric_fn = _damo_fmt_str.text_to_us
 
@@ -466,8 +471,9 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
 def recency_percentiles(snapshot, record, fmt, df_passed):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
+    aggr_us = record.intervals.aggr
     regions = sorted(snapshot.regions,
-                     key=lambda r: get_idle_time(r, fmt))
+                     key=lambda r: get_idle_time(r, fmt, aggr_us))
     if df_passed is True:
         total_sz = sum(r.sz_filter_passed for r in regions)
     else:
@@ -499,12 +505,12 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
             if percentile < percentiles_to_show[0]:
                 break
             percentile_values.append(
-                    [percentiles_to_show[0], get_idle_time(r, fmt)])
+                    [percentiles_to_show[0], get_idle_time(r, fmt, aggr_us)])
             percentiles_to_show = percentiles_to_show[1:]
         if percentile >= 100.0:
             break
     if 100 in percentiles_to_show:
-        percentile_values.append([100, get_idle_time(r, fmt)])
+        percentile_values.append([100, get_idle_time(r, fmt, aggr_us)])
 
     min_val = percentile_values[0][-1]
     max_val = percentile_values[-1][-1]
