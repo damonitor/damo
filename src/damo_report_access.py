@@ -373,14 +373,14 @@ def histogram_str(hist):
         lines.append('%s %s %s' % (xrange_str, y_str, bar))
     return '\n'.join(lines)
 
-def get_unsorted_histogram(snapshot, fmt, get_x_fn, aggr_us, get_y_fn):
-    hist = {}
+def get_distribution(snapshot, fmt, get_metric_fn, aggr_us, get_count_fn):
+    dist = {}
     for region in snapshot.regions:
-        xval = get_x_fn(region, fmt, aggr_us)
-        if not xval in hist:
-            hist[xval] = 0
-        hist[xval] += get_y_fn(region, fmt)
-    return hist
+        metric_val = get_metric_fn(region, fmt, aggr_us)
+        if not metric_val in dist:
+            dist[metric_val] = 0
+        dist[metric_val] += get_count_fn(region, fmt)
+    return dist
 
 def get_sorted_ranged_historgram(
         hist, fmt, fmt_x_fn, parse_x_fn, fmt_y_fn, y_aggr_fn):
@@ -418,16 +418,16 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, aggr_us,
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
     if df_passed_sz is True:
-        get_y_fn = get_df_passed_sz_region
+        get_count_fn = get_df_passed_sz_region
     else:
-        get_y_fn = get_sz_region
-    hist = get_unsorted_histogram(
-            snapshot, fmt, get_metric_fn, aggr_us, get_y_fn)
-    hist2 = get_sorted_ranged_historgram(
-            hist, fmt, fmt_metric_fn, parse_metric_fn, _damo_fmt_str.format_sz,
+        get_count_fn = get_sz_region
+    dist = get_distribution(
+            snapshot, fmt, get_metric_fn, aggr_us, get_count_fn)
+    hist = get_sorted_ranged_historgram(
+            dist, fmt, fmt_metric_fn, parse_metric_fn, _damo_fmt_str.format_sz,
             lambda sz_list: sum(sz_list))
 
-    return histogram_str(hist2)
+    return histogram_str(hist)
 
 def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     def get_temperature(region, fmt, aggr_us):
