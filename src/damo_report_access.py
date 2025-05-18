@@ -434,8 +434,10 @@ def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
         weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
         return temperature_of(region, weights)
 
-    return sz_hist_str(snapshot, fmt, df_passed_sz, get_temperature,
-                       _damo_fmt_str.format_nr, _damo_fmt_str.text_to_nr)
+    return sz_hist_str(
+            snapshot, fmt, df_passed_sz, get_temperature,
+            record.intervals.aggr, _damo_fmt_str.format_nr,
+            _damo_fmt_str.text_to_nr)
 
 def get_idle_time_wrong(region, fmt):
     if region.nr_accesses.percent > 0:
@@ -451,8 +453,9 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
 
-    return sz_hist_str(snapshot, fmt, df_passed_sz, get_idle_time_wrong,
-                       _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
+    return sz_hist_str(
+            snapshot, fmt, df_passed_sz, get_idle_time, record.intervals.aggr,
+            _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
 
 def recency_percentiles(snapshot, record, fmt, df_passed):
     if len(snapshot.regions) == 0:
