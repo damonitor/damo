@@ -472,7 +472,14 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
         total_sz = sum(r.sz_filter_passed for r in regions)
     else:
         total_sz = sum(r.size() for r in regions)
-    percentiles_to_show = [0, 1, 25, 50, 75, 99]
+    percentiles_range = fmt.percentiles_range
+    if percentiles_range is None:
+        percentiles_to_show = [0, 1, 25, 50, 75, 99, 100]
+    else:
+        if len(percentiles_range) <= 3:
+            percentiles_to_show = list(range(*percentiles_range))
+        else:
+            percentiles_to_show = sorted(percentiles_range)
     percentile = 0
     percentile_values = []
     if fmt.raw_number:
@@ -496,7 +503,8 @@ def recency_percentiles(snapshot, record, fmt, df_passed):
             percentiles_to_show = percentiles_to_show[1:]
         if percentile >= 100.0:
             break
-    percentile_values.append([100, get_last_used_time(r, fmt)])
+    if 100 in percentiles_to_show:
+        percentile_values.append([100, get_last_used_time(r, fmt)])
 
     min_val = percentile_values[0][-1]
     max_val = percentile_values[-1][-1]
@@ -1092,6 +1100,7 @@ class ReportFormat:
         self.hist_logscale = args.hist_logscale
         self.hist_cumulate = args.hist_cumulate
         self.hist_ranges = args.hist_ranges
+        self.percentiles_range = args.percentiles_range
         self.format_record_head = args.format_record_head
         self.format_record_tail = args.format_record_tail
         self.format_snapshot_head = args.format_snapshot_head
@@ -1128,6 +1137,7 @@ class ReportFormat:
                 'hist_logscale': self.hist_logscale,
                 'hist_cumulate': self.hist_cumulate,
                 'hist_ranges': self.hist_ranges,
+                'percentiles_range': self.percentiles_range,
                 'format_record_head': self.format_record_head,
                 'format_record_tail': self.format_record_tail,
                 'format_snapshot_head': self.format_snapshot_head,
@@ -1169,6 +1179,9 @@ class ReportFormat:
             self.hist_ranges = kvpairs['hist_ranges']
         else:
             self.hist_ranges = None
+        # percentiles_range introduced after v2.8.0
+        if 'percentiles_range' in kvpairs:
+            self.percentiles_range = kvpairs['percentiles_range']
         self.format_record_head = kvpairs['format_record_head']
         self.format_record_tail = kvpairs['format_record_tail']
         self.format_snapshot_head = kvpairs['format_snapshot_head']
@@ -1603,6 +1616,11 @@ def add_fmt_args(parser, hide_help=False):
             default='detailed',
             help='output format selection among pre-configures ones')
     # how to show, in highly tunable way
+    parser.add_argument(
+            '--percentiles_range', nargs='+', type=int, metavar='<number>',
+            help='Percentiles to show.  If <=3 arguments are given, '
+            'ranges are made with Python range() function. '
+            'If >3 argumenta are given, show percentiles of each argument.')
     parser.add_argument(
             '--sort_regions_by', nargs='+',
             choices=['address', 'access_rate', 'age', 'size', 'temperature'],
