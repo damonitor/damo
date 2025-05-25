@@ -463,6 +463,17 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
             snapshot, fmt, df_passed_sz, get_idle_time, record.intervals.aggr,
             _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
 
+def get_percentiles_to_show(fmt):
+    percentiles_range = fmt.percentiles_range
+    if percentiles_range is None:
+        percentiles_to_show = [0, 1, 25, 50, 75, 99, 100]
+    else:
+        if len(percentiles_range) <= 3:
+            percentiles_to_show = list(range(*percentiles_range))
+        else:
+            percentiles_to_show = sorted(percentiles_range)
+    return percentiles_to_show
+
 def fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
                        df_passed):
     if recency_or_temperature == 'recency':
@@ -511,14 +522,7 @@ def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
         total_sz = sum(r.sz_filter_passed for r in regions)
     else:
         total_sz = sum(r.size() for r in regions)
-    percentiles_range = fmt.percentiles_range
-    if percentiles_range is None:
-        percentiles_to_show = [0, 1, 25, 50, 75, 99, 100]
-    else:
-        if len(percentiles_range) <= 3:
-            percentiles_to_show = list(range(*percentiles_range))
-        else:
-            percentiles_to_show = sorted(percentiles_range)
+    percentiles_to_show = get_percentiles_to_show(fmt)
     percentile = 0
     percentile_values = []
     for r in regions:
