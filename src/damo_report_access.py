@@ -474,6 +474,38 @@ def get_percentiles_to_show(fmt):
             percentiles_to_show = sorted(percentiles_range)
     return percentiles_to_show
 
+def get_percentile_values(snapshot, record, recency_or_temperature, df_passed,
+                          percentiles_to_show, fmt):
+    if recency_or_temperature == 'recency':
+        get_metric_fn = get_idle_time
+    else:
+        get_metric_fn = get_temperature
+    aggr_us = record.intervals.aggr
+    regions = sorted(snapshot.regions,
+                     key=lambda r: get_metric_fn(r, fmt, aggr_us))
+    if df_passed is True:
+        total_sz = sum(r.sz_filter_passed for r in regions)
+    else:
+        total_sz = sum(r.size() for r in regions)
+    percentile_values = []
+    percentile = 0
+    for r in regions:
+        if df_passed is True:
+            percentile += r.sz_filter_passed * 100 / total_sz
+        else:
+            percentile += r.size() * 100 / total_sz
+        while len(percentiles_to_show) > 0:
+            if percentile < percentiles_to_show[0]:
+                break
+            percentile_values.append(
+                    [percentiles_to_show[0], get_metric_fn(r, fmt, aggr_us)])
+            percentiles_to_show = percentiles_to_show[1:]
+        if percentile >= 100.0:
+            break
+    if 100 in percentiles_to_show:
+        percentile_values.append([100, get_metric_fn(r, fmt, aggr_us)])
+    return percentile_values
+
 def fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
                        df_passed):
     if recency_or_temperature == 'recency':
@@ -510,37 +542,11 @@ def fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
 def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
-    aggr_us = record.intervals.aggr
-    if recency_or_temperature == 'recency':
-        get_metric_fn = get_idle_time
-    else:
-        get_metric_fn = get_temperature
-    regions = sorted(snapshot.regions,
-                     key=lambda r: get_metric_fn(r, fmt, aggr_us))
 
-    if df_passed is True:
-        total_sz = sum(r.sz_filter_passed for r in regions)
-    else:
-        total_sz = sum(r.size() for r in regions)
     percentiles_to_show = get_percentiles_to_show(fmt)
-    percentile = 0
-    percentile_values = []
-    for r in regions:
-        if df_passed is True:
-            percentile += r.sz_filter_passed * 100 / total_sz
-        else:
-            percentile += r.size() * 100 / total_sz
-        while len(percentiles_to_show) > 0:
-            if percentile < percentiles_to_show[0]:
-                break
-            percentile_values.append(
-                    [percentiles_to_show[0], get_metric_fn(r, fmt, aggr_us)])
-            percentiles_to_show = percentiles_to_show[1:]
-        if percentile >= 100.0:
-            break
-    if 100 in percentiles_to_show:
-        percentile_values.append([100, get_metric_fn(r, fmt, aggr_us)])
-
+    percentile_values = get_percentile_values(
+            snapshot, record, recency_or_temperature, df_passed,
+            percentiles_to_show, fmt)
     return fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
                               df_passed)
 
