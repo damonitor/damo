@@ -526,6 +526,14 @@ def fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
         fmt_fn = _damo_fmt_str.format_time_us
     else:
         fmt_fn = _damo_fmt_str.format_nr
+    percentile_txts = []
+    idletime_txts = []
+    bars = []
+    percentile_txts = ['%d' % p for p, v in percentile_values]
+    max_percentile_txt_len = max([len(p) for p in percentile_txts])
+    idletime_txts = [fmt_fn(v, fmt.raw_number) for p, v in percentile_values]
+    max_idletime_txt_len = max([len(i) for i in idletime_txts])
+
     min_val = percentile_values[0][-1]
     max_val = percentile_values[-1][-1]
     max_dots = 20
@@ -533,25 +541,17 @@ def fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
         val_per_dot = (max_val - min_val) / max_dots
     else:
         val_per_dot = 1
-    percentile_txts = []
-    idletime_txts = []
-    bars = []
-    for percentile, val in percentile_values:
-        percentile_txts.append('%d' % percentile)
-        idletime_txts.append(fmt_fn(val, fmt.raw_number))
-        bar_length = int((val - min_val) / val_per_dot)
-        bars.append(
-                '|%s%s|' % ('*' * bar_length, ' ' * (max_dots - bar_length)))
-    max_percentile_txt_len = max([len(p) for p in percentile_txts])
-    max_idletime_txt_len = max([len(i) for i in idletime_txts])
+
     for idx, percentile_txt in enumerate(percentile_txts):
         percentile_padding = ' ' * (max_percentile_txt_len -
                                     len(percentile_txt))
         idletime_txt = idletime_txts[idx]
         idletime_padding = ' ' * (max_idletime_txt_len - len(idletime_txt))
+        bar_length = int((percentile_values[idx][1] - min_val) / val_per_dot)
+        bar = '|%s%s|' % ('*' * bar_length, ' ' * (max_dots - bar_length))
         lines.append('%s%s  %s%s  %s' % (
             percentile_padding, percentile_txt,
-            idletime_padding, idletime_txt, bars[idx]))
+            idletime_padding, idletime_txt, bar))
     return '\n'.join(lines)
 
 def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
