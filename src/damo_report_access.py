@@ -1354,8 +1354,10 @@ def set_formats_record_default(fmt, records, intervals_tuning_enabled):
             fmt.format_record_head = default_record_head_format
         else:
             fmt.format_record_head = ''
-    if fmt.format_record_tail == '' and intervals_tuning_enabled:
+    if fmt.format_record_tail is None and intervals_tuning_enabled:
         fmt.format_record_tail = 'monitoring intervals: <intervals>'
+    if fmt.format_record_tail is None:
+        fmt.format_record_tail = ''
 
 def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     # handle snapshot head and tail
@@ -1695,7 +1697,6 @@ def add_fmt_args(parser, hide_help=False):
             # help='output format to show at the beginning of each record'
             help=argparse.SUPPRESS)
     parser.add_argument('--format_record_tail', metavar='<template>',
-                        default='',
                         # help='output format to show at the end of each record'
                         help=argparse.SUPPRESS)
     parser.add_argument(
