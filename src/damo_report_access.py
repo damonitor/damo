@@ -463,6 +463,39 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
             snapshot, fmt, df_passed_sz, get_idle_time, record.intervals.aggr,
             _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
 
+def fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
+                       df_passed):
+    if recency_or_temperature == 'recency':
+        if fmt.raw_number:
+            legend_str = '<idle time (us)>'
+        else:
+            legend_str = '<idle time>'
+    else:
+        legend_str = '<temperature (weights: %s)>' % fmt.temperature_weights
+    if df_passed is True:
+        lines = ['<df-passed percentile> %s' % legend_str]
+    else:
+        lines = ['<percentile> %s' % legend_str]
+
+    if recency_or_temperature == 'recency':
+        fmt_fn = _damo_fmt_str.format_time_us
+    else:
+        fmt_fn = _damo_fmt_str.format_nr
+    min_val = percentile_values[0][-1]
+    max_val = percentile_values[-1][-1]
+    max_dots = 20
+    if max_val != min_val:
+        val_per_dot = (max_val - min_val) / max_dots
+    else:
+        val_per_dot = 1
+    for percentile, val in percentile_values:
+        bar_length = int((val - min_val) / val_per_dot)
+        bar = '|%s%s|' % ('*' * bar_length, ' ' * (max_dots - bar_length))
+        lines.append(
+                '%3d %18s %s' %
+                (percentile, fmt_fn(val, fmt.raw_number), bar))
+    return '\n'.join(lines)
+
 def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
@@ -488,17 +521,6 @@ def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
             percentiles_to_show = sorted(percentiles_range)
     percentile = 0
     percentile_values = []
-    if recency_or_temperature == 'recency':
-        if fmt.raw_number:
-            legend_str = '<idle time (us)>'
-        else:
-            legend_str = '<idle time>'
-    else:
-        legend_str = '<temperature (weights: %s)>' % fmt.temperature_weights
-    if df_passed is True:
-        lines = ['<df-passed percentile> %s' % legend_str]
-    else:
-        lines = ['<percentile> %s' % legend_str]
     for r in regions:
         if df_passed is True:
             percentile += r.sz_filter_passed * 100 / total_sz
@@ -515,24 +537,8 @@ def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
     if 100 in percentiles_to_show:
         percentile_values.append([100, get_metric_fn(r, fmt, aggr_us)])
 
-    min_val = percentile_values[0][-1]
-    max_val = percentile_values[-1][-1]
-    max_dots = 20
-    if max_val != min_val:
-        val_per_dot = (max_val - min_val) / max_dots
-    else:
-        val_per_dot = 1
-    if recency_or_temperature == 'recency':
-        fmt_fn = _damo_fmt_str.format_time_us
-    else:
-        fmt_fn = _damo_fmt_str.format_nr
-    for percentile, val in percentile_values:
-        bar_length = int((val - min_val) / val_per_dot)
-        bar = '|%s%s|' % ('*' * bar_length, ' ' * (max_dots - bar_length))
-        lines.append(
-                '%3d %18s %s' %
-                (percentile, fmt_fn(val, fmt.raw_number), bar))
-    return '\n'.join(lines)
+    return fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
+                              df_passed)
 
 def recency_percentiles(snapshot, record, fmt, df_passed):
     return percentiles_str(snapshot, record, fmt, df_passed, 'recency')
