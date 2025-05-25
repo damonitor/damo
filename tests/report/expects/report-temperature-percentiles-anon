@@ -1,0 +1,24 @@
+# damos filters (df): allow anon
+# WARN: Allow filters at the end of the list means nothing on <6.15
+# df-passed temperature percentiles
+<df-passed percentile> <temperature (weights: [0, 100, 100])>
+  0    -30,600,000,000 |                    |
+  1    -16,200,000,000 |*********           |
+ 25              3,500 |******************* |
+ 50              4,500 |******************* |
+ 75        300,001,500 |******************* |
+ 99        600,008,500 |******************* |
+100        900,001,000 |********************|
+
+# total temperature percentiles
+<percentile> <temperature (weights: [0, 100, 100])>
+  0    -30,600,000,000 |                    |
+  1    -30,600,000,000 |                    |
+ 25    -30,600,000,000 |                    |
+ 50    -29,400,000,000 |                    |
+ 75    -16,200,000,000 |*********           |
+ 99        600,002,500 |******************* |
+100        900,001,000 |********************|
+memory bw estimate: 10.373 GiB per second  df-passed: 5.727 GiB per second
+total size: 59.868 GiB  df-passed 2.657 GiB
+monitoring intervals: sample 150 ms, aggr 3 s

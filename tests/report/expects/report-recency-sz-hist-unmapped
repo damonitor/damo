@@ -1,0 +1,28 @@
+# damos filters (df): allow unmapped
+# WARN: Allow filters at the end of the list means nothing on <6.15
+<idle time (us)> <df-passed size>
+[0 ns, 32.100 s)             2.410 GiB |********************|
+[32.100 s, 1 m 4.200 s)      0 B       |                    |
+[1 m 4.200 s, 1 m 36.300 s)  0 B       |                    |
+[1 m 36.300 s, 2 m 8.400 s)  0 B       |                    |
+[2 m 8.400 s, 2 m 40.500 s)  0 B       |                    |
+[2 m 40.500 s, 3 m 12.600 s) 7.492 MiB |*                   |
+[3 m 12.600 s, 3 m 44.700 s) 0 B       |                    |
+[3 m 44.700 s, 4 m 16.800 s) 0 B       |                    |
+[4 m 16.800 s, 4 m 48.900 s) 0 B       |                    |
+[4 m 48.900 s, 5 m 21.000 s) 1.211 MiB |*                   |
+
+<idle time (us)> <total size>
+[0 ns, 32.100 s)             15.421 GiB |**********          |
+[32.100 s, 1 m 4.200 s)      0 B        |                    |
+[1 m 4.200 s, 1 m 36.300 s)  0 B        |                    |
+[1 m 36.300 s, 2 m 8.400 s)  0 B        |                    |
+[2 m 8.400 s, 2 m 40.500 s)  0 B        |                    |
+[2 m 40.500 s, 3 m 12.600 s) 1.728 GiB  |**                  |
+[3 m 12.600 s, 3 m 44.700 s) 0 B        |                    |
+[3 m 44.700 s, 4 m 16.800 s) 5.962 GiB  |****                |
+[4 m 16.800 s, 4 m 48.900 s) 2.828 GiB  |**                  |
+[4 m 48.900 s, 5 m 21.000 s) 33.929 GiB |********************|
+memory bw estimate: 11.503 GiB per second  df-passed: 6.803 MiB per second
+total size: 59.868 GiB  df-passed 2.418 GiB
+monitoring intervals: sample 150 ms, aggr 3 s

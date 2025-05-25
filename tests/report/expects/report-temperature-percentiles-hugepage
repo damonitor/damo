@@ -1,0 +1,24 @@
+# damos filters (df): allow hugepage_size [2.000 MiB, max]
+# WARN: Allow filters at the end of the list means nothing on <6.15
+# df-passed temperature percentiles
+<df-passed percentile> <temperature (weights: [0, 100, 100])>
+  0    -29,100,000,000 |                    |
+  1              2,000 |******************* |
+ 25              2,500 |******************* |
+ 50              2,500 |******************* |
+ 75              6,000 |********************|
+ 99              6,000 |********************|
+100              6,000 |********************|
+
+# total temperature percentiles
+<percentile> <temperature (weights: [0, 100, 100])>
+  0    -29,100,000,000 |                    |
+  1    -29,100,000,000 |                    |
+ 25    -29,100,000,000 |                    |
+ 50    -27,900,000,000 |                    |
+ 75    -15,900,000,000 |*********           |
+ 99              6,000 |********************|
+100              6,000 |********************|
+memory bw estimate: 11.678 GiB per second  df-passed: 3.870 GiB per second
+total size: 59.868 GiB  df-passed 1.467 GiB
+monitoring intervals: sample 150 ms, aggr 3 s

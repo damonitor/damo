@@ -1,0 +1,23 @@
+# damos filters (df): reject active
+# df-passed recency percentiles
+<df-passed percentile> <idle time>
+  0               0 ns |                    |
+  1               0 ns |                    |
+ 25               0 ns |                    |
+ 50               24 s |*                   |
+ 75               24 s |*                   |
+ 99               39 s |**                  |
+100           5 m 42 s |********************|
+
+# total recency percentiles
+<percentile> <idle time>
+  0               0 ns |                    |
+  1               0 ns |                    |
+ 25               39 s |**                  |
+ 50           5 m 21 s |******************  |
+ 75           5 m 42 s |********************|
+ 99           5 m 42 s |********************|
+100           5 m 42 s |********************|
+memory bw estimate: 7.868 GiB per second  df-passed: 3.674 GiB per second
+total size: 59.868 GiB  df-passed 3.494 GiB
+monitoring intervals: sample 150 ms, aggr 3 s

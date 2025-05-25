@@ -24,11 +24,16 @@ test_report() {
 
 mkdir -p results
 
-damo_report_style="$damo report access --input damon.data.snapshot.nofilter --style"
-for style in "recency-sz-hist" "temperature-sz-hist" "recency-percentiles" \
-	"temperature-percentiles"
+for filter in nofilter active inactive anon file unmapped hugepage
 do
-	test_report "$damo_report_style $style" "$style-nofilter"
+	for style in recency-percentiles temperature-percentiles \
+		recency-sz-hist temperature-sz-hist
+	do
+		test_cmd="$damo report access \
+			--input damon.data.snapshot.$filter \
+			--style $style"
+		test_report "$test_cmd" "$style-$filter"
+	done
 done
 
 damo_report_raw="$damo report access --raw_form --input"

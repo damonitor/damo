@@ -1,0 +1,24 @@
+# damos filters (df): allow hugepage_size [2.000 MiB, max]
+# WARN: Allow filters at the end of the list means nothing on <6.15
+# df-passed recency percentiles
+<df-passed percentile> <idle time>
+  0               0 ns |                    |
+  1               0 ns |                    |
+ 25               0 ns |                    |
+ 50               0 ns |                    |
+ 75               0 ns |                    |
+ 99               0 ns |                    |
+100           4 m 54 s |********************|
+
+# total recency percentiles
+<percentile> <idle time>
+  0               0 ns |                    |
+  1               0 ns |                    |
+ 25           2 m 42 s |***********         |
+ 50           4 m 42 s |******************* |
+ 75           4 m 54 s |********************|
+ 99           4 m 54 s |********************|
+100           4 m 54 s |********************|
+memory bw estimate: 11.678 GiB per second  df-passed: 3.870 GiB per second
+total size: 59.868 GiB  df-passed 1.467 GiB
+monitoring intervals: sample 150 ms, aggr 3 s
