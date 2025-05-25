@@ -1417,19 +1417,21 @@ def set_formats_update_default_formats(fmt, records, args):
     set_formats_region_default(fmt, records, args)
 
 def set_formats_handle_format_append_arg(fmt, format_args):
-    if format_args is not None:
-        for action, target_area, fmt_string in format_args:
-            if action == 'append':
-                if target_area == 'record_head':
-                    fmt.format_record_head += fmt_string
-                elif target_area == 'snapshot_head':
-                    fmt.format_snapshot_head += fmt_string
-                elif target_area == 'region':
-                    fmt.format_region += fmt_string
-                elif target_area == 'snapshot_tail':
-                    fmt.format_snapshot_tail += fmt_string
-                elif target_area == 'record_tail':
-                    fmt.format_record_tail += fmt_string
+    if format_args is None:
+        return
+    for action, target_area, fmt_string in format_args:
+        if action != 'append':
+            continue
+        if target_area == 'record_head':
+            fmt.format_record_head += fmt_string
+        elif target_area == 'snapshot_head':
+            fmt.format_snapshot_head += fmt_string
+        elif target_area == 'region':
+            fmt.format_region += fmt_string
+        elif target_area == 'snapshot_tail':
+            fmt.format_snapshot_tail += fmt_string
+        elif target_area == 'record_tail':
+            fmt.format_record_tail += fmt_string
 
 def set_formats(args, records):
     fmt = ReportFormat.from_args(args)
