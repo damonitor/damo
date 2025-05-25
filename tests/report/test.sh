@@ -24,12 +24,12 @@ test_report() {
 
 mkdir -p results
 
-damo_report_style="$damo report access --input damon.data.snapshot --style"
-test_report "$damo_report_style recency-sz-hist" "recency_sz_hist"
-
-test_report "$damo_report_style temperature-sz-hist" "temperature_sz_hist"
-test_report "$damo_report_style recency-percentiles" "recency_percentiles"
-test_report "$damo_report_style temperature-percentiles" "temperature_percentiles"
+damo_report_style="$damo report access --input damon.data.snapshot.nofilter --style"
+for style in "recency-sz-hist" "temperature-sz-hist" "recency-percentiles" \
+	"temperature-percentiles"
+do
+	test_report "$damo_report_style $style" "$style-nofilter"
+done
 
 damo_report_raw="$damo report access --raw_form --input"
 
