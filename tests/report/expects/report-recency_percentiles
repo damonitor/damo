@@ -1,0 +1,11 @@
+# total recency percentiles
+<percentile> <idle time>
+  0               0 ns |                    |
+  1               0 ns |                    |
+ 25      44 m 33.600 s |********            |
+ 50  1 h 35 m 15.800 s |*****************   |
+ 75  1 h 43 m 13.600 s |******************  |
+ 99  1 h 50 m 48.200 s |********************|
+100  1 h 50 m 48.200 s |********************|
+memory bw estimate: 75.464 GiB per second
+total size: 59.868 GiB
