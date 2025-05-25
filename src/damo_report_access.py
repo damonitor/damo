@@ -463,11 +463,11 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
             snapshot, fmt, df_passed_sz, get_idle_time, record.intervals.aggr,
             _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
 
-def percentiles_str(snapshot, record, fmt, df_passed, recency_or_percentiles):
+def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
     aggr_us = record.intervals.aggr
-    if recency_or_percentiles == 'recency':
+    if recency_or_temperature == 'recency':
         get_metric_fn = get_idle_time
     else:
         get_metric_fn = get_temperature
@@ -488,7 +488,7 @@ def percentiles_str(snapshot, record, fmt, df_passed, recency_or_percentiles):
             percentiles_to_show = sorted(percentiles_range)
     percentile = 0
     percentile_values = []
-    if recency_or_percentiles == 'recency':
+    if recency_or_temperature == 'recency':
         if fmt.raw_number:
             legend_str = '<idle time (us)>'
         else:
@@ -522,7 +522,7 @@ def percentiles_str(snapshot, record, fmt, df_passed, recency_or_percentiles):
         val_per_dot = (max_val - min_val) / max_dots
     else:
         val_per_dot = 1
-    if recency_or_percentiles == 'recency':
+    if recency_or_temperature == 'recency':
         fmt_fn = _damo_fmt_str.format_time_us
     else:
         fmt_fn = _damo_fmt_str.format_nr
