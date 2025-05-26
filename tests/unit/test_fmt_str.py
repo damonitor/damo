@@ -62,9 +62,31 @@ class TestDamoFmtStr(unittest.TestCase):
                     3 * day_ns + 2 * hour_ns: ['3 d 2 h', '74 h'],
                     1234 * day_ns + 2 * hour_ns: ['1,234 d 2 h', '29618 h'],
                     _damo_fmt_str.ulong_max: ['max', 'max'],
+
+                    -123: ['-123 ns', '-123 ns'],
+                    -123456: ['-123 us 456 ns', '-123.456 us'],
+                    -123000: ['-123 us', '-123 us'],
+                    -123456789: ['-123 ms 456 us 789 ns', '-123.457 ms'],
+                    -123000000: ['-123 ms', '-123 ms'],
+                    -123456789123:
+                    ['-2 m 3 s 456 ms 789 us 123 ns', '-2 m 3.457 s'],
+                    -123000000000: ['-2 m 3 s', '-2 m 3 s'],
+                    -1 * minute_ns: ['-1 m', '-1 m'],
+                    -1 * minute_ns - 59 * sec_ns: ['-1 m 59 s', '-1 m 59 s'],
+                    -1 * minute_ns - 59 * sec_ns - 123 * msec_ns:
+                    ['-1 m 59 s 123 ms', '-1 m 59.123 s'],
+                    -2 * hour_ns - 1 * minute_ns - 59 * sec_ns - 123 * msec_ns:
+                    ['-2 h 1 m 59 s 123 ms', '-2 h 1 m 59.123 s'],
+                    -2 * hour_ns: ['-2 h', '-2 h'],
+                    -3 * day_ns - 2 * hour_ns - 1 * minute_ns -
+                    59 * sec_ns - 123 * msec_ns:
+                    ['-3 d 2 h 1 m 59 s 123 ms', '-74 h 1 m 59.123 s'],
+                    -3 * day_ns - 2 * hour_ns: ['-3 d 2 h', '-74 h'],
+                    -1234 * day_ns - 2 * hour_ns: ['-1,234 d 2 h', '-29618 h'],
+                    -1 * _damo_fmt_str.ulong_max: ['-max', '-max'],
                     })
 
-        for input_ in [123, 1234, 12345, 123456]:
+        for input_ in [123, 1234, 12345, 123456, -123, -1234, -12345, -123456]:
             for func in [_damo_fmt_str.format_time_us,
                     _damo_fmt_str.format_time_ms]:
                 self.assertEqual(func(input_, True), '%s' % input_)
