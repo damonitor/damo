@@ -662,24 +662,7 @@ def heatmap_pixels_minmax_temps(snapshot, sz_unit, fmt):
             start = end
     return pixels, min_temperature, max_temperature
 
-def heatmap_str(snapshot, record, fmt):
-    if len(snapshot.regions) == 0:
-        return 'n/a (no region)'
-    raw = fmt.raw_number
-    # whether to display monitoring gaps as size-relative or not
-    static = fmt.snapshot_heatmap_static
-    if static:
-        total_sz = snapshot.regions[-1].end - snapshot.regions[0].start
-    else:
-        total_sz = 0
-        for region in snapshot.regions:
-            total_sz += region.size()
-    map_length = fmt.snapshot_heatmap_width
-    sz_unit = total_sz / map_length
-
-    pixels, min_temperature, max_temperature = heatmap_pixels_minmax_temps(
-            snapshot, sz_unit, fmt)
-
+def heatmap_dots(pixels, min_temperature, max_temperature, fmt):
     max_color_level = _damo_ascii_color.max_color_level()
     temperature_unit = (max_temperature - min_temperature) / max_color_level
     # single region?
@@ -700,7 +683,27 @@ def heatmap_str(snapshot, record, fmt):
                 (pixel.temperature - min_temperature) / temperature_unit)
         dots.append(_damo_ascii_color.colored(
             '%d' % temp_level, fmt.snapshot_heatmap_colorset, temp_level))
-    dots = ''.join(dots)
+    return ''.join(dots)
+
+def heatmap_str(snapshot, record, fmt):
+    if len(snapshot.regions) == 0:
+        return 'n/a (no region)'
+    raw = fmt.raw_number
+    # whether to display monitoring gaps as size-relative or not
+    static = fmt.snapshot_heatmap_static
+    if static:
+        total_sz = snapshot.regions[-1].end - snapshot.regions[0].start
+    else:
+        total_sz = 0
+        for region in snapshot.regions:
+            total_sz += region.size()
+    map_length = fmt.snapshot_heatmap_width
+    sz_unit = total_sz / map_length
+
+    pixels, min_temperature, max_temperature = heatmap_pixels_minmax_temps(
+            snapshot, sz_unit, fmt)
+    dots = heatmap_dots(pixels, min_temperature, max_temperature, fmt)
+
     comment = '# min/max temperatures: %s, %s, column size: %s' % (
             _damo_fmt_str.format_nr(min_temperature, raw),
             _damo_fmt_str.format_nr(max_temperature, raw),
