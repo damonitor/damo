@@ -37,7 +37,6 @@
     - Ideas
       - use min sampling interval?
       - treat larger than a value as same
-- Implement --include_child_tasks for 'damo start'
 - Implement 'damo report access' for snapshot heatmap in pdf/jpg/png/svg.
 - Support multiple targets snapshot (get_snapshot_records())
 

@@ -3,6 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.8.2
 - refactor damo_report_access and add more tests for that
+- damo start: add --include_child_tasks options for virtual address space.
 
 v2.8.1
 - damo report access: support <temperature percentiles> snapshot keyword.
