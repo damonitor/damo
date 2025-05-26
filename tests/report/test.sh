@@ -27,7 +27,7 @@ mkdir -p results
 for filter in nofilter active inactive anon file unmapped hugepage
 do
 	for style in recency-percentiles temperature-percentiles \
-		recency-sz-hist temperature-sz-hist
+		recency-sz-hist temperature-sz-hist detailed
 	do
 		test_cmd="$damo report access \
 			--input damon.data.snapshot.$filter \

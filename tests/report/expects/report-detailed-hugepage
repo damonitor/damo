@@ -1,0 +1,26 @@
+heatmap: [48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;255m9[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;251m7[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m
+# min/max temperatures: -29,100,000,000, 5,991, column size: 766.312 MiB
+0   addr 4.000 GiB    size 4.464 GiB   access 5 %   age 0 ns          df-passed 0 B
+1   addr 8.464 GiB    size 1.610 GiB   access 0 %   age 0 ns          df-passed 0 B
+2   addr 10.074 GiB   size 1.006 GiB   access 0 %   age 0 ns          df-passed 14.000 MiB
+3   addr 11.080 GiB   size 327.633 MiB access 25 %  age 0 ns          df-passed 44.000 MiB
+4   addr 11.400 GiB   size 764.484 MiB access 25 %  age 0 ns          df-passed 180.000 MiB
+5   addr 12.146 GiB   size 468.051 MiB access 25 %  age 0 ns          df-passed 142.000 MiB
+6   addr 12.603 GiB   size 163.816 MiB access 50 %  age 0 ns          df-passed 56.000 MiB
+7   addr 12.763 GiB   size 109.211 MiB access 50 %  age 0 ns          df-passed 66.000 MiB
+8   addr 12.870 GiB   size 117.016 MiB access 45 %  age 0 ns          df-passed 52.000 MiB
+9   addr 12.984 GiB   size 675.746 MiB access 60 %  age 0 ns          df-passed 370.000 MiB
+10  addr 13.644 GiB   size 289.605 MiB access 60 %  age 0 ns          df-passed 162.000 MiB
+11  addr 13.927 GiB   size 107.262 MiB access 55 %  age 0 ns          df-passed 34.000 MiB
+12  addr 14.032 GiB   size 101.801 MiB access 25 %  age 0 ns          df-passed 50.000 MiB
+13  addr 14.131 GiB   size 67.867 MiB  access 25 %  age 0 ns          df-passed 36.000 MiB
+14  addr 14.198 GiB   size 1.491 GiB   access 20 %  age 0 ns          df-passed 296.000 MiB
+15  addr 15.689 GiB   size 5.961 GiB   access 0 %   age 2 m 39 s      df-passed 0 B
+16  addr 21.650 GiB   size 5.581 GiB   access 0 %   age 4 m           df-passed 0 B
+17  addr 27.231 GiB   size 5.887 GiB   access 0 %   age 4 m 27 s      df-passed 0 B
+18  addr 33.118 GiB   size 5.664 GiB   access 0 %   age 4 m 39 s      df-passed 0 B
+19  addr 38.782 GiB   size 5.740 GiB   access 0 %   age 4 m 45 s      df-passed 0 B
+20  addr 44.522 GiB   size 19.346 GiB  access 0 %   age 4 m 51 s      df-passed 0 B
+memory bw estimate: 11.678 GiB per second  df-passed: 3.870 GiB per second
+total size: 59.868 GiB  df-passed 1.467 GiB
+monitoring intervals: sample 150 ms, aggr 3 s

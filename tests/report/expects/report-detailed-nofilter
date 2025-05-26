@@ -1,0 +1,136 @@
+heatmap: [48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;255m9[0m[48;5;232m[38;5;255m9[0m[48;5;232m[38;5;255m9[0m[48;5;232m[38;5;255m9[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;251m7[0m[48;5;232m[38;5;251m7[0m[48;5;232m[38;5;251m7[0m[48;5;232m[38;5;251m7[0m[48;5;232m[38;5;251m7[0m[48;5;232m[38;5;251m7[0m[48;5;232m[38;5;251m7[0m[48;5;232m[38;5;247m5[0m[48;5;232m[38;5;247m5[0m[48;5;232m[38;5;247m5[0m[48;5;232m[38;5;247m5[0m[48;5;232m[38;5;247m5[0m[48;5;232m[38;5;247m5[0m[48;5;232m[38;5;247m5[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;241m2[0m[48;5;232m[38;5;241m2[0m[48;5;232m[38;5;241m2[0m[48;5;232m[38;5;241m2[0m[48;5;232m[38;5;241m2[0m[48;5;232m[38;5;241m2[0m[48;5;232m[38;5;241m2[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m
+# min/max temperatures: -664,810,000,000, 130,001,000, column size: 766.312 MiB
+0   addr 4.000 GiB    size 1.366 GiB   access 0 %   age 3.400 s      
+1   addr 5.366 GiB    size 8.000 KiB   access 100 % age 700 ms       
+2   addr 5.366 GiB    size 4.000 KiB   access 35 %  age 0 ns         
+3   addr 5.366 GiB    size 60.000 KiB  access 100 % age 2.200 s      
+4   addr 5.366 GiB    size 8.000 KiB   access 25 %  age 100 ms       
+5   addr 5.366 GiB    size 4.000 KiB   access 100 % age 2 s          
+6   addr 5.366 GiB    size 8.000 KiB   access 15 %  age 100 ms       
+7   addr 5.366 GiB    size 8.000 KiB   access 65 %  age 0 ns         
+8   addr 5.366 GiB    size 8.000 KiB   access 30 %  age 0 ns         
+9   addr 5.366 GiB    size 36.000 KiB  access 80 %  age 0 ns         
+10  addr 5.366 GiB    size 8.000 KiB   access 10 %  age 100 ms       
+11  addr 5.366 GiB    size 12.000 KiB  access 100 % age 1.500 s      
+12  addr 5.366 GiB    size 8.000 KiB   access 75 %  age 500 ms       
+13  addr 5.366 GiB    size 4.000 KiB   access 100 % age 600 ms       
+14  addr 5.366 GiB    size 12.000 KiB  access 15 %  age 0 ns         
+15  addr 5.366 GiB    size 8.000 KiB   access 100 % age 800 ms       
+16  addr 5.366 GiB    size 4.000 KiB   access 85 %  age 0 ns         
+17  addr 5.366 GiB    size 8.000 KiB   access 60 %  age 100 ms       
+18  addr 5.366 GiB    size 4.000 KiB   access 100 % age 900 ms       
+19  addr 5.366 GiB    size 4.000 KiB   access 20 %  age 100 ms       
+20  addr 5.366 GiB    size 16.000 KiB  access 85 %  age 100 ms       
+21  addr 5.366 GiB    size 4.000 KiB   access 30 %  age 0 ns         
+22  addr 5.366 GiB    size 16.000 KiB  access 85 %  age 400 ms       
+23  addr 5.366 GiB    size 8.000 KiB   access 75 %  age 400 ms       
+24  addr 5.366 GiB    size 8.000 KiB   access 10 %  age 0 ns         
+25  addr 5.366 GiB    size 44.000 KiB  access 100 % age 2.900 s      
+26  addr 5.366 GiB    size 64.000 KiB  access 0 %   age 3 s          
+27  addr 5.366 GiB    size 4.000 KiB   access 100 % age 2.800 s      
+28  addr 5.366 GiB    size 20.000 KiB  access 10 %  age 100 ms       
+29  addr 5.366 GiB    size 20.000 KiB  access 100 % age 2.700 s      
+30  addr 5.366 GiB    size 4.000 KiB   access 35 %  age 100 ms       
+31  addr 5.366 GiB    size 20.000 KiB  access 100 % age 400 ms       
+32  addr 5.366 GiB    size 4.000 KiB   access 85 %  age 0 ns         
+33  addr 5.366 GiB    size 8.000 KiB   access 65 %  age 0 ns         
+34  addr 5.366 GiB    size 8.000 KiB   access 100 % age 1.200 s      
+35  addr 5.366 GiB    size 8.000 KiB   access 35 %  age 0 ns         
+36  addr 5.366 GiB    size 20.000 KiB  access 85 %  age 0 ns         
+37  addr 5.366 GiB    size 4.000 KiB   access 55 %  age 0 ns         
+38  addr 5.366 GiB    size 8.000 KiB   access 75 %  age 0 ns         
+39  addr 5.366 GiB    size 16.000 KiB  access 45 %  age 0 ns         
+40  addr 5.366 GiB    size 8.000 KiB   access 85 %  age 0 ns         
+41  addr 5.366 GiB    size 4.000 KiB   access 0 %   age 300 ms       
+42  addr 5.366 GiB    size 28.000 KiB  access 25 %  age 300 ms       
+43  addr 5.366 GiB    size 4.000 KiB   access 65 %  age 0 ns         
+44  addr 5.366 GiB    size 8.000 KiB   access 85 %  age 500 ms       
+45  addr 5.366 GiB    size 4.000 KiB   access 25 %  age 400 ms       
+46  addr 5.366 GiB    size 8.000 KiB   access 100 % age 100 ms       
+47  addr 5.366 GiB    size 4.000 KiB   access 70 %  age 100 ms       
+48  addr 5.366 GiB    size 28.000 KiB  access 15 %  age 100 ms       
+49  addr 5.366 GiB    size 16.000 KiB  access 20 %  age 100 ms       
+50  addr 5.366 GiB    size 8.000 KiB   access 60 %  age 100 ms       
+51  addr 5.366 GiB    size 4.000 KiB   access 100 % age 100 ms       
+52  addr 5.366 GiB    size 8.000 KiB   access 25 %  age 900 ms       
+53  addr 5.366 GiB    size 4.000 KiB   access 100 % age 2.800 s      
+54  addr 5.366 GiB    size 8.000 KiB   access 55 %  age 500 ms       
+55  addr 5.366 GiB    size 4.000 KiB   access 25 %  age 500 ms       
+56  addr 5.366 GiB    size 16.000 KiB  access 0 %   age 100 ms       
+57  addr 5.366 GiB    size 4.000 KiB   access 10 %  age 400 ms       
+58  addr 5.366 GiB    size 60.000 KiB  access 15 %  age 400 ms       
+59  addr 5.366 GiB    size 8.000 KiB   access 50 %  age 0 ns         
+60  addr 5.366 GiB    size 16.000 KiB  access 90 %  age 500 ms       
+61  addr 5.366 GiB    size 8.000 KiB   access 65 %  age 0 ns         
+62  addr 5.366 GiB    size 4.000 KiB   access 100 % age 0 ns         
+63  addr 5.366 GiB    size 8.000 KiB   access 40 %  age 0 ns         
+64  addr 5.366 GiB    size 4.000 KiB   access 45 %  age 0 ns         
+65  addr 5.366 GiB    size 4.000 KiB   access 85 %  age 200 ms       
+66  addr 5.366 GiB    size 100.000 KiB access 20 %  age 400 ms       
+67  addr 5.366 GiB    size 16.000 KiB  access 100 % age 2.100 s      
+68  addr 5.366 GiB    size 12.000 KiB  access 30 %  age 200 ms       
+69  addr 5.366 GiB    size 8.000 KiB   access 70 %  age 200 ms       
+70  addr 5.366 GiB    size 36.000 KiB  access 25 %  age 200 ms       
+71  addr 5.367 GiB    size 4.000 KiB   access 80 %  age 0 ns         
+72  addr 5.367 GiB    size 4.000 KiB   access 30 %  age 100 ms       
+73  addr 5.367 GiB    size 124.000 KiB access 90 %  age 100 ms       
+74  addr 5.367 GiB    size 8.000 KiB   access 50 %  age 0 ns         
+75  addr 5.367 GiB    size 24.000 KiB  access 15 %  age 0 ns         
+76  addr 5.367 GiB    size 16.000 KiB  access 20 %  age 0 ns         
+77  addr 5.367 GiB    size 8.000 KiB   access 60 %  age 0 ns         
+78  addr 5.367 GiB    size 4.000 KiB   access 35 %  age 0 ns         
+79  addr 5.367 GiB    size 12.000 KiB  access 15 %  age 100 ms       
+80  addr 5.367 GiB    size 4.000 KiB   access 95 %  age 0 ns         
+81  addr 5.367 GiB    size 8.000 KiB   access 60 %  age 0 ns         
+82  addr 5.367 GiB    size 4.000 KiB   access 100 % age 0 ns         
+83  addr 5.367 GiB    size 12.000 KiB  access 30 %  age 0 ns         
+84  addr 5.367 GiB    size 8.000 KiB   access 65 %  age 0 ns         
+85  addr 5.367 GiB    size 8.000 KiB   access 100 % age 500 ms       
+86  addr 5.367 GiB    size 4.000 KiB   access 20 %  age 700 ms       
+87  addr 5.367 GiB    size 8.000 KiB   access 100 % age 2.700 s      
+88  addr 5.367 GiB    size 4.000 KiB   access 35 %  age 0 ns         
+89  addr 5.367 GiB    size 4.000 KiB   access 95 %  age 2.100 s      
+90  addr 5.367 GiB    size 8.000 KiB   access 10 %  age 300 ms       
+91  addr 5.367 GiB    size 8.000 KiB   access 20 %  age 300 ms       
+92  addr 5.367 GiB    size 8.000 KiB   access 80 %  age 0 ns         
+93  addr 5.367 GiB    size 28.000 KiB  access 10 %  age 1.100 s      
+94  addr 5.367 GiB    size 264.000 KiB access 5 %   age 1.100 s      
+95  addr 5.367 GiB    size 4.000 KiB   access 95 %  age 0 ns         
+96  addr 5.367 GiB    size 4.000 KiB   access 30 %  age 100 ms       
+97  addr 5.367 GiB    size 20.000 KiB  access 45 %  age 100 ms       
+98  addr 5.367 GiB    size 64.000 KiB  access 5 %   age 100 ms       
+99  addr 5.367 GiB    size 48.000 KiB  access 20 %  age 200 ms       
+100 addr 5.367 GiB    size 12.000 KiB  access 15 %  age 200 ms       
+101 addr 5.367 GiB    size 144.000 KiB access 0 %   age 500 ms       
+102 addr 5.367 GiB    size 4.000 KiB   access 80 %  age 0 ns         
+103 addr 5.367 GiB    size 12.000 KiB  access 20 %  age 0 ns         
+104 addr 5.367 GiB    size 4.000 KiB   access 100 % age 700 ms       
+105 addr 5.367 GiB    size 8.000 KiB   access 30 %  age 400 ms       
+106 addr 5.367 GiB    size 16.000 KiB  access 90 %  age 1.700 s      
+107 addr 5.367 GiB    size 8.000 KiB   access 60 %  age 0 ns         
+108 addr 5.367 GiB    size 8.000 KiB   access 100 % age 2.900 s      
+109 addr 5.367 GiB    size 8.000 KiB   access 5 %   age 400 ms       
+110 addr 5.367 GiB    size 4.000 KiB   access 0 %   age 400 ms       
+111 addr 5.367 GiB    size 4.000 KiB   access 40 %  age 0 ns         
+112 addr 5.367 GiB    size 8.000 KiB   access 100 % age 600 ms       
+113 addr 5.367 GiB    size 4.000 KiB   access 85 %  age 100 ms       
+114 addr 5.367 GiB    size 12.000 KiB  access 0 %   age 1.300 s      
+115 addr 5.367 GiB    size 120.000 KiB access 5 %   age 1.300 s      
+116 addr 5.368 GiB    size 84.000 KiB  access 55 %  age 0 ns         
+117 addr 5.368 GiB    size 8.000 KiB   access 100 % age 200 ms       
+118 addr 5.368 GiB    size 12.000 KiB  access 15 %  age 100 ms       
+119 addr 5.368 GiB    size 4.000 KiB   access 45 %  age 200 ms       
+120 addr 5.368 GiB    size 3.765 GiB   access 10 %  age 1.300 s      
+121 addr 9.133 GiB    size 2.196 GiB   access 0 %   age 4 m 46.900 s 
+122 addr 11.329 GiB   size 5.240 GiB   access 0 %   age 17 m 58.700 s
+123 addr 16.569 GiB   size 5.449 GiB   access 0 %   age 44 m 33.500 s
+124 addr 22.018 GiB   size 5.535 GiB   access 0 %   age 1 h 10 m 33.200 s
+125 addr 27.553 GiB   size 5.596 GiB   access 0 %   age 1 h 25 m 53.900 s
+126 addr 33.149 GiB   size 5.458 GiB   access 0 %   age 1 h 35 m 15.700 s
+127 addr 38.606 GiB   size 5.891 GiB   access 0 %   age 1 h 39 m 47.300 s
+128 addr 44.497 GiB   size 5.873 GiB   access 0 %   age 1 h 43 m 13.500 s
+129 addr 50.370 GiB   size 5.124 GiB   access 0 %   age 1 h 47 m 11 s
+130 addr 55.494 GiB   size 5.792 GiB   access 0 %   age 1 h 49 m 49.500 s
+131 addr 61.285 GiB   size 2.583 GiB   access 0 %   age 1 h 50 m 48.100 s
+memory bw estimate: 75.464 GiB per second
+total size: 59.868 GiB
