@@ -638,24 +638,11 @@ class HeatPixel:
             region.end = end
         self.total_heat += temperature_of(region, weights) * (region.size())
 
-def heatmap_str(snapshot, record, fmt):
-    if len(snapshot.regions) == 0:
-        return 'n/a (no region)'
-    raw = fmt.raw_number
-    static = fmt.snapshot_heatmap_static
-    if static:
-        total_sz = snapshot.regions[-1].end - snapshot.regions[0].start
-    else:
-        total_sz = 0
-        for region in snapshot.regions:
-            total_sz += region.size()
-    map_length = fmt.snapshot_heatmap_width
-    sz_unit = total_sz / map_length
-
-    start = snapshot.regions[0].start
+def heatmap_pixels_minmax_temps(snapshot, sz_unit, fmt):
     pixels = []
     min_temperature = None
     max_temperature = None
+    start = snapshot.regions[0].start
     while start < snapshot.regions[-1].end:
         end = start + sz_unit
         pixels.append(HeatPixel(
@@ -673,6 +660,25 @@ def heatmap_str(snapshot, record, fmt):
             if max_temperature is None or pixel.temperature > max_temperature:
                 max_temperature = pixel.temperature
             start = end
+    return pixels, min_temperature, max_temperature
+
+def heatmap_str(snapshot, record, fmt):
+    if len(snapshot.regions) == 0:
+        return 'n/a (no region)'
+    raw = fmt.raw_number
+    # whether to display monitoring gaps as size-relative or not
+    static = fmt.snapshot_heatmap_static
+    if static:
+        total_sz = snapshot.regions[-1].end - snapshot.regions[0].start
+    else:
+        total_sz = 0
+        for region in snapshot.regions:
+            total_sz += region.size()
+    map_length = fmt.snapshot_heatmap_width
+    sz_unit = total_sz / map_length
+
+    pixels, min_temperature, max_temperature = heatmap_pixels_minmax_temps(
+            snapshot, sz_unit, fmt)
 
     max_color_level = _damo_ascii_color.max_color_level()
     temperature_unit = (max_temperature - min_temperature) / max_color_level
