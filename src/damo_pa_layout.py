@@ -193,7 +193,7 @@ def numa_addr_ranges(nodes):
             new_first_range = node_ranges[0]
             if last_range[1] == new_first_range[0]:
                 last_range[1] = new_first_range[1]
-            node_ranges = node_ranges[1:]
+                node_ranges = node_ranges[1:]
         ranges += node_ranges
     return ranges, None
 
