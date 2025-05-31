@@ -25,8 +25,8 @@ class DamonSnapshot:
     '''
     Contains a snapshot of data access monitoring results
     '''
-    start_time = None
-    end_time = None
+    start_time = None   # nanoseconds
+    end_time = None     # nanoseconds
     regions = None
     total_bytes = None
     damos_stats = None
