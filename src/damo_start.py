@@ -34,8 +34,15 @@ def main(args):
                     running = f.read().strip()
         if running == 'Y':
             print('Cannot turn on damon since %s is running.  '
-                  'Disable it first.' % module)
-            exit(1)
+                  'You should disable it first.' % module)
+            answer = input('May I disable it for you? [Y/n] ')
+            if answer.lower() == 'n':
+                print('Ok, see you later')
+                exit(1)
+            print('Ok, disabling it')
+            with open(param, 'w') as f:
+                f.write('N')
+            print('Disabled it.  Continue starting DAMON')
 
     err, kdamonds = _damon_args.turn_damon_on(args)
     if err:
