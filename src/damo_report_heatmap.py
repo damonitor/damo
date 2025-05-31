@@ -44,6 +44,36 @@ class HeatPixel:
         self.addr = addr
         self.heat = heat
 
+class HeatMap:
+    time_start = None
+    time_unit = None
+    time_resol = None
+
+    addr_start = None
+    addr_unit = None
+    addr_resol = None
+
+    pixels = None # list of list of pixels
+
+    def __init__(self, time_start, time_unit, time_resol, addr_start,
+                 addr_unit, addr_resol):
+        self.time_start = time_start
+        self.time_unit = time_unit
+        self.time_resol = time_resol
+
+        self.addr_start = addr_start
+        self.addr_unit = addr_unit
+        self.addr_resol = addr_resol
+
+        self.pixels = []
+        for i in range(time_resol):
+            pixels.append([])
+            for j in range(addr_resol):
+                pixel_time = time_start + i * time_unit
+                pixel_addr = addr_start + j * addr_unit
+                self.pixels[-1].append(
+                        HeatPixel(int(pixel_time), int(pixel_addr), 0.0))
+
 def add_heats(snapshot, duration, pixels, time_unit, space_unit, addr_range):
     """Add heats in a monitoring 'snapshot' of specific time 'duration' to
     the corresponding heats 'pixels'.
