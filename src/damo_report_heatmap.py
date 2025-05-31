@@ -88,12 +88,15 @@ def add_heats(snapshot, duration, pixels, time_unit, space_unit, addr_range):
 
 def heat_pixels_from_snapshots(snapshots, time_range, addr_range, resols):
     """Get heat pixels for monitoring snapshots."""
-    time_unit = (time_range[1] - time_range[0]) / float(resols[0])
-    space_unit = (addr_range[1] - addr_range[0]) / float(resols[1])
+    time_resol, addr_resol = resols
+    time_start, time_end = time_range
+    addr_start, addr_end = addr_range
+    time_unit = (time_end - time_start) / float(time_resol)
+    space_unit = (addr_end - addr_start) / float(addr_resol)
 
-    pixels = [[HeatPixel(int(time_range[0] + i * time_unit),
-                    int(addr_range[0] + j * space_unit), 0.0)
-            for j in range(resols[1])] for i in range(resols[0])]
+    pixels = [[HeatPixel(int(time_start + i * time_unit),
+                    int(addr_start + j * space_unit), 0.0)
+            for j in range(addr_resol)] for i in range(addr_resol)]
 
     if len(snapshots) < 2:
         return pixels
