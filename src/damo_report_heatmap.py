@@ -159,12 +159,9 @@ def fmt_ascii_heatmap(pixels, time_range, addr_range, resols, colorset,
 
 def fmt_heats(args, address_range_idx, __records):
     tid = args.tid
-    tres = args.resol[0]
-    tmin = args.time_range[0]
-    tmax = args.time_range[1]
-    ares = args.resol[1]
-    amin = args.address_range[address_range_idx][0]
-    amax = args.address_range[address_range_idx][1]
+    tres, ares = args.resol
+    tmin, tmax = args.time_range
+    amin, amax = args.address_range[address_range_idx]
 
     tunit = (tmax - tmin) // tres
     aunit = (amax - amin) // ares
@@ -172,8 +169,6 @@ def fmt_heats(args, address_range_idx, __records):
     # Compensate the values so that those fit with the resolution
     tmax = tmin + tunit * tres
     amax = amin + aunit * ares
-
-    # __pr_heats(damon_result, tid, tunit, tmin, tmax, aunit, amin, amax)
 
     records = []
     for record in __records:
