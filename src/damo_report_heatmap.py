@@ -203,10 +203,6 @@ def fmt_heats(args, address_range_idx, __records):
                 lines.append('%s\t%s\t%s' % (time, addr, pixel.heat))
     return '\n'.join(lines)
 
-def pr_heats(args, __records):
-    for idx in range(len(args.address_range)):
-        print(fmt_heats(args, idx, __records))
-
 def set_missed_args(args, records):
     if args.tid and args.time_range and args.address_range:
         return
@@ -289,8 +285,10 @@ def main(args):
         return
 
     set_missed_args(args, records)
+
     if args.output in ['stdout', 'raw']:
-        pr_heats(args, records)
+        for idx in range(len(args.address_range)):
+            print(fmt_heats(args, idx, records))
         return
 
     for idx, address_range in enumerate(args.address_range):
