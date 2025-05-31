@@ -170,22 +170,12 @@ def heat_pixels_from_snapshots(snapshots, time_range, addr_range, resols):
     if time_end == time_start:
         return pixels
 
-    for shot in snapshots:
-        start = shot.start_time
-        end = min(shot.end_time, time_end)
+    heatmap = HeatMap(time_start, time_unit, time_resol, addr_start,
+                      space_unit, addr_resol)
+    for snapshot in snapshots:
+        heatmap.add_heat(snapshot)
 
-        # The snapshot's recorded time and the corresponding pixels row may not
-        # fit on the time space.  Get a fraction of the time that both
-        # overlaps, and add heats of the fractions to corresponding pixels.
-        fraction_start = start
-        time_idx = int(float(fraction_start - time_start) / time_unit)
-        while fraction_start < end:
-            fraction_end = min(time_start + (time_idx + 1) * time_unit, end)
-            add_heats(shot, fraction_end - fraction_start, pixels[time_idx],
-                    time_unit, space_unit, addr_range)
-            fraction_start = fraction_end
-            time_idx += 1
-    return pixels
+    return heatmap.pixels
 
 def fmt_ascii_heatmap(pixels, time_range, addr_range, resols, colorset,
         print_colorset):
@@ -194,6 +184,8 @@ def fmt_ascii_heatmap(pixels, time_range, addr_range, resols, colorset,
     lowest_heat = None
     for snapshot in pixels:
         for pixel in snapshot:
+            if pixel.heat is None:
+                continue
             if highest_heat == None or highest_heat < pixel.heat:
                 highest_heat = pixel.heat
             if lowest_heat == None or lowest_heat > pixel.heat:
