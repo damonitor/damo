@@ -114,48 +114,6 @@ class HeatMap:
                     self.add_pixel_heat(
                             pixels_idx, pixel_idx, region, snapshot)
 
-def add_heats(snapshot, duration, pixels, time_unit, space_unit, addr_range):
-    """Add heats in a monitoring 'snapshot' of specific time 'duration' to
-    the corresponding heats 'pixels'.
-
-    Args:
-      snapshot:     Data access monitoring results for a specific time
-                    (DamonSnapshot class).
-      duration:     The time of the snapshot to count and add heats to the
-                    pixels.
-      pixels:       The heatmap pixels that the heats of the snapshot of the
-                    duration will be added.
-      time_unit:    Time length that represented by each pixel
-      space_unit:   Memory address range size that represented by each pixel
-      addr_range:   The entire address range of the heatmap
-    """
-    pixel_sz = time_unit * space_unit
-
-    for region in snapshot.regions:
-        start = max(region.start, addr_range[0])
-        end = min(region.end, addr_range[1])
-        if start >= end:
-            continue
-
-        # The region and the corresponding pixel may not fit on the address
-        # space.  Get a fraction of the region that overlaps with the pixel,
-        # total heat (average heat * size of the fraction) of the fraction, and
-        # add it to the corresponding pixel in size-average heat.
-        fraction_start = start
-        addr_idx = int(float(fraction_start - addr_range[0]) / space_unit)
-        while fraction_start < end:
-            fraction_end = min((addr_idx + 1) * space_unit + addr_range[0],
-                    end)
-            heat = region.nr_accesses.samples * duration * (
-                    fraction_end - fraction_start)
-
-            pixel = pixels[addr_idx]
-            heat += pixel.heat * pixel_sz
-            pixel.heat = float(heat) / pixel_sz
-
-            fraction_start = fraction_end
-            addr_idx += 1
-
 def heat_pixels_from_snapshots(snapshots, time_range, addr_range, resols):
     """Get heat pixels for monitoring snapshots."""
     time_resol, addr_resol = resols
