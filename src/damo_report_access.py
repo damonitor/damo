@@ -1661,13 +1661,12 @@ def read_and_show(args):
             translate_records_to_cache_space(
                     records, sz_cache, ways_cache, sz_cache_line)
 
-        for record in records:
-            try:
-                pr_records(fmt, records,
-                           dont_use_pager = args.repeat is not None)
-            except BrokenPipeError as e:
-                # maybe user piped to 'less' like pager, and quit from it
-                pass
+        try:
+            pr_records(fmt, records,
+                       dont_use_pager = args.repeat is not None)
+        except BrokenPipeError as e:
+            # maybe user piped to 'less' like pager, and quit from it
+            pass
 
         time.sleep(repeat_delay)
         read_show_count += 1
