@@ -286,16 +286,20 @@ def main(args):
 
     set_missed_args(args, records)
 
+    heats_list = []
+    for idx in range(len(args.address_range)):
+        heats_list.append(fmt_heats(args, idx, records))
+
     if args.output in ['stdout', 'raw']:
-        for idx in range(len(args.address_range)):
-            print(fmt_heats(args, idx, records))
+        for heats in heats_list:
+            print(heats)
         return
 
     for idx, address_range in enumerate(args.address_range):
         # use gnuplot-based image plot
         tmp_path = tempfile.mkstemp()[1]
         with open(tmp_path, 'w') as f:
-            f.write(fmt_heats(args, idx, records))
+            f.write(heats_list[idx])
         plot_heatmap(tmp_path, args.output, args, address_range, idx)
 
 def set_argparser(parser):
