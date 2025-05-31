@@ -100,17 +100,17 @@ def heat_pixels_from_snapshots(snapshots, time_range, addr_range, resols):
     if time_end == time_start:
         return pixels
 
-    for idx, shot in enumerate(snapshots):
+    for shot in snapshots:
         start = shot.start_time
-        end = min(shot.end_time, time_range[1])
+        end = min(shot.end_time, time_end)
 
         # The snapshot's recorded time and the corresponding pixels row may not
         # fit on the time space.  Get a fraction of the time that both
         # overlaps, and add heats of the fractions to corresponding pixels.
         fraction_start = start
-        time_idx = int(float(fraction_start - time_range[0]) / time_unit)
+        time_idx = int(float(fraction_start - time_start) / time_unit)
         while fraction_start < end:
-            fraction_end = min((time_idx + 1) * time_unit + time_range[0], end)
+            fraction_end = min(time_start + (time_idx + 1) * time_unit, end)
             add_heats(shot, fraction_end - fraction_start, pixels[time_idx],
                     time_unit, space_unit, addr_range)
             fraction_start = fraction_end
