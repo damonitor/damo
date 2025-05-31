@@ -67,12 +67,52 @@ class HeatMap:
 
         self.pixels = []
         for i in range(time_resol):
-            pixels.append([])
+            self.pixels.append([])
             for j in range(addr_resol):
                 pixel_time = time_start + i * time_unit
                 pixel_addr = addr_start + j * addr_unit
                 self.pixels[-1].append(
                         HeatPixel(int(pixel_time), int(pixel_addr), 0.0))
+
+    def pixels_idx_of_time(self, time_ns):
+        return int((time_ns - self.time_start) / self.time_unit)
+
+    def pixel_idx_of_addr(self, addr):
+        return int((addr - self.addr_start) / self.addr_unit)
+
+    def add_pixel_heat(self, pixels_idx, pixel_idx, region, snapshot):
+        pixel = self.pixels[pixels_idx][pixel_idx]
+        account_time_start = max(snapshot.start_time, pixel.time)
+        account_time_end = min(snapshot.end_time, pixel.time + self.time_unit)
+        account_time = account_time_end - account_time_start
+
+        account_addr_start = max(region.start, pixel.addr)
+        account_addr_end = min(region.end, pixel.addr + self.addr_unit)
+        account_sz = account_addr_end - account_addr_start
+
+        heat = region.nr_accesses.samples * account_time * account_sz
+
+        if pixel.heat is None:
+            pixel.heat = 0
+
+        pixel_time_space = self.time_unit * self.addr_unit
+
+        heat += pixel.heat * pixel_time_space
+        pixel.heat = float(heat) / pixel_time_space
+
+    def add_heat(self, snapshot):
+        for pixels_idx in range(self.pixels_idx_of_time(snapshot.start_time),
+                                self.pixels_idx_of_time(snapshot.end_time) + 1):
+            if pixels_idx < 0 or self.time_resol <= pixels_idx:
+                continue
+            for region in snapshot.regions:
+                for pixel_idx in range(
+                        self.pixel_idx_of_addr(region.start),
+                        self.pixel_idx_of_addr(region.end) + 1):
+                    if pixel_idx < 0 or self.addr_resol <= pixel_idx:
+                        continue
+                    self.add_pixel_heat(
+                            pixels_idx, pixel_idx, region, snapshot)
 
 def add_heats(snapshot, duration, pixels, time_unit, space_unit, addr_range):
     """Add heats in a monitoring 'snapshot' of specific time 'duration' to
