@@ -97,11 +97,10 @@ def heat_pixels_from_snapshots(snapshots, time_range, addr_range, resols):
     pixels = [[HeatPixel(int(time_start + i * time_unit),
                     int(addr_start + j * space_unit), 0.0)
             for j in range(addr_resol)] for i in range(addr_resol)]
-
-    if len(snapshots) < 2:
+    if time_end == time_start:
         return pixels
 
-    for idx, shot in enumerate(snapshots[1:]):
+    for idx, shot in enumerate(snapshots):
         start = shot.start_time
         end = min(shot.end_time, time_range[1])
 
