@@ -662,7 +662,8 @@ def heatmap_pixels_minmax_temps(snapshot, sz_unit, fmt):
             start = end
     return pixels, min_temperature, max_temperature
 
-def heatmap_dots(pixels, min_temperature, max_temperature, fmt):
+def heatmap_dots(
+        pixels, min_temperature, max_temperature, fmt, sz_unit, static):
     max_color_level = _damo_ascii_color.max_color_level()
     temperature_unit = (max_temperature - min_temperature) / max_color_level
     # single region?
@@ -702,7 +703,8 @@ def heatmap_str(snapshot, record, fmt):
 
     pixels, min_temperature, max_temperature = heatmap_pixels_minmax_temps(
             snapshot, sz_unit, fmt)
-    dots = heatmap_dots(pixels, min_temperature, max_temperature, fmt)
+    dots = heatmap_dots(
+            pixels, min_temperature, max_temperature, fmt, sz_unit, static)
 
     comment = '# min/max temperatures: %s, %s, column size: %s' % (
             _damo_fmt_str.format_nr(min_temperature, raw),
