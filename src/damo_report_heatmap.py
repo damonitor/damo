@@ -129,14 +129,9 @@ class HeatMap:
                             pixels_idx, pixel_idx, region, snapshot)
 
 def heatmap_from_records(
-        records, time_range, addr_range, resols):
+        records, time_start, time_unit, time_resol,
+        addr_start, space_unit, addr_resol):
     """Get heat pixels for monitoring snapshots."""
-    time_resol, addr_resol = resols
-    time_start, time_end = time_range
-    addr_start, addr_end = addr_range
-    time_unit = (time_end - time_start) / float(time_resol)
-    space_unit = (addr_end - addr_start) / float(addr_resol)
-
     heatmap = HeatMap(time_start, time_unit, time_resol, addr_start,
                       space_unit, addr_resol)
     last_snapshot = None
@@ -217,18 +212,6 @@ def fmt_gnuplot_heatmap(pixels, tmin, amin, abs_time, abs_addr):
     return lines
 
 def fmt_heats(args, address_range_idx, __records):
-    tid = args.tid
-    tres, ares = args.resol
-    tmin, tmax = args.time_range
-    amin, amax = args.address_range[address_range_idx]
-
-    tunit = (tmax - tmin) // tres
-    aunit = (amax - amin) // ares
-
-    # Compensate the values so that those fit with the resolution
-    tmax = tmin + tunit * tres
-    amax = amin + aunit * ares
-
     records = []
     for record in __records:
         if record.kdamond_idx != args.kdamond_idx:
@@ -237,15 +220,23 @@ def fmt_heats(args, address_range_idx, __records):
             continue
         if record.scheme_idx != args.scheme_idx:
             continue
-        if record.target_id != tid:
+        if record.target_id != args.tid:
             continue
         records.append(record)
 
+    tres, ares = args.resol
+    tmin, tmax = args.time_range
+    amin, amax = args.address_range[address_range_idx]
+    tunit = (tmax - tmin) // tres
+    aunit = (amax - amin) // ares
+
     heatmap = heatmap_from_records(
-            records, [tmin, tmax], [amin, amax], [tres, ares])
+            records, tmin, tunit, tres, amin, aunit, ares)
     pixels = heatmap.pixels
 
     if args.output == 'stdout':
+        tmax = tmin + tunit * tres
+        amax = amin + aunit * ares
         return fmt_ascii_heatmap(
                 pixels, [tmin, tmax], [amin, amax], [tres, ares],
                 args.stdout_colorset, not args.stdout_skip_colorset_example)
