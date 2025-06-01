@@ -22,6 +22,9 @@ class GuideRegion:
         self.end_addr = end_addr
 
 class GuideInfo:
+    kdamond_idx = None
+    context_idx = None
+    scheme_idx = None
     tid = None
     start_time = None
     end_time = None
@@ -30,7 +33,10 @@ class GuideInfo:
     gaps = None
     contig_regions = None  # list of GuideRegion objects
 
-    def __init__(self, tid, start_time):
+    def __init__(self, kdamond_idx, context_idx, scheme_idx, tid, start_time):
+        self.kdamond_idx = kdamond_idx
+        self.context_idx = context_idx
+        self.scheme_idx = scheme_idx
         self.tid = tid
         self.start_time = start_time
         self.gaps = []
@@ -105,7 +111,9 @@ def get_guide_info(records):
         for snapshot in record.snapshots:
             if not tid in guides:
                 guides[tid] = GuideInfo(
-                        tid, oldest_monitor_time(snapshot, record.intervals))
+                        record.kdamond_idx, record.context_idx,
+                        record.scheme_idx, tid,
+                        oldest_monitor_time(snapshot, record.intervals))
             guide = guides[tid]
             monitor_time = snapshot.end_time
             guide.end_time = monitor_time
