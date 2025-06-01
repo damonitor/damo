@@ -111,7 +111,11 @@ class HeatMap:
                 self.pixels_idx_of_time(snapshot.end_time) + 1)
 
     def add_heat(self, snapshot, last_snapshot, aggr_ns):
+        heatmap_addr_end = self.addr_start + self.addr_unit * self.addr_resol
         for region in snapshot.regions:
+            if region.end < self.addr_start or heatmap_addr_end < region.start:
+                continue
+
             for pixels_idx in self.pixels_idxs_range(
                     region, snapshot, last_snapshot, aggr_ns):
                 if pixels_idx < 0 or self.time_resol <= pixels_idx:
