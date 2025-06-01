@@ -107,18 +107,22 @@ def oldest_monitor_time(snapshot, record_intervals):
     aggr_interval_ns = record_intervals.aggr * 1000
     return snapshot.start_time - longest_age * aggr_interval_ns
 
+def rec_to_guide_id(record):
+    return '%s %s %s %s' % (record.kdamond_idx, record.context_idx,
+                            record.scheme_idx, record.target_id)
+
 def get_guide_info(records):
     "return the set of guide information for the moitoring result"
     guides = {}
     for record in records:
-        tid = record.target_id
+        guide_id = rec_to_guide_id(record)
         for snapshot in record.snapshots:
-            if not tid in guides:
-                guides[tid] = GuideInfo(
+            if not guide_id in guides:
+                guides[guide_id] = GuideInfo(
                         record.kdamond_idx, record.context_idx,
-                        record.scheme_idx, tid,
+                        record.scheme_idx, record.target_id,
                         oldest_monitor_time(snapshot, record.intervals))
-            guide = guides[tid]
+            guide = guides[guide_id]
             monitor_time = snapshot.end_time
             guide.end_time = monitor_time
 
@@ -145,14 +149,14 @@ def get_guide_info(records):
             else:
                 guide.gaps = overlapping_regions(guide.gaps, gaps)
 
-    for tid, guide in guides.items():
+    for guide_id, guide in guides.items():
         guide_regions = []
         for start, end in guide.regions():
             guide_regions.append(GuideRegion(start, end))
         guide.contig_regions = guide_regions
 
         for record in records:
-            if record.target_id != tid:
+            if rec_to_guide_id(record) != guide_id:
                 continue
             for snapshot in record.snapshots:
                 for region in snapshot.regions:
