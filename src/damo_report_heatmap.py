@@ -208,6 +208,15 @@ def fmt_heats(args, address_range_idx, __records):
                     args.stdout_skip_colorset_example))
             continue
 
+        highest_heat = None
+        for row in pixels:
+            for pixel in row:
+                if pixel.heat is None:
+                    continue
+                if highest_heat is None or highest_heat < pixel.heat:
+                    highest_heat = pixel.heat
+        unknown_heat = highest_heat * -1
+
         for row in pixels:
             for pixel in row:
                 time = pixel.time
@@ -217,7 +226,8 @@ def fmt_heats(args, address_range_idx, __records):
                 if not args.abs_addr:
                     addr -= amin
 
-                lines.append('%s\t%s\t%s' % (time, addr, pixel.heat))
+                heat = pixel.heat if pixel.heat is not None else unknown_heat
+                lines.append('%s\t%s\t%s' % (time, addr, heat))
     return '\n'.join(lines)
 
 def set_missed_args(args, records):
