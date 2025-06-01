@@ -95,7 +95,7 @@ def get_guide_info(records):
             monitor_time = snapshot.end_time
             tid = record.target_id
             if not tid in guides:
-                guides[tid] = GuideInfo(tid, monitor_time)
+                guides[tid] = GuideInfo(tid, snapshot.start_time)
             guide = guides[tid]
             guide.end_time = monitor_time
 
