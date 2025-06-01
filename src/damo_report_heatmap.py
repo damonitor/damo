@@ -236,8 +236,15 @@ def fmt_heats(args, address_range_idx, __records):
 
     records = []
     for record in __records:
-        if record.target_id == tid:
-            records.append(record)
+        if record.kdamond_idx != args.kdamond_idx:
+            continue
+        if record.context_idx != args.context_idx:
+            continue
+        if record.schemeg_idx != args.kdamond_idx:
+            continue
+        if record.target_id != tid:
+            continue
+        records.append(record)
 
     lines = []
     for record in records:
