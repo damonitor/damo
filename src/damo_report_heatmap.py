@@ -153,6 +153,26 @@ def heat_pixels_from_snapshots(
 
     return heatmap.pixels
 
+def heatmap_from_records(
+        records, time_range, addr_range, resols):
+    """Get heat pixels for monitoring snapshots."""
+    time_resol, addr_resol = resols
+    time_start, time_end = time_range
+    addr_start, addr_end = addr_range
+    time_unit = (time_end - time_start) / float(time_resol)
+    space_unit = (addr_end - addr_start) / float(addr_resol)
+
+    heatmap = HeatMap(time_start, time_unit, time_resol, addr_start,
+                      space_unit, addr_resol)
+    last_snapshot = None
+    for ridx, record in enumerate(records):
+        aggr_ns = None
+        if record.intervals is not None:
+            aggr_ns = record.intervals.aggr * 1000
+        for sidx, snapshot in enumerate(record.snapshots):
+            heatmap.add_heat(snapshot, last_snapshot, aggr_ns)
+    return heatmap
+
 def fmt_ascii_heatmap(pixels, time_range, addr_range, resols, colorset,
         print_colorset):
     lines = []
@@ -240,31 +260,23 @@ def fmt_heats(args, address_range_idx, __records):
             continue
         if record.context_idx != args.context_idx:
             continue
-        if record.schemeg_idx != args.kdamond_idx:
+        if record.scheme_idx != args.scheme_idx:
             continue
         if record.target_id != tid:
             continue
         records.append(record)
 
-    lines = []
-    for record in records:
-        aggr_ns = None
-        # old record format doesn't have intervals
-        if record.intervals is not None:
-            aggr_ns = record.intervals.aggr * 1000
-        pixels = heat_pixels_from_snapshots(
-                record.snapshots, aggr_ns,
-                [tmin, tmax], [amin, amax], [tres, ares])
+    heatmap = heatmap_from_records(
+            records, [tmin, tmax], [amin, amax], [tres, ares])
+    pixels = heatmap.pixels
 
-        if args.output == 'stdout':
-            lines.append(fmt_ascii_heatmap(pixels, [tmin, tmax], [amin, amax],
-                    [tres, ares], args.stdout_colorset, not
-                    args.stdout_skip_colorset_example))
-        else:
-            lines = fmt_gnuplot_heatmap(
-                    pixels, tmin, amin, args.abs_time, args.abs_addr)
+    if args.output == 'stdout':
+        return fmt_ascii_heatmap(
+                pixels, [tmin, tmax], [amin, amax], [tres, ares],
+                args.stdout_colorset, not args.stdout_skip_colorset_example)
 
-    return '\n'.join(lines)
+    return '\n'.join(fmt_gnuplot_heatmap(
+            pixels, tmin, amin, args.abs_time, args.abs_addr))
 
 def set_missed_args(args, records):
     if (args.kdamond_idx is not None and args.context_idx is not None and
