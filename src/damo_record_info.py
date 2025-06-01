@@ -91,12 +91,12 @@ def get_guide_info(records):
     "return the set of guide information for the moitoring result"
     guides = {}
     for record in records:
+        tid = record.target_id
         for snapshot in record.snapshots:
-            monitor_time = snapshot.end_time
-            tid = record.target_id
             if not tid in guides:
                 guides[tid] = GuideInfo(tid, snapshot.start_time)
             guide = guides[tid]
+            monitor_time = snapshot.end_time
             guide.end_time = monitor_time
 
             last_addr = None
