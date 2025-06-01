@@ -128,31 +128,6 @@ class HeatMap:
                     self.add_pixel_heat(
                             pixels_idx, pixel_idx, region, snapshot)
 
-def heat_pixels_from_snapshots(
-        snapshots, aggr_ns, time_range, addr_range, resols):
-    """Get heat pixels for monitoring snapshots."""
-    time_resol, addr_resol = resols
-    time_start, time_end = time_range
-    addr_start, addr_end = addr_range
-    time_unit = (time_end - time_start) / float(time_resol)
-    space_unit = (addr_end - addr_start) / float(addr_resol)
-
-    pixels = [[HeatPixel(int(time_start + i * time_unit),
-                    int(addr_start + j * space_unit), 0.0)
-            for j in range(addr_resol)] for i in range(addr_resol)]
-    if time_end == time_start:
-        return pixels
-
-    heatmap = HeatMap(time_start, time_unit, time_resol, addr_start,
-                      space_unit, addr_resol)
-    for idx, snapshot in enumerate(snapshots):
-        last_snapshot = None
-        if idx > 0:
-            last_snapshot = snapshots[idx - 1]
-        heatmap.add_heat(snapshot, last_snapshot, aggr_ns)
-
-    return heatmap.pixels
-
 def heatmap_from_records(
         records, time_range, addr_range, resols):
     """Get heat pixels for monitoring snapshots."""
