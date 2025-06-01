@@ -1114,8 +1114,6 @@ def start_recording(handle):
             handle.snapshot_records += snapshot_records
             nr_snapshots_to_take -= 1
             if nr_snapshots_to_take == 0:
-                handle.snapshot_records = merge_records(
-                        handle.snapshot_records)
                 break
 
         time.sleep(sleep_time)
