@@ -100,12 +100,16 @@ class HeatMap:
         heat += pixel.heat * pixel_time_space
         pixel.heat = float(heat) / pixel_time_space
 
+    def pixels_idxs_range(self, snapshot):
+        return range(
+                self.pixels_idx_of_time(snapshot.start_time),
+                self.pixels_idx_of_time(snapshot.end_time) + 1)
+
     def add_heat(self, snapshot):
-        for pixels_idx in range(self.pixels_idx_of_time(snapshot.start_time),
-                                self.pixels_idx_of_time(snapshot.end_time) + 1):
-            if pixels_idx < 0 or self.time_resol <= pixels_idx:
-                continue
-            for region in snapshot.regions:
+        for region in snapshot.regions:
+            for pixels_idx in self.pixels_idxs_range(snapshot):
+                if pixels_idx < 0 or self.time_resol <= pixels_idx:
+                    continue
                 for pixel_idx in range(
                         self.pixel_idx_of_addr(region.start),
                         self.pixel_idx_of_addr(region.end) + 1):
