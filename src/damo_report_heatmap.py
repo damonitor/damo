@@ -72,7 +72,7 @@ class HeatMap:
                 pixel_time = time_start + i * time_unit
                 pixel_addr = addr_start + j * addr_unit
                 self.pixels[-1].append(
-                        HeatPixel(int(pixel_time), int(pixel_addr), 0.0))
+                        HeatPixel(int(pixel_time), int(pixel_addr), None))
 
     def pixels_idx_of_time(self, time_ns):
         return int((time_ns - self.time_start) / self.time_unit)
