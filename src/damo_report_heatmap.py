@@ -100,14 +100,20 @@ class HeatMap:
         heat += pixel.heat * pixel_time_space
         pixel.heat = float(heat) / pixel_time_space
 
-    def pixels_idxs_range(self, snapshot):
+    def pixels_idxs_range(self, region, snapshot, last_snapshot, aggr_ns):
+        start_time = snapshot.start_time
+        if aggr_ns is not None:
+            start_time -= region.age.aggr_intervals * aggr_ns
+        if last_snapshot is not None and start_time < last_snapshot.end_time:
+            start_time = last_snapshot.end_time
         return range(
-                self.pixels_idx_of_time(snapshot.start_time),
+                self.pixels_idx_of_time(start_time),
                 self.pixels_idx_of_time(snapshot.end_time) + 1)
 
-    def add_heat(self, snapshot):
+    def add_heat(self, snapshot, last_snapshot, aggr_ns):
         for region in snapshot.regions:
-            for pixels_idx in self.pixels_idxs_range(snapshot):
+            for pixels_idx in self.pixels_idxs_range(
+                    region, snapshot, last_snapshot, aggr_ns):
                 if pixels_idx < 0 or self.time_resol <= pixels_idx:
                     continue
                 for pixel_idx in range(
@@ -118,7 +124,8 @@ class HeatMap:
                     self.add_pixel_heat(
                             pixels_idx, pixel_idx, region, snapshot)
 
-def heat_pixels_from_snapshots(snapshots, time_range, addr_range, resols):
+def heat_pixels_from_snapshots(
+        snapshots, aggr_ns, time_range, addr_range, resols):
     """Get heat pixels for monitoring snapshots."""
     time_resol, addr_resol = resols
     time_start, time_end = time_range
@@ -134,8 +141,11 @@ def heat_pixels_from_snapshots(snapshots, time_range, addr_range, resols):
 
     heatmap = HeatMap(time_start, time_unit, time_resol, addr_start,
                       space_unit, addr_resol)
-    for snapshot in snapshots:
-        heatmap.add_heat(snapshot)
+    for idx, snapshot in enumerate(snapshots):
+        last_snapshot = None
+        if idx > 0:
+            last_snapshot = snapshots[idx - 1]
+        heatmap.add_heat(snapshot, last_snapshot, aggr_ns)
 
     return heatmap.pixels
 
@@ -227,7 +237,12 @@ def fmt_heats(args, address_range_idx, __records):
 
     lines = []
     for record in records:
-        pixels = heat_pixels_from_snapshots(record.snapshots,
+        aggr_ns = None
+        # old record format doesn't have intervals
+        if record.intervals is not None:
+            aggr_ns = record.intervals.aggr * 1000
+        pixels = heat_pixels_from_snapshots(
+                record.snapshots, aggr_ns,
                 [tmin, tmax], [amin, amax], [tres, ares])
 
         if args.output == 'stdout':
