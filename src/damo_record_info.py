@@ -87,6 +87,16 @@ def overlapping_regions(regions1, regions2):
             overlap_regions.append(r1)
     return overlap_regions
 
+def oldest_monitor_time(snapshot, record_intervals):
+    if record_intervals is None:
+        return snapshot.start_time
+    longest_age = 0
+    for region in snapshot.regions:
+        if longest_age < region.age.aggr_intervals:
+            longest_age = region.age.aggr_intervals
+    aggr_interval_ns = record_intervals.aggr * 1000
+    return snapshot.start_time - longest_age * aggr_interval_ns
+
 def get_guide_info(records):
     "return the set of guide information for the moitoring result"
     guides = {}
@@ -94,7 +104,8 @@ def get_guide_info(records):
         tid = record.target_id
         for snapshot in record.snapshots:
             if not tid in guides:
-                guides[tid] = GuideInfo(tid, snapshot.start_time)
+                guides[tid] = GuideInfo(
+                        tid, oldest_monitor_time(snapshot, record.intervals))
             guide = guides[tid]
             monitor_time = snapshot.end_time
             guide.end_time = monitor_time
