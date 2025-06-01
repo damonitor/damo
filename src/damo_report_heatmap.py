@@ -155,6 +155,9 @@ def fmt_ascii_heatmap(pixels, time_range, addr_range, resols, colorset,
     for snapshot in pixels:
         chars = []
         for pixel in snapshot:
+            if pixel.heat is None:
+                chars.append(' ')
+                continue
             heat = int(float(pixel.heat - lowest_heat) / heat_unit)
             heat = min(heat, _damo_ascii_color.max_color_level())
             chars.append('%s%d' %
