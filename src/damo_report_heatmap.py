@@ -260,16 +260,29 @@ def fmt_heats(args, address_range_idx, __records):
     return '\n'.join(lines)
 
 def set_missed_args(args, records):
-    if args.tid and args.time_range and args.address_range:
+    if (args.kdamond_idx is not None and args.context_idx is not None and
+        args.scheme_idx is not None and args.tid is not None and
+        args.time_range is not None and args.address_range is not None):
         return
     guides = damo_record_info.get_guide_info(records)
     guide = guides[0]
-    if not args.tid:
+    if args.kdamond_idx is None:
+        args.kdamond_idx = guide.kdamond_idx
+    if args.context_idx is None:
+        args.context_idx = guide.context_idx
+    if args.scheme_idx is None:
+        args.scheme_idx = guide.scheme_idx
+    if args.tid is None:
         args.tid = guide.tid
-    for g in guides:
-        if g.tid == args.tid:
-            guide = g
-            break
+
+    proper_guides = [g for g in guides if
+                g.kdamond_idx == args.kdamond_idx and
+                g.context_idx == args.context_idx and g.scheme_idx ==
+                args.scheme_idx and g.tid == args.tid]
+    if len(proper_guides) == 0:
+        print('set_missed_args fail due to no proper guide')
+        exit(1)
+    guide = proper_guides[0]
 
     if not args.time_range:
         args.time_range = [guide.start_time, guide.end_time]
@@ -367,8 +380,14 @@ def set_argparser(parser):
     parser.add_argument('--input', '-i', type=str, metavar='<file>',
             default='damon.data', help='input file name')
 
+    parser.add_argument('--kdamond_idx', metavar='<int>', type=int,
+                        help='kdamond idx of record to print heatmap for')
+    parser.add_argument('--context_idx', metavar='<int>', type=int,
+                        help='context idx of record to print heatmap for')
+    parser.add_argument('--scheme_idx', metavar='<int>', type=int,
+                        help='scheme idx of record to print heatmap for')
     parser.add_argument('--tid', metavar='<id>', type=int,
-            help='target id')
+                        help='target id of record to print heatmap for')
     parser.add_argument('--resol', metavar='<resolution>', type=int, nargs=2,
             help='resolutions for time and address axes')
     parser.add_argument('--time_range', metavar='<time>', type=int, nargs=2,
