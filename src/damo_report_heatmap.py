@@ -179,6 +179,30 @@ def fmt_ascii_heatmap(pixels, time_range, addr_range, resols, colorset,
             float(time_range[1] - time_range[0]) / len(pixels), False)))
     return '\n'.join(lines)
 
+def fmt_gnuplot_heatmap(pixels, tmin, amin, abs_time, abs_addr):
+    highest_heat = None
+    for row in pixels:
+        for pixel in row:
+            if pixel.heat is None:
+                continue
+            if highest_heat is None or highest_heat < pixel.heat:
+                highest_heat = pixel.heat
+    unknown_heat = highest_heat * -1
+
+    lines = []
+    for row in pixels:
+        for pixel in row:
+            time = pixel.time
+            addr = pixel.addr
+            if not abs_time:
+                time -= tmin
+            if not abs_addr:
+                addr -= amin
+
+            heat = pixel.heat if pixel.heat is not None else unknown_heat
+            lines.append('%s\t%s\t%s' % (time, addr, heat))
+    return lines
+
 def fmt_heats(args, address_range_idx, __records):
     tid = args.tid
     tres, ares = args.resol
@@ -206,28 +230,10 @@ def fmt_heats(args, address_range_idx, __records):
             lines.append(fmt_ascii_heatmap(pixels, [tmin, tmax], [amin, amax],
                     [tres, ares], args.stdout_colorset, not
                     args.stdout_skip_colorset_example))
-            continue
+        else:
+            lines = fmt_gnuplot_heatmap(
+                    pixels, tmin, amin, args.abs_time, args.abs_addr)
 
-        highest_heat = None
-        for row in pixels:
-            for pixel in row:
-                if pixel.heat is None:
-                    continue
-                if highest_heat is None or highest_heat < pixel.heat:
-                    highest_heat = pixel.heat
-        unknown_heat = highest_heat * -1
-
-        for row in pixels:
-            for pixel in row:
-                time = pixel.time
-                addr = pixel.addr
-                if not args.abs_time:
-                    time -= tmin
-                if not args.abs_addr:
-                    addr -= amin
-
-                heat = pixel.heat if pixel.heat is not None else unknown_heat
-                lines.append('%s\t%s\t%s' % (time, addr, heat))
     return '\n'.join(lines)
 
 def set_missed_args(args, records):
