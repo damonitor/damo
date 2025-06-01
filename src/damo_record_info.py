@@ -62,7 +62,11 @@ class GuideInfo:
         return ret
 
     def __str__(self):
-        lines = ['target_id: %s' % self.tid]
+        lines = [
+                'kdamond_idx: %s' % self.kdamond_idx,
+                'context_idx: %s' % self.context_idx,
+                'scheme_idx: %s' % self.scheme_idx,
+                'target_id: %s' % self.tid]
         lines.append('time: %d-%d (%s)' % (self.start_time, self.end_time,
                     _damo_fmt_str.format_time_ns(self.end_time - self.start_time,
                         False)))
