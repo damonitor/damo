@@ -358,6 +358,10 @@ def main(args):
     if args.time_range is not None:
         args.time_range = [
                 _damo_fmt_str.text_to_ns(x) for x in args.time_range]
+    if args.address_range is not None:
+        for idx, address_range in enumerate(args.address_range):
+            args.address_range[idx] = [
+                    _damo_fmt_str.text_to_bytes(x) for x in address_range]
 
     set_missed_args(args, records)
 
@@ -408,8 +412,8 @@ def set_argparser(parser):
     parser.add_argument('--draw_range', choices=['hottest', 'all'],
                         default='hottest',
                         help='which ranges to draw heatmap for')
-    parser.add_argument('--address_range', metavar='<address>', type=int,
-                        nargs=2, action='append',
+    parser.add_argument('--address_range', metavar='<address>', nargs=2,
+                        action='append',
                         help='start and end address of the output')
     parser.add_argument('--abs_time', action='store_true', default=False,
             help='display absolute time in output')
