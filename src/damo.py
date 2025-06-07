@@ -6,6 +6,13 @@ import os
 
 damo_dir = os.path.dirname(os.path.abspath(__file__))
 os.sys.path.insert(0, damo_dir)
+
+# on some distros, symlonk damo's directory is added to the os.sys.path,
+# instead of the damo.py's directory.  In the case, using damo from local repo
+# fails.  Check the case and modify os.sys.path, accordingly.
+if not os.path.isfile(os.path.join(damo_dir, 'damo_version.py')):
+    os.sys.path.insert(0, os.path.join(damo_dir, 'src'))
+
 import sys
 
 import _damo_subcmds
