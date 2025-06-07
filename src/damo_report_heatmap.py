@@ -355,6 +355,10 @@ def main(args):
         damo_record_info.pr_guide(records)
         return
 
+    if args.time_range is not None:
+        args.time_range = [
+                _damo_fmt_str.text_to_ns(x) for x in args.time_range]
+
     set_missed_args(args, records)
 
     heats_list = []
@@ -399,7 +403,7 @@ def set_argparser(parser):
                         help='target id of record to print heatmap for')
     parser.add_argument('--resol', metavar='<resolution>', type=int, nargs=2,
             help='resolutions for time and address axes')
-    parser.add_argument('--time_range', metavar='<time>', type=int, nargs=2,
+    parser.add_argument('--time_range', metavar='<time>', nargs=2,
             help='start and end time of the output in nanoseconds')
     parser.add_argument('--draw_range', choices=['hottest', 'all'],
                         default='hottest',
