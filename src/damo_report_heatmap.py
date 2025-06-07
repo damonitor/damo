@@ -172,7 +172,9 @@ class HeatMap:
             chars = []
             for pixel in snapshot:
                 if pixel.heat is None:
-                    chars.append(' ')
+                    chars.append('%s ' %
+                                 _damo_ascii_color.color_mode_start_txt(
+                                     colorset, 4))
                     continue
                 heat = int(float(pixel.heat - lowest_heat) / heat_unit)
                 heat = min(heat, _damo_ascii_color.max_color_level())
