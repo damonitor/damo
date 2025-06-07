@@ -248,8 +248,6 @@ def fmt_heats(args, address_range_idx, __records):
 
     heatmap = heatmap_from_records(
             records, tmin, tunit, tres, amin, aunit, ares)
-    pixels = heatmap.pixels
-
     if args.output == 'stdout':
         return heatmap.fmt_ascii_str(
                 args.stdout_colorset, not args.stdout_skip_colorset_example)
