@@ -142,28 +142,18 @@ class HeatMap:
         return highest, lowest
 
     def fmt_gnuplot_str(self, abs_time, abs_addr):
-        pixels = self.pixels
-        tmin = self.time_start
-        amin = self.addr_start
-
-        highest_heat = None
-        for row in pixels:
-            for pixel in row:
-                if pixel.heat is None:
-                    continue
-                if highest_heat is None or highest_heat < pixel.heat:
-                    highest_heat = pixel.heat
+        highest_heat, _ = self.highest_lowest_heats()
         unknown_heat = highest_heat * -1
 
         lines = []
-        for row in pixels:
+        for row in self.pixels:
             for pixel in row:
                 time = pixel.time
                 addr = pixel.addr
                 if not abs_time:
-                    time -= tmin
+                    time -= self.time_start
                 if not abs_addr:
-                    addr -= amin
+                    addr -= self.addr_start
 
                 heat = pixel.heat if pixel.heat is not None else unknown_heat
                 lines.append('%s\t%s\t%s' % (time, addr, heat))
