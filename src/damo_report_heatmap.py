@@ -400,7 +400,7 @@ def set_argparser(parser):
     parser.add_argument('--resol', metavar='<resolution>', type=int, nargs=2,
             help='resolutions for time and address axes')
     parser.add_argument('--time_range', metavar='<time>', type=int, nargs=2,
-            help='start and end time of the output')
+            help='start and end time of the output in nanoseconds')
     parser.add_argument('--draw_range', choices=['hottest', 'all'],
                         default='hottest',
                         help='which ranges to draw heatmap for')
