@@ -7,6 +7,7 @@ v2.8.4
 - report heatmap: Display unknown heat pixels as transparent.
 - report heatmap: Fix color range.
 - report heatmap: Fix snapshot age accounting bug.
+- report heatmap: Support human friendly time/address ranges
 
 v2.8.3
 - Support 'damo report heatmap' for snapshot records.
