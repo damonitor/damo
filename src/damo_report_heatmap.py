@@ -213,17 +213,21 @@ class HeatMap:
         return '\n'.join(lines)
 
 def heatmap_from_records(
-        records, time_start, time_unit, time_resol,
-        addr_start, space_unit, addr_resol):
-    """Get heat pixels for monitoring snapshots."""
-    heatmap = HeatMap(time_start, time_unit, time_resol, addr_start,
-                      space_unit, addr_resol)
+        records, time_range, addr_range, resols):
+    time_start, time_end = time_range
+    addr_start, addr_end = addr_range
+    time_resol, addr_resol = resols
+    time_unit = (time_end - time_start) // time_resol
+    addr_unit = (addr_end - addr_start) // addr_resol
+
+    heatmap = HeatMap(time_start, time_unit, time_resol,
+                      addr_start, addr_unit, addr_resol)
     last_snapshot = None
-    for ridx, record in enumerate(records):
+    for record in records:
         aggr_ns = None
         if record.intervals is not None:
             aggr_ns = record.intervals.aggr * 1000
-        for sidx, snapshot in enumerate(record.snapshots):
+        for snapshot in record.snapshots:
             heatmap.add_heat(snapshot, last_snapshot, aggr_ns)
     return heatmap
 
@@ -240,14 +244,9 @@ def fmt_heats(args, address_range_idx, __records):
             continue
         records.append(record)
 
-    tres, ares = args.resol
-    tmin, tmax = args.time_range
-    amin, amax = args.address_range[address_range_idx]
-    tunit = (tmax - tmin) // tres
-    aunit = (amax - amin) // ares
-
     heatmap = heatmap_from_records(
-            records, tmin, tunit, tres, amin, aunit, ares)
+            records, args.time_range, args.address_range[address_range_idx],
+            args.resol)
     if args.output == 'stdout':
         return heatmap.fmt_ascii_str(
                 args.stdout_colorset, not args.stdout_skip_colorset_example)
