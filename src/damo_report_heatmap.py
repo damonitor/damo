@@ -128,6 +128,19 @@ class HeatMap:
                     self.add_pixel_heat(
                             pixels_idx, pixel_idx, region, snapshot)
 
+    def highest_lowest_heats(self):
+        highest = None
+        lowest = None
+        for row in self.pixels:
+            for pixel in row:
+                if pixel.heat is None:
+                    continue
+                if highest is None or highest < pixel.heat:
+                    highest = pixel.heat
+                if lowest is None or lowest > pixel.heat:
+                    lowest = pixel.heat
+        return highest, lowest
+
     def fmt_gnuplot_str(self, abs_time, abs_addr):
         pixels = self.pixels
         tmin = self.time_start
