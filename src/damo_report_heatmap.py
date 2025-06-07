@@ -128,6 +128,34 @@ class HeatMap:
                     self.add_pixel_heat(
                             pixels_idx, pixel_idx, region, snapshot)
 
+    def fmt_gnuplot_str(self, abs_time, abs_addr):
+        pixels = self.pixels
+        tmin = self.time_start
+        amin = self.addr_start
+
+        highest_heat = None
+        for row in pixels:
+            for pixel in row:
+                if pixel.heat is None:
+                    continue
+                if highest_heat is None or highest_heat < pixel.heat:
+                    highest_heat = pixel.heat
+        unknown_heat = highest_heat * -1
+
+        lines = []
+        for row in pixels:
+            for pixel in row:
+                time = pixel.time
+                addr = pixel.addr
+                if not abs_time:
+                    time -= tmin
+                if not abs_addr:
+                    addr -= amin
+
+                heat = pixel.heat if pixel.heat is not None else unknown_heat
+                lines.append('%s\t%s\t%s' % (time, addr, heat))
+        return lines
+
 def heatmap_from_records(
         records, time_start, time_unit, time_resol,
         addr_start, space_unit, addr_resol):
