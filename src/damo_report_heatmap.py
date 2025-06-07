@@ -191,14 +191,17 @@ class HeatMap:
         addr_start = self.addr_start
         addr_len = self.addr_unit * self.addr_resol
         addr_end = addr_start + addr_len
-        lines.append('# x-axis: space (%d-%d: %s)' % (
-            addr_start, addr_end, _damo_fmt_str.format_sz(addr_len, False)))
+        lines.append('# x-axis: space [%s, %s) (%s)' % (
+            _damo_fmt_str.format_sz(addr_start, False),
+            _damo_fmt_str.format_sz(addr_end, False),
+            _damo_fmt_str.format_sz(addr_len, False)))
 
         time_start = self.time_start
         time_len = self.time_unit * self.time_resol
         time_end = time_start + time_len
-        lines.append('# y-axis: time (%d-%d: %s)' % (
-            time_start, time_end,
+        lines.append('# y-axis: time [%s, %s) (%s)' % (
+            _damo_fmt_str.format_time_ns(time_start, False),
+            _damo_fmt_str.format_time_ns(time_end, False),
             _damo_fmt_str.format_time_ns(time_len, False)))
         pixels = self.pixels
         lines.append('# resolution: %dx%d (%s and %s for each character)' % (
