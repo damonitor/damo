@@ -67,11 +67,11 @@ class GuideInfo:
                 'context_idx: %s' % self.context_idx,
                 'scheme_idx: %s' % self.scheme_idx,
                 'target_id: %s' % self.tid]
-        lines.append('time: %d-%d (%s)' % (self.start_time, self.end_time,
+        lines.append('time: [%d, %d) (%s)' % (self.start_time, self.end_time,
                     _damo_fmt_str.format_time_ns(self.end_time - self.start_time,
                         False)))
         for idx, region in enumerate(self.contig_regions):
-            lines.append('region\t%2d: %020d-%020d (%s)' %
+            lines.append('region\t%2d: [%d, %d) (%s)' %
                          (idx, region.start_addr, region.end_addr,
                           _damo_fmt_str.format_sz(
                               region.end_addr - region.start_addr, False)))
