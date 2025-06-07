@@ -229,7 +229,7 @@ def heatmap_from_records(
             last_snapshot = snapshot
     return heatmap
 
-def fmt_heats(args, address_range_idx, __records):
+def mk_heatmap(args, address_range_idx, __records):
     records = []
     for record in __records:
         if record.kdamond_idx != args.kdamond_idx:
@@ -242,9 +242,12 @@ def fmt_heats(args, address_range_idx, __records):
             continue
         records.append(record)
 
-    heatmap = heatmap_from_records(
+    return heatmap_from_records(
             records, args.time_range, args.address_range[address_range_idx],
             args.resol)
+
+def fmt_heats(args, address_range_idx, __records):
+    heatmap = mk_heatmap(args, address_range_idx, __records)
     if args.output == 'stdout':
         return heatmap.fmt_ascii_str(
                 args.stdout_colorset, not args.stdout_skip_colorset_example)
