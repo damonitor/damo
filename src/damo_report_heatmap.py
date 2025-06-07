@@ -159,27 +159,14 @@ class HeatMap:
                 lines.append('%s\t%s\t%s' % (time, addr, heat))
         return '\n'.join(lines)
 
-    def fmt_ascii_str(self, colorset, print_colorset):
-        time_start = self.time_start
-        time_end = self.time_start + self.time_unit * self.time_resol
-        addr_start = self.addr_start
-        addr_end = self.addr_start + self.addr_unit * self.addr_resol
+    def fmt_ascii_lines_map(self, colorset):
         lines = []
-        highest_heat = None
-        lowest_heat = None
-        pixels = self.pixels
-        for snapshot in pixels:
-            for pixel in snapshot:
-                if pixel.heat is None:
-                    continue
-                if highest_heat == None or highest_heat < pixel.heat:
-                    highest_heat = pixel.heat
-                if lowest_heat == None or lowest_heat > pixel.heat:
-                    lowest_heat = pixel.heat
-        if highest_heat == None and lowest_heat == None:
+        # add pixels
+        highest_heat, lowest_heat = self.highest_lowest_heats()
+        if highest_heat is None and lowest_heat is None:
             return
         heat_unit = float(highest_heat + 1 - lowest_heat) / 9
-
+        pixels = self.pixels
         for snapshot in pixels:
             chars = []
             for pixel in snapshot:
@@ -192,19 +179,37 @@ class HeatMap:
                         (_damo_ascii_color.color_mode_start_txt(colorset, heat),
                             heat))
             lines.append(''.join(chars) + _damo_ascii_color.color_mode_end_txt())
+        return lines
+
+    def fmt_ascii_lines_comments(self, colorset, print_colorset):
+        lines = []
         if print_colorset:
             lines.append('# access_frequency: %s' %
                     _damo_ascii_color.color_samples(colorset))
-        lines.append('# x-axis: space (%d-%d: %s)' % (addr_start, addr_end,
-            _damo_fmt_str.format_sz(addr_end - addr_start, False)))
-        lines.append('# y-axis: time (%d-%d: %s)' % (time_start, time_end,
-            _damo_fmt_str.format_time_ns(time_end - time_start, False)))
+
+        addr_start = self.addr_start
+        addr_len = self.addr_unit * self.addr_resol
+        addr_end = addr_start + addr_len
+        lines.append('# x-axis: space (%d-%d: %s)' % (
+            addr_start, addr_end, _damo_fmt_str.format_sz(addr_len, False)))
+
+        time_start = self.time_start
+        time_len = self.time_unit * self.time_resol
+        time_end = time_start + time_len
+        lines.append('# y-axis: time (%d-%d: %s)' % (
+            time_start, time_end,
+            _damo_fmt_str.format_time_ns(time_len, False)))
+        pixels = self.pixels
         lines.append('# resolution: %dx%d (%s and %s for each character)' % (
             len(pixels[1]), len(pixels),
-            _damo_fmt_str.format_sz(
-                float(addr_end - addr_start) / len(pixels[1]), False),
+            _damo_fmt_str.format_sz(float(addr_len) / len(pixels[1]), False),
             _damo_fmt_str.format_time_ns(
-                float(time_end - time_start) / len(pixels), False)))
+                float(time_len) / len(pixels), False)))
+        return lines
+
+    def fmt_ascii_str(self, colorset, print_colorset):
+        lines = self.fmt_ascii_lines_map(colorset)
+        lines += self.fmt_ascii_lines_comments(colorset, print_colorset)
         return '\n'.join(lines)
 
 def heatmap_from_records(
