@@ -154,7 +154,7 @@ class HeatMap:
 
                 heat = pixel.heat if pixel.heat is not None else unknown_heat
                 lines.append('%s\t%s\t%s' % (time, addr, heat))
-        return lines
+        return '\n'.join(lines)
 
 def heatmap_from_records(
         records, time_start, time_unit, time_resol,
@@ -215,30 +215,6 @@ def fmt_ascii_heatmap(pixels, time_range, addr_range, resols, colorset,
             float(time_range[1] - time_range[0]) / len(pixels), False)))
     return '\n'.join(lines)
 
-def fmt_gnuplot_heatmap(pixels, tmin, amin, abs_time, abs_addr):
-    highest_heat = None
-    for row in pixels:
-        for pixel in row:
-            if pixel.heat is None:
-                continue
-            if highest_heat is None or highest_heat < pixel.heat:
-                highest_heat = pixel.heat
-    unknown_heat = highest_heat * -1
-
-    lines = []
-    for row in pixels:
-        for pixel in row:
-            time = pixel.time
-            addr = pixel.addr
-            if not abs_time:
-                time -= tmin
-            if not abs_addr:
-                addr -= amin
-
-            heat = pixel.heat if pixel.heat is not None else unknown_heat
-            lines.append('%s\t%s\t%s' % (time, addr, heat))
-    return lines
-
 def fmt_heats(args, address_range_idx, __records):
     records = []
     for record in __records:
@@ -269,8 +245,7 @@ def fmt_heats(args, address_range_idx, __records):
                 pixels, [tmin, tmax], [amin, amax], [tres, ares],
                 args.stdout_colorset, not args.stdout_skip_colorset_example)
 
-    return '\n'.join(fmt_gnuplot_heatmap(
-            pixels, tmin, amin, args.abs_time, args.abs_addr))
+    return heatmap.fmt_gnuplot_str(args.abs_time, args.abs_addr)
 
 def set_missed_args(args, records):
     if (args.kdamond_idx is not None and args.context_idx is not None and
