@@ -1,6 +1,9 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.8.4
+- Support local-repo usage on distros having symlink dir in os.sys.path
+
 v2.8.3
 - Support 'damo report heatmap' for snapshot records.
 - Support 'damo report heatmap' for multi records with different intervals.
