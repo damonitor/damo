@@ -142,9 +142,6 @@ class HeatMap:
         return highest, lowest
 
     def fmt_gnuplot_str(self, abs_time, abs_addr):
-        highest_heat, _ = self.highest_lowest_heats()
-        unknown_heat = highest_heat * -1
-
         lines = []
         for row in self.pixels:
             for pixel in row:
@@ -155,7 +152,7 @@ class HeatMap:
                 if not abs_addr:
                     addr -= self.addr_start
 
-                heat = pixel.heat if pixel.heat is not None else unknown_heat
+                heat = pixel.heat if pixel.heat is not None else 'NaN'
                 lines.append('%s\t%s\t%s' % (time, addr, heat))
         return '\n'.join(lines)
 
