@@ -164,6 +164,7 @@ class HeatMap:
         lines = []
         highest_heat = None
         lowest_heat = None
+        pixels = self.pixels
         for snapshot in pixels:
             for pixel in snapshot:
                 if pixel.heat is None:
@@ -218,52 +219,6 @@ def heatmap_from_records(
             heatmap.add_heat(snapshot, last_snapshot, aggr_ns)
     return heatmap
 
-def fmt_ascii_heatmap(pixels, time_range, addr_range, colorset,
-        print_colorset):
-    time_start, time_end = time_range
-    addr_start, addr_end = addr_range
-    lines = []
-    highest_heat = None
-    lowest_heat = None
-    for snapshot in pixels:
-        for pixel in snapshot:
-            if pixel.heat is None:
-                continue
-            if highest_heat == None or highest_heat < pixel.heat:
-                highest_heat = pixel.heat
-            if lowest_heat == None or lowest_heat > pixel.heat:
-                lowest_heat = pixel.heat
-    if highest_heat == None and lowest_heat == None:
-        return
-    heat_unit = float(highest_heat + 1 - lowest_heat) / 9
-
-    for snapshot in pixels:
-        chars = []
-        for pixel in snapshot:
-            if pixel.heat is None:
-                chars.append(' ')
-                continue
-            heat = int(float(pixel.heat - lowest_heat) / heat_unit)
-            heat = min(heat, _damo_ascii_color.max_color_level())
-            chars.append('%s%d' %
-                    (_damo_ascii_color.color_mode_start_txt(colorset, heat),
-                        heat))
-        lines.append(''.join(chars) + _damo_ascii_color.color_mode_end_txt())
-    if print_colorset:
-        lines.append('# access_frequency: %s' %
-                _damo_ascii_color.color_samples(colorset))
-    lines.append('# x-axis: space (%d-%d: %s)' % (addr_start, addr_end,
-        _damo_fmt_str.format_sz(addr_end - addr_start, False)))
-    lines.append('# y-axis: time (%d-%d: %s)' % (time_start, time_end,
-        _damo_fmt_str.format_time_ns(time_end - time_start, False)))
-    lines.append('# resolution: %dx%d (%s and %s for each character)' % (
-        len(pixels[1]), len(pixels),
-        _damo_fmt_str.format_sz(
-            float(addr_end - addr_start) / len(pixels[1]), False),
-        _damo_fmt_str.format_time_ns(
-            float(time_end - time_start) / len(pixels), False)))
-    return '\n'.join(lines)
-
 def fmt_heats(args, address_range_idx, __records):
     records = []
     for record in __records:
@@ -288,11 +243,8 @@ def fmt_heats(args, address_range_idx, __records):
     pixels = heatmap.pixels
 
     if args.output == 'stdout':
-        tmax = tmin + tunit * tres
-        amax = amin + aunit * ares
-        return fmt_ascii_heatmap(
-                pixels, [tmin, tmax], [amin, amax], args.stdout_colorset, not
-                args.stdout_skip_colorset_example)
+        return heatmap.fmt_ascii_str(
+                args.stdout_colorset, not args.stdout_skip_colorset_example)
 
     return heatmap.fmt_gnuplot_str(args.abs_time, args.abs_addr)
 
