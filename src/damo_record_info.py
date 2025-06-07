@@ -181,9 +181,9 @@ def get_guide_info(records):
     return sorted(list(guides.values()), key=lambda x: x.total_space(),
                     reverse=True)
 
-def pr_guide(records):
+def pr_guide(records, raw_numbers=True):
     for guide in get_guide_info(records):
-        print(guide)
+        print(guide.to_str(raw_numbers))
 
 def main(args):
     records, err = _damo_records.get_records(record_file=args.input)
@@ -196,3 +196,5 @@ def main(args):
 def set_argparser(parser):
     parser.add_argument('--input', '-i', type=str, metavar='<file>',
             default='damon.data', help='input file name')
+    parser.add_argument('--raw_numbers', action='store_true',
+                        help='print numbers in raw format')
