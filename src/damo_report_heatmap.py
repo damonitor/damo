@@ -300,7 +300,8 @@ def plot_range(orig_range, use_absolute_val):
         plot_range[1] -= orig_range[0]
     return plot_range
 
-def plot_heatmap(data_file, output_file, args, address_range, range_idx):
+def plot_heatmap(data_file, output_file, args, address_range, range_idx,
+                 highest_heat, lowest_heat):
     terminal = output_file.split('.')[-1]
     if not terminal in ['pdf', 'jpeg', 'png', 'svg']:
         os.remove(data_file)
@@ -320,10 +321,12 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx):
     set key off;
     set xrange [%f:%f];
     set yrange [%f:%f];
+    set cbrange [%f:%f];
     set xlabel 'Time (ns)';
     set ylabel 'Address (bytes)';
-    plot '%s' using 1:2:3 with image;""" % (terminal, output_file, x_range[0],
-            x_range[1], y_range[0], y_range[1], data_file)
+    plot '%s' using 1:2:3 with image;""" % (
+            terminal, output_file, x_range[0], x_range[1],
+            y_range[0], y_range[1], highest_heat, lowest_heat, data_file)
     try:
         subprocess.call(['gnuplot', '-e', gnuplot_cmd])
     except Exception as e:
@@ -365,11 +368,13 @@ def main(args):
                 print(gnuplot_data_str)
                 continue
             # use gnuplot-based image plot
+            highest_heat, lowest_heat = heatmap.highest_lowest_heats()
             tmp_path = tempfile.mkstemp()[1]
             with open(tmp_path, 'w') as f:
                 f.write(gnuplot_data_str)
             plot_heatmap(
-                    tmp_path, args.output, args, args.address_range[idx], idx)
+                    tmp_path, args.output, args, args.address_range[idx], idx,
+                    highest_heat, lowest_heat)
 
 def set_argparser(parser):
     parser.add_argument('--output', metavar='<output>', default='stdout',
