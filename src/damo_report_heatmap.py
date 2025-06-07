@@ -80,9 +80,13 @@ class HeatMap:
     def pixel_idx_of_addr(self, addr):
         return int((addr - self.addr_start) / self.addr_unit)
 
-    def add_pixel_heat(self, pixels_idx, pixel_idx, region, snapshot):
+    def add_pixel_heat(self, pixels_idx, pixel_idx, region, snapshot, aggr_ns):
         pixel = self.pixels[pixels_idx][pixel_idx]
-        account_time_start = max(snapshot.start_time, pixel.time)
+        observe_start_time = snapshot.start_time
+        if aggr_ns is not None:
+            observe_start_time -= region.age.aggr_intervals * aggr_ns
+
+        account_time_start = max(observe_start_time, pixel.time)
         account_time_end = min(snapshot.end_time, pixel.time + self.time_unit)
         account_time = account_time_end - account_time_start
 
@@ -126,7 +130,7 @@ class HeatMap:
                     if pixel_idx < 0 or self.addr_resol <= pixel_idx:
                         continue
                     self.add_pixel_heat(
-                            pixels_idx, pixel_idx, region, snapshot)
+                            pixels_idx, pixel_idx, region, snapshot, aggr_ns)
 
     def highest_lowest_heats(self):
         highest = None
