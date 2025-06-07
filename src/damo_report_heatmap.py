@@ -352,19 +352,24 @@ def main(args):
 
     heats_list = []
     for idx in range(len(args.address_range)):
-        heats_list.append(fmt_heats(args, idx, records))
+        heatmap = mk_heatmap(args, idx, records)
 
-    if args.output in ['stdout', 'raw']:
-        for heats in heats_list:
-            print(heats)
-        return
-
-    for idx, address_range in enumerate(args.address_range):
-        # use gnuplot-based image plot
-        tmp_path = tempfile.mkstemp()[1]
-        with open(tmp_path, 'w') as f:
-            f.write(heats_list[idx])
-        plot_heatmap(tmp_path, args.output, args, address_range, idx)
+        if args.output == 'stdout':
+            print(heatmap.fmt_ascii_str(
+                args.stdout_colorset, not args.stdout_skip_colorset_example))
+            continue
+        else:
+            gnuplot_data_str = heatmap.fmt_gnuplot_str(
+                    args.abs_time, args.abs_addr)
+            if args.output == 'raw':
+                print(gnuplot_data_str)
+                continue
+            # use gnuplot-based image plot
+            tmp_path = tempfile.mkstemp()[1]
+            with open(tmp_path, 'w') as f:
+                f.write(gnuplot_data_str)
+            plot_heatmap(
+                    tmp_path, args.output, args, args.address_range[idx], idx)
 
 def set_argparser(parser):
     parser.add_argument('--output', metavar='<output>', default='stdout',
