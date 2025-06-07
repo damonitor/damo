@@ -229,6 +229,7 @@ def heatmap_from_records(
             aggr_ns = record.intervals.aggr * 1000
         for snapshot in record.snapshots:
             heatmap.add_heat(snapshot, last_snapshot, aggr_ns)
+            last_snapshot = snapshot
     return heatmap
 
 def fmt_heats(args, address_range_idx, __records):
