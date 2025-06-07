@@ -171,7 +171,7 @@ def heatmap_from_records(
             heatmap.add_heat(snapshot, last_snapshot, aggr_ns)
     return heatmap
 
-def fmt_ascii_heatmap(pixels, time_range, addr_range, resols, colorset,
+def fmt_ascii_heatmap(pixels, time_range, addr_range, colorset,
         print_colorset):
     time_start, time_end = time_range
     addr_start, addr_end = addr_range
@@ -244,8 +244,8 @@ def fmt_heats(args, address_range_idx, __records):
         tmax = tmin + tunit * tres
         amax = amin + aunit * ares
         return fmt_ascii_heatmap(
-                pixels, [tmin, tmax], [amin, amax], [tres, ares],
-                args.stdout_colorset, not args.stdout_skip_colorset_example)
+                pixels, [tmin, tmax], [amin, amax], args.stdout_colorset, not
+                args.stdout_skip_colorset_example)
 
     return heatmap.fmt_gnuplot_str(args.abs_time, args.abs_addr)
 
