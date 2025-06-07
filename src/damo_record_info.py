@@ -61,21 +61,28 @@ class GuideInfo:
             ret += r[1] - r[0]
         return ret
 
-    def __str__(self):
+    def to_str(self, raw):
         lines = [
                 'kdamond_idx: %s' % self.kdamond_idx,
                 'context_idx: %s' % self.context_idx,
                 'scheme_idx: %s' % self.scheme_idx,
                 'target_id: %s' % self.tid]
-        lines.append('time: [%d, %d) (%s)' % (self.start_time, self.end_time,
-                    _damo_fmt_str.format_time_ns(self.end_time - self.start_time,
-                        False)))
+        lines.append('time: [%s, %s) (%s)' % (
+            _damo_fmt_str.format_time_ns(self.start_time, raw),
+            _damo_fmt_str.format_time_ns(self.end_time, raw),
+            _damo_fmt_str.format_time_ns(
+                self.end_time - self.start_time, raw)))
         for idx, region in enumerate(self.contig_regions):
-            lines.append('region\t%2d: [%d, %d) (%s)' %
-                         (idx, region.start_addr, region.end_addr,
-                          _damo_fmt_str.format_sz(
-                              region.end_addr - region.start_addr, False)))
+            lines.append('region\t%2d: [%s, %s) (%s)' % (
+                idx,
+                _damo_fmt_str.format_sz(region.start_addr, raw),
+                _damo_fmt_str.format_sz(region.end_addr, raw),
+                _damo_fmt_str.format_sz(
+                    region.end_addr - region.start_addr, raw)))
         return '\n'.join(lines)
+
+    def __str__(self):
+        return self.to_str(raw=True)
 
 def is_overlap(region1, region2):
     if region1[1] < region2[0]:
@@ -184,7 +191,7 @@ def main(args):
         print('monitoring result file (%s) parsing failed (%s)' %
                 (args.input, err))
         exit(1)
-    pr_guide(records)
+    pr_guide(records, args.raw_numbers)
 
 def set_argparser(parser):
     parser.add_argument('--input', '-i', type=str, metavar='<file>',
