@@ -343,11 +343,14 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
     os.remove(data_file)
 
 def main(args):
-    records, err = _damo_records.get_records(record_file=args.input)
-    if err != None:
-        print('monitoring result file (%s) parsing failed (%s)' %
-                (args.input, err))
-        exit(1)
+    records = []
+    for input_file in args.input:
+        records_, err = _damo_records.get_records(record_file=input_file)
+        if err != None:
+            print('monitoring result file (%s) parsing failed (%s)' %
+                    (input_file, err))
+            exit(1)
+        records += records_
 
     # Use 80x40 or 500x500 resolution as default for stdout or image plots
     if args.resol is None:
@@ -399,8 +402,8 @@ def set_argparser(parser):
                             ['output heatmap to generate.',
                              'can be a pdf/png/jpeg/svg file or',
                              'special keywords (\'stdout\', \'raw\')']))
-    parser.add_argument('--input', '-i', type=str, metavar='<file>',
-            default='damon.data', help='input file name')
+    parser.add_argument('--input', '-i', type=str, metavar='<file>', nargs='+',
+            default=['damon.data'], help='input file name')
 
     parser.add_argument('--kdamond_idx', metavar='<int>', type=int,
                         help='kdamond idx of record to print heatmap for')
