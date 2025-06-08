@@ -362,6 +362,9 @@ def main(args):
     if args.guide:
         damo_record_info.pr_guide(records)
         return
+    if args.guide_human is True:
+        damo_record_info.pr_guide(records, raw_numbers=False)
+        return
 
     if args.time_range is not None:
         args.time_range = [
@@ -430,6 +433,8 @@ def set_argparser(parser):
 
     parser.add_argument('--guide', action='store_true',
             help='print a guidance for the ranges and resolution settings')
+    parser.add_argument('--guide_human', action='store_true',
+                        help='print the guidance in human-friendly format')
     parser.add_argument('--stdout_colorset', default='gray',
             choices=['gray', 'flame', 'emotion'],
             help='color theme for access frequencies')
