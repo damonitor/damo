@@ -194,7 +194,7 @@ def main(args):
     pr_guide(records, args.raw_numbers)
 
 def set_argparser(parser):
-    parser.add_argument('--input', '-i', type=str, metavar='<file>',
+    parser.add_argument('--input', '-i', type=str, metavar='<file>', nargs='+',
             default='damon.data', help='input file name')
     parser.add_argument('--raw_numbers', action='store_true',
                         help='print numbers in raw format')
