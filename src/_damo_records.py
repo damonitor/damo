@@ -1679,13 +1679,17 @@ def get_records(tried_regions_of=None, record_file=None,
             filter_copy.address_ranges = None
             filter_copy.snapshot_time_ranges = None
     else:
-        if not os.path.isfile(request.record_file):
-            return None, '%s not found' % request.record_file
+        if type(request.record_file) is not list:
+            request.record_file = [request.record_file]
+        records = []
+        for record_file in request.record_file:
+            if not os.path.isfile(record_file):
+                return None, '%s not found' % record_file
 
-        records, err = parse_records_file(request.record_file)
-        if err:
-            return None, ('parsing %s failed (%s)' %
-                    (request.record_file, err))
+            records_, err = parse_records_file(record_file)
+            if err:
+                return None, ('parsing %s failed (%s)' % (record_file, err))
+            records += records_
 
     filter_copy.filter_records(records)
     return records, None
