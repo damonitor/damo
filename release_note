@@ -10,6 +10,7 @@ v2.8.4
 - report heatmap: Support human friendly time/address ranges
 - report heatmap,access: Support multiple input record files
 - report access: Show monitoring intervals regardless of intervals auto-tuning.
+- report heatmap: Support DAMOS filters-passed memory heatmap.
 
 v2.8.3
 - Support 'damo report heatmap' for snapshot records.
