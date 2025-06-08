@@ -39,7 +39,6 @@
       - treat larger than a value as same
 - Support multiple targets snapshot (get_snapshot_records())
 - damo report access: show intervals always
-- support multiple damon.data input
 - support 2d heatmap on report access
 
 - Deprecate old features

@@ -8,6 +8,7 @@ v2.8.4
 - report heatmap: Fix color range.
 - report heatmap: Fix snapshot age accounting bug.
 - report heatmap: Support human friendly time/address ranges
+- report heatmap,access: Support multiple input record files
 
 v2.8.3
 - Support 'damo report heatmap' for snapshot records.
