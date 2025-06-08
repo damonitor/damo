@@ -12,13 +12,7 @@ import _damo_records
 import _damon
 import _damon_args
 
-def sighandler(signum, frame):
-    print('\nsingal %s received' % signum)
-    exit(0)
-
-def main(args):
-    _damon.ensure_root_and_initialized(args)
-
+def handle_modules():
     for module in os.listdir('/sys/module'):
         if not module.startswith('damon_'):
             continue
@@ -43,6 +37,15 @@ def main(args):
             with open(param, 'w') as f:
                 f.write('N')
             print('Disabled it.  Continue starting DAMON')
+
+def sighandler(signum, frame):
+    print('\nsingal %s received' % signum)
+    exit(0)
+
+def main(args):
+    _damon.ensure_root_and_initialized(args)
+
+    handle_modules():
 
     err, kdamonds = _damon_args.turn_damon_on(args)
     if err:
