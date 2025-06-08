@@ -1396,7 +1396,7 @@ def set_formats_record_default(fmt, records, intervals_tuning_enabled):
             fmt.format_record_head = default_record_head_format
         else:
             fmt.format_record_head = ''
-    if fmt.format_record_tail is None and intervals_tuning_enabled:
+    if fmt.format_record_tail is None:
         fmt.format_record_tail = 'monitoring intervals: <intervals>'
     if fmt.format_record_tail is None:
         fmt.format_record_tail = ''
