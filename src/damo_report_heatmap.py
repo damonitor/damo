@@ -343,14 +343,11 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
     os.remove(data_file)
 
 def main(args):
-    records = []
-    for input_file in args.input:
-        records_, err = _damo_records.get_records(record_file=input_file)
-        if err != None:
-            print('monitoring result file (%s) parsing failed (%s)' %
-                    (input_file, err))
-            exit(1)
-        records += records_
+    records, err = _damo_records.get_records(record_file=args.input)
+    if err != None:
+        print('monitoring result file (%s) parsing failed (%s)' %
+                (args.input, err))
+        exit(1)
 
     # Use 80x40 or 500x500 resolution as default for stdout or image plots
     if args.resol is None:
