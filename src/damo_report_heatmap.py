@@ -80,7 +80,8 @@ class HeatMap:
     def pixel_idx_of_addr(self, addr):
         return int((addr - self.addr_start) / self.addr_unit)
 
-    def add_pixel_heat(self, pixels_idx, pixel_idx, region, snapshot, aggr_ns):
+    def add_pixel_heat(self, pixels_idx, pixel_idx, region, snapshot, aggr_ns,
+                       df_passed):
         pixel = self.pixels[pixels_idx][pixel_idx]
         observe_start_time = snapshot.start_time
         if aggr_ns is not None:
@@ -94,7 +95,11 @@ class HeatMap:
         account_addr_end = min(region.end, pixel.addr + self.addr_unit)
         account_sz = account_addr_end - account_addr_start
 
-        heat = region.nr_accesses.samples * account_time * account_sz
+        nr_accesses = region.nr_accesses.samples
+        if df_passed:
+            nr_accesses = nr_accesses * region.sz_filter_passed / region.size()
+
+        heat = nr_accesses * account_time * account_sz
 
         if pixel.heat is None:
             pixel.heat = 0
@@ -114,7 +119,7 @@ class HeatMap:
                 self.pixels_idx_of_time(start_time),
                 self.pixels_idx_of_time(snapshot.end_time) + 1)
 
-    def add_heat(self, snapshot, last_snapshot, aggr_ns):
+    def add_heat(self, snapshot, last_snapshot, aggr_ns, df_passed):
         heatmap_addr_end = self.addr_start + self.addr_unit * self.addr_resol
         for region in snapshot.regions:
             if region.end < self.addr_start or heatmap_addr_end < region.start:
@@ -130,7 +135,8 @@ class HeatMap:
                     if pixel_idx < 0 or self.addr_resol <= pixel_idx:
                         continue
                     self.add_pixel_heat(
-                            pixels_idx, pixel_idx, region, snapshot, aggr_ns)
+                            pixels_idx, pixel_idx, region, snapshot, aggr_ns,
+                            df_passed)
 
     def highest_lowest_heats(self):
         highest = None
@@ -219,7 +225,7 @@ class HeatMap:
         return '\n'.join(lines)
 
 def heatmap_from_records(
-        records, time_range, addr_range, resols):
+        records, time_range, addr_range, resols, df_passed):
     time_start, time_end = time_range
     addr_start, addr_end = addr_range
     time_resol, addr_resol = resols
@@ -234,7 +240,7 @@ def heatmap_from_records(
         if record.intervals is not None:
             aggr_ns = record.intervals.aggr * 1000
         for snapshot in record.snapshots:
-            heatmap.add_heat(snapshot, last_snapshot, aggr_ns)
+            heatmap.add_heat(snapshot, last_snapshot, aggr_ns, df_passed)
             last_snapshot = snapshot
     return heatmap
 
@@ -253,7 +259,7 @@ def mk_heatmap(args, address_range_idx, __records):
 
     return heatmap_from_records(
             records, args.time_range, args.address_range[address_range_idx],
-            args.resol)
+            args.resol, args.df_passed)
 
 def fmt_heats(args, address_range_idx, __records):
     heatmap = mk_heatmap(args, address_range_idx, __records)
@@ -438,4 +444,6 @@ def set_argparser(parser):
     parser.add_argument('--stdout_skip_colorset_example',
             action='store_true',
             help='skip printing example colors at the output')
+    parser.add_argument('--df_passed', action='store_true',
+                        help='show heatmap for only DAMOS filter-passed parts')
     parser.description = 'Show when which address ranges were how frequently accessed'
