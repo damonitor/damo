@@ -12,31 +12,39 @@ import _damo_records
 import _damon
 import _damon_args
 
+def module_running(module_name):
+    param_dir = os.path.join('/sys/module', module_name, 'parameters')
+    for param_name in ['enabled', 'enable']:
+        param_file = os.path.join(param_dir, param_name)
+        if os.path.isfile(param_file):
+            with open(param_file, 'r') as f:
+                return f.read().strip() == 'Y'
+    return False
+
+def module_disable(module_name):
+    param_dir = os.path.join('/sys/module', module_name, 'parameters')
+    for param_name in ['enabled', 'enable']:
+        param_file = os.path.join(param_dir, param_name)
+        if os.path.isfile(param_file):
+            with open(param_file, 'w') as f:
+                f.write('N')
+                return
+
 def handle_modules():
     for module in os.listdir('/sys/module'):
         if not module.startswith('damon_'):
             continue
-        param = os.path.join('/sys/module', module, 'parameters', 'enabled')
-        running = False
-        if os.path.isfile(param):
-            with open(param, 'r') as f:
-                running = f.read().strip()
-        else:
-            param = os.path.join('/sys/module', module, 'parameters', 'enable')
-            if os.path.isfile(param):
-                with open(param, 'r') as f:
-                    running = f.read().strip()
-        if running == 'Y':
-            print('Cannot turn on damon since %s is running.  '
-                  'You should disable it first.' % module)
-            answer = input('May I disable it for you? [Y/n] ')
-            if answer.lower() == 'n':
-                print('Ok, see you later')
-                exit(1)
-            print('Ok, disabling it')
-            with open(param, 'w') as f:
-                f.write('N')
-            print('Disabled it.  Continue starting DAMON')
+        if not module_running(module):
+            continue
+        print('Cannot turn on damon since %s is running.  '
+              'You should disable it first.' % module)
+        answer = input('May I disable it for you? [Y/n] ')
+        if answer.lower() == 'n':
+            print('Ok, see you later')
+            exit(1)
+        print('Ok, disabling it')
+        module_disable(module)
+        print('Disabled it.  Continue starting DAMON')
 
 def sighandler(signum, frame):
     print('\nsingal %s received' % signum)
@@ -44,8 +52,7 @@ def sighandler(signum, frame):
 
 def main(args):
     _damon.ensure_root_and_initialized(args)
-
-    handle_modules():
+    handle_modules()
 
     err, kdamonds = _damon_args.turn_damon_on(args)
     if err:
