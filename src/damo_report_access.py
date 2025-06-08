@@ -1863,7 +1863,7 @@ def set_argparser(parser):
     # what to show
     _damo_records.set_filter_argparser(parser, hide_help=True)
 
-    parser.add_argument('--input_file', metavar='<file>',
+    parser.add_argument('--input_file', metavar='<file>', nargs='+',
             help='source of the access pattern to show')
     parser.add_argument('--tried_regions_of', nargs=3, type=int,
             action='append',
