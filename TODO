@@ -39,6 +39,8 @@
       - treat larger than a value as same
 - Support multiple targets snapshot (get_snapshot_records())
 - support 2d heatmap on report access
+- Support record file made with intervals auto-tuning
+  - Infer tuned aggregation interval from snapshot time
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
