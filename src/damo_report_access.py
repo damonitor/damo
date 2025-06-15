@@ -1308,8 +1308,17 @@ def set_formats_hist_style(args, fmt, records):
     fmt.format_snapshot_head = '\n'.join(snapshot_head_content)
     fmt.format_region = ''
 
+def has_multiple_snapshots(records):
+    for record in records:
+        if len(record.snapshots) > 1:
+            return True
+    return False
+
 def set_formats_percentiles(args, fmt, records, recency_or_temperature):
     snapshot_head_content = []
+    if has_multiple_snapshots(records):
+        snapshot_head_content.append(
+                'snapshot time: [<start time>, <end time>] (<duration>)')
     if has_ops_filters(records):
         snapshot_head_content += [
                 '# damos filters (df): <filters passed type>',
