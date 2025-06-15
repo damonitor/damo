@@ -444,6 +444,14 @@ def get_temperature(region, fmt, aggr_us):
     weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
     return temperature_of(region, weights)
 
+def infer_aggr_time_us(snapshot, record):
+    snapshot_aggr_us = (snapshot.end_time - snapshot.start_time) / 1000
+    record_aggr_us = record.intervals.aggr
+    # if error is small enough, use simpler number
+    if abs(snapshot_aggr_us - record_aggr_us) / record_aggr_us < 0.1:
+        return record_aggr_us
+    return snapshot_aggr_us
+
 def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     return sz_hist_str(
             snapshot, fmt, df_passed_sz, get_temperature,
