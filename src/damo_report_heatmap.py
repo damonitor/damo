@@ -33,6 +33,7 @@ import _damo_ascii_color
 import _damo_fmt_str
 import _damo_records
 import damo_record_info
+import damo_report_access
 
 class HeatPixel:
     time = None
@@ -308,6 +309,39 @@ def set_missed_args(args, records):
             args.address_range = [
                     [r.start_addr, r.end_addr] for r in guide.contig_regions]
 
+def sort_regions_by_temperature_for_range(snapshot, record, start, end):
+    sorted_regions = []
+    for region in snapshot.regions:
+        if end < region.start or region.end < start:
+            continue
+        if region.start < start:
+            region.start = start
+        if end < region.end:
+            region.end = end
+        region.nr_accesses.add_unset_unit(record.intervals)
+        region.age.add_unset_unit(record.intervals)
+        sorted_regions.append(region)
+    sorted_regions.sort(key=lambda r: damo_report_access.temperature_of(
+        r, [0, 1, 1]))
+    for idx, region in enumerate(sorted_regions):
+        if idx == 0:
+            adjusted_start = start
+        else:
+            adjusted_start = sorted_regions[idx - 1].end
+        adjusted_end = adjusted_start + region.size()
+        region.start = adjusted_start
+        region.end = adjusted_end
+    return sorted_regions
+
+def sort_regions_by_temperature(records, args):
+    for record in records:
+        for snapshot in record.snapshots:
+            sorted_regions = []
+            for start, end in args.address_range:
+                sorted_regions += sort_regions_by_temperature_for_range(
+                        snapshot, record, start, end)
+            snapshot.regions = sorted_regions
+
 def plot_range(orig_range, use_absolute_val):
     plot_range = [x for x in orig_range]
     if not use_absolute_val:
@@ -378,6 +412,8 @@ def main(args):
                     _damo_fmt_str.text_to_bytes(x) for x in address_range]
 
     set_missed_args(args, records)
+    if args.sort_temperature:
+        sort_regions_by_temperature(records, args)
 
     heats_list = []
     for idx in range(len(args.address_range)):
@@ -446,4 +482,6 @@ def set_argparser(parser):
             help='skip printing example colors at the output')
     parser.add_argument('--df_passed', action='store_true',
                         help='show heatmap for only DAMOS filter-passed parts')
+    parser.add_argument('--sort_temperature', action='store_true',
+                        help='sort regions by temperature on space')
     parser.description = 'Show when which address ranges were how frequently accessed'
