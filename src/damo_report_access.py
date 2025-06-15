@@ -301,6 +301,14 @@ def damos_stats_str(snapshot, record, fmt):
         return 'none'
     return snapshot.damos_stats.to_str(fmt.raw_number)
 
+def infer_aggr_time_us(snapshot, record):
+    snapshot_aggr_us = (snapshot.end_time - snapshot.start_time) / 1000
+    record_aggr_us = record.intervals.aggr
+    # if error is small enough, use simpler number
+    if abs(snapshot_aggr_us - record_aggr_us) / record_aggr_us < 0.1:
+        return record_aggr_us
+    return snapshot_aggr_us
+
 def estimated_mem_bw(snapshot, record, fmt, filter_passed_only=False):
     access_bytes = 0
     for region in snapshot.regions:
@@ -309,7 +317,8 @@ def estimated_mem_bw(snapshot, record, fmt, filter_passed_only=False):
         else:
             bytes = region.size()
         access_bytes += bytes * region.nr_accesses.samples
-    bw_per_sec = access_bytes / (record.intervals.aggr / 1000000)
+    aggr_interval_sec = infer_aggr_time_us(snapshot, record) / 1000000
+    bw_per_sec = access_bytes / aggr_interval_sec
     return '%s per second' % _damo_fmt_str.format_sz(
             bw_per_sec, fmt.raw_number)
 
@@ -438,14 +447,6 @@ def get_temperature(region, fmt, aggr_us):
     # set size weight zero
     weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
     return temperature_of(region, weights)
-
-def infer_aggr_time_us(snapshot, record):
-    snapshot_aggr_us = (snapshot.end_time - snapshot.start_time) / 1000
-    record_aggr_us = record.intervals.aggr
-    # if error is small enough, use simpler number
-    if abs(snapshot_aggr_us - record_aggr_us) / record_aggr_us < 0.1:
-        return record_aggr_us
-    return snapshot_aggr_us
 
 def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     return sz_hist_str(
