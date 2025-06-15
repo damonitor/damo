@@ -39,7 +39,6 @@
       - treat larger than a value as same
 - Support multiple targets snapshot (get_snapshot_records())
 - support 2d heatmap on report access
-- Support heatmap with access temeperature-sorted regions
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
