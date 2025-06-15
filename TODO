@@ -41,6 +41,7 @@
 - support 2d heatmap on report access
 - Support record file made with intervals auto-tuning
   - Infer tuned aggregation interval from snapshot time
+- Support heatmap with access temeperature-sorted regions
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
