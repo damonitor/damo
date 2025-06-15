@@ -309,7 +309,8 @@ def set_missed_args(args, records):
             args.address_range = [
                     [r.start_addr, r.end_addr] for r in guide.contig_regions]
 
-def sort_regions_by_temperature_for_range(snapshot, record, start, end):
+def sort_regions_by_temperature_for_range(snapshot, record, start, end,
+                                          weights):
     sorted_regions = []
     for region in snapshot.regions:
         if end < region.start or region.end < start:
@@ -322,7 +323,7 @@ def sort_regions_by_temperature_for_range(snapshot, record, start, end):
         region.age.add_unset_unit(record.intervals)
         sorted_regions.append(region)
     sorted_regions.sort(key=lambda r: damo_report_access.temperature_of(
-        r, [0, 1, 1]))
+        r, weights))
     for idx, region in enumerate(sorted_regions):
         if idx == 0:
             adjusted_start = start
@@ -339,7 +340,8 @@ def sort_regions_by_temperature(records, args):
             sorted_regions = []
             for start, end in args.address_range:
                 sorted_regions += sort_regions_by_temperature_for_range(
-                        snapshot, record, start, end)
+                        snapshot, record, start, end,
+                        [0] + args.temperature_weights)
             snapshot.regions = sorted_regions
 
 def plot_range(orig_range, use_absolute_val):
@@ -489,4 +491,7 @@ def set_argparser(parser):
                         help='show heatmap for only DAMOS filter-passed parts')
     parser.add_argument('--sort_temperature', action='store_true',
                         help='sort regions by temperature on space')
+    parser.add_argument('--temperature_weights', nargs=2, type=float,
+                        metavar=('<frequency>', '<age>'), default=[1.0, 1.0],
+                        help='temperature calculation weights')
     parser.description = 'Show when which address ranges were how frequently accessed'
