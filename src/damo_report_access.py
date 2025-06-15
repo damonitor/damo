@@ -1448,7 +1448,8 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
             fmt.format_snapshot_tail = ('%s\n<region box description>' %
                     fmt.format_record_tail)
 
-    if fmt.format_snapshot_tail == default_snapshot_tail_format:
+    if fmt.format_snapshot_tail is None:
+        fmt.format_snapshot_tail = default_snapshot_tail_format
         if ops_filters_installed:
             fmt.format_snapshot_tail = default_snapshot_tail_format_filter_installed
         # further check if scheme action is not stat
@@ -1769,7 +1770,6 @@ def add_fmt_args(parser, hide_help=False):
             help=argparse.SUPPRESS)
     parser.add_argument(
             '--format_snapshot_tail', metavar='<template>',
-            default=default_snapshot_tail_format,
             # help='output format to show at the end of each snapshot'
             help=argparse.SUPPRESS)
     parser.add_argument('--format_region', metavar='<template>',
