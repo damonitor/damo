@@ -82,13 +82,15 @@ snapshot_formatters = [
                   _damo_fmt_str.format_time_ns(
                       snapshot.start_time -
                       record.snapshots[0].start_time, fmt.raw_number),
-            'access monitoring start time for the snapshot, relative to the record start time'),
+                  'access monitoring start time for the snapshot, ' \
+                          'relative to the record start time'),
         Formatter('<end time>',
             lambda snapshot, record, fmt:
                   _damo_fmt_str.format_time_ns(
                       snapshot.end_time - record.snapshots[0].start_time,
                       fmt.raw_number),
-            'access monitoring end time for the snapshot, relative to the record end time'),
+                  'access monitoring end time for the snapshot, ' \
+                          'relative to the record end time'),
         Formatter('<abs start time>',
             lambda snapshot, record, fmt:
             _damo_fmt_str.format_time_ns(snapshot.start_time, fmt.raw_number),
@@ -238,7 +240,8 @@ region_formatters = [
             '<box>',
             lambda index, region, fmt:
             fmt.region_box_format.to_str(region),
-            'user-customizable (via --region_box_*) box (age/access_rate/size by default)'),
+            'user-customizable (via --region_box_*) box ' \
+                    '(age/access_rate/size by default)'),
         ]
 
 def record_intervals(record, raw_number):
@@ -369,7 +372,8 @@ def histogram_str(hist):
         y_str = '%s%s' % (y_str,
                            ' ' * (max_yval_str - len(y_str)))
 
-        nr_dots = min(math.ceil((yval - min_yval) / yval_dot_interval), max_dots)
+        nr_dots = min(math.ceil((yval - min_yval) / yval_dot_interval),
+                      max_dots)
         bar = '|%s%s|' % ('*' * nr_dots, ' ' * (max_dots - nr_dots))
         lines.append('%s %s %s' % (xrange_str, y_str, bar))
     return '\n'.join(lines)
@@ -929,7 +933,8 @@ class RegionBoxFormat:
                     if self.length.display_logscale else 'linearscale'))
 
         minval, maxval = self.minmax(self.color.value_name)
-        lines.append('# color: %s (represents %s with [%d, %d] number and color (%s) in %s)'
+        lines.append('# color: %s (represents %s with [%d, %d] number and ' \
+                'color (%s) in %s)'
                 % (self.color.value_name,
                     self.format_min_max(minval, maxval,
                         self.color.value_name, raw),
@@ -1439,7 +1444,8 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
         else:
             fmt.format_snapshot_head = 'heatmap: <heatmap>'
     if ops_filters_installed:
-        fmt.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
+        fmt.format_snapshot_head += \
+                '\n# damos filters (df): <filters passed type>'
         fmt.format_snapshot_head += '\ndf-pass: <filters passed heatmap>'
 
     if args.region_box:
@@ -1523,13 +1529,16 @@ def set_formats(args, records):
 
 def handle_ls_keywords(args):
     if args.ls_record_format_keywords:
-        print("use 'damo help access_format_options record_format_keywords' instead")
+        print("use 'damo help access_format_options record_format_keywords' " \
+                "instead")
         return True
     if args.ls_snapshot_format_keywords:
-        print("use 'damo help access_format_options snapshot_format_keywords' instead")
+        print("use 'damo help access_format_options " \
+                "snapshot_format_keywords' instead")
         return True
     if args.ls_region_format_keywords:
-        print("use 'damo help access_format_options region_format_keywords' instead")
+        print("use 'damo help access_format_options " \
+                "region_format_keywords' instead")
         return True
     return False
 
@@ -1562,7 +1571,8 @@ def translate_regions_to_cache_space(regions, cache_spec):
             if csidx >= len(set_regions):
                 print(csidx, len(set_regions))
                 exit(0)
-            set_regions[csidx].nr_accesses.samples += region.nr_accesses.samples
+            set_regions[csidx].nr_accesses.samples += \
+                    region.nr_accesses.samples
     converted = []
     for set_region in set_regions:
         if len(converted) == 0:
@@ -1659,7 +1669,8 @@ def read_and_show(args):
             break
         records, err = _damo_records.get_records(
                     tried_regions_of=args.tried_regions_of,
-                    record_file=args.input_file, snapshot_damos_filters=dfilters,
+                    record_file=args.input_file,
+                    snapshot_damos_filters=dfilters,
                     record_filter=record_filter,
                     total_sz_only=args.total_sz_only,
                     dont_merge_regions=args.dont_merge_regions)
@@ -1754,7 +1765,9 @@ def add_fmt_args(parser, hide_help=False):
     parser.add_argument('--hist_cumulate', action='store_true',
                         help='draw histogram in cumulative way')
 
-    fmt_flexible_metavar='<set|append> <record_head|snapshot_head|region|snapshot_tail|record_tail> <format string>'
+    fmt_flexible_metavar='<set|append> ' \
+            '<record_head|snapshot_head|region|snapshot_tail|record_tail> ' \
+            '<format string>'
 
     # This option also receives json string or file.  But, no real use case is
     # found.  Keep supporting for now, but hide from the help message.
