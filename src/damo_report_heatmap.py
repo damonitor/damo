@@ -364,6 +364,10 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
     x_range = plot_range(args.time_range, args.abs_time)
     y_range = plot_range(address_range, args.abs_addr)
 
+    ylabel = 'Address (bytes)'
+    if args.sort_temperature:
+        ylabel = 'Size (bytes)'
+
     gnuplot_cmd = """
     set term %s;
     set output '%s';
@@ -372,10 +376,11 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
     set yrange [%f:%f];
     set cbrange [%f:%f];
     set xlabel 'Time (ns)';
-    set ylabel 'Address (bytes)';
+    set ylabel '%s';
     plot '%s' using 1:2:3 with image;""" % (
             terminal, output_file, x_range[0], x_range[1],
-            y_range[0], y_range[1], highest_heat, lowest_heat, data_file)
+            y_range[0], y_range[1], highest_heat, lowest_heat, ylabel,
+            data_file)
     try:
         subprocess.call(['gnuplot', '-e', gnuplot_cmd])
     except Exception as e:
