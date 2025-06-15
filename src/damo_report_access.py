@@ -242,8 +242,8 @@ region_formatters = [
         ]
 
 default_record_head_format = 'kdamond <kdamond index> / context <context index> / scheme <scheme index> / target id <target id> / recorded for <duration> from <abs start time>'
-default_snapshot_head_format = 'monitored time: [<start time>, <end time>] (<duration>)\n<heatmap>'
-default_snapshot_head_format_without_heatmap = 'monitored time: [<start time>, <end time>] (<duration>)'
+default_snapshot_head_format = 'snapshot time: [<start time>, <end time>] (<duration>)\n<heatmap>'
+default_snapshot_head_format_without_heatmap = 'snapshot time: [<start time>, <end time>] (<duration>)'
 default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
 default_snapshot_tail_format = 'memory bw estimate: <estimated memory bandwidth>\ntotal size: <total bytes>'
 default_snapshot_tail_format_filter_installed = 'memory bw estimate: <estimated memory bandwidth>  df-passed: <filters passed estimated memory bandwidth>\ntotal size: <total bytes>  df-passed <filters passed bytes>'
