@@ -455,7 +455,7 @@ def infer_aggr_time_us(snapshot, record):
 def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
     return sz_hist_str(
             snapshot, fmt, df_passed_sz, get_temperature,
-            record.intervals.aggr, _damo_fmt_str.format_nr,
+            infer_aggr_time_us(snapshot, record) , _damo_fmt_str.format_nr,
             _damo_fmt_str.text_to_nr)
 
 def get_idle_time(region, fmt, aggr_interval):
@@ -468,8 +468,9 @@ def recency_hist_str(snapshot, record, fmt, df_passed_sz):
         return 'no region in snapshot'
 
     return sz_hist_str(
-            snapshot, fmt, df_passed_sz, get_idle_time, record.intervals.aggr,
-            _damo_fmt_str.format_time_us, _damo_fmt_str.text_to_us)
+            snapshot, fmt, df_passed_sz, get_idle_time,
+            infer_aggr_time_us(snapshot, record), _damo_fmt_str.format_time_us,
+            _damo_fmt_str.text_to_us)
 
 def get_percentiles_to_show(fmt):
     percentiles_range = fmt.percentiles_range
@@ -482,13 +483,12 @@ def get_percentiles_to_show(fmt):
             percentiles_to_show = sorted(percentiles_range)
     return percentiles_to_show
 
-def get_percentile_values(snapshot, record, recency_or_temperature, df_passed,
+def get_percentile_values(snapshot, aggr_us, recency_or_temperature, df_passed,
                           percentiles_to_show, fmt):
     if recency_or_temperature == 'recency':
         get_metric_fn = get_idle_time
     else:
         get_metric_fn = get_temperature
-    aggr_us = record.intervals.aggr
     regions = sorted(snapshot.regions,
                      key=lambda r: get_metric_fn(r, fmt, aggr_us))
     if df_passed is True:
@@ -568,8 +568,8 @@ def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
 
     percentiles_to_show = get_percentiles_to_show(fmt)
     percentile_values = get_percentile_values(
-            snapshot, record, recency_or_temperature, df_passed,
-            percentiles_to_show, fmt)
+            snapshot, infer_aggr_time_us(snapshot, record),
+            recency_or_temperature, df_passed, percentiles_to_show, fmt)
     return fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
                               df_passed)
 
