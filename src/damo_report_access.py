@@ -241,13 +241,6 @@ region_formatters = [
             'user-customizable (via --region_box_*) box (age/access_rate/size by default)'),
         ]
 
-default_record_head_format = 'kdamond <kdamond index> / context <context index> / scheme <scheme index> / target id <target id> / recorded for <duration> from <abs start time>'
-default_snapshot_head_format = 'snapshot time: [<start time>, <end time>] (<duration>)\n<heatmap>'
-default_snapshot_head_format_without_heatmap = 'snapshot time: [<start time>, <end time>] (<duration>)'
-default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
-default_snapshot_tail_format = 'memory bw estimate: <estimated memory bandwidth>\ntotal size: <total bytes>'
-default_snapshot_tail_format_filter_installed = 'memory bw estimate: <estimated memory bandwidth>  df-passed: <filters passed estimated memory bandwidth>\ntotal size: <total bytes>  df-passed <filters passed bytes>'
-
 def record_intervals(record, raw_number):
     intervals = record.intervals
     return 'sample %s, aggr %s' % (
@@ -1376,6 +1369,8 @@ def set_formats_handle_format_set_arg(fmt, format_arg):
 def set_formats_handle_styles(fmt, args, records):
     if args.style is None:
         return
+
+    default_snapshot_head_format_without_heatmap = 'snapshot time: [<start time>, <end time>] (<duration>)'
     if args.style == 'simple-boxes':
         fmt.format_snapshot_head = default_snapshot_head_format_without_heatmap
         fmt.format_region = '<box> size <size> access rate <access rate> age <age>'
@@ -1414,6 +1409,7 @@ def intervals_goal_enabled(records):
     return False
 
 def set_formats_record_default(fmt, records):
+    default_record_head_format = 'kdamond <kdamond index> / context <context index> / scheme <scheme index> / target id <target id> / recorded for <duration> from <abs start time>'
     if fmt.format_record_head == None:
         if len(records) > 1:
             fmt.format_record_head = default_record_head_format
@@ -1427,6 +1423,7 @@ def set_formats_record_default(fmt, records):
 
 def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     # handle snapshot head and tail
+    default_snapshot_head_format = 'snapshot time: [<start time>, <end time>] (<duration>)\n<heatmap>'
     if fmt.format_snapshot_head == None:
         need_snapshot_head = False
         for record in records:
@@ -1446,6 +1443,8 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
             fmt.format_snapshot_tail = ('%s\n<region box description>' %
                     fmt.format_record_tail)
 
+    default_snapshot_tail_format = 'memory bw estimate: <estimated memory bandwidth>\ntotal size: <total bytes>'
+    default_snapshot_tail_format_filter_installed = 'memory bw estimate: <estimated memory bandwidth>  df-passed: <filters passed estimated memory bandwidth>\ntotal size: <total bytes>  df-passed <filters passed bytes>'
     if fmt.format_snapshot_tail is None:
         fmt.format_snapshot_tail = default_snapshot_tail_format
         if ops_filters_installed:
@@ -1455,6 +1454,7 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
             fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
 
 def set_formats_region_default(fmt, records, args):
+    default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
     if args.region_box:
         if fmt.region_box_min_max_height[1] > 1:
             fmt.format_region = '<box>%s' % default_region_format
