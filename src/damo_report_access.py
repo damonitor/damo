@@ -1370,10 +1370,11 @@ def set_formats_handle_styles(fmt, args, records):
     if args.style is None:
         return
 
-    default_snapshot_head_format_without_heatmap = 'snapshot time: [<start time>, <end time>] (<duration>)'
     if args.style == 'simple-boxes':
-        fmt.format_snapshot_head = default_snapshot_head_format_without_heatmap
-        fmt.format_region = '<box> size <size> access rate <access rate> age <age>'
+        fmt.format_snapshot_head = \
+                'snapshot time: [<start time>, <end time>] (<duration>)'
+        fmt.format_region = \
+                '<box> size <size> access rate <access rate> age <age>'
         fmt.region_box_min_max_height = [1, 1]
         fmt.region_box_min_max_length = [1, 40]
         fmt.region_box_align = 'right'
@@ -1409,10 +1410,12 @@ def intervals_goal_enabled(records):
     return False
 
 def set_formats_record_default(fmt, records):
-    default_record_head_format = 'kdamond <kdamond index> / context <context index> / scheme <scheme index> / target id <target id> / recorded for <duration> from <abs start time>'
     if fmt.format_record_head == None:
         if len(records) > 1:
-            fmt.format_record_head = default_record_head_format
+            fmt.format_record_head = \
+                    'kdamond <kdamond index> / context <context index>' \
+                    ' / scheme <scheme index> / target id <target id> ' \
+                    '/ recorded for <duration> from <abs start time>'
         else:
             fmt.format_record_head = ''
     if fmt.format_record_tail is None:
@@ -1423,7 +1426,6 @@ def set_formats_record_default(fmt, records):
 
 def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     # handle snapshot head and tail
-    default_snapshot_head_format = 'snapshot time: [<start time>, <end time>] (<duration>)\n<heatmap>'
     if fmt.format_snapshot_head == None:
         need_snapshot_head = False
         for record in records:
@@ -1431,7 +1433,9 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
                 need_snapshot_head = True
                 break
         if need_snapshot_head:
-            fmt.format_snapshot_head = default_snapshot_head_format
+            fmt.format_snapshot_head = \
+                    'snapshot time: [<start time>, <end time>] ' \
+                    '(<duration>)\n<heatmap>'
         else:
             fmt.format_snapshot_head = 'heatmap: <heatmap>'
     if ops_filters_installed:
@@ -1443,18 +1447,24 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
             fmt.format_snapshot_tail = ('%s\n<region box description>' %
                     fmt.format_record_tail)
 
-    default_snapshot_tail_format = 'memory bw estimate: <estimated memory bandwidth>\ntotal size: <total bytes>'
-    default_snapshot_tail_format_filter_installed = 'memory bw estimate: <estimated memory bandwidth>  df-passed: <filters passed estimated memory bandwidth>\ntotal size: <total bytes>  df-passed <filters passed bytes>'
     if fmt.format_snapshot_tail is None:
-        fmt.format_snapshot_tail = default_snapshot_tail_format
+        fmt.format_snapshot_tail = \
+                'memory bw estimate: <estimated memory bandwidth>\n' \
+                'total size: <total bytes>'
         if ops_filters_installed:
-            fmt.format_snapshot_tail = default_snapshot_tail_format_filter_installed
+            fmt.format_snapshot_tail = \
+                    'memory bw estimate: <estimated memory bandwidth>  ' \
+                    'df-passed: <filters passed estimated memory bandwidth>' \
+                    '\ntotal size: <total bytes>  ' \
+                    'df-passed <filters passed bytes>'
         # further check if scheme action is not stat
         if args.tried_regions_of is not None:
             fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
 
 def set_formats_region_default(fmt, records, args):
-    default_region_format = '<index> addr <start address> size <size> access <access rate> age <age>'
+    default_region_format = \
+            '<index> addr <start address> size <size> access <access rate> ' \
+            'age <age>'
     if args.region_box:
         if fmt.region_box_min_max_height[1] > 1:
             fmt.format_region = '<box>%s' % default_region_format
