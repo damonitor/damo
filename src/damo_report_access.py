@@ -1417,8 +1417,6 @@ def set_formats_record_default(fmt, records):
         if intervals_goal_enabled(records):
             tail_lines.append('# <intervals goal>')
         fmt.format_record_tail = '\n'.join(tail_lines)
-    if fmt.format_record_tail is None:
-        fmt.format_record_tail = ''
 
 def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     # handle snapshot head and tail
