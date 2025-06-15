@@ -322,8 +322,6 @@ def filters_pass_type_of(record):
     if len(ops_filters) == 0:
         return 'n/a'
     text = ', '.join(['%s' % f for f in ops_filters])
-    if ops_filters[-1].allow is True:
-        text += '\n# WARN: Allow filters at the end of the list means nothing on <6.15'
     return text
 
 def get_linearscale_hist_ranges(minv, maxv, nr_ranges, cumulate):

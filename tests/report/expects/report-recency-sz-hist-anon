@@ -1,5 +1,4 @@
 # damos filters (df): allow anon
-# WARN: Allow filters at the end of the list means nothing on <6.15
 <idle time (us)> <df-passed size>
 [0 ns, 30.900 s)            2.613 GiB   |********************|
 [30.900 s, 1 m 1.800 s)     0 B         |                    |

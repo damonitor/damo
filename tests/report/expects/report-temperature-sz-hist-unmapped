@@ -1,5 +1,4 @@
 # damos filters (df): allow unmapped
-# WARN: Allow filters at the end of the list means nothing on <6.15
 <temperature> <df-passed size>
 [-31,800,000,000, -26,789,999,949) 1.211 MiB  |*                   |
 [-26,789,999,949, -21,779,999,898) 0 B        |                    |

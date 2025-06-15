@@ -1,5 +1,4 @@
 # damos filters (df): allow active
-# WARN: Allow filters at the end of the list means nothing on <6.15
 <temperature> <df-passed size>
 [-20,100,000,000, -18,089,999,899) 280.000 KiB |*                   |
 [-18,089,999,899, -16,079,999,798) 6.578 MiB   |*                   |
