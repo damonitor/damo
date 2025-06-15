@@ -1437,7 +1437,7 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
             fmt.format_snapshot_head = default_snapshot_head_format
         else:
             fmt.format_snapshot_head = 'heatmap: <heatmap>'
-    if '<filters passed bytes>' in fmt.format_region:
+    if ops_filters_installed:
         fmt.format_snapshot_head += '\n# damos filters (df): <filters passed type>'
         fmt.format_snapshot_head += '\ndf-pass: <filters passed heatmap>'
 
