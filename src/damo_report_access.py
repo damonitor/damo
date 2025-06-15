@@ -1461,7 +1461,8 @@ def set_formats_region_default(fmt, records, args):
         else:
             fmt.format_region = '<box>\n%s' % default_region_format
 
-    if fmt.format_region == default_region_format:
+    if fmt.format_region is None:
+        fmt.format_region = default_region_format
         for record in records:
             if len(record.scheme_filters) > 0:
                 fmt.format_region += ' df-passed <filters passed bytes>'
@@ -1771,7 +1772,6 @@ def add_fmt_args(parser, hide_help=False):
             # help='output format to show at the end of each snapshot'
             help=argparse.SUPPRESS)
     parser.add_argument('--format_region', metavar='<template>',
-                        default=default_region_format,
                         # help='output format to show for each memory region'
                         help=argparse.SUPPRESS)
 
