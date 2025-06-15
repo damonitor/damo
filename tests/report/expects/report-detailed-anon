@@ -108,3 +108,4 @@ heatmap: [48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5
 memory bw estimate: 10.373 GiB per second  df-passed: 5.727 GiB per second
 total size: 59.868 GiB  df-passed 2.657 GiB
 monitoring intervals: sample 150 ms, aggr 3 s
+# target 4 % accesses per 1 aggrs, [5 ms, 150 ms] sampling interval

@@ -1398,6 +1398,14 @@ def set_formats_handle_styles(fmt, args, records):
         fmt.sort_regions_by = ['temperature']
         fmt.sort_regions_dsc = ['temperature']
 
+def intervals_goal_enabled(records):
+    for record in records:
+        if record.intervals is None:
+            continue
+        if record.intervals.intervals_goal.enabled():
+            return True
+    return False
+
 def set_formats_record_default(fmt, records):
     if fmt.format_record_head == None:
         if len(records) > 1:
@@ -1405,7 +1413,10 @@ def set_formats_record_default(fmt, records):
         else:
             fmt.format_record_head = ''
     if fmt.format_record_tail is None:
-        fmt.format_record_tail = 'monitoring intervals: <intervals>'
+        tail_lines = ['monitoring intervals: <intervals>']
+        if intervals_goal_enabled(records):
+            tail_lines.append('# <intervals goal>')
+        fmt.format_record_tail = '\n'.join(tail_lines)
     if fmt.format_record_tail is None:
         fmt.format_record_tail = ''
 

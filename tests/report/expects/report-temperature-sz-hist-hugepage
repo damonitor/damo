@@ -26,3 +26,4 @@
 memory bw estimate: 11.678 GiB per second  df-passed: 3.870 GiB per second
 total size: 59.868 GiB  df-passed 1.467 GiB
 monitoring intervals: sample 150 ms, aggr 3 s
+# target 4 % accesses per 1 aggrs, [5 ms, 150 ms] sampling interval
