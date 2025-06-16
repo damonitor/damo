@@ -2,11 +2,11 @@ This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
 v2.8.5
-- damo report access: improve records made with auto-tuned intervals handling
-  - use inferred interval for percentiles, histogram, and memory bw
 - damo report heatmap: support sorting regions on space by access temperature
   (--sort_temperature to use the feature, --temperature_weights for custom
   temperature calculation)
+- damo report access: improve handling records made with auto-tuned intervals
+  - use inferred interval for percentiles, histogram, and memory bw
 
 v2.8.4
 - Support local-repo usage on distros having symlink dir in os.sys.path.
