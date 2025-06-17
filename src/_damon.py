@@ -487,8 +487,10 @@ qgoal_user_input = 'user_input'
 qgoal_some_mem_psi_us = 'some_mem_psi_us'
 qgoal_node_mem_used_bp = 'node_mem_used_bp'
 qgoal_node_mem_free_bp = 'node_mem_free_bp'
+qgoal_active_mem_bp = 'active_mem_bp'
 qgoal_metrics = [qgoal_user_input, qgoal_some_mem_psi_us,
-                 qgoal_node_mem_used_bp, qgoal_node_mem_free_bp]
+                 qgoal_node_mem_used_bp, qgoal_node_mem_free_bp,
+                 qgoal_active_mem_bp]
 
 class DamosQuotaGoal:
     metric = None
@@ -504,7 +506,8 @@ class DamosQuotaGoal:
         self.metric = metric
         if metric == qgoal_some_mem_psi_us:
             self.target_value = _damo_fmt_str.text_to_us(target_value)
-        elif metric in [qgoal_node_mem_used_bp, qgoal_node_mem_free_bp]:
+        elif metric in [qgoal_node_mem_used_bp, qgoal_node_mem_free_bp,
+                        qgoal_active_mem_bp]:
             self.target_value = _damo_fmt_str.text_to_bp(target_value)
         else:
             self.target_value = _damo_fmt_str.text_to_nr(target_value)
