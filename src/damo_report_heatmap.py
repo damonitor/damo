@@ -321,6 +321,11 @@ def complete_src_args(args, records):
         elif args.draw_range == 'all':
             args.address_range = [
                     [r.start_addr, r.end_addr] for r in guide.contig_regions]
+    else:
+        for idx, address_range in enumerate(args.address_range):
+            args.address_range[idx] = [
+                    _damo_fmt_str.text_to_bytes(x) for x in address_range]
+
     return None
 
 def sort_regions_by_temperature_for_range(snapshot, record, start, end,
@@ -423,11 +428,6 @@ def main(args):
     if args.guide_human is True:
         damo_record_info.pr_guide(records, raw_numbers=False)
         return
-
-    if args.address_range is not None:
-        for idx, address_range in enumerate(args.address_range):
-            args.address_range[idx] = [
-                    _damo_fmt_str.text_to_bytes(x) for x in address_range]
 
     err = complete_src_args(args, records)
     if err is not None:
