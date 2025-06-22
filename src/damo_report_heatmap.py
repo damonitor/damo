@@ -285,6 +285,17 @@ def complete_time_range(user_input, guide):
         base_time = _damo_fmt_str.text_to_ns(user_input[2])
     return [base_time + x for x in time_range], None
 
+def get_guided_address_ranges(draw_range, guide):
+    if draw_range == 'hottest':
+        hottest_contig_region = sorted(
+                guide.contig_regions, key=lambda x: x.heat_per_byte(),
+                reverse=True)[0]
+        return [[hottest_contig_region.start_addr,
+                 hottest_contig_region.end_addr]]
+    elif draw_range == 'all':
+        return [[r.start_addr, r.end_addr]
+                for r in guide.contig_regions]
+
 def complete_address_range_one(user_input):
     if not len(user_input) in [2, 3]:
         return None, 'wrong number of fiellds'
@@ -296,15 +307,7 @@ def complete_address_range_one(user_input):
 
 def complete_address_range(user_input, draw_range, guide):
     if user_input is None:
-        if draw_range == 'hottest':
-            hottest_contig_region = sorted(
-                    guide.contig_regions, key=lambda x: x.heat_per_byte(),
-                    reverse=True)[0]
-            return [[hottest_contig_region.start_addr,
-                     hottest_contig_region.end_addr]], None
-        elif draw_range == 'all':
-            return [[r.start_addr, r.end_addr]
-                    for r in guide.contig_regions], None
+        return get_guided_address_ranges(draw_range, guide), None
     else:
         address_ranges = []
         for address_range in user_input:
