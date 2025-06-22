@@ -308,8 +308,7 @@ def complete_src_args(args, records):
     else:
         args.time_range, err = complete_user_set_time_range(args.time_range)
         if err is not None:
-            print('wrong --time_range (%s)' % err)
-            exit(1)
+            return 'wrong --time_range (%s)' % err
 
     if not args.address_range:
         if args.draw_range == 'hottest':
