@@ -270,7 +270,9 @@ def fmt_heats(args, address_range_idx, __records):
 
     return heatmap.fmt_gnuplot_str(args.abs_time, args.abs_addr)
 
-def complete_user_set_time_range(user_input):
+def complete_time_range(user_input, guide):
+    if user_input is None:
+        return guide, None
     if not len(user_input) in [2, 3]:
         return None, 'wrong number of arguments'
     time_range = [_damo_fmt_str.text_to_ns(x) for x in user_input[:2]]
@@ -303,12 +305,10 @@ def complete_src_args(args, records):
         return 'no proper guide'
     guide = proper_guides[0]
 
-    if not args.time_range:
-        args.time_range = [guide.start_time, guide.end_time]
-    else:
-        args.time_range, err = complete_user_set_time_range(args.time_range)
-        if err is not None:
-            return 'wrong --time_range (%s)' % err
+    args.time_range, err = complete_time_range(
+            args.time_range, [guide.start_time, guide.end_time])
+    if err is not None:
+            return 'time range completion fail (%s)' % err
 
     if not args.address_range:
         if args.draw_range == 'hottest':
