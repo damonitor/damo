@@ -270,6 +270,15 @@ def fmt_heats(args, address_range_idx, __records):
 
     return heatmap.fmt_gnuplot_str(args.abs_time, args.abs_addr)
 
+def complete_user_set_time_range(user_input):
+    if not len(user_input) in [2, 3]:
+        return None, 'wrong number of arguments'
+    time_range = [_damo_fmt_str.text_to_ns(x) for x in user_input[:2]]
+    if len(user_input) == 2:
+        return time_range, None
+    base_time = _damo_fmt_str.text_to_ns(user_input[2])
+    return [base_time + x for x in time_range], None
+
 def set_missed_args(args, records):
     if (args.kdamond_idx is not None and args.context_idx is not None and
         args.scheme_idx is not None and args.tid is not None and
@@ -296,6 +305,11 @@ def set_missed_args(args, records):
 
     if not args.time_range:
         args.time_range = [guide.start_time, guide.end_time]
+    else:
+        args.time_range, err = complete_user_set_time_range(args.time_range)
+        if err is not None:
+            print('wrong --time_range (%s)' % err)
+            exit(1)
 
     if not args.address_range:
         if args.draw_range == 'hottest':
@@ -389,15 +403,6 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
         print('executing gnuplot failed (%s)' % e)
     os.remove(data_file)
 
-def complete_user_set_time_range(user_input):
-    if not len(user_input) in [2, 3]:
-        return None, 'wrong number of arguments'
-    time_range = [_damo_fmt_str.text_to_ns(x) for x in user_input[:2]]
-    if len(user_input) == 2:
-        return time_range, None
-    base_time = _damo_fmt_str.text_to_ns(user_input[2])
-    return [base_time + x for x in time_range], None
-
 def main(args):
     records, err = _damo_records.get_records(record_file=args.input)
     if err != None:
@@ -419,11 +424,6 @@ def main(args):
         damo_record_info.pr_guide(records, raw_numbers=False)
         return
 
-    if args.time_range is not None:
-        args.time_range, err = complete_user_set_time_range(args.time_range)
-        if err is not None:
-            print('wrong --time_range (%s)' % err)
-            exit(1)
     if args.address_range is not None:
         for idx, address_range in enumerate(args.address_range):
             args.address_range[idx] = [
