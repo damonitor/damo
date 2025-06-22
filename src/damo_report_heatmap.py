@@ -285,6 +285,15 @@ def complete_time_range(user_input, guide):
         base_time = _damo_fmt_str.text_to_ns(user_input[2])
     return [base_time + x for x in time_range], None
 
+def complete_address_range_one(user_input):
+    if not len(user_input) in [2, 3]:
+        return None, 'wrong number of fiellds'
+    address_range = [_damo_fmt_str.text_to_bytes(x) for x in user_input[:2]]
+    if len(user_input) == 2:
+        return address_range, None
+    base = _damo_fmt_str.text_to_bytes(user_input[2])
+    return [base + x for x in address_range], None
+
 def complete_address_range(user_input, draw_range, guide):
     if user_input is None:
         if draw_range == 'hottest':
@@ -299,8 +308,10 @@ def complete_address_range(user_input, draw_range, guide):
     else:
         address_ranges = []
         for address_range in user_input:
-            address_ranges.append([
-                    _damo_fmt_str.text_to_bytes(x) for x in address_range])
+            ar, err = complete_address_range_one(address_range)
+            if err is not None:
+                return None, err
+            address_ranges.append(ar)
         return address_ranges, None
 
 def complete_src_args(args, records):
@@ -509,9 +520,9 @@ def set_argparser(parser):
     parser.add_argument('--draw_range', choices=['hottest', 'all'],
                         default='hottest',
                         help='which ranges to draw heatmap for')
-    parser.add_argument('--address_range', metavar='<address>', nargs=2,
-                        action='append',
-                        help='start and end address of the output')
+    parser.add_argument(
+            '--address_range', metavar='<address>', nargs='+', action='append',
+            help='"<start> <end> [base]" of address ranges for the heatmap.')
     parser.add_argument('--abs_time', action='store_true', default=False,
             help='display absolute time in output')
     parser.add_argument('--abs_addr', action='store_true', default=False,
