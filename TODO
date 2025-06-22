@@ -39,7 +39,6 @@
       - treat larger than a value as same
 - Support multiple targets snapshot (get_snapshot_records())
 - support 2d heatmap on report access
-- Let heatmap time/address easier to specify, e.g., in relative way.
 - Support easier heatmap zoom in/out
 
 - Deprecate old features

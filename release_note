@@ -3,6 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.8.6
 - support active_mem_bp DAMOS quota goal metric
+- damo report heatmap: Support base value for --address_range and --time_range
 
 v2.8.5
 - damo report heatmap: support sorting regions on space by access temperature
