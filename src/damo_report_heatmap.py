@@ -296,22 +296,33 @@ def get_guided_address_ranges(draw_range, guide):
         return [[r.start_addr, r.end_addr]
                 for r in guide.contig_regions]
 
-def complete_address_range_one(user_input):
+def complete_address_range_one(user_input, guided):
     if not len(user_input) in [2, 3]:
         return None, 'wrong number of fiellds'
     address_range = [_damo_fmt_str.text_to_bytes(x) for x in user_input[:2]]
     if len(user_input) == 2:
         return address_range, None
-    base = _damo_fmt_str.text_to_bytes(user_input[2])
-    return [base + x for x in address_range], None
+    base_input = user_input[2]
+    if base_input == 'guided':
+        if guided is None:
+            return None, 'guide not exists'
+        base_addr = guided[0]
+    else:
+        base_addr = _damo_fmt_str.text_to_bytes(base_input)
+    return [base_addr + x for x in address_range], None
 
 def complete_address_range(user_input, draw_range, guide):
+    guided_address_ranges = get_guided_address_ranges(draw_range, guide)
     if user_input is None:
-        return get_guided_address_ranges(draw_range, guide), None
+        return guided_address_ranges, None
     else:
         address_ranges = []
-        for address_range in user_input:
-            ar, err = complete_address_range_one(address_range)
+        for idx, address_range in enumerate(user_input):
+            if idx < len(guided_address_ranges):
+                guided_range = guided_address_ranges[idx]
+            else:
+                guided_range = None
+            ar, err = complete_address_range_one(address_range, guided_range)
             if err is not None:
                 return None, err
             address_ranges.append(ar)
@@ -525,7 +536,8 @@ def set_argparser(parser):
                         help='which ranges to draw heatmap for')
     parser.add_argument(
             '--address_range', metavar='<address>', nargs='+', action='append',
-            help='"<start> <end> [base]" of address ranges for the heatmap.')
+            help='"<start> <end> [base]" of address ranges for the heatmap.' \
+                    '[base] can be "guided" for the guided start address.')
     parser.add_argument('--abs_time', action='store_true', default=False,
             help='display absolute time in output')
     parser.add_argument('--abs_addr', action='store_true', default=False,
