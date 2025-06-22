@@ -274,7 +274,7 @@ def set_missed_args(args, records):
     if (args.kdamond_idx is not None and args.context_idx is not None and
         args.scheme_idx is not None and args.tid is not None and
         args.time_range is not None and args.address_range is not None):
-        return
+        return None
     guides = damo_record_info.get_guide_info(records)
     guide = guides[0]
     if args.kdamond_idx is None:
@@ -291,8 +291,7 @@ def set_missed_args(args, records):
                 g.context_idx == args.context_idx and g.scheme_idx ==
                 args.scheme_idx and g.tid == args.tid]
     if len(proper_guides) == 0:
-        print('set_missed_args fail due to no proper guide')
-        exit(1)
+        return 'no proper guide'
     guide = proper_guides[0]
 
     if not args.time_range:
@@ -308,6 +307,7 @@ def set_missed_args(args, records):
         elif args.draw_range == 'all':
             args.address_range = [
                     [r.start_addr, r.end_addr] for r in guide.contig_regions]
+    return None
 
 def sort_regions_by_temperature_for_range(snapshot, record, start, end,
                                           weights):
@@ -429,7 +429,10 @@ def main(args):
             args.address_range[idx] = [
                     _damo_fmt_str.text_to_bytes(x) for x in address_range]
 
-    set_missed_args(args, records)
+    err = set_missed_args(args, records)
+    if err is not None:
+        print('arguments completion fail (%s)' % err)
+        exit(1)
     if args.sort_temperature:
         sort_regions_by_temperature(records, args)
 
