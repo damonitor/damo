@@ -278,7 +278,11 @@ def complete_time_range(user_input, guide):
     time_range = [_damo_fmt_str.text_to_ns(x) for x in user_input[:2]]
     if len(user_input) == 2:
         return time_range, None
-    base_time = _damo_fmt_str.text_to_ns(user_input[2])
+    base_input = user_input[2]
+    if base_input == 'guided':
+        base_time = guide[0]
+    else:
+        base_time = _damo_fmt_str.text_to_ns(user_input[2])
     return [base_time + x for x in time_range], None
 
 def complete_src_args(args, records):
@@ -478,7 +482,9 @@ def set_argparser(parser):
     parser.add_argument('--resol', metavar='<resolution>', type=int, nargs=2,
             help='resolutions for time and address axes')
     parser.add_argument('--time_range', metavar='<nanoseconds>', nargs='+',
-            help='"<start> <end> [base]" of time ranges for the heamap')
+            help='"<start> <end> [base]" of time ranges for the heamap.' \
+                    '[base] can be "guided" for the guided start time.'
+                    )
     parser.add_argument('--draw_range', choices=['hottest', 'all'],
                         default='hottest',
                         help='which ranges to draw heatmap for')
