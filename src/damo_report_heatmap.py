@@ -279,7 +279,7 @@ def complete_user_set_time_range(user_input):
     base_time = _damo_fmt_str.text_to_ns(user_input[2])
     return [base_time + x for x in time_range], None
 
-def set_missed_args(args, records):
+def complete_src_args(args, records):
     if (args.kdamond_idx is not None and args.context_idx is not None and
         args.scheme_idx is not None and args.tid is not None and
         args.time_range is not None and args.address_range is not None):
@@ -429,9 +429,9 @@ def main(args):
             args.address_range[idx] = [
                     _damo_fmt_str.text_to_bytes(x) for x in address_range]
 
-    err = set_missed_args(args, records)
+    err = complete_src_args(args, records)
     if err is not None:
-        print('arguments completion fail (%s)' % err)
+        print('source arguments completion fail (%s)' % err)
         exit(1)
     if args.sort_temperature:
         sort_regions_by_temperature(records, args)
