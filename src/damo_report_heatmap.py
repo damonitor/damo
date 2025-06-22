@@ -285,6 +285,24 @@ def complete_time_range(user_input, guide):
         base_time = _damo_fmt_str.text_to_ns(user_input[2])
     return [base_time + x for x in time_range], None
 
+def complete_address_range(user_input, draw_range, guide):
+    if user_input is None:
+        if draw_range == 'hottest':
+            hottest_contig_region = sorted(
+                    guide.contig_regions, key=lambda x: x.heat_per_byte(),
+                    reverse=True)[0]
+            return [[hottest_contig_region.start_addr,
+                     hottest_contig_region.end_addr]], None
+        elif draw_range == 'all':
+            return [[r.start_addr, r.end_addr]
+                    for r in guide.contig_regions], None
+    else:
+        address_ranges = []
+        for address_range in user_input:
+            address_ranges.append([
+                    _damo_fmt_str.text_to_bytes(x) for x in address_range])
+        return address_ranges, None
+
 def complete_src_args(args, records):
     if (args.kdamond_idx is not None and args.context_idx is not None and
         args.scheme_idx is not None and args.tid is not None and
@@ -313,6 +331,9 @@ def complete_src_args(args, records):
             args.time_range, [guide.start_time, guide.end_time])
     if err is not None:
             return 'time range completion fail (%s)' % err
+
+    args.address_range, err = complete_address_range(
+            args.address_range, args.draw_range, guide)
 
     if not args.address_range:
         if args.draw_range == 'hottest':
