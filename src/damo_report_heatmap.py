@@ -389,6 +389,15 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
         print('executing gnuplot failed (%s)' % e)
     os.remove(data_file)
 
+def complete_user_set_time_range(user_input):
+    if not len(user_input) in [2, 3]:
+        return None, 'wrong number of arguments'
+    time_range = [_damo_fmt_str.text_to_ns(x) for x in user_input[:2]]
+    if len(user_input) == 2:
+        return time_range, None
+    base_time = _damo_fmt_str.text_to_ns(user_input[2])
+    return [base_time + x for x in time_range], None
+
 def main(args):
     records, err = _damo_records.get_records(record_file=args.input)
     if err != None:
@@ -411,8 +420,10 @@ def main(args):
         return
 
     if args.time_range is not None:
-        args.time_range = [
-                _damo_fmt_str.text_to_ns(x) for x in args.time_range]
+        args.time_range, err = complete_user_set_time_range(args.time_range)
+        if err is not None:
+            print('wrong --time_range (%s)' % err)
+            exit(1)
     if args.address_range is not None:
         for idx, address_range in enumerate(args.address_range):
             args.address_range[idx] = [
@@ -464,8 +475,8 @@ def set_argparser(parser):
                         help='target id of record to print heatmap for')
     parser.add_argument('--resol', metavar='<resolution>', type=int, nargs=2,
             help='resolutions for time and address axes')
-    parser.add_argument('--time_range', metavar='<time>', nargs=2,
-            help='start and end time of the output in nanoseconds')
+    parser.add_argument('--time_range', metavar='<nanoseconds>', nargs='+',
+            help='"<start> <end> [base]" of time ranges for the heamap')
     parser.add_argument('--draw_range', choices=['hottest', 'all'],
                         default='hottest',
                         help='which ranges to draw heatmap for')
