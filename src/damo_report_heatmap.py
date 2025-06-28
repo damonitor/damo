@@ -481,6 +481,32 @@ def mk_show_heatmap(records, args):
                     tmp_path, args.output, args, args.address_range[idx], idx,
                     highest_heat, lowest_heat)
 
+def do_interactive_zoom(args):
+    if not args.interactive_zoom:
+        return True
+
+    answer = input('Enter (0. Quit, 1. Zoom): ')
+    answer = int(answer)
+    if answer == 0:
+        return True
+    if answer == 1:
+        answer = input('Enter percentage: ')
+        zoom_ratio = float(answer)
+        for idx, start_end in enumerate(args.address_range):
+            start, end = start_end
+            old_size = end - start
+            mid = int(start + old_size / 2)
+            new_size = old_size * zoom_ratio / 100
+            args.address_range[idx] = [
+                    int(mid - new_size / 2), int(mid + new_size / 2)]
+        time_start, time_end = args.time_range
+        old_size = time_end - time_start
+        mid = int(time_start + old_size / 2)
+        new_size = old_size * zoom_ratio / 100
+        args.time_range = [
+                int(mid - new_size / 2), int(mid + new_size / 2)]
+    return False
+
 def main(args):
     records, err = _damo_records.get_records(record_file=args.input)
     if err != None:
@@ -509,7 +535,10 @@ def main(args):
     if args.sort_temperature:
         sort_regions_by_temperature(records, args)
 
-    mk_show_heatmap(records, args)
+    interactive_zoom_done = False
+    while not interactive_zoom_done:
+        mk_show_heatmap(records, args)
+        interactive_zoom_done = do_interactive_zoom(args)
 
 def set_argparser(parser):
     parser.add_argument('--output', metavar='<output>', default='stdout',
@@ -563,4 +592,6 @@ def set_argparser(parser):
     parser.add_argument('--temperature_weights', nargs=2, type=float,
                         metavar=('<frequency>', '<age>'), default=[1.0, 1.0],
                         help='temperature calculation weights')
+    parser.add_argument('--interactive_zoom', action='store_true',
+                        help='interactively zoom and scroll the maps')
     parser.description = 'Show when which address ranges were how frequently accessed'
