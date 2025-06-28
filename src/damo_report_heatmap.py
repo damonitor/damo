@@ -485,7 +485,7 @@ def do_interactive_zoom(args):
     if not args.interactive_zoom:
         return True
 
-    answer = input('Enter (0. Quit, 1. Zoom): ')
+    answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll): ')
     answer = int(answer)
     if answer == 0:
         return True
@@ -505,6 +505,22 @@ def do_interactive_zoom(args):
         new_size = old_size * zoom_ratio / 100
         args.time_range = [
                 int(mid - new_size / 2), int(mid + new_size / 2)]
+    elif answer == 2:
+        answer = input('Enter (1. Time, 2. Space): ')
+        scroll_time = int(answer) == 1
+        answer = input('Enter percentage: ')
+        scroll_ratio = float(answer) / 100
+        if scroll_time is True:
+            time_start, time_end = args.time_range
+            size = time_end - time_start
+            diff = int(size * scroll_ratio)
+            args.time_range = [x + diff for x in args.time_range]
+        else:
+            for idx, start_end in enumerate(args.address_range):
+                start, end = start_end
+                size = end - start
+                diff = int(size * scroll_ratio)
+                args.address_range[idx] = [start + diff, end + diff]
     return False
 
 def main(args):
