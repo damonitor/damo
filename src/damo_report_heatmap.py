@@ -172,7 +172,7 @@ class HeatMap:
         # add pixels
         highest_heat, lowest_heat = self.highest_lowest_heats()
         if highest_heat is None and lowest_heat is None:
-            return
+            return lines
         heat_unit = float(highest_heat + 1 - lowest_heat) / 9
         pixels = self.pixels
         for snapshot in pixels:
