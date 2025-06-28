@@ -3,6 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.8.7
 - damo report heatmap: Support interactive zoom and scroll (--interactive_edit)
+- Support DAMOS_QUOTA_INACTIVE_MEM_BP
 
 v2.8.6
 - damo report heatmap: Support base value for --address_range and --time_range
