@@ -457,6 +457,30 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
         print('executing gnuplot failed (%s)' % e)
     os.remove(data_file)
 
+def mk_show_heatmap(records, args):
+    heats_list = []
+    for idx in range(len(args.address_range)):
+        heatmap = mk_heatmap(args, idx, records)
+
+        if args.output == 'stdout':
+            print(heatmap.fmt_ascii_str(
+                args.stdout_colorset, not args.stdout_skip_colorset_example))
+            continue
+        else:
+            gnuplot_data_str = heatmap.fmt_gnuplot_str(
+                    args.abs_time, args.abs_addr)
+            if args.output == 'raw':
+                print(gnuplot_data_str)
+                continue
+            # use gnuplot-based image plot
+            highest_heat, lowest_heat = heatmap.highest_lowest_heats()
+            tmp_path = tempfile.mkstemp()[1]
+            with open(tmp_path, 'w') as f:
+                f.write(gnuplot_data_str)
+            plot_heatmap(
+                    tmp_path, args.output, args, args.address_range[idx], idx,
+                    highest_heat, lowest_heat)
+
 def main(args):
     records, err = _damo_records.get_records(record_file=args.input)
     if err != None:
@@ -485,28 +509,7 @@ def main(args):
     if args.sort_temperature:
         sort_regions_by_temperature(records, args)
 
-    heats_list = []
-    for idx in range(len(args.address_range)):
-        heatmap = mk_heatmap(args, idx, records)
-
-        if args.output == 'stdout':
-            print(heatmap.fmt_ascii_str(
-                args.stdout_colorset, not args.stdout_skip_colorset_example))
-            continue
-        else:
-            gnuplot_data_str = heatmap.fmt_gnuplot_str(
-                    args.abs_time, args.abs_addr)
-            if args.output == 'raw':
-                print(gnuplot_data_str)
-                continue
-            # use gnuplot-based image plot
-            highest_heat, lowest_heat = heatmap.highest_lowest_heats()
-            tmp_path = tempfile.mkstemp()[1]
-            with open(tmp_path, 'w') as f:
-                f.write(gnuplot_data_str)
-            plot_heatmap(
-                    tmp_path, args.output, args, args.address_range[idx], idx,
-                    highest_heat, lowest_heat)
+    mk_show_heatmap(records, args)
 
 def set_argparser(parser):
     parser.add_argument('--output', metavar='<output>', default='stdout',
