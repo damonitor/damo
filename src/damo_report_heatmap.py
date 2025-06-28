@@ -488,6 +488,12 @@ def scale_range(start_end, ratio):
     mid = int(start + size / 2)
     return [mid - new_size / 2, mid + new_size / 2]
 
+def add_diff_range(start_end, ratio):
+    start, end = start_end
+    size = end - start
+    diff = size * ratio
+    return [start + diff, end + diff]
+
 def do_interactive_zoom(args):
     if not args.interactive_zoom:
         return True
@@ -508,16 +514,11 @@ def do_interactive_zoom(args):
         answer = input('Enter percentage: ')
         scroll_ratio = float(answer) / 100
         if scroll_time is True:
-            time_start, time_end = args.time_range
-            size = time_end - time_start
-            diff = int(size * scroll_ratio)
-            args.time_range = [x + diff for x in args.time_range]
+            args.time_range = add_diff_range(args.time_range, scroll_ratio)
         else:
             for idx, start_end in enumerate(args.address_range):
-                start, end = start_end
-                size = end - start
-                diff = int(size * scroll_ratio)
-                args.address_range[idx] = [start + diff, end + diff]
+                args.address_range[idx] = add_diff_range(
+                        args.address_range[idx], scroll_ratio)
     return False
 
 def main(args):
