@@ -481,6 +481,13 @@ def mk_show_heatmap(records, args):
                     tmp_path, args.output, args, args.address_range[idx], idx,
                     highest_heat, lowest_heat)
 
+def scale_range(start_end, ratio):
+    start, end = start_end
+    size = end - start
+    new_size = size * ratio
+    mid = int(start + size / 2)
+    return [mid - new_size / 2, mid + new_size / 2]
+
 def do_interactive_zoom(args):
     if not args.interactive_zoom:
         return True
@@ -491,20 +498,10 @@ def do_interactive_zoom(args):
         return True
     if answer == 1:
         answer = input('Enter percentage: ')
-        zoom_ratio = float(answer)
+        zoom_ratio = float(answer) / 100
         for idx, start_end in enumerate(args.address_range):
-            start, end = start_end
-            old_size = end - start
-            mid = int(start + old_size / 2)
-            new_size = old_size * zoom_ratio / 100
-            args.address_range[idx] = [
-                    int(mid - new_size / 2), int(mid + new_size / 2)]
-        time_start, time_end = args.time_range
-        old_size = time_end - time_start
-        mid = int(time_start + old_size / 2)
-        new_size = old_size * zoom_ratio / 100
-        args.time_range = [
-                int(mid - new_size / 2), int(mid + new_size / 2)]
+            args.address_range[idx] = scale_range(start_end, zoom_ratio)
+        args.time_range = scale_range(args.time_range, zoom_ratio)
     elif answer == 2:
         answer = input('Enter (1. Time, 2. Space): ')
         scroll_time = int(answer) == 1
