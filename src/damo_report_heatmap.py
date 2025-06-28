@@ -498,21 +498,21 @@ def do_interactive_zoom(args):
     if not args.interactive_zoom:
         return True
 
-    answer = input(
-            'Enter (0. Quit, 1. Zoom time, 2. Zoom space, 3. Scroll time, ' \
-                    '4. Scroll space): ')
-    answer = int(answer)
-    if answer == 0:
+    answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll): ')
+    action = int(answer)
+    if action == 0:
         return True
+    answer = input('Enter (1. Time, 2. Space): ')
+    target = int(answer)
     ratio = float(input('Enter percentage: ')) / 100
-    if answer == 1:
+    if action == 1 and target == 1:
         args.time_range = scale_range(args.time_range, ratio)
-    elif answer == 2:
+    elif action == 1 and target == 2:
         for idx, start_end in enumerate(args.address_range):
             args.address_range[idx] = scale_range(start_end, ratio)
-    elif answer == 3:
+    elif action == 2 and target == 1:
         args.time_range = add_diff_range(args.time_range, ratio)
-    elif answer == 4:
+    elif action == 2 and target == 2:
         for idx, start_end in enumerate(args.address_range):
             args.address_range[idx] = add_diff_range(
                     args.address_range[idx], ratio)
