@@ -494,8 +494,8 @@ def add_diff_range(start_end, ratio):
     diff = size * ratio
     return [start + diff, end + diff]
 
-def do_interactive_zoom(args):
-    if not args.interactive_zoom:
+def do_interactive_edit(args):
+    if not args.interactive_edit:
         return True
 
     answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll): ')
@@ -550,7 +550,7 @@ def main(args):
     interactive_zoom_done = False
     while not interactive_zoom_done:
         mk_show_heatmap(records, args)
-        interactive_zoom_done = do_interactive_zoom(args)
+        interactive_zoom_done = do_interactive_edit(args)
 
 def set_argparser(parser):
     parser.add_argument('--output', metavar='<output>', default='stdout',
@@ -604,6 +604,6 @@ def set_argparser(parser):
     parser.add_argument('--temperature_weights', nargs=2, type=float,
                         metavar=('<frequency>', '<age>'), default=[1.0, 1.0],
                         help='temperature calculation weights')
-    parser.add_argument('--interactive_zoom', action='store_true',
+    parser.add_argument('--interactive_edit', action='store_true',
                         help='interactively zoom and scroll the maps')
     parser.description = 'Show when which address ranges were how frequently accessed'
