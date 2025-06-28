@@ -502,17 +502,18 @@ def do_interactive_zoom(args):
     action = int(answer)
     if action == 0:
         return True
-    answer = input('Enter (1. Time, 2. Space): ')
+    answer = input('Enter (1. Time, 2. Space, 3. Time and Space): ')
     target = int(answer)
     ratio = float(input('Enter percentage: ')) / 100
-    if action == 1 and target == 1:
+    if action == 1 and target  in [1, 3]:
         args.time_range = scale_range(args.time_range, ratio)
-    elif action == 1 and target == 2:
+    if action == 1 and target in [2, 3]:
+        print('adjust address')
         for idx, start_end in enumerate(args.address_range):
             args.address_range[idx] = scale_range(start_end, ratio)
-    elif action == 2 and target == 1:
+    if action == 2 and target in [1, 3]:
         args.time_range = add_diff_range(args.time_range, ratio)
-    elif action == 2 and target == 2:
+    if action == 2 and target in [2, 3]:
         for idx, start_end in enumerate(args.address_range):
             args.address_range[idx] = add_diff_range(
                     args.address_range[idx], ratio)
