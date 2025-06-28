@@ -498,27 +498,24 @@ def do_interactive_zoom(args):
     if not args.interactive_zoom:
         return True
 
-    answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll): ')
+    answer = input(
+            'Enter (0. Quit, 1. Zoom time, 2. Zoom space, 3. Scroll time, ' \
+                    '4. Scroll space): ')
     answer = int(answer)
     if answer == 0:
         return True
+    ratio = float(input('Enter percentage: ')) / 100
     if answer == 1:
-        answer = input('Enter percentage: ')
-        zoom_ratio = float(answer) / 100
-        for idx, start_end in enumerate(args.address_range):
-            args.address_range[idx] = scale_range(start_end, zoom_ratio)
-        args.time_range = scale_range(args.time_range, zoom_ratio)
+        args.time_range = scale_range(args.time_range, ratio)
     elif answer == 2:
-        answer = input('Enter (1. Time, 2. Space): ')
-        scroll_time = int(answer) == 1
-        answer = input('Enter percentage: ')
-        scroll_ratio = float(answer) / 100
-        if scroll_time is True:
-            args.time_range = add_diff_range(args.time_range, scroll_ratio)
-        else:
-            for idx, start_end in enumerate(args.address_range):
-                args.address_range[idx] = add_diff_range(
-                        args.address_range[idx], scroll_ratio)
+        for idx, start_end in enumerate(args.address_range):
+            args.address_range[idx] = scale_range(start_end, ratio)
+    elif answer == 3:
+        args.time_range = add_diff_range(args.time_range, ratio)
+    elif answer == 4:
+        for idx, start_end in enumerate(args.address_range):
+            args.address_range[idx] = add_diff_range(
+                    args.address_range[idx], ratio)
     return False
 
 def main(args):
