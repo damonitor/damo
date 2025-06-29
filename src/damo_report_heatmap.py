@@ -525,18 +525,42 @@ def handle_shortcuts(answer, args):
         edit_time_address_ranges(2, 2, -0.1, args)
     return True
 
+def print_interactive_edit_help():
+    help_msg = [
+            'Zoom or scroll using the prompt menu.',
+            '',
+            'Below inputs are supported.',
+            '0: Quit this mode.',
+            '1: Continue prompts for zooming in/out the map.',
+            '2: Continue prompts for scorrling the map.',
+            '3: Print this help message.',
+            'h: Scroll the map left, 10%.',
+            'j: Scroll the map down, 10%.',
+            'k: Scroll the map up, 10%.',
+            'l: Scroll the map right, 10%.',
+            '+: Zoom the map in, 10%.',
+            '-: Zomm the map out, 10%.',
+            '',
+            ]
+    print('\n'.join(help_msg))
+
 def do_interactive_edit(args):
     if not args.interactive_edit:
         return True
 
-    answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll): ')
-    handled = handle_shortcuts(answer, args)
-    if handled:
-        return False
+    while True:
+        answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll, 3. Help): ')
+        handled = handle_shortcuts(answer, args)
+        if handled:
+            return False
 
-    action = int(answer)
-    if action == 0:
-        return True
+        action = int(answer)
+        if action == 0:
+            return True
+        if action == 3:
+            print_interactive_edit_help()
+            continue
+        break
     answer = input('Enter (1. Time, 2. Space, 3. Time and Space): ')
     target = int(answer)
     ratio = float(input('Enter percentage: ')) / 100
