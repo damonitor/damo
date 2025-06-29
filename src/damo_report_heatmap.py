@@ -517,17 +517,17 @@ def handle_shortcuts(answer, args):
     if not answer in ['+', '-', 'j', 'h', 'k', 'l']:
         return False
     if answer == '+':
-        edit_time_address_ranges(1, 3, 0.9, args)
+        edit_time_address_ranges(edit_zoom, edit_time_space, 0.9, args)
     elif answer == '-':
-        edit_time_address_ranges(1, 3, 1.1, args)
+        edit_time_address_ranges(edit_zoom, edit_time_space, 1.1, args)
     elif answer == 'h':
-        edit_time_address_ranges(2, 2, 0.1, args)
+        edit_time_address_ranges(edit_scroll, edit_space, 0.1, args)
     elif answer == 'j':
-        edit_time_address_ranges(2, 1, -0.1, args)
+        edit_time_address_ranges(edit_scroll, edit_time, -0.1, args)
     elif answer == 'k':
-        edit_time_address_ranges(2, 1, 0.1, args)
+        edit_time_address_ranges(edit_scroll, edit_time, 0.1, args)
     elif answer == 'l':
-        edit_time_address_ranges(2, 2, -0.1, args)
+        edit_time_address_ranges(edit_scroll, edit_space, -0.1, args)
     return True
 
 def print_interactive_edit_help():
@@ -565,12 +565,17 @@ def do_interactive_edit(args):
             print_interactive_edit_help()
             continue
         if answer in ['1', 'zoom']:
-            action = 1
+            action = edit_zoom
         if answer in ['2', 'scroll']:
-            action = 2
+            action = edit_scroll
         break
     answer = input('Enter (1. Time, 2. Space, 3. Time and Space): ')
-    target = int(answer)
+    if anaswer == '1':
+        target = edit_time
+    if answer == '2':
+        target = edit_space
+    if answer == '3':
+        target = edit_time_space
     ratio = float(input('Enter percentage: ')) / 100
     edit_time_address_ranges(action, target, ratio, args)
     return False
