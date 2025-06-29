@@ -1056,6 +1056,8 @@ heatmap.
 
     $ sudo ./damo report heatmap --output heatmap.png
 
+#### Heatmap Scoping
+
 If the target address space is a virtual memory address space and the user
 plots the entire address space, the huge unmapped regions will make the picture
 looks only black.  Therefore the user should do proper zoom in / zoom out using
@@ -1083,6 +1085,8 @@ will have the user-specified file name.  For those of second and third regions,
 `.1` and `.2` will be added to the file name, before the file format extension
 part (e.g., `heatmap.1.png`).  If `hottest` is passed, `damo report heatmap`
 will draw the heatmap for hottest region among the three regions.
+
+#### Raw Heatmap Data for Custom Plots
 
 In some cases, users may want to have only the raw data points of the heatmap
 so that they can do their own heatmap visualization.  For such use case, a
