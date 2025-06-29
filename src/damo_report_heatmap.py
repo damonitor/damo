@@ -508,11 +508,32 @@ def edit_time_address_ranges(action, target, ratio, args):
             args.address_range[idx] = add_diff_range(
                     args.address_range[idx], ratio)
 
+def handle_shortcuts(answer, args):
+    if not answer in ['+', '-', 'j', 'h', 'k', 'l']:
+        return False
+    if answer == '+':
+        edit_time_address_ranges(1, 3, 0.9, args)
+    elif answer == '-':
+        edit_time_address_ranges(1, 3, 1.1, args)
+    elif answer == 'h':
+        edit_time_address_ranges(2, 2, 0.1, args)
+    elif answer == 'j':
+        edit_time_address_ranges(2, 1, -0.1, args)
+    elif answer == 'k':
+        edit_time_address_ranges(2, 1, 0.1, args)
+    elif answer == 'l':
+        edit_time_address_ranges(2, 2, -0.1, args)
+    return True
+
 def do_interactive_edit(args):
     if not args.interactive_edit:
         return True
 
     answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll): ')
+    handled = handle_shortcuts(answer, args)
+    if handled:
+        return False
+
     action = int(answer)
     if action == 0:
         return True
