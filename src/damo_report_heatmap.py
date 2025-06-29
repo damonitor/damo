@@ -566,7 +566,7 @@ def do_interactive_edit(args):
         return True
 
     while True:
-        answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll, 3. Help): ')
+        answer = input('Enter (zoom, scroll, quit, help): ')
         handled = handle_shortcuts(answer, args)
         if handled:
             return False
