@@ -1058,11 +1058,14 @@ heatmap.
 
 #### Heatmap Scoping
 
-If the target address space is a virtual memory address space and the user
-plots the entire address space, the huge unmapped regions will make the picture
-looks only black.  Therefore the user should do proper zoom in / zoom out using
-the resolution and axis boundary-setting arguments.  To make this effort
-minimal, `--guide_human` option can be used as below:
+If the recorded time and space are huge, users would want to do proper zoom
+in/out.  Particularly if the target address space is a virtual memory address
+space and the user plots the entire address space, the huge unmapped regions
+will make the picture looks only black.  For this, command line options for
+setting the resolution (`--resol`) and x/y axis boundaries (`--time_range` and
+`--address_range`) are provided.
+
+To make this effort minimal, `--guide_human` option can be used as below:
 
     # ./damo report heatmap --guide_human
     target_id: 18446623438842320000
@@ -1076,6 +1079,9 @@ and the union of monitored time duration (start and end time in nanoseconds) of
 each target task.  Therefore, it would be wise to plot the data points in each
 union.  If no axis boundary option is given, it will automatically find the
 biggest union in ``--guide_human`` output and set the boundary in it.
+
+Users can also interactively find the right scope using `--interactive_edit`
+option.
 
 For a case that the user still unsure which range to draw heatmap for,
 `--draw_range` option can be used.  The option receives either `all` or
