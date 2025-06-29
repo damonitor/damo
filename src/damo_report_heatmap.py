@@ -519,9 +519,15 @@ def handle_shortcuts(answer, args):
     if args.output == 'stdout':
         xaxis = edit_space
         yaxis = edit_time
+        # on stdout, y-axis increases towards bottom
+        down = -0.1
+        up = 0.1
     else:
         xaxis = edit_time
         yaxis = edit_space
+        # on none-stdout, y-axis increases towards top
+        down = 0.1
+        up = -0.1
     if answer == '+':
         edit_time_address_ranges(edit_zoom, edit_time_space, 0.9, args)
     elif answer == '-':
@@ -529,9 +535,9 @@ def handle_shortcuts(answer, args):
     elif answer == 'h':
         edit_time_address_ranges(edit_scroll, xaxis, 0.1, args)
     elif answer == 'j':
-        edit_time_address_ranges(edit_scroll, yaxis, -0.1, args)
+        edit_time_address_ranges(edit_scroll, yaxis, down, args)
     elif answer == 'k':
-        edit_time_address_ranges(edit_scroll, yaxis, 0.1, args)
+        edit_time_address_ranges(edit_scroll, yaxis, up, args)
     elif answer == 'l':
         edit_time_address_ranges(edit_scroll, xaxis, -0.1, args)
     return True
