@@ -62,11 +62,15 @@ class GuideInfo:
         return ret
 
     def to_str(self, raw):
-        lines = [
-                'kdamond_idx: %s' % self.kdamond_idx,
-                'context_idx: %s' % self.context_idx,
-                'scheme_idx: %s' % self.scheme_idx,
-                'target_id: %s' % self.tid]
+        lines = []
+        if self.kdamond_idx is not None:
+            lines.append('kdamond_idx: %s' % self.kdamond_idx)
+        if self.context_idx is not None:
+            line.sappend('context_idx: %s' % self.context_idx)
+        if self.scheme_idx is not None:
+            lines.append('scheme_idx: %s' % self.scheme_idx)
+        if self.tid is not None:
+            lines.append('target_id: %s' % self.tid)
         lines.append('time: [%s, %s) (%s)' % (
             _damo_fmt_str.format_time_ns(self.start_time, raw),
             _damo_fmt_str.format_time_ns(self.end_time, raw),
