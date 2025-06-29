@@ -1060,20 +1060,20 @@ If the target address space is a virtual memory address space and the user
 plots the entire address space, the huge unmapped regions will make the picture
 looks only black.  Therefore the user should do proper zoom in / zoom out using
 the resolution and axis boundary-setting arguments.  To make this effort
-minimal, `--guide` option can be used as below:
+minimal, `--guide_human` option can be used as below:
 
-    # ./damo report heatmap --guide
-    target_id:18446623438842320000
-    time: 539914032967-596606618651 (56.693 s)
-    region   0: 00000094827419009024-00000094827452162048 (31.617 MiB)
-    region   1: 00000140271510761472-00000140271717171200 (196.848 MiB)
-    region   2: 00000140734916239360-00000140734916927488 (672.000 KiB)
+    # ./damo report heatmap --guide_human
+    target_id: 18446623438842320000
+    time: [8 m 59.809 s, 9 m 56.607 s) (56.797 s)
+    region   0: [86.245 TiB, 86.245 TiB) (31.617 MiB)
+    region   1: [127.576 TiB, 127.576 TiB) (196.848 MiB)
+    region   2: [127.998 TiB, 127.998 TiB) (672.000 KiB)
 
 The output shows unions of monitored regions (start and end addresses in byte)
 and the union of monitored time duration (start and end time in nanoseconds) of
 each target task.  Therefore, it would be wise to plot the data points in each
 union.  If no axis boundary option is given, it will automatically find the
-biggest union in ``--guide`` output and set the boundary in it.
+biggest union in ``--guide_human`` output and set the boundary in it.
 
 For a case that the user still unsure which range to draw heatmap for,
 `--draw_range` option can be used.  The option receives either `all` or
