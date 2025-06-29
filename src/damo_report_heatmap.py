@@ -530,10 +530,10 @@ def print_interactive_edit_help():
             'Zoom or scroll using the prompt menu.',
             '',
             'Below inputs are supported.',
-            '0: Quit this mode.',
-            '1: Continue prompts for zooming in/out the map.',
-            '2: Continue prompts for scorrling the map.',
-            '3: Print this help message.',
+            '0,q,quit: Quit this mode.',
+            '1,zoom: Continue prompts for zooming in/out the map.',
+            '2,scroll: Continue prompts for scorrling the map.',
+            '3,help: Print this help message.',
             'h: Scroll the map left, 10%.',
             'j: Scroll the map down, 10%.',
             'k: Scroll the map up, 10%.',
@@ -554,12 +554,15 @@ def do_interactive_edit(args):
         if handled:
             return False
 
-        action = int(answer)
-        if action == 0:
+        if answer in ['0', 'q', 'quit']:
             return True
-        if action == 3:
+        if answer in ['3', 'help']:
             print_interactive_edit_help()
             continue
+        if answer in ['1', 'zoom']:
+            action = 1
+        if answer in ['2', 'scroll']:
+            action = 2
         break
     answer = input('Enter (1. Time, 2. Space, 3. Time and Space): ')
     target = int(answer)
