@@ -504,7 +504,6 @@ def edit_time_address_ranges(action, target, ratio, args):
     if action == edit_zoom and target in [edit_time, edit_time_space]:
         args.time_range = scale_range(args.time_range, ratio)
     if action == edit_zoom and target in [edit_space, edit_time_space]:
-        print('adjust address')
         for idx, start_end in enumerate(args.address_range):
             args.address_range[idx] = scale_range(start_end, ratio)
     if action == edit_scroll and target in [edit_time, edit_time_space]:
