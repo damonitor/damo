@@ -516,18 +516,24 @@ def edit_time_address_ranges(action, target, ratio, args):
 def handle_shortcuts(answer, args):
     if not answer in ['+', '-', 'j', 'h', 'k', 'l']:
         return False
+    if args.output == 'stdout':
+        xaxis = edit_space
+        yaxis = edit_time
+    else:
+        xaxis = edit_time
+        yaxis = edit_space
     if answer == '+':
         edit_time_address_ranges(edit_zoom, edit_time_space, 0.9, args)
     elif answer == '-':
         edit_time_address_ranges(edit_zoom, edit_time_space, 1.1, args)
     elif answer == 'h':
-        edit_time_address_ranges(edit_scroll, edit_space, 0.1, args)
+        edit_time_address_ranges(edit_scroll, xaxis, 0.1, args)
     elif answer == 'j':
-        edit_time_address_ranges(edit_scroll, edit_time, -0.1, args)
+        edit_time_address_ranges(edit_scroll, yaxis, -0.1, args)
     elif answer == 'k':
-        edit_time_address_ranges(edit_scroll, edit_time, 0.1, args)
+        edit_time_address_ranges(edit_scroll, yaxis, 0.1, args)
     elif answer == 'l':
-        edit_time_address_ranges(edit_scroll, edit_space, -0.1, args)
+        edit_time_address_ranges(edit_scroll, xaxis, -0.1, args)
     return True
 
 def print_interactive_edit_help():
