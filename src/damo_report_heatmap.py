@@ -494,17 +494,7 @@ def add_diff_range(start_end, ratio):
     diff = size * ratio
     return [start + diff, end + diff]
 
-def do_interactive_edit(args):
-    if not args.interactive_edit:
-        return True
-
-    answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll): ')
-    action = int(answer)
-    if action == 0:
-        return True
-    answer = input('Enter (1. Time, 2. Space, 3. Time and Space): ')
-    target = int(answer)
-    ratio = float(input('Enter percentage: ')) / 100
+def edit_time_address_ranges(action, target, ratio, args):
     if action == 1 and target  in [1, 3]:
         args.time_range = scale_range(args.time_range, ratio)
     if action == 1 and target in [2, 3]:
@@ -517,6 +507,19 @@ def do_interactive_edit(args):
         for idx, start_end in enumerate(args.address_range):
             args.address_range[idx] = add_diff_range(
                     args.address_range[idx], ratio)
+
+def do_interactive_edit(args):
+    if not args.interactive_edit:
+        return True
+
+    answer = input('Enter (0. Quit, 1. Zoom, 2. Scroll): ')
+    action = int(answer)
+    if action == 0:
+        return True
+    answer = input('Enter (1. Time, 2. Space, 3. Time and Space): ')
+    target = int(answer)
+    ratio = float(input('Enter percentage: ')) / 100
+    edit_time_address_ranges(action, target, ratio, args)
     return False
 
 def main(args):
