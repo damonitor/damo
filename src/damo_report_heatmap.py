@@ -573,13 +573,16 @@ def do_interactive_edit(args):
 
         if answer in ['0', 'q', 'quit']:
             return True
-        if answer in ['3', 'help']:
+        elif answer in ['3', 'help']:
             print_interactive_edit_help()
             continue
-        if answer in ['1', 'zoom']:
+        elif answer in ['1', 'zoom']:
             action = edit_zoom
-        if answer in ['2', 'scroll']:
+        elif answer in ['2', 'scroll']:
             action = edit_scroll
+        else:
+            print('Wrong input.')
+            continue
         break
     answer = input('Enter (1. Time, 2. Space, 3. Time and Space): ')
     if anaswer == '1':
