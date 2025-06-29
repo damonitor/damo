@@ -1056,30 +1056,6 @@ heatmap.
 
     $ sudo ./damo report heatmap --output heatmap.png
 
-In some cases, users may want to have only the raw data points of the heatmap
-so that they can do their own heatmap visualization.  For such use case, a
-special keyword, `raw` can be given to `--output` option, like below.
-
-    # damo report heatmap --output raw --resol 3 3
-    0               0               0.0
-    0               7609002         0.0
-    0               15218004        0.0
-    66112620851     0               0.0
-    66112620851     7609002         0.0
-    66112620851     15218004        0.0
-    132225241702    0               0.0
-    132225241702    7609002         0.0
-    132225241702    15218004        0.0
-
-This command shows a recorded access pattern in a heatmap of 3x3 resolution.
-Therefore it shows 9 data points in total.  Each line shows each of the data
-points.  The three numbers in each line represent time in nanoseconds, address
-in bytes and the observed access frequency.
-
-Users can convert this text output into a heatmap image (represents z-axis
-values with colors) or other 3D representations using various tools such as
-`gnuplot`.
-
 If the target address space is a virtual memory address space and the user
 plots the entire address space, the huge unmapped regions will make the picture
 looks only black.  Therefore the user should do proper zoom in / zoom out using
@@ -1107,6 +1083,30 @@ will have the user-specified file name.  For those of second and third regions,
 `.1` and `.2` will be added to the file name, before the file format extension
 part (e.g., `heatmap.1.png`).  If `hottest` is passed, `damo report heatmap`
 will draw the heatmap for hottest region among the three regions.
+
+In some cases, users may want to have only the raw data points of the heatmap
+so that they can do their own heatmap visualization.  For such use case, a
+special keyword, `raw` can be given to `--output` option, like below.
+
+    # damo report heatmap --output raw --resol 3 3
+    0               0               0.0
+    0               7609002         0.0
+    0               15218004        0.0
+    66112620851     0               0.0
+    66112620851     7609002         0.0
+    66112620851     15218004        0.0
+    132225241702    0               0.0
+    132225241702    7609002         0.0
+    132225241702    15218004        0.0
+
+This command shows a recorded access pattern in a heatmap of 3x3 resolution.
+Therefore it shows 9 data points in total.  Each line shows each of the data
+points.  The three numbers in each line represent time in nanoseconds, address
+in bytes and the observed access frequency.
+
+Users can convert this text output into a heatmap image (represents z-axis
+values with colors) or other 3D representations using various tools such as
+`gnuplot`.
 
 ### `damo report wss`
 
