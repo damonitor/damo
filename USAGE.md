@@ -1021,15 +1021,11 @@ address, size, and the number of observed accesses of each region.
 
 ### `damo report heatmap`
 
-Even single DAMON monitoring result snapshot is useful since it contains the
-`age` information.  However, retrieving every snapshot and visualizing the
-multiple snapshots can provide good insights.
-
-`damo report heatmap` plots `damo record`-generated multi-snapshots monitoring
-results in 3-dimensional form, which represents the time
-in x-axis, address of regions in y-axis, and the access frequency in z-axis.
-Users can optionally set the resolution of the map (`--resol`) and start/end
-point of each axis (`--time_range` and `--address_range`).  For example:
+`damo report heatmap` plots `damo record`-generated monitoring results in
+3-dimensional form, which represents the time in x-axis, address of regions in
+y-axis, and the access frequency in z-axis.  Users can optionally set the
+resolution of the map (`--resol`) and start/end point of each axis
+(`--time_range` and `--address_range`).  For example:
 
     $ sudo ./damo report heatmap --resol 15 80
     11111111111111111111111111111111111111111111111111111111111111111111112211110000
