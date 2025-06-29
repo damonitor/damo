@@ -494,16 +494,22 @@ def add_diff_range(start_end, ratio):
     diff = size * ratio
     return [start + diff, end + diff]
 
+edit_zoom = 1
+edit_scroll = 2
+edit_time = 1
+edit_space = 2
+edit_time_space = 3
+
 def edit_time_address_ranges(action, target, ratio, args):
-    if action == 1 and target  in [1, 3]:
+    if action == edit_zoom and target in [edit_time, edit_time_space]:
         args.time_range = scale_range(args.time_range, ratio)
-    if action == 1 and target in [2, 3]:
+    if action == edit_zoom and target in [edit_space, edit_time_space]:
         print('adjust address')
         for idx, start_end in enumerate(args.address_range):
             args.address_range[idx] = scale_range(start_end, ratio)
-    if action == 2 and target in [1, 3]:
+    if action == edit_scroll and target in [edit_time, edit_time_space]:
         args.time_range = add_diff_range(args.time_range, ratio)
-    if action == 2 and target in [2, 3]:
+    if action == edit_scroll and target in [edit_space, edit_time_space]:
         for idx, start_end in enumerate(args.address_range):
             args.address_range[idx] = add_diff_range(
                     args.address_range[idx], ratio)
