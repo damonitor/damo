@@ -17,6 +17,7 @@ test_report() {
 	if ! diff -q "$expected" "$result"
 	then
 		echo "FAIL report-$test_name"
+		echo "# for detail, vimdiff $expected $result"
 		exit 1
 	fi
 	echo "PASS report-$test_name"
