@@ -40,7 +40,6 @@
 - Support multiple targets snapshot (get_snapshot_records())
 - support 2d heatmap on report access
 - Support easier heatmap zoom in/out
-- Support damon:damon_monitor_intervals_tune
 - Support drgn based 'damo diagnose'
 
 - Deprecate old features
