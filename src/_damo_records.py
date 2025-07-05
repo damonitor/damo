@@ -361,11 +361,32 @@ def parse_perf_script_line(line):
     else:
         return None, None, None, None
 
+def parse_perf_script_tune_line(line):
+    '''
+    The line is in format of, e.g.,
+    35359.794 kdamond.0/57030 damon:damon_monitor_intervals_tune(sample_us: 100000)
+
+    Return if the line is for damon_monitor_intervals_tune, and if so, the
+    sample_us value.
+     '''
+
+    fields = line.split()
+    if len(fields) != 4:
+        return False, None
+    tracepoint_name = fields[2].split('(')[0]
+    if tracepoint_name != perf_event_damon_monitor_intervals_tune:
+        return False, None
+    return True, int(fields[3].split(')')[0])
+
 def parse_perf_script(script_output, monitoring_intervals):
     records = []
     snapshot = None
+    snapshot_sample_interval_us = None
 
     for line in script_output.split('\n'):
+        parsed, snapshot_sample_interval_us = parse_perf_script_tune_line(line)
+        if parsed is True:
+            continue
         region, end_time, target_id, nr_regions = parse_perf_script_line(line)
         if region is None:
             continue
@@ -379,7 +400,10 @@ def parse_perf_script(script_output, monitoring_intervals):
                 return None, 'trace is not time-sorted'
 
         if snapshot is None:
-            snapshot = DamonSnapshot(start_time, end_time, [], None)
+            snapshot = DamonSnapshot(
+                    start_time, end_time, regions=[], total_bytes=None,
+                    damos_stats=None,
+                    sample_interval_us=snapshot_sample_interval_us)
             record.snapshots.append(snapshot)
         snapshot = record.snapshots[-1]
         snapshot.regions.append(region)
