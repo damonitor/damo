@@ -51,18 +51,27 @@ class DamonSnapshot:
         damos_stats = None
         if 'damos_stats' in kv and kv['damos_stats'] is not None:
             damos_stats = _damon.DamosStats.from_kvpairs(kv['damos_stats'])
+        sample_interval_us = None
+        if 'sample_interval_us' in kv and kv['sample_interval_us'] is not None:
+            sample_interval_us = _damo_fmt_str.text_to_us(
+                    kv['sample_interval_us'])
         return DamonSnapshot(
                 _damo_fmt_str.text_to_ns(kv['start_time']),
                 _damo_fmt_str.text_to_ns(kv['end_time']),
                 [_damon.DamonRegion.from_kvpairs(r) for r in kv['regions']],
                 _damo_fmt_str.text_to_bytes(kv['total_bytes'])
                 if 'total_bytes' in kv and kv['total_bytes'] is not None
-                else None, damos_stats)
+                else None, damos_stats, sample_interval_us)
 
     def to_kvpairs(self, raw=False):
         damos_stats_kv = None
         if self.damos_stats is not None:
             damos_stats_kv = self.damos_stats.to_kvpairs(raw)
+        if self.sample_interval_us is not None:
+            sample_interval_us = _damo_fmt_str.format_time_us_exact(
+                    self.sample_interval_us, raw)
+        else:
+            sample_interval_us = None
         return collections.OrderedDict([
             ('start_time', _damo_fmt_str.format_time_ns_exact(
                 self.start_time, raw)),
@@ -71,7 +80,8 @@ class DamonSnapshot:
             ('regions', [r.to_kvpairs() for r in self.regions]),
             ('total_bytes', _damo_fmt_str.format_sz(self.total_bytes, raw)
                 if self.total_bytes is not None else None),
-            ('damos_stats', damos_stats_kv)
+            ('damos_stats', damos_stats_kv),
+            ('sample_interval_us', sample_interval_us),
             ])
 
 class DamonRecord:
