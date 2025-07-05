@@ -122,7 +122,7 @@ def mk_handle(args, kdamonds, monitoring_intervals):
 
     handle = _damo_records.RecordingHandle(
             # for access pattern monitoring
-            tracepoint=tracepoint, file_path=args.out,
+            tracepoints=[tracepoint], file_path=args.out,
             file_format=args.output_type,
             file_permission=args.output_permission,
             monitoring_intervals=monitoring_intervals,

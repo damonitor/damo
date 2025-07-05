@@ -1016,7 +1016,7 @@ class RecordingHandle:
     file_permission = None
 
     # for access patterns tracing
-    tracepoint = None
+    tracepoints = None
     monitoring_intervals = None
     perf_pipe = None
 
@@ -1043,13 +1043,13 @@ class RecordingHandle:
 
     timeout = None
 
-    def __init__(self, tracepoint, file_path, file_format, file_permission,
+    def __init__(self, tracepoints, file_path, file_format, file_permission,
                  monitoring_intervals,
                  do_profile,
                  kdamonds, add_child_tasks, record_mem_footprint,
                  record_vmas, record_proc_stats, timeout, snapshot_request,
                  snapshot_interval_sec, snapshot_count):
-        self.tracepoint = tracepoint
+        self.tracepoints = tracepoints
         self.file_path = file_path
         self.file_format = file_format
         self.file_permission = file_permission
@@ -1084,10 +1084,13 @@ def start_recording(handle):
         json.dump([k.to_kvpairs() for k in handle.kdamonds], f, indent=4)
     os.chmod(kdamonds_file_path, handle.file_permission)
 
-    if handle.tracepoint is not None:
+    if handle.tracepoints is not None:
+        tracepoints_option = []
+        for tracepoint in handle.tracepoints:
+            tracepoints_option += ['-e', tracepoint]
         handle.perf_pipe = subprocess.Popen(
-                [PERF, 'record', '-a', '-e', handle.tracepoint,
-                 '-o', handle.file_path])
+                [PERF, 'record', '-a', '-o', handle.file_path] +
+                tracepoints_option)
     if handle.do_profile:
         cmd = [PERF, 'record', '-o', '%s.profile' % handle.file_path]
         handle.perf_profile_pipe = subprocess.Popen(cmd)
