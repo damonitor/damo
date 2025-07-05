@@ -71,12 +71,12 @@ def handle_args(args):
         print(err)
         exit(-3)
 
-def tracepoint_from_args(args):
+def tracepoints_from_args(args):
     if not 'access' in args.do_record or args.snapshot is not None:
         return None
-    if args.schemes_target_regions is False:
-        return _damo_records.perf_event_damon_aggregated
-    return _damo_records.perf_event_damos_before_apply
+    if args.schemes_target_regions is True:
+        return [_damo_records.perf_event_damos_before_apply]
+    return [_damo_records.perf_event_damon_aggregated]
 
 def snapshot_requests_from_args(args):
     ''' Returns snapshot_request and error '''
@@ -107,7 +107,7 @@ def snapshot_requests_from_args(args):
             dont_merge_regions=False), None
 
 def mk_handle(args, kdamonds, monitoring_intervals):
-    tracepoint = tracepoint_from_args(args)
+    tracepoints = tracepoints_from_args(args)
     snapshot_request, err = snapshot_requests_from_args(args)
     if err is not None:
         print(err)
@@ -122,7 +122,7 @@ def mk_handle(args, kdamonds, monitoring_intervals):
 
     handle = _damo_records.RecordingHandle(
             # for access pattern monitoring
-            tracepoints=[tracepoint], file_path=args.out,
+            tracepoints=tracepoints, file_path=args.out,
             file_format=args.output_type,
             file_permission=args.output_permission,
             monitoring_intervals=monitoring_intervals,
