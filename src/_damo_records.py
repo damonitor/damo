@@ -30,11 +30,13 @@ class DamonSnapshot:
     regions = None
     total_bytes = None
     damos_stats = None
+    sample_interval_us = None
 
     def update_total_bytes(self):
         self.total_bytes = sum([r.size() for r in self.regions])
 
-    def __init__(self, start_time, end_time, regions, total_bytes, damos_stats=None):
+    def __init__(self, start_time, end_time, regions, total_bytes,
+                 damos_stats=None, sample_interval_us=None):
         self.start_time = start_time
         self.end_time = end_time
         self.regions = regions
@@ -42,6 +44,7 @@ class DamonSnapshot:
         if self.total_bytes is None:
             self.update_total_bytes()
         self.damos_stats = damos_stats
+        self.sample_interval_us = sample_interval_us
 
     @classmethod
     def from_kvpairs(cls, kv):
