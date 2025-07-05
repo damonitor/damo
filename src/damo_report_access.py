@@ -302,6 +302,10 @@ def damos_stats_str(snapshot, record, fmt):
     return snapshot.damos_stats.to_str(fmt.raw_number)
 
 def infer_aggr_time_us(snapshot, record):
+    if snapshot.sample_interval_us is not None:
+        aggr_sample_ratio = record.intervals.aggr / record.intervals.sample
+        return snapshot.sample_interval_us * aggr_sample_ratio
+
     snapshot_aggr_us = (snapshot.end_time - snapshot.start_time) / 1000
     record_aggr_us = record.intervals.aggr
     # if error is small enough, use simpler number
