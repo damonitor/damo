@@ -19,6 +19,7 @@ import damo_report_access
 
 PERF = 'perf'
 perf_event_damon_aggregated = 'damon:damon_aggregated'
+perf_event_damon_monitor_intervals_tune = 'damon:damon_monitor_intervals_tune'
 perf_event_damos_before_apply = 'damon:damos_before_apply'
 
 class DamonSnapshot:

@@ -76,7 +76,8 @@ def tracepoints_from_args(args):
         return None
     if args.schemes_target_regions is True:
         return [_damo_records.perf_event_damos_before_apply]
-    return [_damo_records.perf_event_damon_aggregated]
+    return [_damo_records.perf_event_damon_aggregated,
+            _damo_records.perf_event_damon_monitor_intervals_tune]
 
 def snapshot_requests_from_args(args):
     ''' Returns snapshot_request and error '''
