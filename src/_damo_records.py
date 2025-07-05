@@ -1078,6 +1078,18 @@ class RecordingHandle:
             return False
         return True
 
+def tracepoint_supported(tracepoint):
+    output = subprocess.check_output([PERF, 'list']).decode().strip()
+    for line in output.split('\n'):
+        fields = line.split()
+        if len(fields) < 3:
+            continue
+        if fields[1:3] != ['[Tracepoint', 'event]']:
+            continue
+        if fields[0] == tracepoint:
+            return True
+    return False
+
 def start_recording(handle):
     kdamonds_file_path = '%s.kdamonds' % handle.file_path
     with open(kdamonds_file_path, 'w') as f:
@@ -1087,7 +1099,8 @@ def start_recording(handle):
     if handle.tracepoints is not None:
         tracepoints_option = []
         for tracepoint in handle.tracepoints:
-            tracepoints_option += ['-e', tracepoint]
+            if tracepoint_supported(tracepoint):
+                tracepoints_option += ['-e', tracepoint]
         handle.perf_pipe = subprocess.Popen(
                 [PERF, 'record', '-a', '-o', handle.file_path] +
                 tracepoints_option)
