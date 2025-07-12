@@ -761,7 +761,11 @@ def files_content_to_kdamond(files_content):
                 contexts_content, 'nr_contexts')]
     state = files_content['state'].strip()
     pid = files_content['pid'].strip()
-    return _damon.Kdamond(state, pid, contexts)
+    if 'refresh_ms' in files_content:
+        refresh_ms = files_content['refresh_ms'].strip()
+    else:
+        refresh_ms = 0
+    return _damon.Kdamond(state, pid, refresh_ms=refresh_ms, contexts=contexts)
 
 def files_content_to_kdamonds(files_contents):
     return [files_content_to_kdamond(content)
