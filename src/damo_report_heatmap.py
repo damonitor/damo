@@ -450,6 +450,9 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
     set cbrange [%f:%f];
     set xlabel 'Time (ns)';
     set ylabel '%s';
+    set cblabel 'Access frequency';
+    set lmargin at screen 0.1;
+    set rmargin at screen 0.7;
     plot '%s' using 1:2:3 with image;""" % (
             terminal, output_file, x_range[0], x_range[1],
             y_range[0], y_range[1], highest_heat, lowest_heat, ylabel,
