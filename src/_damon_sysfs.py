@@ -870,7 +870,9 @@ def infer_damon_version():
                                 )])])]
     err = stage_kdamonds(kdamonds)
     if err is None:
-        if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'addr_unit')):
+        if os.path.isfile(os.path.join(kdamond_dir_of(0), 'refresh_ms')):
+            version = '>v6.16'
+        elif os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'addr_unit')):
             version = '>v6.15'
         elif os.path.isdir(
                 os.path.join(ctx_dir_of(0, 0),
@@ -1026,6 +1028,9 @@ def update_supported_features():
                 os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
                              'nid')):
             feature_supports['schemes_quota_goal_node_mem_used_free'] = True
+
+    if os.path.isfile(os.path.join(kdamond_dir_of(0), 'refresh_ms')):
+        feature_supports['sysfs_refresh_ms'] = True
 
     if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'addr_unit')):
         feature_supports['addr_unit'] = True
