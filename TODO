@@ -42,7 +42,9 @@
 - Support easier heatmap zoom in/out
 - Support drgn based 'damo diagnose'
 - Use hz for access frequency
+  - Redesign to method instead of field
 - Support refresh_ms
+  - Remove unnecessary updates
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
