@@ -192,11 +192,10 @@ snapshot_formatters = [
                 damos_stats_str(snapshot, record, fmt),
                 'DAMOS stats for the snapshot-retrieval scheme'),
         Formatter(
-                '<max access hz>',
+                '<snapshot intervals>',
                 lambda snapshot, record, fmt:
-                _damo_fmt_str.format_nr(
-                    max_access_hz(record.intervals), fmt.raw_number),
-                'Max access hz under the snapshot\'s monitoring setup'),
+                snapshot_intervals_str(snapshot, record, fmt),
+                'Snapshot intervals status'),
         ]
 
 region_formatters = [
@@ -328,6 +327,18 @@ def max_access_hz(intervals):
     max_nr_accesses = intervals.aggr / intervals.sample
     aggr_sec = intervals.aggr / 1000000
     return max_nr_accesses / aggr_sec
+
+def snapshot_intervals_str(snapshot, record, fmt):
+    intervals = record.intervals
+    aggr_sample_ratio = intervals.aggr / intervals.sample
+    snapshot_aggr_us = infer_aggr_time_us(snapshot, record)
+    snapshot_sample_us = snapshot_aggr_us / aggr_sample_ratio
+    max_access_hz = aggr_sample_ratio / (snapshot_aggr_us / 1000000)
+
+    return 'sample %s aggr %s (max access hz %s)' % (
+        _damo_fmt_str.format_time_us(snapshot_sample_us, fmt.raw_number),
+        _damo_fmt_str.format_time_us(snapshot_aggr_us, fmt.raw_number),
+        _damo_fmt_str.format_nr(max_access_hz, fmt.raw_number))
 
 def estimated_mem_bw(snapshot, record, fmt, filter_passed_only=False):
     access_bytes = 0
