@@ -529,15 +529,25 @@ def write_contexts_dir(dir_path, contexts):
         if err is not None:
             return err
 
+def write_kdamond_dir(dir_path, kdamond):
+    refresh_ms_path = os.path.join(dir_path, 'refresh_ms')
+    if os.path.isfile(refresh_ms_path):
+        err = _damo_fs.write_file(refresh_ms_path, '%d' % kdamond.refresh_ms)
+        if err is not None:
+            return err
+
+    err = write_contexts_dir(
+            os.path.join(dir_path, 'contexts'), kdamond.contexts)
+    if err is not None:
+        return err
+
 def write_kdamonds_dir(dir_path, kdamonds):
     err = ensure_nr_file_for(os.path.join(dir_path, 'nr_kdamonds'), kdamonds)
     if err:
         return err
 
     for idx, kdamond in enumerate(kdamonds):
-        err = write_contexts_dir(
-                os.path.join(dir_path, '%d' % idx, 'contexts'),
-                kdamond.contexts)
+        err = write_kdamond_dir(os.path.join(dir_path, '%d' % idx), kdamond)
         if err is not None:
             return err
 
