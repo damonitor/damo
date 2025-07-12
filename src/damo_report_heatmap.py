@@ -96,11 +96,14 @@ class HeatMap:
         account_addr_end = min(region.end, pixel.addr + self.addr_unit)
         account_sz = account_addr_end - account_addr_start
 
-        nr_accesses = region.nr_accesses.samples
+        if region.nr_accesses.hz is not None:
+            heat_source = region.nr_accesses.hz
+        else:
+            heat_source = region.nr_accesses.samples
         if df_passed:
-            nr_accesses = nr_accesses * region.sz_filter_passed / region.size()
+            heat_source = heat_source * region.sz_filter_passed / region.size()
 
-        heat = nr_accesses * account_time * account_sz
+        heat = heat_source * account_time * account_sz
 
         if pixel.heat is None:
             pixel.heat = 0
