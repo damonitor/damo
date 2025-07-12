@@ -28,6 +28,7 @@ class TestDamoFmtStr(unittest.TestCase):
                     '1,234.567': 1234.567,
                     123: 123,
                     0.123: 0.123,
+                    '0.123': 0.123,
                     })
 
     def test_format_time(self):
