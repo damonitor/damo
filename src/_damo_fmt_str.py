@@ -164,6 +164,11 @@ def format_time_sec(time_sec, machine_friendly):
 
     return format_time_ns(time_sec * 1000000000, machine_friendly)
 
+def format_hz(hz, machine_friendly):
+    if machine_friendly:
+        return '%f' % hz
+    return '%s hz' % format_nr(hz, machine_friendly)
+
 def format_ratio(ratio, machine_friendly):
     if machine_friendly:
         return '%f' % ratio
