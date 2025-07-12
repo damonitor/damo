@@ -1166,29 +1166,36 @@ def target_has_pid(ops):
 class Kdamond:
     state = None
     pid = None
+    refresh_ms = None
     contexts = None
 
-    def __init__(self, state, pid, contexts):
+    def __init__(self, state, pid, contexts, refresh_ms=0):
         self.state = state
         self.pid = pid
+        self.refresh_ms = _damo_fmt_str.text_to_ms(refresh_ms)
         self.contexts = contexts
         for ctx in self.contexts:
             ctx.kdamond = self
 
     def summary_str(self, show_cpu=False, params_only=False,
-                    omit_defaults=False):
+                    omit_defaults=False, raw_number=False):
         words = []
         if params_only is False and self.state is not None:
             words.append('state: %s' % self.state)
         if params_only is False and self.pid is not None:
             words.append('pid: %s' % self.pid)
+        if self.refresh_ms != 0:
+            words.append('stats refresh per: %s' %
+                         _damo_fmt_str.format_time_ms(
+                             self.refresh_ms, raw_number))
         if show_cpu:
             words.append('cpu usage: %s' % self.get_cpu_usage())
         return ', '.join(words)
 
     def to_str(self, raw, show_cpu=False, params_only=False):
         lines = []
-        summary_line = self.summary_str(show_cpu, params_only)
+        summary_line = self.summary_str(show_cpu, params_only,
+                                        omit_defaults=False, raw_number=raw)
         if summary_line != '':
             lines.append(summary_line)
         for idx, ctx in enumerate(self.contexts):
@@ -1220,13 +1227,16 @@ class Kdamond:
         return Kdamond(
                 kv['state'] if 'state' in kv else 'off',
                 kv['pid'] if 'pid' in kv else None,
-                [DamonCtx.from_kvpairs(c) for c in kv['contexts']])
+                [DamonCtx.from_kvpairs(c) for c in kv['contexts']],
+                refresh_ms=kv['refresh_ms'] if 'refresh_ms' in kv else 0,
+                )
 
     def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
         kv = collections.OrderedDict()
         if not params_only:
             kv['state'] = self.state
             kv['pid'] = self.pid
+        kv['refresh_ms'] = self.refresh_ms
         kv['contexts'] = [c.to_kvpairs(raw, omit_defaults, params_only)
                           for c in self.contexts]
         return kv

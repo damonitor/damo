@@ -58,7 +58,7 @@ class TestDamon(unittest.TestCase):
         kdamond_kvpairs = kdamond.to_kvpairs()
         self.assertEqual(type(kdamond_kvpairs), collections.OrderedDict)
         self.assertEqual(list(kdamond_kvpairs.keys()),
-                ['state', 'pid', 'contexts'])
+                ['state', 'pid', 'refresh_ms', 'contexts'])
         self.assertEqual(kdamond,
             _damon.Kdamond.from_kvpairs(kdamond_kvpairs))
 

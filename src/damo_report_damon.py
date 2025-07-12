@@ -97,7 +97,7 @@ def pr_kdamonds_summary(input_file, json_format, raw_nr, show_cpu):
         if err is None:
             print(err)
             exit(1)
-    summary = [k.summary_str(show_cpu) for k in kdamonds]
+    summary = [k.summary_str(show_cpu, raw_number=raw_nr) for k in kdamonds]
     if json_format:
         print(json.dumps(summary, indent=4))
         return
