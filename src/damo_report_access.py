@@ -194,7 +194,8 @@ snapshot_formatters = [
         Formatter(
                 '<max access hz>',
                 lambda snapshot, record, fmt:
-                max_access_hz(snapshot, record),
+                _damo_fmt_str.format_nr(
+                    max_access_hz(record.intervals), fmt.raw_number),
                 'Max access hz under the snapshot\'s monitoring setup'),
         ]
 
@@ -323,11 +324,10 @@ def infer_aggr_time_us(snapshot, record):
         return record_aggr_us
     return snapshot_aggr_us
 
-def max_access_hz(snapshot, record, fmt):
-    intervals = record.intervals
+def max_access_hz(intervals):
     max_nr_accesses = intervals.aggr / intervals.sample
     aggr_sec = intervals.aggr / 1000000
-    return max_nr_accesses / intervals.aggr_sec
+    return max_nr_accesses / aggr_sec
 
 def estimated_mem_bw(snapshot, record, fmt, filter_passed_only=False):
     access_bytes = 0
