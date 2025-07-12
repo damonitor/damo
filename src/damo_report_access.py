@@ -1401,14 +1401,14 @@ def set_formats_handle_styles(fmt, args, records):
     elif args.style == 'temperature-percentiles':
         set_formats_percentiles(args, fmt, records, 'temperature')
     elif args.style == 'cold':
-        fmt.format_region = '<box> <size> access <access rate> <age>'
+        fmt.format_region = '<box> <size> access <access hz> <age>'
         fmt.region_box_min_max_height = [1, 1]
         fmt.region_box_min_max_length = [1, 40]
         fmt.region_box_align = 'right'
         fmt.region_box_colorset = 'emotion'
         fmt.sort_regions_by = ['temperature']
     elif args.style == 'hot':
-        fmt.format_region = '<box> <size> access <access rate> <age>'
+        fmt.format_region = '<box> <size> access <access hz> <age>'
         fmt.region_box_min_max_height = [1, 1]
         fmt.region_box_min_max_length = [1, 40]
         fmt.region_box_align = 'right'
@@ -1479,7 +1479,7 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
 
 def set_formats_region_default(fmt, records, args):
     default_region_format = \
-            '<index> addr <start address> size <size> access <access rate> ' \
+            '<index> addr <start address> size <size> access <access hz> ' \
             'age <age>'
     if args.region_box:
         if fmt.region_box_min_max_height[1] > 1:
@@ -1764,7 +1764,7 @@ def add_fmt_args(parser, hide_help=False):
             '--temperature_weights', type=int, metavar='<int>', nargs=3,
             default=[0, 100, 100],
             help=' '.join(
-                ['temperature weights for size, access rate, and age',
+                ['temperature weights for size, access frequency, and age',
                  'of each region']) if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--hist_logscale', action='store_true',
                         help='draw histograms in logscale'
@@ -1866,6 +1866,7 @@ def add_fmt_args(parser, hide_help=False):
             default=[['<index>', 3],
                      ['<start address>', 12],['<end address>', 11],
                      ['<size>', 11], ['<access rate>', 5],
+                     ['<access hz>', 6],
                      ['<age>', 13],
                      ['<filters passed type>', 10],
                      ],
