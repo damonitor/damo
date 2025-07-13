@@ -736,9 +736,9 @@ def kdamonds_for(args):
     kdamonds = []
     ctx_idx = 0
     for nr in args.nr_ctxs:
-        if (args.stat_auto_refresh is not None and
-            len(args.stat_auto_refresh) > len(kdamonds)):
-            refresh_ms = args.stat_auto_refresh[len(kdamonds)]
+        if (args.refresh_stat is not None and
+            len(args.refresh_stat) > len(kdamonds)):
+            refresh_ms = args.refresh_stat[len(kdamonds)]
         else:
             refresh_ms = 0
         try:
@@ -840,7 +840,7 @@ def set_monitoring_argparser(parser, hide_help=False):
                         help='monitoring operations set'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
-            '--stat_auto_refresh', metavar='<milliseconds>', action='append',
+            '--refresh_stat', metavar='<milliseconds>', action='append',
             help='automatic kdamond internal stat refresh interval')
     parser.add_argument('--ops_addr_unit', metavar='<bytes>',
                         help='operations set address unit'
