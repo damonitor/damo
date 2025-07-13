@@ -10,10 +10,12 @@ def main(args):
     if category == 'monitoring':
         print('command line options for monitoring-part DAMON parameters')
         print()
+        _damon_args.set_monitoring_damos_common_args(parser, hide_help=False)
         _damon_args.set_monitoring_argparser(parser, hide_help=False)
     elif category == 'damos':
         print('command line options for DAMOS parameters')
         print()
+        _damon_args.set_monitoring_damos_common_args(parser, hide_help=False)
         _damon_args.set_damos_argparser(parser, hide_help=False)
     elif category == 'all':
         print('command line options for all DAMON parameters')
