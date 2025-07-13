@@ -1,6 +1,9 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.8.9
+- Support refresh_ms
+
 v2.8.8
 - Improve handling of access records that made with intervals auto-tuning
 
