@@ -223,7 +223,10 @@ region_formatters = [
         Formatter(
             '<access hz>',
             lambda index, region, snapshot, record, fmt:
-            _damo_fmt_str.format_hz(region.nr_accesses.hz, fmt.raw_number),
+            _damo_fmt_str.format_hz(
+                region.nr_accesses.in_hz(
+                    snapshot_monitoring_intervals(snapshot, record)[1]),
+                    fmt.raw_number),
             'monitored access frequency of the region in hz'),
         Formatter(
             '<age>',
