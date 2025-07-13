@@ -328,16 +328,7 @@ def snapshot_monitoring_intervals(snapshot, record):
     return [snapshot_sample_us, snapshot_aggr_us]
 
 def infer_aggr_time_us(snapshot, record):
-    if snapshot.sample_interval_us is not None:
-        aggr_sample_ratio = record.intervals.aggr / record.intervals.sample
-        return snapshot.sample_interval_us * aggr_sample_ratio
-
-    snapshot_aggr_us = (snapshot.end_time - snapshot.start_time) / 1000
-    record_aggr_us = record.intervals.aggr
-    # if error is small enough, use simpler number
-    if abs(snapshot_aggr_us - record_aggr_us) / record_aggr_us < 0.1:
-        return record_aggr_us
-    return snapshot_aggr_us
+    return snapshot_monitoring_intervals(snapshot, record)[1]
 
 def estimated_mem_bw(snapshot, record, fmt, filter_passed_only=False):
     access_bytes = 0
