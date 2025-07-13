@@ -139,7 +139,6 @@ class DamonNrRegionsRange:
             ('max', _damo_fmt_str.format_nr(self.maximum, raw)),
             ])
 
-unit_hz = 'hz'
 unit_percent = 'percent'
 unit_samples = 'samples'
 unit_usec = 'usec'
@@ -157,16 +156,13 @@ class DamonNrAccesses:
             self.samples = _damo_fmt_str.text_to_nr(val)
         elif unit == unit_percent:
             self.percent = _damo_fmt_str.text_to_percent(val)
-        elif unit == unit_hz:
-            self.hz = _damo_fmt_str.text_to_nr(val)
         else:
             raise Exception('invalid DamonNrAccesses unit \'%s\'' % unit)
 
     def __eq__(self, other):
         return (type(self) == type(other) and
                 ((self.samples != None and self.samples == other.samples) or
-                    (self.percent != None and self.percent == other.percent) or
-                    (self.hz is not None and self.hz == other.hz)
+                    (self.percent != None and self.percent == other.percent)
                  ))
 
     def in_hz(self, aggr_us):
@@ -180,8 +176,6 @@ class DamonNrAccesses:
             self.samples = int(self.percent * max_val / 100)
         if self.percent == None:
             self.percent = int(self.samples * 100.0 / max_val)
-        if self.hz is None:
-            self.hz = self.samples / (intervals.aggr / 1000000)
 
     def to_str(self, unit, raw):
         if unit == unit_percent:
@@ -189,8 +183,6 @@ class DamonNrAccesses:
         elif unit == unit_samples:
             return '%s %s' % (_damo_fmt_str.format_nr(self.samples, raw),
                     unit_samples)
-        elif unit == unit_hz:
-            return '%s hz' % (_damo_fmt_str.format_nr(self.hz, raw))
         raise Exception('unsupported unit for NrAccesses (%s)' % unit)
 
     @classmethod
@@ -200,14 +192,11 @@ class DamonNrAccesses:
             ret.samples = _damo_fmt_str.text_to_nr(kv['samples'])
         if 'percent' in kv and kv['percent'] != None:
             ret.percent = _damo_fmt_str.text_to_percent(kv['percent'])
-        if 'hz' in kv and kv['hz'] is not None:
-            ret.hz = _damo_fmt_str.text_to_nr(kv['hz'])
         return ret
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict(
                 [('samples', self.samples), ('percent', self.percent),
-                 ('hz', self.hz),
                  ])
 
 class DamonAge:
