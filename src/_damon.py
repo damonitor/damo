@@ -1301,10 +1301,10 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
                                         # merged in v6.15-rc1
             'schemes_filters_active',
                                         # merged in v6.15-rc1
+            'schemes_quota_goal_node_mem_used_free',
+                                        # merged in v6.16-rc
             'sysfs_refresh_ms',         # under development
 
-            'schemes_quota_goal_node_mem_used_free',
-                                        # under development
             'addr_unit'                 # under development
             ]
 
