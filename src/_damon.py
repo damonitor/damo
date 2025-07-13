@@ -1069,7 +1069,6 @@ class Damos:
 
 class DamonCtx:
     ops = None
-    addr_unit = None
     targets = None
     intervals = None
     nr_regions = None
@@ -1077,11 +1076,8 @@ class DamonCtx:
     kdamond = None
 
     def __init__(self, ops='paddr', targets=None, intervals=None,
-                 nr_regions=None, schemes=None, addr_unit=None):
+                 nr_regions=None, schemes=None):
         self.ops = ops
-        if addr_unit is not None:
-            self.addr_unit = _damo_fmt_str.text_to_bytes(addr_unit)
-        self.addr_unit = addr_unit
         self.targets = targets if targets is not None else []
         for target in self.targets:
             target.context = self
@@ -1095,9 +1091,6 @@ class DamonCtx:
 
     def to_str(self, raw, params_only=False):
         ops_line = 'ops: %s' % self.ops
-        if self.addr_unit is not None:
-            ops_line = '%s (addr_unit %s)' % (
-                    ops_line, _damo_fmt_str.format_sz(self.addr_unit, raw))
         lines = [ops_line]
         for idx, target in enumerate(self.targets):
             lines.append('target %d' % idx)
@@ -1135,15 +1128,12 @@ class DamonCtx:
                 DamonNrRegionsRange.from_kvpairs(kv['nr_regions'])
                     if 'nr_regions' in kv else DAmonNrRegionsRange(),
                 [Damos.from_kvpairs(s) for s in kv['schemes']]
-                    if 'schemes' in kv else [],
-                    kv['addr_unit']
-                    if 'addr_unit' in kv else None)
+                    if 'schemes' in kv else [])
         return ctx
 
     def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
         kv = collections.OrderedDict({})
         kv['ops'] = self.ops
-        kv['addr_unit'] = self.addr_unit
         kv['targets'] = [t.to_kvpairs(raw) for t in self.targets]
         if not omit_defaults or self.intervals != DamonIntervals():
             kv['intervals'] = self.intervals.to_kvpairs(raw)
@@ -1304,8 +1294,6 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
             'schemes_quota_goal_node_mem_used_free',
                                         # merged in v6.16-rc
             'sysfs_refresh_ms',         # under development
-
-            'addr_unit'                 # under development
             ]
 
 _damon_fs = None
