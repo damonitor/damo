@@ -76,6 +76,16 @@ def refresh_ms_enabled(kdamond_idx):
         return False, 'int(refresh_ms) failed (%s)!  kernel bug?' % e
     return enabled, None
 
+def refresh_ms_disabled_kdidxs(kdamond_idxs):
+    idxs = []
+    for kdidx in kdamond_idxs:
+        unnecessary, err = refresh_ms_enabled(kdidx)
+        if err is not None:
+            return None, 'refresh_ms check fail (%s)' % err
+        if not unnecessary:
+            idxs.append(kdidx)
+    return idxs, None
+
 'Return error'
 def update_tuned_intervals(kdamond_idxs):
     return __write_state_file(kdamond_idxs, 'update_tuned_intervals')
