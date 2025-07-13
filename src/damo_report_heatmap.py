@@ -97,11 +97,16 @@ class HeatMap:
         account_addr_end = min(region.end, pixel.addr + self.addr_unit)
         account_sz = account_addr_end - account_addr_start
 
-        nr_accesses = region.nr_accesses.samples
+        if record_intervals is not None:
+            aggr_us = damo_report_access.snapshot_monitoring_intervals(
+                    snapshot, record_intervals)[1]
+            heat_val = region.nr_accesses.in_hz(aggr_us)
+        else:
+            heat_val = region.nr_accesses.samples
         if df_passed:
-            nr_accesses = nr_accesses * region.sz_filter_passed / region.size()
+            heat_val = heat_val * region.sz_filter_passed / region.size()
 
-        heat = nr_accesses * account_time * account_sz
+        heat = heat_val * account_time * account_sz
 
         if pixel.heat is None:
             pixel.heat = 0
