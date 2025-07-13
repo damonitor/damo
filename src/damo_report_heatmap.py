@@ -207,9 +207,13 @@ class HeatMap:
 
     def fmt_ascii_lines_comments(self, colorset, print_colorset):
         lines = []
+
         if print_colorset:
-            lines.append('# access_frequency: %s' %
-                    _damo_ascii_color.color_samples(colorset))
+            highest_heat, lowest_heat = self.highest_lowest_heats()
+            range_str = '%.3f-%.3f %s' % (lowest_heat, highest_heat,
+                                          self.heat_unit)
+            lines.append('# access_frequency: %s (%s)' %
+                    (_damo_ascii_color.color_samples(colorset), range_str))
 
         addr_start = self.addr_start
         addr_len = self.addr_unit * self.addr_resol
