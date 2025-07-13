@@ -11,4 +11,4 @@
 [1 h 39 m 43.380 s, 1 h 50 m 48.200 s) 25.262 GiB |********************|
 memory bw estimate: 75.464 GiB per second
 total size: 59.868 GiB
-monitoring intervals: sample 5 ms, aggr 100 ms
+record DAMON intervals: sample 5 ms, aggr 100 ms

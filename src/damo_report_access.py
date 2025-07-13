@@ -1471,7 +1471,7 @@ def set_formats_record_default(fmt, records):
         else:
             fmt.format_record_head = ''
     if fmt.format_record_tail is None:
-        tail_lines = ['monitoring intervals: <intervals>']
+        tail_lines = ['record DAMON intervals: <intervals>']
         if intervals_goal_enabled(records):
             tail_lines.append('# <intervals goal>')
         fmt.format_record_tail = '\n'.join(tail_lines)
@@ -1490,6 +1490,7 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
                     '(<duration>)\n<heatmap>'
         else:
             fmt.format_snapshot_head = 'heatmap: <heatmap>'
+        fmt.format_snapshot_head += '\nintervals: <snapshot intervals>'
     if ops_filters_installed:
         fmt.format_snapshot_head += \
                 '\n# damos filters (df): <filters passed type>'
