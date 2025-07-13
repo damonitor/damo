@@ -613,6 +613,15 @@ def main(args):
                 (args.input, err))
         exit(1)
 
+    # old DAMON records may have None intervals, while newer ones would have
+    # none-None intervals.  The intervals are used for showing access frequency
+    # in hz.  If intervals are None, nr_accesses (samples) is just used.
+    # Reject mixed versions of records to make the output consistent.
+    nr_having_intervals = len([r for r in records if r.intervals is not None])
+    if not nr_having_intervals in [0, len(records)]:
+        print('Some records have intervals while some not.  Cannot proceed.')
+        exit(1)
+
     # Use 80x40 or 500x500 resolution as default for stdout or image plots
     if args.resol is None:
         if args.output == 'stdout':
