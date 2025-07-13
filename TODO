@@ -39,10 +39,7 @@
       - treat larger than a value as same
 - Support multiple targets snapshot (get_snapshot_records())
 - support 2d heatmap on report access
-- Support easier heatmap zoom in/out
 - Support drgn based 'damo diagnose'
-- Use hz for access frequency
-  - Redesign to method instead of field
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
