@@ -716,9 +716,7 @@ Note: This is an experimental feature at the moment.  Some changes could be
 made, or the support can be dropped in future.
 
 `damo` supports DAMON's page level properties based access monitoring feature,
-which is in [RFC](https://lore.kernel.org/20241219040327.61902-1-sj@kernel.org)
-stage as of this writing.  The RFC patches are applied on DAMON development
-[tree](https://github.com/damonitor/damo/tree/next).
+which has been merged into the mainline Linux kernel starting from v6.14.
 
 `damo report access` shows the per-region size of the pages of specific
 properties by default if following two conditions met.
