@@ -88,10 +88,16 @@ def refresh_ms_disabled_kdidxs(kdamond_idxs):
 
 'Return error'
 def update_tuned_intervals(kdamond_idxs):
+    kdamond_idxs, err = refresh_ms_disabled_kdidxs(kdamond_idxs)
+    if err is not None:
+        return err
     return __write_state_file(kdamond_idxs, 'update_tuned_intervals')
 
 'Return error'
 def update_schemes_stats(kdamond_idxs):
+    kdamond_idxs, err = refresh_ms_disabled_kdidxs(kdamond_idxs)
+    if err is not None:
+        return err
     return __write_state_file(kdamond_idxs, 'update_schemes_stats')
 
 'Return error'
@@ -113,6 +119,9 @@ def update_schemes_tried_regions(kdamond_idxs):
 
 'Return error'
 def update_schemes_quota_effective_bytes(kdamond_idxs):
+    kdamond_idxs, err = refresh_ms_disabled_kdidxs(kdamond_idxs)
+    if err is not None:
+        return err
     err = __write_state_file(kdamond_idxs, 'update_schemes_effective_quotas')
     if err != None:
         err = '%s (maybe schemes_effective_quotas not supported?)' % err
