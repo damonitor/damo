@@ -60,6 +60,22 @@ def is_kdamond_running(kdamond_idx):
         return False
     return content.strip() == 'on'
 
+def get_refresh_ms_file_of(kdamond_idx):
+    return os.path.join(get_kdamonds_dir(), '%s' % kdamond_idx, 'refresh_ms')
+
+def refresh_ms_enabled(kdamond_idx):
+    filepath = get_refresh_ms_file_of(kdamond_idx)
+    if not os.path.isfile(filepath):
+        return False, None
+    content, err = _damo_fs.read_file(get_refresh_ms_file_of(kdamond_idx))
+    if err is not None:
+        return False, err
+    try:
+        enabled = int(content) != 0
+    except Exception as e:
+        return False, 'int(refresh_ms) failed (%s)!  kernel bug?' % e
+    return enabled, None
+
 'Return error'
 def update_tuned_intervals(kdamond_idxs):
     return __write_state_file(kdamond_idxs, 'update_tuned_intervals')
