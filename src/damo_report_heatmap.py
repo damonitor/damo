@@ -120,7 +120,11 @@ class HeatMap:
                 self.pixels_idx_of_time(start_time),
                 self.pixels_idx_of_time(snapshot.end_time) + 1)
 
-    def add_heat(self, snapshot, last_snapshot, aggr_ns, df_passed):
+    def add_heat(self, snapshot, last_snapshot, record_intervals, df_passed):
+        if record_intervals is not None:
+            aggr_ns = record_intervals.aggr * 1000
+        else:
+            aggr_ns = None
         heatmap_addr_end = self.addr_start + self.addr_unit * self.addr_resol
         for region in snapshot.regions:
             if region.end < self.addr_start or heatmap_addr_end < region.start:
@@ -237,11 +241,9 @@ def heatmap_from_records(
                       addr_start, addr_unit, addr_resol)
     last_snapshot = None
     for record in records:
-        aggr_ns = None
-        if record.intervals is not None:
-            aggr_ns = record.intervals.aggr * 1000
         for snapshot in record.snapshots:
-            heatmap.add_heat(snapshot, last_snapshot, aggr_ns, df_passed)
+            heatmap.add_heat(snapshot, last_snapshot, record.intervals,
+                             df_passed)
             last_snapshot = snapshot
     return heatmap
 
