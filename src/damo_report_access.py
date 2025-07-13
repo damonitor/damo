@@ -1404,7 +1404,7 @@ def set_formats_handle_styles(fmt, args, records):
         fmt.format_snapshot_head = \
                 'snapshot time: [<start time>, <end time>] (<duration>)'
         fmt.format_region = \
-                '<box> size <size> access rate <access rate> age <age>'
+                '<box> size <size> access <access hz> age <age>'
         fmt.region_box_min_max_height = [1, 1]
         fmt.region_box_min_max_length = [1, 40]
         fmt.region_box_align = 'right'
