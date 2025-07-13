@@ -743,30 +743,29 @@ in regiosn of different access patterns, like below:
 
 ```
 $ sudo damo start
-$ sudo ./damo report access --snapshot_damos_filter reject none anon reject none young
-heatmap: 99999998888888884444444422222222111111111111111000000000000000000000000000000000
-# min/max temperatures: -10,873,676,710,759, -143,980,000,000, column size: 766.312 MiB
-# damos filters (df): reject none anon, reject none young
-df-pass: 8888888888888888888888888888898888888888888888888888888888[...]000000000000005[...]000000002
-# min/max temperatures: -10,839,410,000,000, -87,800,866,934, column size: 211.892 MiB
-0   addr 4.000 GiB    size 2.511 GiB   access 0 %   age 23 m 59.800 s df-passed 260.000 KiB
-1   addr 6.511 GiB    size 1.674 GiB   access 0 %   age 23 m 59.800 s df-passed 220.000 KiB
-2   addr 8.184 GiB    size 1.793 GiB   access 0 %   age 23 m 59.800 s df-passed 2.160 MiB
-3   addr 9.977 GiB    size 183.910 MiB access 0 %   age 59 m 43.500 s df-passed 0 B
-4   addr 10.157 GiB   size 1.616 GiB   access 0 %   age 59 m 43.500 s df-passed 140.000 KiB
-5   addr 11.773 GiB   size 4.191 GiB   access 0 %   age 59 m 43.500 s df-passed 92.000 KiB
-6   addr 15.964 GiB   size 5.932 GiB   access 0 %   age 16 h 7 m 50.700 s df-passed 0 B
-7   addr 21.896 GiB   size 5.945 GiB   access 0 %   age 20 h 44 m 50.100 s df-passed 0 B
-8   addr 27.841 GiB   size 5.959 GiB   access 0 %   age 24 h 3 m 6.100 s df-passed 0 B
-9   addr 33.800 GiB   size 5.944 GiB   access 0 %   age 26 h 45 m 45.100 s df-passed 0 B
-10  addr 39.744 GiB   size 5.966 GiB   access 0 %   age 27 h 59 m 18.900 s df-passed 0 B
-11  addr 45.709 GiB   size 2.974 GiB   access 0 %   age 28 h 49 m 4 s df-passed 0 B
-12  addr 48.683 GiB   size 2.974 GiB   access 0 %   age 28 h 49 m 4 s df-passed 4.000 KiB
-13  addr 51.657 GiB   size 5.937 GiB   access 0 %   age 29 h 34 m 26 s df-passed 0 B
-14  addr 57.594 GiB   size 4.190 GiB   access 0 %   age 30 h 6 m 34.100 s df-passed 0 B
-15  addr 61.784 GiB   size 1.796 GiB   access 0 %   age 30 h 6 m 34.100 s df-passed 44.000 KiB
-16  addr 63.580 GiB   size 295.410 MiB access 0 %   age 30 h 21 m 23 s df-passed 0 B
-total size: 59.868 GiB  df-passed: 2.902 MiB
+$ sudo damo report access --snapshot_damos_filter allow anon allow young
+89888888885555555522222222111111100000000000000000000000000000000000000000000000
+# min/max temperatures: -9,460,000,000, -368,113,080, column size: 766.312 MiB
+intervals: sample 5 ms aggr 100 ms (max access hz 200)
+# damos filters (df): allow anon, allow young
+df-pass: 777777777987777777777777777777777777777777777777777775444444444444446[...]400000000000
+# min/max temperatures: -9,460,000,000, 870,000,500, column size: 143.883 MiB
+0   addr 4.000 GiB    size 25.285 MiB  access 0 hz   age 8.900 s       df-passed 16.000 KiB
+1   addr 4.025 GiB    size 227.574 MiB access 0 hz   age 8.900 s       df-passed 7.320 MiB
+2   addr 4.247 GiB    size 1011.438 MiB access 0 hz   age 8.900 s       df-passed 172.566 MiB
+3   addr 5.235 GiB    size 8.000 KiB   access 200 hz age 3.900 s       df-passed 8.000 KiB
+4   addr 5.235 GiB    size 7.387 MiB   access 0 hz   age 8.700 s       df-passed 1.336 MiB
+5   addr 5.242 GiB    size 17.242 MiB  access 0 hz   age 8.700 s       df-passed 3.645 MiB
+[...]
+26  addr 29.101 GiB   size 5.620 GiB   access 0 hz   age 1 m 31.400 s  df-passed 0 B
+27  addr 34.721 GiB   size 5.677 GiB   access 0 hz   age 1 m 33.600 s  df-passed 0 B
+28  addr 40.398 GiB   size 5.934 GiB   access 0 hz   age 1 m 34.300 s  df-passed 0 B
+29  addr 46.332 GiB   size 15.140 GiB  access 0 hz   age 1 m 34.600 s  df-passed 0 B
+30  addr 61.472 GiB   size 1.615 GiB   access 0 hz   age 1 m 34.600 s  df-passed 476.000 KiB
+31  addr 63.087 GiB   size 799.883 MiB access 0 hz   age 1 m 34.600 s  df-passed 0 B
+memory bw estimate: 2.171 GiB per second  df-passed: 377.578 MiB per second
+total size: 59.868 GiB  df-passed 2.190 GiB
+record DAMON intervals: sample 5 ms, aggr 100 ms
 ```
 
 The line starting with `df-pass:` shows the access snapshot heatmap for regions
