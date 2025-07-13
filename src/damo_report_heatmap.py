@@ -428,7 +428,7 @@ def plot_range(orig_range, use_absolute_val):
     return plot_range
 
 def plot_heatmap(data_file, output_file, args, address_range, range_idx,
-                 highest_heat, lowest_heat):
+                 highest_heat, lowest_heat, access_frequency_unit):
     terminal = output_file.split('.')[-1]
     if not terminal in ['pdf', 'jpeg', 'png', 'svg']:
         os.remove(data_file)
@@ -455,13 +455,13 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
     set cbrange [%f:%f];
     set xlabel 'Time (ns)';
     set ylabel '%s';
-    set cblabel 'Access frequency';
+    set cblabel 'Access frequency (%s)';
     set lmargin at screen 0.1;
     set rmargin at screen 0.7;
     plot '%s' using 1:2:3 with image;""" % (
             terminal, output_file, x_range[0], x_range[1],
             y_range[0], y_range[1], highest_heat, lowest_heat, ylabel,
-            data_file)
+            access_frequency_unit, data_file)
     try:
         subprocess.call(['gnuplot', '-e', gnuplot_cmd])
     except Exception as e:
@@ -469,6 +469,12 @@ def plot_heatmap(data_file, output_file, args, address_range, range_idx,
     os.remove(data_file)
 
 def mk_show_heatmap(records, args):
+    access_frequency_unit = 'samples'
+    for record in records:
+        if record.intervals is not None:
+            access_frequency_unit = 'hz'
+            break
+
     heats_list = []
     for idx in range(len(args.address_range)):
         heatmap = mk_heatmap(args, idx, records)
@@ -490,7 +496,7 @@ def mk_show_heatmap(records, args):
                 f.write(gnuplot_data_str)
             plot_heatmap(
                     tmp_path, args.output, args, args.address_range[idx], idx,
-                    highest_heat, lowest_heat)
+                    highest_heat, lowest_heat, access_frequency_unit)
 
 def scale_range(start_end, ratio):
     start, end = start_end
