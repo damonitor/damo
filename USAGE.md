@@ -279,6 +279,14 @@ interval is 100 milliseconds, the "maximum nr_accesses" is 20 (100 milliseconds
 divided by 5 milliseconds).  And if a region has `nr_accesses` value 4, it's
 access rate is 20% (`4 / 20 * 100`).
 
+#### Access hz
+
+Access hz is the ratio of
+[`nr_accesses`](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#region-based-sampling)
+of the region to the aggregation interval, simply speaking, Hertz.  That is, if
+a region's "access hz" is 100, it means the region is accessed 100 times per
+second.
+
 #### `--damos_filter` Option Format
 
 `--damos_filter` option's format is as below:
