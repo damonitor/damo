@@ -984,16 +984,30 @@ Users can sort the regions based on hotness of the regions by providing
 
 For example:
 
-    $ sudo damo report access --style simple-boxes --sort_regions_by temperature
-    |0000000000000000000000000000000000000000| size 36.488 MiB  access rate 0 %   age 42.300 s
-     |000000000000000000000000000000000000000| size 4.000 KiB   access rate 0 %   age 42 s
-     |000000000000000000000000000000000000000| size 18.367 MiB  access rate 0 %   age 32.800 s
-      |00000000000000000000000000000000000000| size 11.234 MiB  access rate 0 %   age 21.300 s
-       |0000000000000000000000000000000000000| size 18.219 MiB  access rate 0 %   age 14.300 s
-        |000000000000000000000000000000000000| size 17.859 MiB  access rate 0 %   age 7.400 s
-                                           |3| size 8.000 KiB   access rate 35 %  age 0 ns
-              |555555555555555555555555555555| size 8.000 KiB   access rate 65 %  age 500 ms
-           |999999999999999999999999999999999| size 9.535 MiB   access rate 100 % age 2.300 s
+```
+snapshot time: [0 ns, 100 ms] (100 ms)
+|0000000000000000000000000000000000000000| size 3.022 GiB   access 0 hz   age 11 m 31.300 s
+ |000000000000000000000000000000000000000| size 5.899 GiB   access 0 hz   age 11 m 28.300 s
+ |000000000000000000000000000000000000000| size 5.319 GiB   access 0 hz   age 11 m 19.900 s
+ |000000000000000000000000000000000000000| size 5.557 GiB   access 0 hz   age 11 m 4.900 s
+ |000000000000000000000000000000000000000| size 4.509 GiB   access 0 hz   age 10 m 35.400 s
+ |000000000000000000000000000000000000000| size 5.563 GiB   access 0 hz   age 9 m 33.200 s
+  |00000000000000000000000000000000000000| size 5.512 GiB   access 0 hz   age 7 m 52.100 s
+    |000000000000000000000000000000000000| size 5.699 GiB   access 0 hz   age 5 m 57.500 s
+       |000000000000000000000000000000000| size 5.854 GiB   access 0 hz   age 2 m 53.900 s
+           |00000000000000000000000000000| size 4.306 GiB   access 0 hz   age 1 m 13.100 s
+                       |00000000000000000| size 5.949 GiB   access 0 hz   age 6.200 s
+                             |00000000000| size 2.074 MiB   access 0 hz   age 1.800 s
+                                |00000000| size 1.242 GiB   access 0 hz   age 900 ms
+                                       |3| size 8.000 KiB   access 80 hz  age 200 ms
+                                      |00| size 4.000 KiB   access 20 hz  age 300 ms
+                                      |99| size 4.000 KiB   access 200 hz age 300 ms
+                              |9999999999| size 16.000 KiB  access 200 hz age 1.600 s
+           |00000000000000000000000000000| size 1.435 GiB   access 10 hz  age 1 m 13.100 s
+memory bw estimate: 14.358 GiB per second
+total size: 59.868 GiB
+record DAMON intervals: sample 5 ms, aggr 100 ms
+```
 
 #### `damo report access --raw_form`
 
