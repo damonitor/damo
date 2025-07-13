@@ -834,7 +834,7 @@ def set_monitoring_attrs_argparser(parser, hide_help=False):
                         help='min/max number of monitoring regions'
                         if not hide_help else argparse.SUPPRESS)
 
-def set_monitoring_argparser(parser, hide_help=False):
+def set_monitoring_damos_common_args(parser, hide_help=False):
     parser.add_argument('--ops', choices=['vaddr', 'paddr', 'fvaddr'],
                         action='append',
                         help='monitoring operations set'
@@ -842,6 +842,8 @@ def set_monitoring_argparser(parser, hide_help=False):
     parser.add_argument(
             '--refresh_stat', metavar='<milliseconds>', action='append',
             help='automatic kdamond internal stat refresh interval')
+
+def set_monitoring_argparser(parser, hide_help=False):
     parser.add_argument('--ops_addr_unit', metavar='<bytes>',
                         help='operations set address unit'
                         if not hide_help else argparse.SUPPRESS)
@@ -969,6 +971,7 @@ def set_misc_damon_params_argparser(parser):
                 'DAMON parameters (same to that for --kdamonds)']))
 
 def set_damon_params_argparser(parser, min_help):
+    set_monitoring_damos_common_args(parser, min_help)
     set_monitoring_argparser(parser, min_help)
     set_damos_argparser(parser, min_help)
     set_misc_damon_params_argparser(parser)
