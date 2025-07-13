@@ -54,10 +54,12 @@ class HeatMap:
     addr_unit = None
     addr_resol = None
 
+    heat_unit = None
+
     pixels = None # list of list of pixels
 
     def __init__(self, time_start, time_unit, time_resol, addr_start,
-                 addr_unit, addr_resol):
+                 addr_unit, addr_resol, heat_unit):
         self.time_start = time_start
         self.time_unit = time_unit
         self.time_resol = time_resol
@@ -65,6 +67,8 @@ class HeatMap:
         self.addr_start = addr_start
         self.addr_unit = addr_unit
         self.addr_resol = addr_resol
+
+        self.heat_unit = heat_unit
 
         self.pixels = []
         for i in range(time_resol):
@@ -243,8 +247,14 @@ def heatmap_from_records(
     time_unit = (time_end - time_start) // time_resol
     addr_unit = (addr_end - addr_start) // addr_resol
 
+    heat_unit = 'samples'
+    for record in records:
+        if record.intervals is not None:
+            heat_unit = 'hz'
+            break
+
     heatmap = HeatMap(time_start, time_unit, time_resol,
-                      addr_start, addr_unit, addr_resol)
+                      addr_start, addr_unit, addr_resol, heat_unit)
     last_snapshot = None
     for record in records:
         for snapshot in record.snapshots:
