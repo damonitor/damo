@@ -23,5 +23,5 @@ df-pass: [48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5
 # min/max temperatures: -33,900,000,000, 604,159,670, column size: 250.100 MiB
 memory bw estimate: 7.868 GiB per second  df-passed: 3.674 GiB per second
 total size: 59.868 GiB  df-passed 3.494 GiB
-record DAMON intervals: sample 150 ms, aggr 3 s
+monitoring intervals: sample 150 ms, aggr 3 s
 # target 4 % accesses per 1 aggrs, [5 ms, 150 ms] sampling interval
