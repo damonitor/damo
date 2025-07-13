@@ -169,8 +169,8 @@ class DamonNrAccesses:
                     (self.hz is not None and self.hz == other.hz)
                  ))
 
-    def in_hz(self, intervals):
-        return self.samples / (intervals.aggr / 1000000)
+    def in_hz(self, aggr_us):
+        return self.samples / (aggr_us / 1000000)
 
     def add_unset_unit(self, intervals):
         if self.samples != None and self.percent != None:
