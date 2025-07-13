@@ -468,8 +468,7 @@ def damon_ctx_for(args, idx):
     ops = args.ops[idx]
 
     try:
-        ctx = _damon.DamonCtx(ops, None, intervals, nr_regions, schemes=[],
-                              addr_unit=args.ops_addr_unit)
+        ctx = _damon.DamonCtx(ops, None, intervals, nr_regions, schemes=[])
         return ctx, None
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
@@ -844,9 +843,6 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
             help='automatic kdamond internal stat refresh interval')
 
 def set_monitoring_argparser(parser, hide_help=False):
-    parser.add_argument('--ops_addr_unit', metavar='<bytes>',
-                        help='operations set address unit'
-                        if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--target_pid', type=int, metavar='<pid>',
                         action='append',
                         help='pid of monitoring target process'
