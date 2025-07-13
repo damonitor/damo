@@ -578,37 +578,46 @@ For example:
 
     # damo start
     # damo report access
-    heatmap: 88999988887777777555555533333332222222111111110000000000000000000000000000000000
-    # min/max temperatures: -664,810,000,000, 130,001,000, column size: 766.312 MiB
-    0   addr 4.000 GiB    size 1.366 GiB   access 0 %   age 3.400 s
-    1   addr 5.366 GiB    size 8.000 KiB   access 100 % age 700 ms
-    2   addr 5.366 GiB    size 4.000 KiB   access 35 %  age 0 ns
+    heatmap: 77788899998666666654444443333333322222221111111100000000000000000000000000000000
+    # min/max temperatures: -2,400,000,000, 1,500, column size: 766.312 MiB
+    intervals: sample 5 ms aggr 100 ms (max access hz 200)
+    0   addr 4.000 GiB    size 2.326 GiB   access 0 hz   age 2.800 s
+    1   addr 6.326 GiB    size 8.000 KiB   access 200 hz age 2.800 s
+    2   addr 6.326 GiB    size 12.000 KiB  access 10 hz  age 800 ms
     [...]
-    130 addr 55.494 GiB   size 5.792 GiB   access 0 %   age 1 h 49 m 49.500 s
-    131 addr 61.285 GiB   size 2.583 GiB   access 0 %   age 1 h 50 m 48.100 s
-    memory bw estimate: 75.464 GiB per second
+    71  addr 51.462 GiB   size 5.534 GiB   access 0 hz   age 23.700 s
+    72  addr 56.996 GiB   size 5.908 GiB   access 0 hz   age 23.900 s
+    73  addr 62.903 GiB   size 988.039 MiB access 0 hz   age 24 s
+    memory bw estimate: 121.143 GiB per second
     total size: 59.868 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
 
 The first line of the output shows the hotness (temperature) of regions on the
 address range as a heatmap visualization.  The location and value of each
 column on the line represents the relative location and the
 [access temperature](#access-temperature) of each memory region on the
 monitoring target address space.  The second line shows scales of the
-temperature number and size of the heatmap.
+temperature number and size of the heatmap.  The third line shows the sampling
+and aggregation
+[intervals](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#access-frequency-monitoring)
+that used for this snapshot.  DAMON checks if each page is accessed every
+"sampling interval", count the times it shown access for each page, and resets
+the counter every "aggregation interval".  Hence the observable maximum [access
+frequency in hz](#access-hz) depends on the intervals, and the maximum hz is
+shown on the same line.
 
 Lines showing more detailed properties of each region follow.  The detailed
 properties include the start address, (`addr`), size (`size`), [access
-rate](#access-rate) (`access`), and the
+frequency in hz](#access-hz) (`access`), and the
 [age](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)
-of the region.  “Access rate” represents the probability to show access on the
-region, if you periodically check accesses on the region.  “Age” means how long
-the access frequency to the region was kept.  For example the fourth line
-(starts with “2”) says it found 8 KiB memory region that starts from ~5.366 GiB
-address on the address space.  The region kept an access frequency that an
-observer could find it accessed about 100% of the time, and the frequency was
-kept for last 700 milliseconds.
+of the region.  “Access frequency” represents how many times each page in the
+region is accessed per second.  “Age” means how long the access frequency to
+the region was kept.  For example the sixth line (starts with “2”) says it
+found 12 KiB memory region that starts from ~6.326 GiB address on the address
+space.  The region was accessed about 10 times per second, and the frequency
+was kept for last 800 milliseconds.
 
-Final two lines show the memory bandwidth usage that is estimated from the
+Final three lines show the memory bandwidth usage that is estimated from the
 snapshot, and the total size of the regions that are listed on the output,
 respectively.
 
