@@ -306,6 +306,27 @@ def damos_stats_str(snapshot, record, fmt):
         return 'none'
     return snapshot.damos_stats.to_str(fmt.raw_number)
 
+def snapshot_monitoring_intervals(snapshot, record):
+    '''
+    Returns sampling and aggregation intervals for the snapshot, that may
+    auto-tuned.
+    '''
+    if not record.intervals.intervals_goal.enabled():
+        return [record.intervals.sample, record.intervals.aggr]
+
+    aggr_sample_ratio = record.intervals.aggr / record.intervals.sample
+    if snapshot.sample_interval_us is not None:
+        return [snapshot.sample_interval_us,
+                snapshot.sample_interval_us * aggr_sample_ratio]
+
+    snapshot_aggr_us = (snapshot.end_time - snapshot.start_time) / 1000
+    record_aggr_us = record.intervals.aggr
+    # if error is small enough, use simpler number
+    if abs(snapshot_aggr_us - record_aggr_us) / record_aggr_us < 0.1:
+        return [record.intervals.sample, record_aggr_us]
+    snapshot_sample_us = snapshot_aggr_us / aggr_sample_ratio
+    return [snapshot_sample_us, snapshot_aggr_us]
+
 def infer_aggr_time_us(snapshot, record):
     if snapshot.sample_interval_us is not None:
         aggr_sample_ratio = record.intervals.aggr / record.intervals.sample
