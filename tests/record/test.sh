@@ -13,7 +13,7 @@ cleanup_files()
 	do
 		if [ -f "$file" ]
 		then
-			if ! rm "$file"
+			if ! sudo rm "$file"
 			then
 				echo "removing $file failed"
 				exit 1
@@ -84,14 +84,14 @@ test_record_validate()
 
 	if [ "$regions_boundary" = "none" ]
 	then
-		if ! "$damo" validate &> /dev/null
+		if ! sudo "$damo" validate &> /dev/null
 		then
 			echo "FAIL $testname (record file is not valid)"
 			exit 1
 		fi
 	else
-		if ! "$damo" validate --regions_boundary "$regions_boundary" \
-			&> /dev/null
+		if ! sudo "$damo" validate \
+			--regions_boundary "$regions_boundary" &> /dev/null
 		then
 			echo "FAIL $testname (record file is not valid)"
 			exit 1
