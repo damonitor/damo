@@ -493,6 +493,36 @@ class DamosAccessPattern:
                 other.converted_for_units(
                     unit_samples, unit_aggr_intervals, intervals))
 
+class DamosDest:
+    id = None
+    weight = None
+
+    def __init__(self, id=0, weight=0):
+        self.id = _damo_fmt_str.text_to_nr(id)
+        self.weight = _damo_fmt_str.text_to_nr(weight)
+
+    def to_str(self, raw):
+        return 'id: %s, weight: %s' % (
+                _damo_fmt_str.format_nr(self.id, raw),
+                _damo_fmt_str.format_nr(self.weight, raw))
+
+    def __str__(self):
+        return self.to_str(False)
+
+    def __eq__(self, other):
+        return (type(self) == type(other) and
+                self.id == other.id and self.weight == other.weight)
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamosDest(kv['id'], kv['weight'])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('id', self.id),
+            ('weight', self.weight),
+            ])
+
 qgoal_user_input = 'user_input'
 qgoal_some_mem_psi_us = 'some_mem_psi_us'
 qgoal_node_mem_used_bp = 'node_mem_used_bp'
