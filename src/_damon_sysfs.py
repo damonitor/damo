@@ -1069,6 +1069,9 @@ def update_supported_features():
                              'nid')):
             feature_supports['schemes_quota_goal_node_mem_used_free'] = True
 
+    if os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'dests')):
+        feature_supports['schemes_dests'] = True
+
     if os.path.isfile(os.path.join(kdamond_dir_of(0), 'refresh_ms')):
         feature_supports['sysfs_refresh_ms'] = True
 
