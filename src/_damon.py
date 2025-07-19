@@ -950,6 +950,7 @@ class Damos:
     access_pattern = None
     action = None
     target_nid = None
+    dests = None
     apply_interval_us = None
     quotas = None
     watermarks = None
@@ -965,12 +966,13 @@ class Damos:
             self, access_pattern=None,
             action=damos_action_stat, target_nid=None, apply_interval_us=None,
             quotas=None, watermarks=None, filters=None, stats=None,
-            tried_regions=None, tried_bytes=None):
+            tried_regions=None, tried_bytes=None, dests=None):
         self.access_pattern = (access_pattern
                 if access_pattern != None else DamosAccessPattern())
         if not action in damos_actions:
             raise Exception('wrong damos action: %s' % action)
         self.action = action
+        self.dests = dests if dests is not None else []
         self.target_nid = target_nid
         if apply_interval_us != None:
             self.apply_interval_us = _damo_fmt_str.text_to_us(
@@ -1011,6 +1013,8 @@ class Damos:
             lines.append('target access pattern')
             lines.append(_damo_fmt_str.indent_lines(
                 self.access_pattern.to_str(raw), 4))
+        for dest in self.dests:
+            lines.append('dest %d weight %d' % (dest.id, dest.weight))
         if self.quotas is not None:
             lines.append('quotas')
             lines.append(_damo_fmt_str.indent_lines(
@@ -1043,6 +1047,7 @@ class Damos:
         return (type(self) == type(other) and
                 self.access_pattern == other.access_pattern and
                 self.action == other.action and
+                self.dests == other.dests and
                 self.apply_interval_us == other.apply_interval_us and
                 self.quotas == other.quotas and
                 self.watermarks == other.watermarks and
@@ -1054,6 +1059,10 @@ class Damos:
         if 'filters' in kv:
             for damos_filter_kv in kv['filters']:
                 filters.append(DamosFilter.from_kvpairs(damos_filter_kv))
+        dests = []
+        if 'dests' in kv:
+            for dest_kv in kv['dests']:
+                dests.append(DamosDest.from_kvpairs(dest_kv))
         return Damos(DamosAccessPattern.from_kvpairs(kv['access_pattern'])
                     if 'access_pattern' in kv else DamosAccessPattern(),
                 kv['action'] if 'action' in kv else damos_action_stat,
@@ -1064,11 +1073,12 @@ class Damos:
                 DamosWatermarks.from_kvpairs(kv['watermarks'])
                     if 'watermarks' in kv else DamosWatermarks(),
                 filters,
-                None, None)
+                None, None, dests=dests)
 
     def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
         kv = collections.OrderedDict()
         kv['action'] = self.action
+        kv['dests'] = [dest.to_kvpairs(raw) for dest in self.dests]
         if is_damos_migrate_action(self.action):
             kv['target_nid'] = self.target_nid
         if not omit_defaults or self.access_pattern != DamosAccessPattern():
@@ -1092,6 +1102,7 @@ class Damos:
                 self.access_pattern.effectively_equal(
                     other.access_pattern, intervals) and
                 self.action == other.action and
+                self.dests == other.dests and
                 self.apply_interval_us == other.apply_interval_us and
                 self.quotas == other.quotas and
                 self.watermarks == other.watermarks and
