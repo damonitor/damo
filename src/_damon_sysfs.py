@@ -910,6 +910,8 @@ def infer_damon_version():
     if err is None:
         if os.path.isfile(os.path.join(kdamond_dir_of(0), 'refresh_ms')):
             version = '>v6.16'
+        elif os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'dests')):
+            version = '>v6.16'
         elif os.path.isfile(
                 os.path.join(
                     scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0', 'nid')):
