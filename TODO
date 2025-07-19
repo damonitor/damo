@@ -40,6 +40,7 @@
 - Support multiple targets snapshot (get_snapshot_records())
 - support 2d heatmap on report access
 - Support drgn based 'damo diagnose'
+- Support DAMOS dests
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
