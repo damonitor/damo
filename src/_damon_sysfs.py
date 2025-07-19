@@ -345,6 +345,23 @@ def write_quotas_dir(dir_path, quotas):
 
     return write_quota_goals_dir(os.path.join(dir_path, 'goals'), quotas.goals)
 
+def write_scheme_dests_dir(dir_path, dests):
+    if len(dests) == 0:
+        return None
+    err = ensure_nr_file_for(os.path.join(dir_path, 'nr_dests'), dests)
+    if err is not None:
+        return err
+
+    for idx, dest in enumerate(dests):
+        err = _damo_fs.write_file(os.path.join(dir_path, '%d' % idx, 'id'),
+                                  '%d' % dest.id)
+        if err is not None:
+            return err
+        err = _damo_fs.write_file(os.path.join(dir_path, '%d' % idx, 'weight'),
+                                  '%d' % dest.weight)
+        if err is not None:
+            return err
+
 def write_ulong(file_path, val):
     return _damo_fs.write_file(
             file_path, '%d' % min(val, _damo_fmt_str.ulong_max))
@@ -384,6 +401,11 @@ def write_scheme_dir(dir_path, scheme):
         return err
 
     err = _damo_fs.write_file(os.path.join(dir_path, 'action'), scheme.action)
+    if err is not None:
+        return err
+
+    err = write_scheme_dests_dir(
+            os.path.join(dir_path, 'dests'), scheme.dests)
     if err is not None:
         return err
 
