@@ -6,6 +6,8 @@ cd "$bindir"
 
 damo="../../damo"
 
+cmd_log=$(mktemp damo_test_cmd_log_XXX)
+
 cleanup_files()
 {
 	files_to_remove="./damon.data ./damon.data.perf.data ./damon.data.old"
@@ -25,10 +27,11 @@ cleanup_files()
 test_record_permission()
 {
 	sudo "$damo" record "sleep 3" --timeout 3 --output_permission 611 \
-		&> /dev/null
+		&> "$cmd_log"
 	if [ ! "$(stat -c %a damon.data)" = "611" ]
 	then
 		echo "FAIL record-permission"
+		cat "$cmd_log"
 		exit 1
 	fi
 	cleanup_files
@@ -66,12 +69,12 @@ test_record_validate()
 	then
 		sudo "$damo" record "$target" --timeout "$timeout" \
 			--damon_interface_DEPRECATED "$damon_interface" \
-			&> /dev/null
+			&> "$cmd_log"
 	else
 		sudo "$damo" record "$target" --timeout "$timeout" \
 			--regions "$regions_boundary" \
 			--damon_interface_DEPRECATED "$damon_interface" \
-			&> /dev/null
+			&> "$cmd_log"
 	fi
 
 	rc=$?
@@ -79,21 +82,24 @@ test_record_validate()
 	then
 		echo "FAIL $testname"
 		echo "(damo-record command failed with value $rc)"
+		cat "$cmd_log"
 		exit 1
 	fi
 
 	if [ "$regions_boundary" = "none" ]
 	then
-		if ! sudo "$damo" validate &> /dev/null
+		if ! sudo "$damo" validate &> "$cmd_log"
 		then
 			echo "FAIL $testname (record file is not valid)"
+			cat "$cmd_log"
 			exit 1
 		fi
 	else
 		if ! sudo "$damo" validate \
-			--regions_boundary "$regions_boundary" &> /dev/null
+			--regions_boundary "$regions_boundary" &> "$cmd_log"
 		then
 			echo "FAIL $testname (record file is not valid)"
+			cat "$cmd_log"
 			exit 1
 		fi
 	fi
@@ -101,6 +107,7 @@ test_record_validate()
 	if [ -f ./damon.data.perf.data ]
 	then
 		echo "FAIL $testname (perf.data is not removed)"
+		cat "$cmd_log"
 		exit 1
 	fi
 
@@ -108,6 +115,7 @@ test_record_validate()
 	if [ ! "$permission" = "600" ]
 	then
 		echo "FAIL $testname (out file permission $permission)"
+		cat "$cmd_log"
 		exit 1
 	fi
 
@@ -149,4 +157,5 @@ fi
 
 test_record_permission
 
+rm -f "$cmd_log"
 echo "PASS $(basename $(pwd))"
