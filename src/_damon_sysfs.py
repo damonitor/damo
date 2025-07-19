@@ -744,7 +744,16 @@ def files_content_to_damos_tried_regions(files_content):
             if 'sz_filter_passed' in kv else None,
             ) for kv in number_sorted_dirs(files_content)]
 
+def files_content_to_damos_dest(files_content):
+    return _damon.DamosDest(
+            id=int(files_content['id']), weight=int(files_content['weight']))
+
 def files_content_to_scheme(files_content):
+    dests = []
+    if 'dests' in files_content:
+        dests = [files_content_to_damos_dest(content)
+            for content in numbered_dirs_content(
+                files_content['dests'], 'nr_dests')]
     return _damon.Damos(
             files_content_to_access_pattern(files_content['access_pattern']),
             files_content['action'].strip(),
@@ -762,7 +771,8 @@ def files_content_to_scheme(files_content):
                 if 'tried_regions' in files_content else [],
             files_content['tried_regions']['total_bytes']
                 if 'tried_regions' in files_content and
-                    'total_bytes' in files_content['tried_regions'] else None)
+                    'total_bytes' in files_content['tried_regions'] else None,
+            dests=dests)
 
 def files_content_to_regions(files_content):
     return [_damon.DamonRegion(
