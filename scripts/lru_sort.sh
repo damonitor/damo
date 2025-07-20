@@ -1,6 +1,19 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 
+# This script shows example usage of damo for access-aware Linux kernel LRU
+# lists sorting[1,2].  This script asks DAMON to move hot and cold pages in
+# active and inactive LRU lists to inactive and active lists, respectively.
+# The hotness and coldness thresholds are automatically tuned by DAMON, aiming
+# number of pages in active LRU lists and inactive LRU lists being nearly same.
+#
+# To run this, the kernel should run with the LRU sorting advancing patch
+# series[2], which is not yet merged into the mainline as of this writing
+# (2025-07-20).
+#
+# [1] https://lwn.net/Articles/905370/
+# [2] https://lore.kernel.org/20250628165144.55528-1-sj@kernel.org
+
 set -e
 
 bindir=$(realpath $(dirname "$0"))
