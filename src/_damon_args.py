@@ -887,6 +887,10 @@ def set_damos_argparser(parser, hide_help):
                             'damos action to apply to the target regions.',
                             '<action> should be {%s}.' %
                             ','.join(_damon.damos_actions),
+                            'for \'migrate_{hot,cold}\' actions,',
+                            'single target node id or',
+                            'multiple destination nodes input',
+                            'should also be given.'
                             ])
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--damos_sz_region', metavar=('<min>', '<max>'),
