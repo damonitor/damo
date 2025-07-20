@@ -1,11 +1,13 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.9.0
+- Support multiple DAMOS action destinations.
+- Add example scripts (scripts/) for memory tiering and LRU lists sorting.
+
 v2.8.9
 - Show access frequency in hertz by default.
 - Support automatic and faster DAMON status read (--refresh_stat).
-- Support DAMOS action destinations.
-- Add example scripts (scripts/) for memory tiering and LRU lists sorting.
 
 v2.8.8
 - Improve handling of access records that made with intervals auto-tuning
