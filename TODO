@@ -40,7 +40,6 @@
 - Support multiple targets snapshot (get_snapshot_records())
 - support 2d heatmap on report access
 - Support drgn based 'damo diagnose'
-- Support DAMOS dests
 - Support paddr_fault
 
 - Deprecate old features
