@@ -303,7 +303,7 @@ def damos_options_to_quotas(quotas, goals):
     return quotas, None
 
 def damos_options_to_scheme(sz_region, access_rate, age, action,
-        apply_interval, quotas, goals, wmarks, target_nid, filters):
+        apply_interval, quotas, goals, wmarks, target_nid, filters, dests):
     if quotas != None:
         quotas, err = damos_options_to_quotas(quotas, goals)
         if err is not None:
@@ -326,7 +326,7 @@ def damos_options_to_scheme(sz_region, access_rate, age, action,
                 access_pattern=_damon.DamosAccessPattern(sz_region,
                     access_rate, _damon.unit_percent, age, _damon.unit_usec),
                 action=action, target_nid=target_nid,
-                apply_interval_us=apply_interval, quotas=quotas,
+                dests=dests, apply_interval_us=apply_interval, quotas=quotas,
                 watermarks=wmarks, filters=filters), None
     except Exception as e:
         return None, 'Wrong \'--damos_*\' argument (%s)' % e
@@ -383,16 +383,29 @@ def damos_options_to_schemes(args):
     args.damos_quotas += [None] * (nr_schemes - len(args.damos_quotas))
     args.damos_wmarks += [None] * (nr_schemes - len(args.damos_wmarks))
     target_nid = [None] * nr_schemes
+    dests_list = []
+    for i in range(nr_schemes):
+        dests_list.append([])
     schemes = []
 
     for i in range(nr_schemes):
         action = args.damos_action[i][0]
         if _damon.is_damos_migrate_action(action):
             try:
-                target_nid[i] = int(args.damos_action[i][1])
-                args.damos_action[i] = args.damos_action[i][0]
+                if len(args.damos_action[i]) == 2:
+                    target_nid[i] = int(args.damos_action[i][1])
+                    args.damos_action[i] = args.damos_action[i][0]
+                elif len(args.damos_action[i]) > 2:
+                    dests = []
+                    for j in range(1, len(args.damos_action[i]), 2):
+                        dests.append(_damon.DamosDest(
+                            args.damos_action[i][j],
+                            args.damos_action[i][j + 1]))
+                    dests_list[i] = dests
+                    args.damos_action[i] = args.damos_action[i][0]
             except:
-                return [], '"%s" action require a numeric target_nid argument.' \
+                return [], '"%s" action require a numeric target_nid ' \
+                        'or dests arguments.' \
                             % args.damos_action[i][0]
         else:
             args.damos_action[i] = action
@@ -408,10 +421,12 @@ def damos_options_to_schemes(args):
             filter_start_index = sum(args.damos_nr_filters[:i])
             filter_end_index = filter_start_index + args.damos_nr_filters[i]
             filters = args.damos_filter[filter_start_index:filter_end_index]
-        scheme, err = damos_options_to_scheme(args.damos_sz_region[i],
+        scheme, err = damos_options_to_scheme(
+                args.damos_sz_region[i],
                 args.damos_access_rate[i], args.damos_age[i],
                 args.damos_action[i], args.damos_apply_interval[i],
-                args.damos_quotas[i], qgoals, args.damos_wmarks[i], target_nid[i], filters)
+                args.damos_quotas[i], qgoals, args.damos_wmarks[i],
+                target_nid[i], filters, dests_list[i])
         if err != None:
             return [], err
         schemes.append(scheme)
