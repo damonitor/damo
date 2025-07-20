@@ -1,6 +1,21 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 
+# This script shows example usage of damo for access-aware tiered memory
+# management.  The script assumes the system has two NUMA nodes of id 0 and 1,
+# and node 0 is faster than node 1, for all CPUs.  The script asks DAMON to
+# migrate hot pages in node 1 to node 0 (promote), while migrating cold pages
+# in node 0 to node 1 (demote).  The hotness and coldness thresholds are
+# auto-tuned aiming ~99.6 percent of node 0 memory utilization.  The basic idea
+# behind the tiering policy is came from TPP[1].  This script is also
+# implemented for DAMON's auto-tune based memory tiering support[2].
+#
+# To run this, the kernel should have the auto-tuned memory tiering support of
+# DAMON[2], which was landed into the mainline since v6.16-rc1.
+#
+# [1] https://dl.acm.org/doi/10.1145/3582016.3582063
+# [2] https://lkml.kernel.org/r/20250420194030.75838-1-sj@kernel.org
+
 set -e
 
 bindir=$(realpath $(dirname "$0"))
