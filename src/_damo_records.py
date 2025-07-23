@@ -978,7 +978,7 @@ def add_childs_target(kdamonds):
 
         # commit the new set of targets
         kdamonds[0].contexts[0].targets = new_targets
-        err = _damon.commit(kdamonds)
+        err = _damon.commit(kdamonds, commit_targets_only=True)
         if err is not None:
             return 'commit failed (%s)' % err
     return None

@@ -614,6 +614,29 @@ def stage_kdamonds(kdamonds):
     # Assume caller checked supported()
     return write_kdamonds_dir(get_kdamonds_dir(), kdamonds)
 
+def stage_kdamonds_targets(kdamonds):
+    kdamonds_dir_path = get_kdamonds_dir()
+
+    err = ensure_nr_file_for(os.path.join(kdamonds_dir_path, 'nr_kdamonds'), kdamonds)
+    if err:
+        return err
+
+    for k_idx, kdamond in enumerate(kdamonds):
+        contexts_dir_path = os.path.join(kdamonds_dir_path, '%d' % k_idx, 'contexts')
+        contexts = kdamond.contexts
+
+        err = ensure_nr_file_for(os.path.join(contexts_dir_path, 'nr_contexts'), contexts)
+        if err:
+            return err
+
+        for c_idx, context in enumerate(contexts):
+            targets_dir_path = os.path.join(contexts_dir_path, '%d' % c_idx, 'targets')
+            err = write_targets_dir(targets_dir_path, context.targets)
+            if err:
+                return err
+
+    return None
+
 # for current_kdamonds()
 
 def numbered_dirs_content(files_content, nr_filename):
