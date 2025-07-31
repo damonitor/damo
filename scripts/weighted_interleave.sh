@@ -5,7 +5,7 @@
 # interleaving. The script assumes the system has two NUMA nodes of id 0 and 1.
 # The script asks DAMON to interleave hot pages of the target process, passed
 # as the first command line argument of this script, at a 1:1 ratio between
-# nodes 0 and 1. 
+# nodes 0 and 1.
 #
 # To run this, the kernel should have the weighted interleaving support of
 # DAMON[1], which is expected to land into mainline in v6.17-rc1.
