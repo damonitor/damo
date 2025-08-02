@@ -510,6 +510,12 @@ def write_monitoring_intervals_goal_dir(dir_path, goal):
     if err is not None:
         return err
 
+def write_ops_attrs_dir(dir_path, ops_attrs):
+    if not os.path.isdir(dir_path):
+        return None
+    return _damo_fs.write_file(os.path.join(dir_path, 'use_reports'),
+                               'Y' if ops_attrs.use_reports else 'N')
+
 def write_monitoring_attrs_dir(dir_path, context):
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'intervals', 'sample_us'),
@@ -549,6 +555,11 @@ def write_monitoring_attrs_dir(dir_path, context):
 def write_context_dir(dir_path, context):
     err = _damo_fs.write_file(os.path.join(dir_path, 'operations'),
                               context.ops)
+    if err is not None:
+        return err
+
+    err = write_ops_attrs_dir(
+            os.path.join(dir_path, 'operations_attrs'), context.ops_attrs)
     if err is not None:
         return err
 
