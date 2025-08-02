@@ -821,6 +821,10 @@ def files_content_to_target(files_content):
     regions = files_content_to_regions(files_content['regions'])
     return _damon.DamonTarget(pid, regions)
 
+def files_content_to_ops_attrs(files_content):
+    use_reports = files_content['use_reports'].strip()
+    return _damon.OpsAttrs(use_reports)
+
 def files_content_to_context(files_content):
     mon_attrs_content = files_content['monitoring_attrs']
     intervals_content = mon_attrs_content['intervals']
@@ -841,6 +845,11 @@ def files_content_to_context(files_content):
             int(nr_regions_content['min']),
             int(nr_regions_content['max']))
     ops = files_content['operations'].strip()
+    if 'operations_attrs' in files_content:
+        ops_attrs = files_content_to_ops_attrs(
+                files_content['operations_attrs'])
+    else:
+        ops_attrs = _damon.OpsAttrs()
 
     targets_content = files_content['targets']
     targets = [files_content_to_target(content)
@@ -852,7 +861,8 @@ def files_content_to_context(files_content):
             for content in numbered_dirs_content(
                 schemes_content, 'nr_schemes')]
 
-    return _damon.DamonCtx(ops, targets, intervals, nr_regions, schemes)
+    return _damon.DamonCtx(ops, targets, intervals, nr_regions, schemes,
+                           ops_attrs=ops_attrs)
 
 def files_content_to_kdamond(files_content):
     contexts_content = files_content['contexts']
