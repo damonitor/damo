@@ -1135,6 +1135,7 @@ class Damos:
 
 class DamonCtx:
     ops = None
+    ops_attrs = None
     targets = None
     intervals = None
     nr_regions = None
@@ -1142,8 +1143,9 @@ class DamonCtx:
     kdamond = None
 
     def __init__(self, ops='paddr', targets=None, intervals=None,
-                 nr_regions=None, schemes=None):
+                 nr_regions=None, schemes=None, ops_attrs=None):
         self.ops = ops
+        self.ops_attrs = ops_attrs if ops_attrs is not None else OpsAttrs()
         self.targets = targets if targets is not None else []
         for target in self.targets:
             target.context = self
@@ -1156,8 +1158,10 @@ class DamonCtx:
             scheme.context = self
 
     def to_str(self, raw, params_only=False):
-        ops_line = 'ops: %s' % self.ops
-        lines = [ops_line]
+        ops_line_tokens = ['ops: %s' % self.ops]
+        if self.ops_attrs.use_reports:
+            ops_line_tokens.append('use_reports')
+        lines = [' '.join(ops_line_tokens)]
         for idx, target in enumerate(self.targets):
             lines.append('target %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(target.to_str(raw), 4))
