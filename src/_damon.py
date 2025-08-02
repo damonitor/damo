@@ -1365,6 +1365,7 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
                                         # merged in v6.16-rc
             'schemes_dests',            # merged in mm before v6.16 release
             'sysfs_refresh_ms',         # merged in mm before v6.16 release
+            'ops_attrs',                # hacking on damon/next
             ]
 
 _damon_fs = None
