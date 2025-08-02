@@ -481,12 +481,12 @@ def damon_ctx_for(args, idx):
     except Exception as e:
         return None, 'invalid nr_regions arguments (%s)' % e
     ops = args.ops[idx]
-    if args.ops_use_reports[idx] is not None:
-        use_reports = args.ops_use_reports[idx]
+    if args.exp_ops_use_reports[idx] is not None:
+        use_reports = args.exp_ops_use_reports[idx]
     else:
         use_reports = False
-    if args.ops_write_only[idx] is not None:
-        write_only = args.ops_write_only[idx]
+    if args.exp_ops_write_only[idx] is not None:
+        write_only = args.exp_ops_write_only[idx]
     else:
         write_only = False
     try:
@@ -529,8 +529,8 @@ def get_nr_targets(args):
 def fillup_none_ctx_args(args):
     nr_ctxs = get_nr_ctxs(args)
     for attr_name in [
-            'ops', 'ops_use_reports', 'ops_write_only', 'sample', 'aggr',
-            'updr', 'minr', 'maxr', 'monitoring_intervals',
+            'ops', 'exp_ops_use_reports', 'exp_ops_write_only', 'sample',
+            'aggr', 'updr', 'minr', 'maxr', 'monitoring_intervals',
             'monitoring_intervals_goal', 'monitoring_nr_regions_range']:
         attr_val = getattr(args, attr_name)
         if attr_val is None:
@@ -867,11 +867,13 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
                         action='append',
                         help='monitoring operations set'
                         if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--ops_use_reports', action='append', metavar='<Y|N>',
-                        help='let monitoring operations set to use reports'
+    parser.add_argument('--exp_ops_use_reports', action='append',
+                        metavar='<Y|N>',
+                        help='use access reports (experimental)'
                         if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--ops_write_only', action='append', metavar='<Y|N>',
-                        help='monitor writes only'
+    parser.add_argument('--exp_ops_write_only', action='append',
+                        metavar='<Y|N>',
+                        help='monitor writes only (experimental)'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--refresh_stat', metavar='<milliseconds>', action='append',
