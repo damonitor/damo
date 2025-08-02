@@ -19,12 +19,15 @@ import damo_version
 
 class OpsAttrs:
     use_reports = None
+    write_only = None
 
-    def __init__(self, use_reports=False):
+    def __init__(self, use_reports=False, write_only=False):
         self.use_reports = _damo_fmt_str.text_to_bool(use_reports)
+        self.write_only = _damo_fmt_str.text_to_bool(write_only)
 
     def to_str(self, raw):
-        return 'use_reports: %s' % self.use_reports
+        return 'use_reports: %s, write_only: %s' % (
+                self.use_reports, self.write_only)
 
     def __str__(self):
         return self.to_str(False)
@@ -35,11 +38,16 @@ class OpsAttrs:
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
-        return OpsAttrs(kvpairs['use_reports'])
+        use_reports = kvpairs['use_reports'] \
+                if 'use_reports' in kvpiars else False
+        write_only = kvpairs['write_only'] \
+                if 'write_only' in kvpairs else False
+        return OpsAttrs(use_reports=use_reports, write_only=write_only)
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('use_reports', self.use_reports),
+            ('write_only', self.write_only),
             ])
 
 class DamonIntervalsGoal:
