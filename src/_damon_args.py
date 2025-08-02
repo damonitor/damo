@@ -481,9 +481,18 @@ def damon_ctx_for(args, idx):
     except Exception as e:
         return None, 'invalid nr_regions arguments (%s)' % e
     ops = args.ops[idx]
+    if args.ops_use_reports[idx] is not None:
+        use_reports = args.ops_use_reports[idx]
+    else:
+        use_reports = False
+    try:
+        ops_attrs = _damon.OpsAttrs(use_reports=use_reports)
+    except Exception as e:
+        return None, 'invalid ops_use_reports (%s)' % e
 
     try:
-        ctx = _damon.DamonCtx(ops, None, intervals, nr_regions, schemes=[])
+        ctx = _damon.DamonCtx(ops, None, intervals, nr_regions, schemes=[],
+                              ops_attrs=ops_attrs)
         return ctx, None
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
@@ -515,7 +524,7 @@ def get_nr_targets(args):
 def fillup_none_ctx_args(args):
     nr_ctxs = get_nr_ctxs(args)
     for attr_name in [
-            'ops', 'sample', 'aggr', 'updr', 'minr', 'maxr',
+            'ops', 'ops_use_reports', 'sample', 'aggr', 'updr', 'minr', 'maxr',
             'monitoring_intervals', 'monitoring_intervals_goal',
             'monitoring_nr_regions_range']:
         attr_val = getattr(args, attr_name)
@@ -852,6 +861,9 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
     parser.add_argument('--ops', choices=['vaddr', 'paddr', 'fvaddr'],
                         action='append',
                         help='monitoring operations set'
+                        if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--ops_use_reports', action='append', metavar='<Y|N>',
+                        help='let monitoring operations set to use reports'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--refresh_stat', metavar='<milliseconds>', action='append',
