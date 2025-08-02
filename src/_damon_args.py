@@ -485,10 +485,15 @@ def damon_ctx_for(args, idx):
         use_reports = args.ops_use_reports[idx]
     else:
         use_reports = False
+    if args.ops_write_only[idx] is not None:
+        write_only = args.ops_write_only[idx]
+    else:
+        write_only = False
     try:
-        ops_attrs = _damon.OpsAttrs(use_reports=use_reports)
+        ops_attrs = _damon.OpsAttrs(
+                use_reports=use_reports, write_only=write_only)
     except Exception as e:
-        return None, 'invalid ops_use_reports (%s)' % e
+        return None, 'invalid ops_attrs arguments (%s)' % e
 
     try:
         ctx = _damon.DamonCtx(ops, None, intervals, nr_regions, schemes=[],
@@ -524,9 +529,9 @@ def get_nr_targets(args):
 def fillup_none_ctx_args(args):
     nr_ctxs = get_nr_ctxs(args)
     for attr_name in [
-            'ops', 'ops_use_reports', 'sample', 'aggr', 'updr', 'minr', 'maxr',
-            'monitoring_intervals', 'monitoring_intervals_goal',
-            'monitoring_nr_regions_range']:
+            'ops', 'ops_use_reports', 'ops_write_only', 'sample', 'aggr',
+            'updr', 'minr', 'maxr', 'monitoring_intervals',
+            'monitoring_intervals_goal', 'monitoring_nr_regions_range']:
         attr_val = getattr(args, attr_name)
         if attr_val is None:
             setattr(args, attr_name, [None] * nr_ctxs)
@@ -864,6 +869,9 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--ops_use_reports', action='append', metavar='<Y|N>',
                         help='let monitoring operations set to use reports'
+                        if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--ops_write_only', action='append', metavar='<Y|N>',
+                        help='monitor writes only'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--refresh_stat', metavar='<milliseconds>', action='append',
