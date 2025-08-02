@@ -17,6 +17,31 @@ import damo_version
 
 # Core data structures
 
+class OpsAttrs:
+    use_reports = None
+
+    def __init__(self, use_reports=False):
+        self.use_reports = _damo_fmt_str.text_to_bool(use_reports)
+
+    def to_str(self, raw):
+        return 'use_reports: %s' % self.use_reports
+
+    def __str__(self):
+        return self.to_str(False)
+
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+                self.use_reports == other.use_reports
+
+    @classmethod
+    def from_kvpairs(cls, kvpairs):
+        return OpsAttrs(kvpairs['use_reports'])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('use_reports', self.use_reports),
+            ])
+
 class DamonIntervalsGoal:
     access_bp = None
     aggrs = None
