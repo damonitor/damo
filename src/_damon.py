@@ -34,7 +34,8 @@ class OpsAttrs:
 
     def __eq__(self, other):
         return type(self) == type(other) and \
-                self.use_reports == other.use_reports
+                self.use_reports == other.use_reports and \
+                self.write_only == other.write_only
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
