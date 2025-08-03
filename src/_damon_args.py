@@ -489,9 +489,13 @@ def damon_ctx_for(args, idx):
         write_only = args.exp_ops_write_only[idx]
     else:
         write_only = False
+    if args.exp_ops_cpus[idx] is not None:
+        cpus = args.exp_ops_cpus[idx]
+    else:
+        cpus = 'all'
     try:
         ops_attrs = _damon.OpsAttrs(
-                use_reports=use_reports, write_only=write_only)
+                use_reports=use_reports, write_only=write_only, cpus=cpus)
     except Exception as e:
         return None, 'invalid ops_attrs arguments (%s)' % e
 
@@ -529,8 +533,8 @@ def get_nr_targets(args):
 def fillup_none_ctx_args(args):
     nr_ctxs = get_nr_ctxs(args)
     for attr_name in [
-            'ops', 'exp_ops_use_reports', 'exp_ops_write_only', 'sample',
-            'aggr', 'updr', 'minr', 'maxr', 'monitoring_intervals',
+            'ops', 'exp_ops_use_reports', 'exp_ops_write_only', 'exp_ops_cpus',
+            'sample', 'aggr', 'updr', 'minr', 'maxr', 'monitoring_intervals',
             'monitoring_intervals_goal', 'monitoring_nr_regions_range']:
         attr_val = getattr(args, attr_name)
         if attr_val is None:
@@ -874,6 +878,9 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
     parser.add_argument('--exp_ops_write_only', action='append',
                         metavar='<Y|N>',
                         help='monitor writes only (experimental)'
+                        if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--exp_ops_cpus', action='append', metavar='<cpulist>',
+                        help='monitor for given cpus only (experimental)'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--refresh_stat', metavar='<milliseconds>', action='append',
