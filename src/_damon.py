@@ -20,14 +20,16 @@ import damo_version
 class OpsAttrs:
     use_reports = None
     write_only = None
+    cpus = None         #cpus list string
 
-    def __init__(self, use_reports=False, write_only=False):
+    def __init__(self, use_reports=False, write_only=False, cpus=None):
         self.use_reports = _damo_fmt_str.text_to_bool(use_reports)
         self.write_only = _damo_fmt_str.text_to_bool(write_only)
+        self.cpus = cpus if cpus is not None else 'all'
 
     def to_str(self, raw):
-        return 'use_reports: %s, write_only: %s' % (
-                self.use_reports, self.write_only)
+        return 'use_reports: %s, write_only: %s, cpus: %s' % (
+                self.use_reports, self.write_only, self.cpus)
 
     def __str__(self):
         return self.to_str(False)
@@ -35,7 +37,8 @@ class OpsAttrs:
     def __eq__(self, other):
         return type(self) == type(other) and \
                 self.use_reports == other.use_reports and \
-                self.write_only == other.write_only
+                self.write_only == other.write_only and \
+                self.cpus == other.cpus
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
@@ -43,12 +46,15 @@ class OpsAttrs:
                 if 'use_reports' in kvpiars else False
         write_only = kvpairs['write_only'] \
                 if 'write_only' in kvpairs else False
-        return OpsAttrs(use_reports=use_reports, write_only=write_only)
+        cpus = kvpairs['cpus'] if 'cpus' in kvpairs else 'all'
+        return OpsAttrs(use_reports=use_reports, write_only=write_only,
+                        cpus=cpus)
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('use_reports', self.use_reports),
             ('write_only', self.write_only),
+            ('cpus', self.cpus),
             ])
 
 class DamonIntervalsGoal:
