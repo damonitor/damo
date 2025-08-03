@@ -1552,3 +1552,66 @@ memory bandwidth more than 'damo replay' and/or replaying systems could, and as
 the difference of the performance is big, the replayed accesses would be less
 similar to the original one.  To show the real memory access performance of
 `damo replay` on specific system, users could use `--test_perf` option.
+
+Write-only and CPUs-only Access Monitoring (EXPERIMENTAL)
+---------------------------------------------------------
+
+Note: These features are extremely experimental.  Many changes would be made
+and the support can be dropped in future.
+
+On Linux kernel built with some hacks that exist in
+[damon/next](https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/log/?h=damon/next)
+tree as of this writing (2025-08-03), users can do data access monitoring for
+only writes, or for accesses made by given set of CPUs using `damo`.
+Currently, only physical address space monitoring supports this.
+
+### Write-only Access Monitoring
+
+Users can do write-only data access monitoring by adding
+`--exp_ops_use_reports` and `--exp_ops_write_only` options with value `y` to
+the usual DAMON parameters setup commands including `damo start` and `damo
+tune`, like below.
+
+    damo start --exp_ops_use_reports y --exp_ops_write_only y
+
+Then all access monitoring results will silently ignore read accesses, and show
+only the accesses that made for writes.
+
+Note that only physical address space monitoring is supported for now.
+
+### CPUs-only Access Monitoring
+
+Users can monitor the data accesses made by only specific CPUs by adding
+`--exp_ops_use_reports` and `--exp_ops_cpus` options to the usual DAMON
+parameters setup commands including `damo start` and `damo tune`, like below.
+
+    damo start --exp_ops_use_reports y --exp_ops_cpus 0-3,5-7,9
+
+`--exp_ops_use_reports` argument should always be `y`.
+
+`--exp_ops_cpus` option should be given with a list of the desired CPUs.  In
+this example, accesses that made by only CPUs of id 0, 1, 2, 3, 5, 6, 7, or 9
+will be monitored and reported.  The format of the cpus list is same to that
+for
+[cpuset.cpus](https://docs.kernel.org/admin-guide/cgroup-v2.html#cpuset-interface-files)
+file of cgroup v2.
+
+Note that only physical address space monitoring is supported for now.
+
+### Cautions and Plan to Drop Experimental Tag
+
+The write-only and cpus-only monitoring features require changes in Linux
+kernel that not yet upstreamed.  The changes are available at
+[damon/next](https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/log/?h=damon/next)
+tree, which is for containing under-development DAMON works, as of this writing
+(2025-08-03).  To make those upstreamed, we may need significant amount of
+efforts.  Many changes could be made on the upstreamed version.  In the worst
+case, we would forgive upstreaming the changes to mainline kernel, and drop the
+support on the damon/next tree.
+
+The user interface for these features on `damo` will definitely be changed in
+future.  At least, `--exp_` part will be removed.
+
+So, please feel free to try and let us know if it is useful and worthy enough
+to make the upstream efforts.  But, please don't make your long term important
+works depend on these.
