@@ -1612,6 +1612,9 @@ support on the damon/next tree.
 The user interface for these features on `damo` will definitely be changed in
 future.  At least, `--exp_` part will be removed.
 
-So, please feel free to try and let us know if it is useful and worthy enough
-to make the upstream efforts.  But, please don't make your long term important
-works depend on these.
+Finally, as of this writing (2025-08-03), the features are nearly not tested,
+so there could be many bugs.
+
+So, please feel free to try and let us know bugs that you found, and if it is
+useful and worthy enough to make the upstream efforts.  But, please don't make
+your long term important works depend on these.
