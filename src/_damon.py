@@ -1176,6 +1176,7 @@ class DamonCtx:
         ops_line_tokens = ['ops: %s' % self.ops]
         if self.ops_attrs.use_reports:
             ops_line_tokens.append('use_reports')
+            ops_line_tokens.append('cpus %s' % self.ops_attrs.cpus)
         if self.ops_attrs.write_only:
             ops_line_tokens.append('write-only')
         lines = [' '.join(ops_line_tokens)]
