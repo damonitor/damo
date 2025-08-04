@@ -1123,7 +1123,7 @@ class Damos:
             kv['target_nid'] = self.target_nid
         if not omit_defaults or self.access_pattern != DamosAccessPattern():
             kv['access_pattern'] = self.access_pattern.to_kvpairs(raw)
-        kv['apply_interval_us'] = self.apply_interval_us
+        kv['apply_interval_us'] = _damo_fmt_str.format_time_us(self.apply_interval_us, raw)
         if not omit_defaults or self.quotas != DamosQuotas():
             kv['quotas'] = self.quotas.to_kvpairs(raw)
         if not omit_defaults or self.watermarks != DamosWatermarks():
