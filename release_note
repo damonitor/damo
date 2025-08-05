@@ -3,6 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v2.9.1
 - Add experimental support of write-only and cpus group-only monitoring.
+- damo args damon: format DAMOS apply interval in human-friendly way.
 
 v2.9.0
 - Support multiple DAMOS (migration) action destinations.
