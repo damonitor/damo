@@ -11,19 +11,20 @@ def pr_idle_time_mem_sz(regions):
     max_idle_time = idle_time(regions[-1])
     min_idle_time = idle_time(regions[0])
     idle_time_interval = (max_idle_time - min_idle_time) / 100
-    next_idle_time_to_pr = min_idle_time + idle_time_interval
-    sz = 0
     print('# idle time range: [%s, %s] seconds' % (
         min_idle_time / 1000000, max_idle_time / 1000000))
     print('# total memory size: %s bytes' % total_sz)
-    for r in regions:
-        if idle_time(r) > next_idle_time_to_pr:
-            print('%f\t%f' % (next_idle_time_to_pr / 1000000,
-                              sz / total_sz * 100))
-            next_idle_time_to_pr += idle_time_interval
-            sz = r.size()
-            continue
-        sz += r.size()
+
+    count_max = min_idle_time + idle_time_interval
+    while True:
+        count_min = count_max - idle_time_interval
+        sz = sum([r.size() for r in regions
+                  if count_min <= idle_time(r) and idle_time(r) < count_max])
+        if sz > 0:
+            print('%f\t%f' % (count_max / 1000000, sz / total_sz * 100))
+        if count_max > max_idle_time:
+            break
+        count_max += idle_time_interval
 
 def main(records, cmdline_fields):
     for ridx, record in enumerate(records):
