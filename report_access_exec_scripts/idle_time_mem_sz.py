@@ -59,12 +59,12 @@ Above two lines of the output can be interpreted as 1.885 % of the monitored
 memory (about 1.16 GiB) was not accessed for [1003,54, 1351.44) seconds.
 
 Note that the length of the idle time range is defined as 1/100 of difference
-between maximum and minimum idle time of the snpashot, and the output for zero
+between maximum and minimum idle time of the snapshot, and the output for zero
 memory size are skipped.  In the above example, the maximum and minimum idle
 time of the snapshot were 0 seconds and 1338.06 seconds, so the idle time range
 for each output line is about 13.38 seconds.  Hence, more accurate
 interpretation of the last line of the output (1351.445226     1.885889) is
-that 1.885 % of the monitored memory (about 1.16 GiB) was not acessed for
+that 1.885 % of the monitored memory (about 1.16 GiB) was not accessed for
 [1338.06, 1351.445) seconds.
 '''
 
