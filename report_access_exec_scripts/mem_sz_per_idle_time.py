@@ -18,7 +18,8 @@ def pr_idle_time_mem_sz(regions):
     print('# total memory size: %s bytes' % total_sz)
     for r in regions:
         if idle_time(r) > next_idle_time_to_pr:
-            print('%f\t%f' % (next_idle_time_to_pr, sz / total_sz * 100))
+            print('%f\t%f' % (next_idle_time_to_pr / 1000000,
+                              sz / total_sz * 100))
             next_idle_time_to_pr += idle_time_interval
             sz = r.size()
             continue
