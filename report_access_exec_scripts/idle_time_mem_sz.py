@@ -73,7 +73,7 @@ def idle_time(region):
         return 0
     return region.age.usec
 
-def pr_idle_time_mem_sz(regions):
+def pr_idle_time_mem_sz(regions, pr_zero_size):
     regions = sorted(regions, key=lambda r: idle_time(r))
     total_sz = sum([r.size() for r in regions])
     max_idle_time = idle_time(regions[-1])
@@ -88,17 +88,21 @@ def pr_idle_time_mem_sz(regions):
         count_min = count_max - idle_time_interval
         sz = sum([r.size() for r in regions
                   if count_min <= idle_time(r) and idle_time(r) < count_max])
-        if sz > 0:
+        if sz > 0 or pr_zero_size is True:
             print('%f\t%f' % (count_max / 1000000, sz / total_sz * 100))
         if count_max > max_idle_time:
             break
         count_max += idle_time_interval
 
 def main(records, cmdline_fields):
+    if '--pr_zero_size' in cmdline_fields:
+        pr_zero_size = True
+    else:
+        pr_zero_size = False
     for ridx, record in enumerate(records):
         for sidx, snapshot in enumerate(record.snapshots):
             print('# %d-th record, %d-th snapshot' % (ridx, sidx))
             print('# <idle time (seconds)> <memory size in percentage>')
             for region in snapshot.regions:
                 region.age.add_unset_unit(record.intervals)
-            pr_idle_time_mem_sz(snapshot.regions)
+            pr_idle_time_mem_sz(snapshot.regions, pr_zero_size)
