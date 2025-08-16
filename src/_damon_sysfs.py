@@ -521,7 +521,12 @@ def write_ops_attrs_dir(dir_path, ops_attrs):
                                'Y' if ops_attrs.write_only else 'N')
     if err is not None:
         return err
-    return _damo_fs.write_file(os.path.join(dir_path, 'cpus'), ops_attrs.cpus)
+    err = _damo_fs.write_file(os.path.join(dir_path, 'cpus'), ops_attrs.cpus)
+    if err is not None:
+        return err
+    err = _damo_fs.write_file(os.path.join(dir_path, 'tids'), ops_attrs.tids)
+    if err is not None:
+        return err
 
 def write_monitoring_attrs_dir(dir_path, context):
     err = _damo_fs.write_file(
@@ -832,8 +837,9 @@ def files_content_to_ops_attrs(files_content):
     use_reports = files_content['use_reports'].strip()
     write_only = files_content['write_only'].strip()
     cpus = files_content['cpus'].strip()
+    tids = files_content['tids'].strip()
     return _damon.OpsAttrs(use_reports=use_reports, write_only=write_only,
-                           cpus=cpus)
+                           cpus=cpus, tids=tids)
 
 def files_content_to_context(files_content):
     mon_attrs_content = files_content['monitoring_attrs']
