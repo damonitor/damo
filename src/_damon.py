@@ -21,15 +21,18 @@ class OpsAttrs:
     use_reports = None
     write_only = None
     cpus = None         #cpus list string
+    tids = None         #thread ids list string
 
-    def __init__(self, use_reports=False, write_only=False, cpus=None):
+    def __init__(self, use_reports=False, write_only=False, cpus=None,
+                 tids=None):
         self.use_reports = _damo_fmt_str.text_to_bool(use_reports)
         self.write_only = _damo_fmt_str.text_to_bool(write_only)
         self.cpus = cpus if cpus is not None else 'all'
+        self.tids = tids if tids is not None else ''
 
     def to_str(self, raw):
-        return 'use_reports: %s, write_only: %s, cpus: %s' % (
-                self.use_reports, self.write_only, self.cpus)
+        return 'use_reports: %s, write_only: %s, cpus: %s, threads: %s' % (
+                self.use_reports, self.write_only, self.cpus, self.tids)
 
     def __str__(self):
         return self.to_str(False)
@@ -38,7 +41,8 @@ class OpsAttrs:
         return type(self) == type(other) and \
                 self.use_reports == other.use_reports and \
                 self.write_only == other.write_only and \
-                self.cpus == other.cpus
+                self.cpus == other.cpus and \
+                self.tids == other.tids
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
@@ -47,14 +51,16 @@ class OpsAttrs:
         write_only = kvpairs['write_only'] \
                 if 'write_only' in kvpairs else False
         cpus = kvpairs['cpus'] if 'cpus' in kvpairs else 'all'
+        tids = kvpairs['tids'] if 'tids' in kvpairs else ''
         return OpsAttrs(use_reports=use_reports, write_only=write_only,
-                        cpus=cpus)
+                        cpus=cpus, tids=tids)
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('use_reports', self.use_reports),
             ('write_only', self.write_only),
             ('cpus', self.cpus),
+            ('tids', self.tids),
             ])
 
 class DamonIntervalsGoal:
@@ -1177,6 +1183,7 @@ class DamonCtx:
         if self.ops_attrs.use_reports:
             ops_line_tokens.append('use_reports')
             ops_line_tokens.append('cpus %s' % self.ops_attrs.cpus)
+            ops_line_tokens.append('threads %s' % self.ops_attrs.tids)
         if self.ops_attrs.write_only:
             ops_line_tokens.append('write-only')
         lines = [' '.join(ops_line_tokens)]
