@@ -58,12 +58,28 @@ def pr_idle_time_mem_sz(nr_lines, raw_number):
         idle_sec_percentiles = [int(x) / 1000 for x in f.read().split(',')]
     do_pr_idle_time_mem_sz(idle_sec_percentiles, nr_lines, raw_number)
 
+def pr_idle_time_percentiles(range_vals, raw_number):
+    param_dir = '/sys/module/damon_stat/parameters'
+    with open(os.path.join(param_dir, 'memory_idle_ms_percentiles'), 'r') as f:
+        idle_sec_percentiles = [int(x) / 1000 for x in f.read().split(',')]
+
+    start, end, interval = range_vals
+    percentile = start
+    while percentile < end:
+        print('%3d' % percentile,
+              _damo_fmt_str.format_time_sec(
+                  idle_sec_percentiles[percentile], raw_number))
+        percentile += interval
+
 def handle_read_write(args):
     module_name = args.module_name
     param_dir = '/sys/module/damon_%s/parameters' % module_name
     if args.action == 'read':
         if args.parameter == 'idle_time_mem_sz':
             pr_idle_time_mem_sz(args.idle_time_mem_sz_lines, args.raw_number)
+        elif args.parameter == 'idle_time_percentiles':
+            pr_idle_time_percentiles(args.idle_time_percentiles_range,
+                                     args.raw_number)
         elif args.parameter is not None:
             with open(os.path.join(param_dir, args.parameter), 'r') as f:
                 print(f.read().strip())
@@ -97,6 +113,10 @@ def set_argparser(parser):
     parser_read.add_argument(
             '--idle_time_mem_sz_lines', default=100, type=int,
             help='number of lines for idle time to memory size output')
+    parser_read.add_argument(
+            '--idle_time_percentiles_range', default=[0, 101, 1], type=int,
+            nargs=3,
+            help='idle time percentiles print range (start, end, interval)')
     parser_read.add_argument('--raw_number', action='store_true',
                              help='print number in raw form')
 
