@@ -31,15 +31,24 @@ def do_pr_idle_time_mem_sz(percentiles, gran, raw_number):
     idle_time_interval = (max_idle_sec - min_idle_sec) / gran
 
     idle_sec_range = [min_idle_sec, min_idle_sec + idle_time_interval]
+    rows = []
+    max_time_column_len = 0
     while idle_sec_range[0] < max_idle_sec:
-        print('%s\t%s' % (
+        rows.append([
             _damo_fmt_str.format_time_sec(idle_sec_range[1], raw_number),
             _damo_fmt_str.format_percent(
                 mem_sz_of_idle_time_range(percentiles, idle_sec_range),
-                raw_number),
-            ))
+                raw_number)])
+
+        time_col_len = len(rows[-1][0])
+        if time_col_len > max_time_column_len:
+            max_time_column_len = time_col_len
+
         idle_sec_range[0] += idle_time_interval
         idle_sec_range[1] += idle_time_interval
+    for row in rows:
+        print('%s%s%s' % (
+            row[0], ' ' * (max_time_column_len + 4 - len(row[0])), row[1]))
 
 def pr_idle_time_mem_sz(nr_lines, raw_number):
     param_dir = '/sys/module/damon_stat/parameters'
