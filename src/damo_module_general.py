@@ -4,9 +4,7 @@ import os
 
 import _damon
 
-def main(args):
-    _damon.ensure_root_permission()
-
+def handle_read_write(args):
     module_name = args.module_name
     param_dir = '/sys/module/damon_%s/parameters' % module_name
     if args.action == 'read':
@@ -27,6 +25,9 @@ def main(args):
             param_val = args.parameter_value[i + 1]
             with open(os.path.join(param_dir, param_name), 'w') as f:
                 f.write(param_val)
+
+def main(args):
+    handle_read_write(args)
 
 def set_argparser(parser):
     subparsers = parser.add_subparsers(
