@@ -2,13 +2,58 @@
 
 import os
 
+import _damo_fmt_str
 import _damon
+
+def cum_mem_pct_of(percentiles, idle_sec):
+    for cum_mem_pct, iter_idle_second in enumerate(percentiles):
+        if iter_idle_second == idle_sec:
+            return cum_mem_pct
+        if iter_idle_second > idle_sec:
+            # assume linear distribution
+            before_idle_sec = percentiles[cum_mem_pct - 1]
+            before_to_target_idle_sec = idle_sec - before_idle_sec
+            before_to_current = iter_idle_second - before_idle_sec
+            the_ratio = before_to_target_idle_sec / before_to_current
+            return cum_mem_pct - 1 + the_ratio
+    return 100.0
+
+def mem_sz_of_idle_time_range(percentiles, idle_sec_range):
+    a = cum_mem_pct_of(percentiles, idle_sec_range[1])
+    b = cum_mem_pct_of(percentiles, idle_sec_range[0])
+    return a - b
+
+def do_pr_idle_time_mem_sz(percentiles, gran, raw_number):
+    # percentiles is 101 values list, each meaning p0 to p100 in seconds.
+    # gran is the granularity of idle time to memory size
+    min_idle_sec = percentiles[0]
+    max_idle_sec = percentiles[-1]
+    idle_time_interval = (max_idle_sec - min_idle_sec) / gran
+
+    idle_sec_range = [min_idle_sec, min_idle_sec + idle_time_interval]
+    while idle_sec_range[0] < max_idle_sec:
+        print('%s\t%s' % (
+            _damo_fmt_str.format_time_sec(idle_sec_range[1], raw_number),
+            _damo_fmt_str.format_percent(
+                mem_sz_of_idle_time_range(percentiles, idle_sec_range),
+                raw_number),
+            ))
+        idle_sec_range[0] += idle_time_interval
+        idle_sec_range[1] += idle_time_interval
+
+def pr_idle_time_mem_sz(raw_number):
+    param_dir = '/sys/module/damon_stat/parameters'
+    with open(os.path.join(param_dir, 'memory_idle_ms_percentiles'), 'r') as f:
+        idle_sec_percentiles = [int(x) / 1000 for x in f.read().split(',')]
+    do_pr_idle_time_mem_sz(idle_sec_percentiles, 100, raw_number)
 
 def handle_read_write(args):
     module_name = args.module_name
     param_dir = '/sys/module/damon_%s/parameters' % module_name
     if args.action == 'read':
-        if args.parameter is not None:
+        if args.parameter == 'idle_time_mem_sz':
+            pr_idle_time_mem_sz(args.raw_number)
+        elif args.parameter is not None:
             with open(os.path.join(param_dir, args.parameter), 'r') as f:
                 print(f.read().strip())
         else:
@@ -38,6 +83,8 @@ def set_argparser(parser):
     parser_read.add_argument(
             'parameter', metavar='<parameter name>', nargs='?',
             help='parameter to read.')
+    parser_read.add_argument('--raw_number', action='store_true',
+                             help='print number in raw form')
 
     parser_write = subparsers.add_parser('write', help='write parameters')
     parser_write.add_argument(
