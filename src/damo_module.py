@@ -5,6 +5,7 @@ import os
 import _damo_subcmds
 import damo_lru_sort
 import damo_module_general
+import damo_module_stat
 import damo_reclaim
 
 subcmds = [
@@ -26,6 +27,12 @@ def set_subcmds(subcmds):
         module_name = module[len('damon_'):]
         if module_name in ['reclaim', 'lru_sort']:
             continue
+        if module_name == 'stat':
+            subcmds.append(_damo_subcmds.DamoSubCmd(
+                name=module_name, module=damo_module_stat,
+                msg='Control DAMON_STAT'))
+            continue
+
         subcmds.append(_damo_subcmds.DamoSubCmd(
             name=module_name, module=damo_module_general,
             msg='Control DAMON_%s' % module_name.upper()))
