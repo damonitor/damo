@@ -6,6 +6,8 @@ import _damo_fmt_str
 import _damon
 
 def cum_mem_pct_of(percentiles, idle_sec):
+    if idle_sec < percentiles[0]:
+        return 0.0
     for cum_mem_pct, iter_idle_second in enumerate(percentiles):
         if iter_idle_second == idle_sec:
             return cum_mem_pct
@@ -30,7 +32,7 @@ def do_pr_idle_time_mem_sz(percentiles, gran, raw_number):
     max_idle_sec = percentiles[-1]
     idle_time_interval = (max_idle_sec - min_idle_sec) / gran
 
-    idle_sec_range = [min_idle_sec, min_idle_sec + idle_time_interval]
+    idle_sec_range = [min_idle_sec - 1, min_idle_sec + idle_time_interval]
     rows = []
     max_time_column_len = 0
     while idle_sec_range[0] < max_idle_sec:
