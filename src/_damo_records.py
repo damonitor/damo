@@ -944,6 +944,21 @@ def load_proc_stats(filepath):
         kvpairs = json.load(f)
     return [ProcStatsSnapshot.from_kvpairs(x) for x in kvpairs]
 
+def get_childs_pids(pid):
+    try:
+        childs_pids = subprocess.check_output(
+                ['ps', '--ppid', '%s' % pid, '-o', 'pid=']
+                ).decode().split()
+    except:
+        childs_pids = []
+
+    ret = childs_pids
+    for child_pid in childs_pids:
+        childs_childs_pids = get_childs_pids(child_pid)
+        ret.extend(childs_childs_pids)
+
+    return ret
+
 def add_childs_target(kdamonds):
     # TODO: Support multiple kdamonds
     if not _damon.target_has_pid(kdamonds[0].contexts[0].ops):
@@ -953,12 +968,7 @@ def add_childs_target(kdamonds):
     for target in current_targets:
         if target.pid is None:
             continue
-        try:
-            childs_pids = subprocess.check_output(
-                    ['ps', '--ppid', '%s' % target.pid, '-o', 'pid=']
-                    ).decode().split()
-        except:
-            childs_pids = []
+        childs_pids = get_childs_pids(target.pid)
         if len(childs_pids) == 0:
             continue
 
