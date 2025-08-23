@@ -116,10 +116,33 @@ def partial_to_full_idle_time_percentiles(partial_percentiles):
 
     return full_percentile_vals
 
+def input_idle_time_percentiles_to_full_percentiles(input_percentiles):
+    len_input = len(input_percentiles)
+    if len_input < 2 or len_input % 2 != 0:
+        return None, 'input length invalid'
+    partial_percentiles = []
+    for i in range(0, len_input, 2):
+        # val should be in seconds
+        percentile, val = input_percentiles[i], input_percentiles[i + 1]
+        try:
+            percentile = int(percentile)
+            val = float(val)
+        except Exception as e:
+            return None, 'casting fail (%s)' % e
+        partial_percentiles.append([percentile, val])
+    return partial_to_full_idle_time_percentiles(partial_percentiles), None
+
 def handle_read_write(args):
     module_name = args.module_name
     param_dir = '/sys/module/damon_%s/parameters' % module_name
     if args.action == 'read':
+        if args.input_idle_time_percentiles is not None:
+            input_idle_time_percentiles, err = \
+                    input_idle_time_percentiles_to_full_percentiles(
+                            args.input_idle_time_percentiles)
+            if err is not None:
+                print('wrong --input_idle_time_percentiles (%s)' % err)
+                exit(1)
         if args.parameter == 'idle_time_mem_sz':
             pr_idle_time_mem_sz(args.idle_time_mem_sz_lines, args.raw_number)
         elif args.parameter == 'idle_time_percentiles':
@@ -172,6 +195,10 @@ def set_argparser(parser):
             '--idle_time_percentiles_range', default=[0, 101, 10], type=int,
             nargs=3,
             help='idle time percentiles print range (start, end, interval)')
+    parser_read.add_argument(
+            '--input_idle_time_percentiles', nargs='+',
+            metavar='<percentile> <value>',
+            help='idle time percentiles to visualize')
     parser_read.add_argument('--raw_number', action='store_true',
                              help='print number in raw form')
 
