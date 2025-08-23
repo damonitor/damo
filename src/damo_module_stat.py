@@ -126,6 +126,9 @@ def partial_to_full_idle_time_percentiles(partial_percentiles):
     return full_percentile_vals
 
 def input_idle_time_percentiles_to_full_percentiles(input_percentiles):
+    if len(input_percentiles) == 1 and os.path.isfile(input_percentiles[0]):
+        with open(input_percentiles[0], 'r') as f:
+            input_percentiles = f.read().split()
     len_input = len(input_percentiles)
     if len_input < 2 or len_input % 2 != 0:
         return None, 'input length invalid'
