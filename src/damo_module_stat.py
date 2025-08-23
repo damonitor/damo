@@ -30,7 +30,10 @@ def do_pr_idle_time_mem_sz(percentiles, gran, raw_number):
     # gran is the granularity of idle time to memory size
     min_idle_sec = percentiles[0]
     max_idle_sec = percentiles[-1]
-    idle_time_interval = (max_idle_sec - min_idle_sec) / gran
+    if max_idle_sec == min_idle_sec:
+        idle_time_interval = 1
+    else:
+        idle_time_interval = (max_idle_sec - min_idle_sec) / gran
 
     idle_sec_range = [min_idle_sec - 1, min_idle_sec + idle_time_interval]
     rows = []
