@@ -108,6 +108,7 @@ def handle_read_write(args):
                 f.write(param_val)
 
 def main(args):
+    _damon.ensure_root_permission()
     handle_read_write(args)
 
 def set_argparser(parser):
