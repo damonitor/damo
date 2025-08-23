@@ -55,7 +55,11 @@ def do_pr_idle_time_mem_sz(percentiles, gran, raw_number):
         print('%s%s%s' % (
             row[0], ' ' * (max_time_column_len + 4 - len(row[0])), row[1]))
 
-def pr_idle_time_mem_sz(nr_lines, raw_number):
+def pr_idle_time_mem_sz(nr_lines, raw_number, input_idle_time_percentiles):
+    if input_idle_time_percentiles is not None:
+        do_pr_idle_time_mem_sz(
+                input_idle_time_percentiles, nr_lines, raw_number)
+        return
     param_dir = '/sys/module/damon_stat/parameters'
     with open(os.path.join(param_dir, 'memory_idle_ms_percentiles'), 'r') as f:
         idle_sec_percentiles = [int(x) / 1000 for x in f.read().split(',')]
@@ -143,8 +147,11 @@ def handle_read_write(args):
             if err is not None:
                 print('wrong --input_idle_time_percentiles (%s)' % err)
                 exit(1)
+        else:
+            input_idle_time_percentiles = None
         if args.parameter == 'idle_time_mem_sz':
-            pr_idle_time_mem_sz(args.idle_time_mem_sz_lines, args.raw_number)
+            pr_idle_time_mem_sz(args.idle_time_mem_sz_lines, args.raw_number,
+                                input_idle_time_percentiles)
         elif args.parameter == 'idle_time_percentiles':
             pr_idle_time_percentiles(args.idle_time_percentiles_range,
                                      args.raw_number)
