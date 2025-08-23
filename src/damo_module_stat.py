@@ -121,7 +121,7 @@ def set_argparser(parser):
             'parameter', metavar='<parameter name>', nargs='?',
             help='parameter to read.')
     parser_read.add_argument(
-            '--idle_time_mem_sz_lines', default=100, type=int,
+            '--idle_time_mem_sz_lines', default=10, type=int,
             help='number of lines for idle time to memory size output')
     parser_read.add_argument(
             '--idle_time_percentiles_range', default=[0, 101, 10], type=int,
