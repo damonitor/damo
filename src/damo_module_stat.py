@@ -65,10 +65,15 @@ def pr_idle_time_mem_sz(nr_lines, raw_number, input_idle_time_percentiles):
         idle_sec_percentiles = [int(x) / 1000 for x in f.read().split(',')]
     do_pr_idle_time_mem_sz(idle_sec_percentiles, nr_lines, raw_number)
 
-def pr_idle_time_percentiles(range_vals, raw_number):
-    param_dir = '/sys/module/damon_stat/parameters'
-    with open(os.path.join(param_dir, 'memory_idle_ms_percentiles'), 'r') as f:
-        idle_sec_percentiles = [int(x) / 1000 for x in f.read().split(',')]
+def pr_idle_time_percentiles(range_vals, raw_number,
+                             input_idle_time_percentiles):
+    if input_idle_time_percentiles is not None:
+        idle_sec_percentiles = input_idle_time_percentiles
+    else:
+        param_dir = '/sys/module/damon_stat/parameters'
+        with open(os.path.join(param_dir,
+                               'memory_idle_ms_percentiles'), 'r') as f:
+            idle_sec_percentiles = [int(x) / 1000 for x in f.read().split(',')]
 
     start, end, interval = range_vals
     percentile = start
@@ -154,7 +159,8 @@ def handle_read_write(args):
                                 input_idle_time_percentiles)
         elif args.parameter == 'idle_time_percentiles':
             pr_idle_time_percentiles(args.idle_time_percentiles_range,
-                                     args.raw_number)
+                                     args.raw_number,
+                                     input_idle_time_percentiles)
         elif args.parameter is not None:
             file_path = os.path.join(param_dir, args.parameter)
             if not os.path.isfile(file_path):
