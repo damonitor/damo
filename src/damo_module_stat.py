@@ -81,6 +81,15 @@ def handle_read_write(args):
             pr_idle_time_percentiles(args.idle_time_percentiles_range,
                                      args.raw_number)
         elif args.parameter is not None:
+            file_path = os.path.join(param_dir, args.parameter)
+            if not os.path.isfile(file_path):
+                print('Wrong parameter (%s).  Please use one among below:' %
+                      args.parameter)
+                for param_file in os.listdir(param_dir):
+                    print('- %s' % param_file)
+                print('- idle_time_mem_sz')
+                print('- idle_time_percentiles')
+                exit(1)
             with open(os.path.join(param_dir, args.parameter), 'r') as f:
                 print(f.read().strip())
         else:
