@@ -74,6 +74,48 @@ def pr_idle_time_percentiles(range_vals, raw_number):
                   idle_sec_percentiles[percentile], raw_number))
         percentile += interval
 
+def partial_to_full_idle_time_percentiles(partial_percentiles):
+    # partial_percentiles is a list of lists having two entries.  The two
+    # entries are percentile number and the value.
+    full_percentile_vals = []
+
+    # fill up middle percentiles first
+    first_known_perceentile = partial_percentiles[0][0]
+    last_known_perceentile = partial_percentiles[-1][0]
+    for percentile, val in partial_percentiles:
+        if len(full_percentile_vals) == 0:
+            full_percentile_vals.append(val)
+            last_percentile = percentile
+            continue
+        last_val = full_percentile_vals[-1]
+        val_diff = val - last_val
+        percentile_diff = percentile - last_percentile
+        val_diff_per_percentile = val_diff / percentile_diff
+        iter_percentile = last_percentile + 1
+        while iter_percentile < percentile:
+            full_percentile_vals.append(full_percentile_vals[-1] +
+                                        val_diff_per_percentile)
+            iter_percentile += 1
+        full_percentile_vals.append(val)
+        last_percentile = percentile
+
+    # fill up first missing percentiles
+    first_known_val_diff_per_percentile = \
+            full_percentile_vals[1] - full_percentile_vals[0]
+    for percentile in range(first_known_perceentile - 1, -1, -1):
+        full_percentile_vals.insert(
+                0, full_percentile_vals[0] -
+                first_known_val_diff_per_percentile)
+
+    # fill up last missing percentiles
+    last_known_val_diff_per_percentile = \
+            full_percentile_vals[-1] - full_percentile_vals[-2]
+    for percentile in range(last_known_perceentile + 1, 101, 1):
+        full_percentile_vals.append(
+                full_percentile_vals[-1] + last_known_val_diff_per_percentile)
+
+    return full_percentile_vals
+
 def handle_read_write(args):
     module_name = args.module_name
     param_dir = '/sys/module/damon_%s/parameters' % module_name
