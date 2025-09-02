@@ -40,7 +40,8 @@
 - Support multiple targets snapshot (get_snapshot_records())
 - support 2d heatmap on report access
 - Support drgn based 'damo diagnose'
-- Support idle time percentiles to idle time - mem size visualization
+- Support cold memory tail from 'damo report access'
+- Support DAMON_STAT output as record file
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
