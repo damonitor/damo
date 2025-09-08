@@ -204,7 +204,7 @@ your workload more memory efficient with only modest performance overhead.
 
     $ sudo damo start --damos_access_rate 0 0 --damos_sz_region 4K max \
                         --damos_age 60s max --damos_action pageout \
-                        <pid of your workload>
+                        --target_pid <pid of your workload>
 
 Holistic Memory Usage Monitoring
 --------------------------------
