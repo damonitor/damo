@@ -1,6 +1,9 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v2.9.6
+- Prepare DAMON_STAT integration into DAMON records.
+
 v2.9.5
 - Accelerate --include_child_tasks to be recursive
 
