@@ -22,6 +22,21 @@ perf_event_damon_aggregated = 'damon:damon_aggregated'
 perf_event_damon_monitor_intervals_tune = 'damon:damon_monitor_intervals_tune'
 perf_event_damos_before_apply = 'damon:damos_before_apply'
 
+class DamonIdleMsPercentiles:
+    percentile_ms_dict = None  # percentile:idletime (ms) dict
+
+    def __init__(self, percentile_ms_dict):
+        self.percentile_ms_dict = percentile_ms_dict
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamonIdleMsPercentiles(percentile_ms_dict=kv)
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('percentile_ms_dict', self.percentile_ms_dict),
+            ])
+
 class DamonSnapshot:
     '''
     Contains a snapshot of data access monitoring results
