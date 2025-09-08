@@ -944,67 +944,9 @@ def load_proc_stats(filepath):
         kvpairs = json.load(f)
     return [ProcStatsSnapshot.from_kvpairs(x) for x in kvpairs]
 
-def get_childs_pids(pid):
-    try:
-        childs_pids = subprocess.check_output(
-                ['ps', '--ppid', '%s' % pid, '-o', 'pid=']
-                ).decode().split()
-    except:
-        childs_pids = []
-
-    ret = childs_pids
-    for child_pid in childs_pids:
-        childs_childs_pids = get_childs_pids(child_pid)
-        ret.extend(childs_childs_pids)
-
-    return ret
-
-def add_childs_target(kdamonds):
-    # TODO: Support multiple kdamonds
-    if not _damon.target_has_pid(kdamonds[0].contexts[0].ops):
-        return
-    current_targets = kdamonds[0].contexts[0].targets
-
-    for target in current_targets:
-        if target.pid is None:
-            continue
-        childs_pids = get_childs_pids(target.pid)
-        if len(childs_pids) == 0:
-            continue
-
-        # TODO: Commit all at once, out of this loop
-        new_targets = []
-        for child_pid in childs_pids:
-            # skip the child if already in the targets
-            if child_pid in ['%s' % t.pid for t in current_targets]:
-                continue
-            # remove already terminated targets, since committing already
-            # terminated targets to DAMON fails
-            new_targets = [target for target in current_targets
-                    if pid_running('%s' % target.pid)]
-            new_targets.append(_damon.DamonTarget(pid=child_pid, regions=[]))
-        if new_targets == []:
-            continue
-
-        # commit the new set of targets
-        kdamonds[0].contexts[0].targets = new_targets
-        err = _damon.commit(kdamonds, commit_targets_only=True)
-        if err is not None:
-            kdamonds[0].contexts[0].targets = current_targets
-            return 'commit failed (%s)' % err
-    return None
-
-def pid_running(pid):
-    '''pid should be string'''
-    try:
-        subprocess.check_output(['ps', '--pid', pid])
-        return True
-    except:
-        return False
-
 def all_targets_terminated(targets):
     for target in targets:
-        if pid_running('%s' % target.pid):
+        if _damon.pid_running('%s' % target.pid):
             return False
     return True
 
@@ -1153,7 +1095,7 @@ def start_recording(handle):
     while (poll_target_pids(handle.kdamonds) or
            _damon.any_kdamond_running()):
         if handle.add_child_tasks is True:
-            add_childs_target(handle.kdamonds)
+            _damon.add_childs_target(handle.kdamonds)
 
         if handle.mem_footprint_snapshots is not None:
             record_mem_footprint(handle.kdamonds,
