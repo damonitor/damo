@@ -22,19 +22,41 @@ perf_event_damon_aggregated = 'damon:damon_aggregated'
 perf_event_damon_monitor_intervals_tune = 'damon:damon_monitor_intervals_tune'
 perf_event_damos_before_apply = 'damon:damos_before_apply'
 
+class DamonIdleMsPercentile:
+    percentile = None
+    idle_ms = None
+
+    def __init__(self, percentile, idle_ms):
+        self.percentile = _damo_fmt_str.text_to_nr(percentile)
+        self.idle_ms = _damo_fmt_str.text_to_ms(idle_ms)
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamonIdleMsPercentiles(
+                percentile=kv['percentile'], idle_ms=kv['idle_ms'])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('percentile', _damo_fmt_str.format_nr(self.percentile, raw)),
+            ('idle_ms', _damo_fmt_str.format_time_ms_exact(self.idle_ms, raw)),
+            ])
+
 class DamonIdleMsPercentiles:
-    percentile_ms_dict = None  # percentile:idletime (ms) dict
+    percentile_ms_dict = None  # list of DamonIdleMsPercentile
 
     def __init__(self, percentile_ms_dict):
         self.percentile_ms_dict = percentile_ms_dict
 
     @classmethod
     def from_kvpairs(cls, kv):
-        return DamonIdleMsPercentiles(percentile_ms_dict=kv)
+        percentile_ms_dict = [DamonIdleMsPercentile.from_kvpairs(x)
+                              for x in kv['percentile_ms_dict']]
+        return DamonIdleMsPercentiles(percentile_ms_dict=percentile_ms_dict)
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
-            ('percentile_ms_dict', self.percentile_ms_dict),
+            ('percentile_ms_dict',
+             [x.to_kvpairs(raw) for x in self.percentile_ms_dict]),
             ])
 
 class DamonSnapshot:
