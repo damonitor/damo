@@ -69,12 +69,14 @@ class DamonSnapshot:
     total_bytes = None
     damos_stats = None
     sample_interval_us = None
+    idle_ms_percentiles = None  # DamonIdleMsPercentiles
 
     def update_total_bytes(self):
         self.total_bytes = sum([r.size() for r in self.regions])
 
     def __init__(self, start_time, end_time, regions, total_bytes,
-                 damos_stats=None, sample_interval_us=None):
+                 damos_stats=None, sample_interval_us=None,
+                 idle_ms_percentiles=None):
         self.start_time = start_time
         self.end_time = end_time
         self.regions = regions
@@ -83,6 +85,7 @@ class DamonSnapshot:
             self.update_total_bytes()
         self.damos_stats = damos_stats
         self.sample_interval_us = sample_interval_us
+        self.idle_ms_percentiles = idle_ms_percentiles
 
     @classmethod
     def from_kvpairs(cls, kv):
@@ -93,13 +96,20 @@ class DamonSnapshot:
         if 'sample_interval_us' in kv and kv['sample_interval_us'] is not None:
             sample_interval_us = _damo_fmt_str.text_to_us(
                     kv['sample_interval_us'])
+        idle_ms_percentiles = None
+        if 'idle_ms_percentiles' in kv:
+            val = kv['idle_ms_percentiles']
+            if val is not None:
+                idle_ms_percentiles = DamonIdleMsPercentiles.from_kvpairs(val)
+
         return DamonSnapshot(
                 _damo_fmt_str.text_to_ns(kv['start_time']),
                 _damo_fmt_str.text_to_ns(kv['end_time']),
                 [_damon.DamonRegion.from_kvpairs(r) for r in kv['regions']],
                 _damo_fmt_str.text_to_bytes(kv['total_bytes'])
                 if 'total_bytes' in kv and kv['total_bytes'] is not None
-                else None, damos_stats, sample_interval_us)
+                else None, damos_stats, sample_interval_us,
+                idle_ms_percentiles)
 
     def to_kvpairs(self, raw=False):
         damos_stats_kv = None
@@ -110,6 +120,10 @@ class DamonSnapshot:
                     self.sample_interval_us, raw)
         else:
             sample_interval_us = None
+        if self.idle_ms_percentiles is not None:
+            idle_ms_percentiles = self.idle_ms_percentiles.to_kvapirs(raw)
+        else:
+            idle_ms_percentiles = None
         return collections.OrderedDict([
             ('start_time', _damo_fmt_str.format_time_ns_exact(
                 self.start_time, raw)),
@@ -120,6 +134,7 @@ class DamonSnapshot:
                 if self.total_bytes is not None else None),
             ('damos_stats', damos_stats_kv),
             ('sample_interval_us', sample_interval_us),
+            ('idle_ms_percentiles', idle_ms_percentiles),
             ])
 
 class DamonRecord:
