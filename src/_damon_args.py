@@ -764,7 +764,8 @@ def kdamonds_for(args):
     ctxs, err = damon_ctxs_for(args)
     if err:
         return None, err
-
+    if args.damos_action and (args.damos_action not in (['migrate_hot'], ['migrate_cold'])) and args.target_pid == [None]:
+        return None, 'target_pid could not be read. Did you forget to pass the --target_pid option?'
     if args.nr_ctxs is None:
         args.nr_ctxs = [len(ctxs)]
     if sum(args.nr_ctxs) != len(ctxs):
