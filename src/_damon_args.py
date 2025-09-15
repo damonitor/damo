@@ -389,11 +389,7 @@ def verify_set_damos_args_len(args):
         return 'wrong --damos_nr_filters'
     return None
 
-def damos_options_to_schemes(args):
-    set_args_damos_quotas(args)
-    err = verify_set_damos_args_len(args)
-    if err is not None:
-        return [], err
+def fillup_default_damos_args(args):
     nr_schemes = len(args.damos_action)
 
     args.damos_sz_region += [['min', 'max']] * (
@@ -405,6 +401,15 @@ def damos_options_to_schemes(args):
             nr_schemes - len(args.damos_apply_interval))
     args.damos_quotas += [None] * (nr_schemes - len(args.damos_quotas))
     args.damos_wmarks += [None] * (nr_schemes - len(args.damos_wmarks))
+
+def damos_options_to_schemes(args):
+    set_args_damos_quotas(args)
+    err = verify_set_damos_args_len(args)
+    if err is not None:
+        return [], err
+    fillup_default_damos_args(args)
+    nr_schemes = len(args.damos_action)
+
     target_nid = [None] * nr_schemes
     dests_list = []
     for i in range(nr_schemes):
