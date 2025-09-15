@@ -331,19 +331,30 @@ def damos_options_to_scheme(sz_region, access_rate, age, action,
     except Exception as e:
         return None, 'Wrong \'--damos_*\' argument (%s)' % e
 
+def set_args_damos_quotas(args):
+    # DAMOS quotas can be set using
+    # 1) only --damos_quotas (specify time, space, interval, weights at once),
+    #    or
+    # 2) --damos_quota_interval, --damos_quota_time, --damos_quota_space,
+    #    and --damos_quota_weights (specify the components one by one).
+    # Convert quotas specified in 2) way into --damos_quotas for easier
+    # handling.
+    if not args.damos_quota_interval:
+        return
+    for i, interval in enumerate(args.damos_quota_interval):
+        t, s = 0, 0
+        if i < len(args.damos_quota_time):
+            t = args.damos_quota_time[i]
+        if i < len(args.damos_quota_space):
+            s = args.damos_quota_space[i]
+        if i < len(args.damos_quota_weights):
+            w1, w2, w3 = args.damos_quota_weights[i]
+        else:
+            w1, w2, w3 = 1, 1, 1
+        args.damos_quotas.append([t, s, interval, w1, w2, w3])
+
 def damos_options_to_schemes(args):
-    if args.damos_quota_interval:
-        for i, interval in enumerate(args.damos_quota_interval):
-            t, s = 0, 0
-            if i < len(args.damos_quota_time):
-                t = args.damos_quota_time[i]
-            if i < len(args.damos_quota_space):
-                s = args.damos_quota_space[i]
-            if i < len(args.damos_quota_weights):
-                w1, w2, w3 = args.damos_quota_weights[i]
-            else:
-                w1, w2, w3 = 1, 1, 1
-            args.damos_quotas.append([t, s, interval, w1, w2, w3])
+    set_args_damos_quotas(args)
     nr_schemes = len(args.damos_action)
     if len(args.damos_sz_region) > nr_schemes:
         return [], 'too much --damos_sz_region'
