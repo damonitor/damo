@@ -353,36 +353,48 @@ def set_args_damos_quotas(args):
             w1, w2, w3 = 1, 1, 1
         args.damos_quotas.append([t, s, interval, w1, w2, w3])
 
-def damos_options_to_schemes(args):
-    set_args_damos_quotas(args)
+def verify_set_damos_args_len(args):
+    # return an error string if given args is wrong in terms of lengths.
     nr_schemes = len(args.damos_action)
+
     if len(args.damos_sz_region) > nr_schemes:
-        return [], 'too much --damos_sz_region'
+        return 'too much --damos_sz_region'
     if len(args.damos_access_rate) > nr_schemes:
-        return [], 'too much --damos_access_rate'
+        return 'too much --damos_access_rate'
     if len(args.damos_age) > nr_schemes:
-        return [], 'too much --damos_age'
+        return 'too much --damos_age'
     if len(args.damos_apply_interval) > nr_schemes:
-        return [], 'too much --damos_apply_interval'
+        return 'too much --damos_apply_interval'
     if len(args.damos_quotas) > nr_schemes:
-        return [], 'too much --damos_quotas'
+        return 'too much --damos_quotas'
+
     if len(args.damos_quota_goal) > 0 and nr_schemes > 1:
         if len(args.damos_nr_quota_goals) == 0:
-            return [], '--damos_nr_quota_goals required'
+            return '--damos_nr_quota_goals required'
     if nr_schemes == 1 and args.damos_nr_quota_goals == []:
         args.damos_nr_quota_goals = [len(args.damos_quota_goal)]
     if sum(args.damos_nr_quota_goals) != len(args.damos_quota_goal):
-        return [], 'wrong --damos_nr_quota_goals'
+        return 'wrong --damos_nr_quota_goals'
+
     if len(args.damos_wmarks) > nr_schemes:
-        return [], 'too much --damos_wmarks'
+        return 'too much --damos_wmarks'
+
     # for multiple schemes, number of filters per scheme is required
     if len(args.damos_filter) > 0 and nr_schemes > 1:
         if len(args.damos_nr_filters) == 0:
-            return [], '--damos_nr_filters required'
+            return '--damos_nr_filters required'
     if nr_schemes == 1 and args.damos_nr_filters == []:
         args.damos_nr_filters = [len(args.damos_filter)]
     if sum(args.damos_nr_filters) != len(args.damos_filter):
-        return [], 'wrong --damos_nr_filters'
+        return 'wrong --damos_nr_filters'
+    return None
+
+def damos_options_to_schemes(args):
+    set_args_damos_quotas(args)
+    err = verify_set_damos_args_len(args)
+    if err is not None:
+        return [], err
+    nr_schemes = len(args.damos_action)
 
     args.damos_sz_region += [['min', 'max']] * (
             nr_schemes - len(args.damos_sz_region))
