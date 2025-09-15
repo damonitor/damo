@@ -433,6 +433,10 @@ def damos_options_to_schemes(args):
                         'or dests arguments.' \
                             % args.damos_action[i][0]
         else:
+            if len(args.damos_action[i]) > 1:
+                return [], 'Action "%s" should not include target specification. ' \
+                        'Use --target_pid %s for process monitoring, or set appropriate address space options. ' \
+                        % (action, args.damos_action[i][1])
             args.damos_action[i] = action
 
         qgoals = []
