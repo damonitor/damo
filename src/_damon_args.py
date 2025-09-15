@@ -410,14 +410,12 @@ def damos_options_to_schemes(args):
     fillup_default_damos_args(args)
     nr_schemes = len(args.damos_action)
 
-    dests_list = []
-    for i in range(nr_schemes):
-        dests_list.append([])
     schemes = []
 
     for i in range(nr_schemes):
         action = args.damos_action[i][0]
         target_nid = None
+        dests = []
         if _damon.is_damos_migrate_action(action):
             try:
                 if len(args.damos_action[i]) == 2:
@@ -429,7 +427,6 @@ def damos_options_to_schemes(args):
                         dests.append(_damon.DamosDest(
                             args.damos_action[i][j],
                             args.damos_action[i][j + 1]))
-                    dests_list[i] = dests
                     args.damos_action[i] = args.damos_action[i][0]
             except:
                 return [], '"%s" action require a numeric target_nid ' \
@@ -454,7 +451,7 @@ def damos_options_to_schemes(args):
                 args.damos_access_rate[i], args.damos_age[i],
                 args.damos_action[i], args.damos_apply_interval[i],
                 args.damos_quotas[i], qgoals, args.damos_wmarks[i],
-                target_nid, filters, dests_list[i])
+                target_nid, filters, dests)
         if err != None:
             return [], err
         schemes.append(scheme)
