@@ -420,24 +420,21 @@ def damos_options_to_schemes(args):
             try:
                 if len(args.damos_action[i]) == 2:
                     target_nid = int(args.damos_action[i][1])
-                    args.damos_action[i] = args.damos_action[i][0]
                 elif len(args.damos_action[i]) > 2:
                     dests = []
                     for j in range(1, len(args.damos_action[i]), 2):
                         dests.append(_damon.DamosDest(
                             args.damos_action[i][j],
                             args.damos_action[i][j + 1]))
-                    args.damos_action[i] = args.damos_action[i][0]
             except:
                 return [], '"%s" action require a numeric target_nid ' \
                         'or dests arguments.' \
                             % args.damos_action[i][0]
-        else:
-            if len(args.damos_action[i]) > 1:
-                return [], 'Action "%s" should not include target specification. ' \
-                        'Use --target_pid %s for process monitoring, or set appropriate address space options. ' \
-                        % (action, args.damos_action[i][1])
-            args.damos_action[i] = action
+        elif len(args.damos_action[i]) > 1:
+            return [], 'Action "%s" should not include target specification. ' \
+                    'Use --target_pid %s for process monitoring, or set appropriate address space options. ' \
+                    % (action, args.damos_action[i][1])
+        args.damos_action[i] = action
 
         qgoals = []
         if args.damos_quota_goal:
