@@ -23,7 +23,8 @@ def fmt_report_short(args):
     guides = damo_record_info.get_guide_info(records)
     lines.append('# Heatmap')
     for guide in guides:
-        for region in guide.regions():
+        regions = guide.regions()
+        for idx, region in enumerate(regions):
             lines.append('# target %d, address range %d-%d' % (
                 guide.tid, region[0], region[1]))
             heatmap = damo_report_heatmap.fmt_heats(
@@ -34,12 +35,13 @@ def fmt_report_short(args):
                         df_passed=False,
                         tid=guide.tid, resol=[5, 80],
                         time_range=[guide.start_time, guide.end_time],
-                        address_range=region,
+                        address_range=regions,
                         output='stdout',
                         stdout_colorset='gray',
                         stdout_skip_colorset_example=True,
                         ),
-                    records)
+                    address_range_idx=idx,
+                    __records=records)
             lines.append(heatmap)
 
     lines.append('')
@@ -116,7 +118,8 @@ def fmt_report(args):
     lines.append('')
     for guide in guides:
         lines.append('# target %d' % guide.tid)
-        for region in guide.regions():
+        regions = guide.regions()
+        for idx, region in enumerate(guide.regions()):
             lines.append('# address range %d-%d' % (region[0], region[1]))
             heatmap = damo_report_heatmap.fmt_heats(
                     argparse.Namespace(
@@ -126,12 +129,13 @@ def fmt_report(args):
                         df_passed=False,
                         tid=guide.tid, resol=[10, 80],
                         time_range=[guide.start_time, guide.end_time],
-                        address_range=region,
+                        address_range=regions,
                         output='stdout',
                         stdout_colorset='gray',
                         stdout_skip_colorset_example=True,
                         ),
-                    records)
+                    address_range_idx=idx,
+                    __records=records)
             lines.append(heatmap)
     lines.append('# you can get above via \'damo report heatmap\'')
 
