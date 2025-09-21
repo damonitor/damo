@@ -28,6 +28,10 @@ def fmt_report_short(args):
                 guide.tid, region[0], region[1]))
             heatmap = damo_report_heatmap.fmt_heats(
                     argparse.Namespace(
+                        kdamond_idx=None,
+                        context_idx=None,
+                        scheme_idx=None,
+                        df_passed=False,
                         tid=guide.tid, resol=[5, 80],
                         time_range=[guide.start_time, guide.end_time],
                         address_range=region,
@@ -116,6 +120,10 @@ def fmt_report(args):
             lines.append('# address range %d-%d' % (region[0], region[1]))
             heatmap = damo_report_heatmap.fmt_heats(
                     argparse.Namespace(
+                        kdamond_idx=None,
+                        context_idx=None,
+                        scheme_idx=None,
+                        df_passed=False,
                         tid=guide.tid, resol=[10, 80],
                         time_range=[guide.start_time, guide.end_time],
                         address_range=region,
