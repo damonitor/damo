@@ -132,7 +132,8 @@ def main(args):
 
     if args.input_file is None:
         kdamonds, err = _damon.update_read_kdamonds(
-                nr_retries=5, update_stats=True, update_tried_regions=True,
+                nr_retries=5, update_stats=True,
+                update_tried_regions=(args.omit_damos_tried_regions is False),
                 update_quota_effective_bytes=True,
                 # todo: set update_tuned_intervals as False if not needed
                 do_update_tuned_intervals=True)
