@@ -131,9 +131,18 @@ def main(args):
                                        args.damos_stat_fields)
 
     if args.input_file is None:
+        update_tried_regions = True
+        # tried regions are not printed when --omit_damos_tried_regions or
+        # --json is set.  When --json is set, the output is formatted via
+        # Damos.to_kvpairs(), which doesn't include tried regions information.
+        # Updating tried regions for such cases makes no sense but just incur
+        # system overhead and user delay, so don't do the update in the case.
+        if args.omit_damos_tried_regions or args.json:
+            update_tried_regions = False
+
         kdamonds, err = _damon.update_read_kdamonds(
                 nr_retries=5, update_stats=True,
-                update_tried_regions=(args.omit_damos_tried_regions is False),
+                update_tried_regions=update_tried_regions,
                 update_quota_effective_bytes=True,
                 # todo: set update_tuned_intervals as False if not needed
                 do_update_tuned_intervals=True)
