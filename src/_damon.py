@@ -1053,7 +1053,7 @@ class Damos:
             if self.apply_interval_us != 0 else 'per aggr interval')
         return ' '.join(action_words)
 
-    def to_str(self, raw, params_only=False):
+    def to_str(self, raw, params_only=False, omit_tried_regions=False):
         lines = [self.str_action_line(raw)]
         if self.access_pattern is not None:
             lines.append('target access pattern')
@@ -1076,7 +1076,8 @@ class Damos:
         if params_only is False and self.stats is not None:
             lines.append('statistics')
             lines.append(_damo_fmt_str.indent_lines(self.stats.to_str(raw), 4))
-        if params_only is False and self.tried_regions is not None:
+        if params_only is False and omit_tried_regions is False and \
+                self.tried_regions is not None:
             lines.append('tried regions (%s)' % _damo_fmt_str.format_sz(
                     self.tried_bytes, raw))
             for region in self.tried_regions:
