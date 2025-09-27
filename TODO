@@ -42,6 +42,7 @@
 - Support drgn based 'damo diagnose'
 - Support cold memory tail from 'damo report access'
 - Support DAMON_STAT output as record file
+- Skip unnecessary stat updates when refresh_ms is set
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
