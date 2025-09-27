@@ -104,14 +104,16 @@ def pr_kdamonds_summary(input_file, json_format, raw_nr, show_cpu):
     for idx, line in enumerate(summary):
         print('%d\t%s' % (idx, line))
 
-def pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu, params_only=False):
+def pr_kdamonds(kdamonds, json_format, raw_nr, show_cpu, params_only=False,
+                omit_damos_tried_regions=False):
     if json_format:
         print(json.dumps([k.to_kvpairs(raw_nr) for k in kdamonds], indent=4))
     else:
         for idx, k in enumerate(kdamonds):
             print('kdamond %d' % idx)
             print(_damo_fmt_str.indent_lines(
-                k.to_str(raw_nr, show_cpu, params_only), 4))
+                k.to_str(raw_nr, show_cpu, params_only,
+                         omit_damos_tried_regions), 4))
 
 def main(args):
     _damon.ensure_root_and_initialized(args)
@@ -142,7 +144,8 @@ def main(args):
         if err is not None:
             print(err)
             exit(1)
-    pr_kdamonds(kdamonds, args.json, args.raw, args.show_cpu_usage)
+    pr_kdamonds(kdamonds, args.json, args.raw, args.show_cpu_usage,
+                args.omit_damos_tried_regions)
 
 def set_argparser(parser):
     parser.add_argument('--json', action='store_true', default=False,
@@ -159,6 +162,8 @@ def set_argparser(parser):
             choices=['nr_tried', 'sz_tried', 'nr_applied', 'sz_applied',
                 'qt_exceeds'], nargs='+',
             help='DAMOS stat fields to print')
+    parser.add_argument('--omit_damos_tried_regions', action='store_true',
+                        help='omit DAMOS tried regions')
     parser.add_argument('--damon_params', action='store_true',
             help='print entered DAMON parameters only')
     parser.add_argument('--damon_params_omit_defaults', action='store_true',
