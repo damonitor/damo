@@ -1179,7 +1179,7 @@ class DamonCtx:
         for scheme in self.schemes:
             scheme.context = self
 
-    def to_str(self, raw, params_only=False):
+    def to_str(self, raw, params_only=False, omit_damos_tried_regions=False):
         ops_line_tokens = ['ops: %s' % self.ops]
         if self.ops_attrs.use_reports:
             ops_line_tokens.append('use_reports')
@@ -1202,7 +1202,7 @@ class DamonCtx:
         for idx, scheme in enumerate(self.schemes):
             lines.append('scheme %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(
-                scheme.to_str(raw, params_only), 4))
+                scheme.to_str(raw, params_only, omit_damos_tried_regions), 4))
         return '\n'.join(lines)
 
     def __str__(self):
@@ -1271,7 +1271,8 @@ class Kdamond:
             words.append('cpu usage: %s' % self.get_cpu_usage())
         return ', '.join(words)
 
-    def to_str(self, raw, show_cpu=False, params_only=False):
+    def to_str(self, raw, show_cpu=False, params_only=False,
+               omit_damos_tried_regions=False):
         lines = []
         summary_line = self.summary_str(show_cpu, params_only,
                                         omit_defaults=False, raw_number=raw)
@@ -1280,7 +1281,7 @@ class Kdamond:
         for idx, ctx in enumerate(self.contexts):
             lines.append('context %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(
-                ctx.to_str(raw, params_only), 4))
+                ctx.to_str(raw, params_only, omit_damos_tried_regions), 4))
         return '\n'.join(lines)
 
     def __str__(self):
