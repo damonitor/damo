@@ -1697,10 +1697,6 @@ class RecordGetRequest:
 def get_records(tried_regions_of=None, record_file=None,
                 snapshot_damos_filters=None, record_filter=None,
                 total_sz_only=False, dont_merge_regions=True):
-    request = RecordGetRequest(
-            tried_regions_of, record_file, snapshot_damos_filters,
-            record_filter, total_sz_only, dont_merge_regions)
-
     # If record is live snapshot, access pattern filtering is applied with
     # get_snapshot_records_of() because it uses DAMOS to get the snapshot.  If
     # the kernel has schemes_filters_addr feature, address ranges filter is
@@ -1713,8 +1709,11 @@ def get_records(tried_regions_of=None, record_file=None,
     else:
         filter_copy = RecordFilter(None, None, None, None, None, None, None)
 
-    if request.record_file is None:
-        records, err = get_snapshot_records_of(request)
+    if record_file is None:
+        records, err = get_snapshot_records_of(
+                RecordGetRequest(
+                    tried_regions_of, record_file, snapshot_damos_filters,
+                    record_filter, total_sz_only, dont_merge_regions))
         if err is not None:
             return None, err
         filter_copy.access_pattern = None
@@ -1722,10 +1721,10 @@ def get_records(tried_regions_of=None, record_file=None,
             filter_copy.address_ranges = None
             filter_copy.snapshot_time_ranges = None
     else:
-        if type(request.record_file) is not list:
-            request.record_file = [request.record_file]
+        if type(record_file) is not list:
+            record_file = [record_file]
         records = []
-        for record_file in request.record_file:
+        for record_file in record_file:
             if not os.path.isfile(record_file):
                 return None, '%s not found' % record_file
 
