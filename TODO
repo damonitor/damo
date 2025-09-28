@@ -40,9 +40,13 @@
 - Support multiple targets snapshot (get_snapshot_records())
 - support 2d heatmap on report access
 - Support drgn based 'damo diagnose'
-- Support cold memory tail from 'damo report access'
-- Support DAMON_STAT output as record file
-- Skip unnecessary stat updates when refresh_ms is set
+- Support DAMON_STAT from 'damo record' and 'damo report access'
+  - If 'damo record' is called in ongoing snapshot recording mode while
+    DAMON_STAT running, record DAMON_STAT snapshots.
+  - If 'damo report' is called in live snapshot mode and DAMON_STAT is running,
+    record DAMON_STAT snapshots.
+  - Support cold memory tail or idle time percentiles format on
+    'damo report access'.
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
