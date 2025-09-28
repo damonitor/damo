@@ -1670,7 +1670,6 @@ def set_snapshot_damos_filters_option(parser):
 class SnapshotRequest:
     # source of the record.  If both are None, get snapshot
     tried_regions_of = None
-    record_file = None
 
     snapshot_damos_filters = None
 
@@ -1681,12 +1680,9 @@ class SnapshotRequest:
     dont_merge_regions = None
 
     def __init__(
-            self, tried_regions_of=None, record_file=None,
-            snapshot_damos_filters=None,
-            record_filter=None,
-            total_sz_only=False, dont_merge_regions=True):
+            self, tried_regions_of=None, snapshot_damos_filters=None,
+            record_filter=None, total_sz_only=False, dont_merge_regions=True):
         self.tried_regions_of = tried_regions_of
-        self.record_file = record_file
         self.snapshot_damos_filters = snapshot_damos_filters
         self.record_filter = record_filter
         self.total_sz_only = total_sz_only
@@ -1710,7 +1706,7 @@ def get_records(tried_regions_of=None, record_file=None,
     if record_file is None:
         records, err = get_snapshot_records_of(
                 SnapshotRequest(
-                    tried_regions_of, record_file, snapshot_damos_filters,
+                    tried_regions_of, snapshot_damos_filters,
                     record_filter, total_sz_only, dont_merge_regions))
         if err is not None:
             return None, err

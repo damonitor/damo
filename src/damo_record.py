@@ -102,8 +102,7 @@ def snapshot_requests_from_args(args):
         return None, err
 
     return _damo_records.SnapshotRequest(
-            tried_regions_of=tried_regions_of, record_file=None,
-            snapshot_damos_filters=dfilters,
+            tried_regions_of=tried_regions_of, snapshot_damos_filters=dfilters,
             record_filter=record_filter, total_sz_only=False,
             dont_merge_regions=False), None
 
