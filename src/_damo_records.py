@@ -50,14 +50,11 @@ class DamonIdleMsPercentiles:
     @classmethod
     def from_kvpairs(cls, kv):
         percentile_ms_list = [DamonIdleMsPercentile.from_kvpairs(x)
-                              for x in kv['percentile_ms_list']]
+                              for x in kv]
         return DamonIdleMsPercentiles(percentile_ms_list=percentile_ms_list)
 
     def to_kvpairs(self, raw=False):
-        return collections.OrderedDict([
-            ('percentile_ms_list',
-             [x.to_kvpairs(raw) for x in self.percentile_ms_list]),
-            ])
+        return [x.to_kvpairs(raw) for x in self.percentile_ms_list]
 
 class DamonSnapshot:
     '''
