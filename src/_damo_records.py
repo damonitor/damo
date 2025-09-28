@@ -1668,8 +1668,6 @@ def set_snapshot_damos_filters_option(parser):
                 ]))
 
 class RecordGetRequest:
-    # TODO: Extend to be used for recording
-
     # source of the record.  If both are None, get snapshot
     tried_regions_of = None
     record_file = None
