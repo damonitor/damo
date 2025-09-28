@@ -101,7 +101,7 @@ def snapshot_requests_from_args(args):
     if err is not None:
         return None, err
 
-    return _damo_records.RecordGetRequest(
+    return _damo_records.SnapshotRequest(
             tried_regions_of=tried_regions_of, record_file=None,
             snapshot_damos_filters=dfilters,
             record_filter=record_filter, total_sz_only=False,

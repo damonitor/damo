@@ -1034,7 +1034,7 @@ class RecordingHandle:
     perf_pipe = None
 
     # for access patterns snapshot
-    snapshot_request = None # RecordGetRequest object.
+    snapshot_request = None # SnapshotRequest object.
     snapshot_records = None # list of DamonRecord objects retrieved via
                             # get_snapshot_records_of()
     snapshot_count = None
@@ -1667,7 +1667,7 @@ def set_snapshot_damos_filters_option(parser):
                 'Format is same to --damos_filter.'
                 ]))
 
-class RecordGetRequest:
+class SnapshotRequest:
     # source of the record.  If both are None, get snapshot
     tried_regions_of = None
     record_file = None
@@ -1709,7 +1709,7 @@ def get_records(tried_regions_of=None, record_file=None,
 
     if record_file is None:
         records, err = get_snapshot_records_of(
-                RecordGetRequest(
+                SnapshotRequest(
                     tried_regions_of, record_file, snapshot_damos_filters,
                     record_filter, total_sz_only, dont_merge_regions))
         if err is not None:
