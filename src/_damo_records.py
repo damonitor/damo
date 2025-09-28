@@ -32,7 +32,7 @@ class DamonIdleMsPercentile:
 
     @classmethod
     def from_kvpairs(cls, kv):
-        return DamonIdleMsPercentiles(
+        return DamonIdleMsPercentile(
                 percentile=kv['percentile'], idle_ms=kv['idle_ms'])
 
     def to_kvpairs(self, raw=False):
