@@ -56,6 +56,43 @@ class DamonIdleMsPercentiles:
     def to_kvpairs(self, raw=False):
         return [x.to_kvpairs(raw) for x in self.percentile_ms_list]
 
+class DamonStatSnapshot:
+    idletime_ms_percentiles = None  # DamonIdleMsPercentiles
+    memory_bw_bytes_per_sec = None   # bytes per second
+    aggr_interval_us = None # aggregation interval, available from 6.18
+
+    def __init__(self, idletime_ms_percentiles,
+                 memory_bw_bytes_per_sec, aggr_interval_us):
+        self.idletime_ms_percentiles = idletime_ms_percentiles
+        self.memory_bw_bytes_per_sec = _damo_fmt_str.text_to_bytes(
+                memory_bw_bytes_per_sec)
+        # aggr_interval_us on DAMON_STAT is available since 6.18
+        if aggr_interval_us is not None:
+            self.aggr_interval_us = _damo_fmt_str.text_to_us(aggr_interval_us)
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamonStatSnapshot(
+                idletime_ms_percentiles=DamonIdleMsPercentiles.from_kvpairs(
+                    kv['idletime_ms_percentiles']),
+                memory_bw_bytes_per_sec=kv['memory_bw_bytes_per_sec'],
+                aggr_interval_us=kv['aggr_interval_us'])
+
+    def to_kvpairs(self, raw=False):
+        if self.aggr_interval_us is not None:
+            aggr_interval_us = _damo_fmt_str.format_time_us_exact(
+                    self.aggr_interval_us, raw)
+        else:
+            aggr_interval_us = None
+
+        return collections.OrderedDict([
+            ('idletime_ms_percentiles',
+             self.idletime_ms_percentiles.to_kvpairs(raw)),
+            ('memory_bw_bytes_per_sec',
+             _damo_fmt_str.format_sz(self.memory_bw_bytes_per_sec, raw)),
+            ('aggr_interval_us', aggr_interval_us),
+            ])
+
 class DamonSnapshot:
     '''
     Contains a snapshot of data access monitoring results
