@@ -1569,11 +1569,15 @@ def filter_records_by_temperature(records, temperature_ranges,
             snapshot.update_total_bytes()
 
 class SnapshotRequest:
-    # source of the record.  If both are None, get snapshot
+    '''
+    Request for getting single snapshot records from running kdamonds.
+    '''
     tried_regions_of = None
 
+    # filter to be applied using DAMOS filters, if available.
     snapshot_damos_filters = None
 
+    # filter to be applied on retrieved snapshot, by damo.
     record_filter = None
 
     # more detailed requests
