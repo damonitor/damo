@@ -1000,8 +1000,8 @@ def poll_target_pids(kdamonds):
 
 class RecordingHandle:
     '''
-    Specifies the recording request.  The recording can be started by
-    start_recording(), and finished by finish_recording().
+    Recording requests, status and intermediate results.  The recording can be
+    started by start_recording(), and finished by finish_recording().
 
     As a result of the two function calls, below files can be generated.
 
@@ -1034,8 +1034,9 @@ class RecordingHandle:
     perf_pipe = None
 
     # for access patterns snapshot
-    snapshot_request = None
-    snapshot_records = None
+    snapshot_request = None # RecordGetRequest object.
+    snapshot_records = None # list of DamonRecord objects retrieved via
+                            # get_snapshot_records_of()
     snapshot_count = None
     snapshot_interval_sec = None
 
