@@ -1568,6 +1568,27 @@ def filter_records_by_temperature(records, temperature_ranges,
             snapshot.regions = filtered_regions
             snapshot.update_total_bytes()
 
+class SnapshotRequest:
+    # source of the record.  If both are None, get snapshot
+    tried_regions_of = None
+
+    snapshot_damos_filters = None
+
+    record_filter = None
+
+    # more detailed requests
+    total_sz_only = None
+    dont_merge_regions = None
+
+    def __init__(
+            self, tried_regions_of=None, snapshot_damos_filters=None,
+            record_filter=None, total_sz_only=False, dont_merge_regions=True):
+        self.tried_regions_of = tried_regions_of
+        self.snapshot_damos_filters = snapshot_damos_filters
+        self.record_filter = record_filter
+        self.total_sz_only = total_sz_only
+        self.dont_merge_regions = dont_merge_regions
+
 def get_snapshot_records_of(request):
     '''
     get records containing single snapshot from running kdamonds
@@ -1666,27 +1687,6 @@ def set_snapshot_damos_filters_option(parser):
                 'Region-internal DAMOS filters for the snapshot.',
                 'Format is same to --damos_filter.'
                 ]))
-
-class SnapshotRequest:
-    # source of the record.  If both are None, get snapshot
-    tried_regions_of = None
-
-    snapshot_damos_filters = None
-
-    record_filter = None
-
-    # more detailed requests
-    total_sz_only = None
-    dont_merge_regions = None
-
-    def __init__(
-            self, tried_regions_of=None, snapshot_damos_filters=None,
-            record_filter=None, total_sz_only=False, dont_merge_regions=True):
-        self.tried_regions_of = tried_regions_of
-        self.snapshot_damos_filters = snapshot_damos_filters
-        self.record_filter = record_filter
-        self.total_sz_only = total_sz_only
-        self.dont_merge_regions = dont_merge_regions
 
 def get_records(tried_regions_of=None, record_file=None,
                 snapshot_damos_filters=None, record_filter=None,
