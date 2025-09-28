@@ -5,6 +5,7 @@ v2.9.8
 - Fixup 'damo report holistic' breakage.
 - Avoid unnecessary DAMOS tried regions update in 'damo report damon --json'.
 - Add '--omit_damos_tried_regions' to 'damo report damon'.
+- Preparation of DAMON_STAT support on 'damo record' and 'damo report access'.
 
 v2.9.7
 - DAMOS arguments parsing cleanup.
