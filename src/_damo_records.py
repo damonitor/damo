@@ -42,21 +42,21 @@ class DamonIdleMsPercentile:
             ])
 
 class DamonIdleMsPercentiles:
-    percentile_ms_dict = None  # list of DamonIdleMsPercentile
+    percentile_ms_list = None  # list of DamonIdleMsPercentile
 
-    def __init__(self, percentile_ms_dict):
-        self.percentile_ms_dict = percentile_ms_dict
+    def __init__(self, percentile_ms_list):
+        self.percentile_ms_list = percentile_ms_list
 
     @classmethod
     def from_kvpairs(cls, kv):
-        percentile_ms_dict = [DamonIdleMsPercentile.from_kvpairs(x)
-                              for x in kv['percentile_ms_dict']]
-        return DamonIdleMsPercentiles(percentile_ms_dict=percentile_ms_dict)
+        percentile_ms_list = [DamonIdleMsPercentile.from_kvpairs(x)
+                              for x in kv['percentile_ms_list']]
+        return DamonIdleMsPercentiles(percentile_ms_list=percentile_ms_list)
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
-            ('percentile_ms_dict',
-             [x.to_kvpairs(raw) for x in self.percentile_ms_dict]),
+            ('percentile_ms_list',
+             [x.to_kvpairs(raw) for x in self.percentile_ms_list]),
             ])
 
 class DamonSnapshot:
