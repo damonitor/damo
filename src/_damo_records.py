@@ -1488,10 +1488,6 @@ def get_snapshot_records(monitor_scheme, total_sz_only, merge_regions):
 
     orig_kdamonds = _damon.current_kdamonds()
 
-    err = install_target_regions_if_needed(orig_kdamonds)
-    if err is not None:
-        return None, 'vaddr region install failed (%s)' % err
-
     installed, idxs, updated_kdamonds, err = find_install_scheme(
             monitor_scheme)
     if err:
