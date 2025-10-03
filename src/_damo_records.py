@@ -1369,45 +1369,6 @@ def tried_regions_to_records_of(idxs, merge_regions):
                 break
     return records
 
-def three_regions_of(pid):
-    '''
-    Return three big mapped virtual address ranges of a given process, which
-    separated by the two huge gaps[1].
-
-    [1] https://docs.kernel.org/mm/damon/design.html#vma-based-target-address-range-construction
-    '''
-    if not os.path.isfile('/proc/%s/maps' % pid):
-        print('maps file for %s pid not found' % pid)
-        exit(0)
-    with open('/proc/%s/maps' % pid, 'r') as f:
-        maps_content = f.read()
-    regions = []
-    for line in maps_content.split('\n'):
-        if line == '':
-            continue
-        start, end = [int(addr, 16) for addr in line.split()[0].split('-')]
-        if len(regions) > 0 and regions[-1].end == start:
-            regions[-1].end = end
-        else:
-            regions.append(_damon.DamonRegion(start, end))
-
-    gaps = []
-    for idx, region in enumerate(regions):
-        if idx == 0:
-            continue
-        prev_region = regions[idx - 1]
-        if region.start != prev_region.end:
-            gaps.append([prev_region.end, region.start])
-    gaps.sort(key=lambda x: x[1] - x[0], reverse=True)
-    if len(gaps) < 2:
-        return regions
-    # sort biggest two gaps in address
-    gaps = sorted(gaps[:2], key=lambda x: x[0])
-
-    return [_damon.DamonRegion(regions[0].start, gaps[0][0]),
-            _damon.DamonRegion(gaps[0][1], gaps[1][0]),
-            _damon.DamonRegion(gaps[1][1], regions[-1].end)]
-
 def update_get_snapshot_records(kdamond_idxs, scheme_idxs,
         total_sz_only, merge_regions):
     if total_sz_only:
