@@ -1408,27 +1408,6 @@ def three_regions_of(pid):
             _damon.DamonRegion(gaps[0][1], gaps[1][0]),
             _damon.DamonRegion(gaps[1][1], regions[-1].end)]
 
-def install_target_regions_if_needed(kdamonds):
-    '''Returns an error string, or None'''
-    need_install = False
-    for kd in kdamonds:
-        for ctx in kd.contexts:
-            if ctx.ops != 'vaddr':
-                continue
-            need_install = True
-            for target in ctx.targets:
-                target.regions = three_regions_of(target.pid)
-    if not need_install:
-        return None
-    err = _damon.commit(kdamonds)
-    for kd in kdamonds:
-        for ctx in kd.contexts:
-            if ctx.ops != 'vaddr':
-                continue
-            for target in ctx.targets:
-                target.regions = []
-    return err
-
 def update_get_snapshot_records(kdamond_idxs, scheme_idxs,
         total_sz_only, merge_regions):
     if total_sz_only:
