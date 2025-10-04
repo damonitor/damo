@@ -1700,36 +1700,36 @@ def add_childs_target(kdamonds):
     if not target_has_pid(kdamonds[0].contexts[0].ops):
         return
     old_targets = kdamonds[0].contexts[0].targets
-    current_targets = []
-    new_targets = []
+    current_target_pids = []
+    new_target_pids = []
 
     for target in old_targets:
         if target is None:
             continue
-        current_targets.append('%s' % target.pid)
+        current_target_pids.append('%s' % target.pid)
 
-    for target in current_targets:
-        # If this is already in new_targets, we have already recursively
+    for target_pid in current_target_pids:
+        # If this is already in new_target_pids, we have already recursively
         # searched for its children as well.
-        if target in new_targets:
+        if target_pid in new_target_pids:
             continue
         # Don't consider already terminated targets since committing already
         # terminated targets to DAMON fails
-        if not pid_running(target):
+        if not pid_running(target_pid):
             continue
 
-        new_targets.append(target)
-        childs_pids = get_childs_pids(target)
+        new_target_pids.append(target_pid)
+        childs_pids = get_childs_pids(target_pid)
         if len(childs_pids) == 0:
             continue
 
         for child_pid in childs_pids:
             # skip the child if already in the targets
-            if child_pid in new_targets:
+            if child_pid in new_target_pids:
                 continue
-            new_targets.append(child_pid)
+            new_target_pids.append(child_pid)
 
-    if set(new_targets) == set(current_targets):
+    if set(new_target_pids) == set(current_target_pids):
         return None
     # Commit the new set of targets.
     #
@@ -1739,7 +1739,7 @@ def add_childs_target(kdamonds):
     #
     # TODO: adjust the orders of the new targets so that only appropriate past
     # monitoring results are inherited.
-    kdamonds[0].contexts[0].targets = [DamonTarget(pid = p, regions=[]) for p in new_targets]
+    kdamonds[0].contexts[0].targets = [DamonTarget(pid = p, regions=[]) for p in new_target_pids]
     err = commit(kdamonds, commit_targets_only=True)
     if err is not None:
         kdamonds[0].contexts[0].targets = old_targets
