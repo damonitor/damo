@@ -94,10 +94,14 @@ class DamonStatSnapshot:
             ])
 
     @classmethod
-    def capture(cls):
+    def capture(cls, live_only=False):
         damon_stat_parm_dir = '/sys/module/damon_stat/parameters'
         if not os.path.isdir(damon_stat_parm_dir):
             return None, 'damon_stat unsupported'
+        if live_only:
+            with open(os.path.join(damon_stat_parm_dir, 'enabled'), 'r') as f:
+                if f.read().strip().lower() == 'n':
+                    return None, 'damon_stat is not enabled'
         with open(os.path.join(damon_stat_parm_dir,
                                'memory_idle_ms_percentiles'), 'r') as f:
             idletime_ms_percentiles = DamonIdleMsPercentiles(
