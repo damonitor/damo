@@ -182,9 +182,8 @@ def handle_read_write(args):
                 exit(1)
         else:
             input_idle_time_percentiles = None
-        for to_read in args.parameter:
-            handle_read(to_read, args, input_idle_time_percentiles,
-                        param_dir)
+        for to_read in args.to_read:
+            handle_read(to_read, args, input_idle_time_percentiles, param_dir)
     elif args.action == 'write':
         if len(args.parameter_value) % 2 != 0:
             print('wrong paramter_value')
@@ -207,7 +206,7 @@ def set_argparser(parser):
 
     parser_read = subparsers.add_parser('read', help='read parameters')
     parser_read.add_argument(
-            'parameter', metavar='<parameter name or display keywords>',
+            'to_read', metavar='<parameter name or display keywords>',
             nargs='*',
             help='what to read.')
     parser_read.add_argument(
