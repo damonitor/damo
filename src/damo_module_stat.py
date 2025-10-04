@@ -202,7 +202,8 @@ def set_argparser(parser):
 
     parser_read = subparsers.add_parser('read', help='read parameters')
     parser_read.add_argument(
-            'parameter', metavar='<parameter name>', nargs='?',
+            'parameter', metavar='<parameter name or display keywords>',
+            nargs='?',
             help='parameter to read.')
     parser_read.add_argument(
             '--idle_time_mem_sz_lines', metavar='<int>', default=10, type=int,
