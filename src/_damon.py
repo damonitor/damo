@@ -1731,7 +1731,14 @@ def add_childs_target(kdamonds):
 
     if set(new_targets) == set(current_targets):
         return None
-    # commit the new set of targets
+    # Commit the new set of targets.
+    #
+    # Set no target region because it will instruct DAMON to keep current
+    # monitoring results (regions with nr_accesses, age, etc) for the target if
+    # exists.
+    #
+    # TODO: adjust the orders of the new targets so that only appropriate past
+    # monitoring results are inherited.
     kdamonds[0].contexts[0].targets = [DamonTarget(pid = p, regions=[]) for p in new_targets]
     err = commit(kdamonds, commit_targets_only=True)
     if err is not None:
