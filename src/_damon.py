@@ -1739,14 +1739,14 @@ def add_childs_target(kdamonds):
     #
     # TODO: adjust the orders of the new targets so that only appropriate past
     # monitoring results are inherited.
-    kdamonds[0].contexts[0].targets = [DamonTarget(pid = p, regions=[]) for p in new_target_pids]
+    kdamonds[0].contexts[0].targets = [DamonTarget(pid = p, regions=[])
+                                       for p in new_target_pids]
     err = commit(kdamonds, commit_targets_only=True)
     if err is not None:
         kdamonds[0].contexts[0].targets = old_targets
         return 'commit failed (%s)' % err
 
     return None
-
 
 def turn_damon_on(kdamonds_idxs):
     err = _damon_fs.turn_damon_on(kdamonds_idxs)
