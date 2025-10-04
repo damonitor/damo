@@ -144,6 +144,31 @@ def input_idle_time_percentiles_to_full_percentiles(input_percentiles):
         partial_percentiles.append([percentile, val])
     return partial_to_full_idle_time_percentiles(partial_percentiles), None
 
+def handle_read(to_read, args, input_idle_time_percentiles, param_dir):
+    if to_read == 'idle_time_mem_sz':
+        pr_idle_time_mem_sz(args.idle_time_mem_sz_lines, args.raw_number,
+                            input_idle_time_percentiles)
+    elif to_read == 'idle_time_percentiles':
+        pr_idle_time_percentiles(args.idle_time_percentiles_range,
+                                 args.raw_number,
+                                 input_idle_time_percentiles)
+    elif to_read is not None:
+        file_path = os.path.join(param_dir, to_read)
+        if not os.path.isfile(file_path):
+            print('Wrong parameter (%s).  Please use one among below:' %
+                  to_read)
+            for param_file in os.listdir(param_dir):
+                print('- %s' % param_file)
+            print('- idle_time_mem_sz')
+            print('- idle_time_percentiles')
+            exit(1)
+        with open(os.path.join(param_dir, to_read), 'r') as f:
+            print(f.read().strip())
+    else:
+        for param in os.listdir(param_dir):
+            with open(os.path.join(param_dir, param), 'r') as f:
+                print('%s: %s' % (param, f.read().strip()))
+
 def handle_read_write(args):
     module_name = args.module_name
     param_dir = '/sys/module/damon_%s/parameters' % module_name
@@ -157,29 +182,9 @@ def handle_read_write(args):
                 exit(1)
         else:
             input_idle_time_percentiles = None
-        if args.parameter == 'idle_time_mem_sz':
-            pr_idle_time_mem_sz(args.idle_time_mem_sz_lines, args.raw_number,
-                                input_idle_time_percentiles)
-        elif args.parameter == 'idle_time_percentiles':
-            pr_idle_time_percentiles(args.idle_time_percentiles_range,
-                                     args.raw_number,
-                                     input_idle_time_percentiles)
-        elif args.parameter is not None:
-            file_path = os.path.join(param_dir, args.parameter)
-            if not os.path.isfile(file_path):
-                print('Wrong parameter (%s).  Please use one among below:' %
-                      args.parameter)
-                for param_file in os.listdir(param_dir):
-                    print('- %s' % param_file)
-                print('- idle_time_mem_sz')
-                print('- idle_time_percentiles')
-                exit(1)
-            with open(os.path.join(param_dir, args.parameter), 'r') as f:
-                print(f.read().strip())
-        else:
-            for param in os.listdir(param_dir):
-                with open(os.path.join(param_dir, param), 'r') as f:
-                    print('%s: %s' % (param, f.read().strip()))
+        for to_read in args.parameter:
+            handle_read(to_read, args, input_idle_time_percentiles,
+                        param_dir)
     elif args.action == 'write':
         if len(args.parameter_value) % 2 != 0:
             print('wrong paramter_value')
@@ -203,8 +208,8 @@ def set_argparser(parser):
     parser_read = subparsers.add_parser('read', help='read parameters')
     parser_read.add_argument(
             'parameter', metavar='<parameter name or display keywords>',
-            nargs='?',
-            help='parameter to read.')
+            nargs='*',
+            help='what to read.')
     parser_read.add_argument(
             '--idle_time_mem_sz_lines', metavar='<int>', default=10, type=int,
             help='number of lines for idle time to memory size output')
