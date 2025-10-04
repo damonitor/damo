@@ -1677,10 +1677,39 @@ def handle_exec(cmd, records):
     recursive_del(script_dir_path)
     return None
 
+def handle_args_input(args):
+    if args.input is None:
+        return None
+
+    tried_regions_of_list = []
+    input_files = []
+    for input_args in args.input:
+        if input_args[0] == 'tried_regions_of':
+            if len(input_args) != 4:
+                return 'wrong number of args for tried_regions_of'
+            try:
+                tried_regions_of_list.append([int(x) for x in input_args[1:]])
+            except:
+                return 'tried_regions_of should get only ints'
+        elif len(input_args) == 1 and os.path.isfile(input_args[0]):
+            input_files.append(input_args[0])
+        else:
+            return 'unsupported input'
+    if len(tried_regions_of_list) > 0:
+        args.tried_regions_of = tried_regions_of_list
+    if len(input_files) > 0:
+        args.input_file = input_files
+    return None
+
 def read_and_show(args):
     record_filter, err = _damo_records.args_to_filter(args)
     if err != None:
         print(err)
+        exit(1)
+
+    err = handle_args_input(args)
+    if err is not None:
+        print('--input handling failed (%s)' % err)
         exit(1)
 
     if args.input_file == None:
@@ -1954,6 +1983,14 @@ def set_argparser(parser):
     # what to show
     _damo_records.set_filter_argparser(parser, hide_help=True)
 
+    parser.add_argument(
+            '--input', metavar='<file or special words>', nargs='+',
+            action='append',
+            help=' '.join([
+                'Source of the access pattern to show.',
+                'Can be file or',
+                '"tried_regions_of <kdamond idx> <context idx> <scheme idx>"'
+                ]))
     parser.add_argument('--input_file', metavar='<file>', nargs='+',
             help='source of the access pattern to show')
     parser.add_argument('--tried_regions_of', nargs=3, type=int,
