@@ -1597,10 +1597,35 @@ class SnapshotRequest:
         self.total_sz_only = total_sz_only
         self.dont_merge_regions = dont_merge_regions
 
+def should_get_snapshot_from_damon_stat(request):
+    if request.tried_regions_of is not None:
+        return False
+    if request.snapshot_damos_filters:
+        return False
+
+    if _damon.any_kdamond_running():
+        return False
+
+    param_dir = '/sys/module/damon_stat/parameters/'
+    aggr_interval_us_file = os.path.join(param_dir, 'aggr_interval_us')
+    if not os.path.isfile(aggr_interval_us_file):
+        return False
+    enabled_file = os.path.join(param_dir, 'enabled')
+    with open(enabled_file, 'r') as f:
+        if f.read().strip().lower() == 'n':
+            return False
+
+    return True
+
+def get_snapshot_records_of_damon_stat(request):
+    return None, 'damon_stat snapshot feature is under the construction'
+
 def get_snapshot_records_of(request):
     '''
     get records containing single snapshot from running kdamonds
     '''
+    if should_get_snapshot_from_damon_stat(request):
+        return get_snapshot_records_of_damon_stat(request)
     if request.tried_regions_of is None:
         access_pattern = _damon.DamosAccessPattern()
         filters = []
