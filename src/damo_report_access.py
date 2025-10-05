@@ -1478,6 +1478,15 @@ def set_formats_record_default(fmt, records):
         tail_lines = ['record DAMON intervals: <intervals>']
         if intervals_goal_enabled(records):
             tail_lines.append('# <intervals goal>')
+        show_data_source = False
+        for record in records:
+            if record.data_source == \
+                    _damo_records.record_data_source_damon_stat:
+                show_data_source = True
+                break
+        if show_data_source:
+            tail_lines.append('# data source: <data source>')
+
         fmt.format_record_tail = '\n'.join(tail_lines)
 
 def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
