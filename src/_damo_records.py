@@ -1339,22 +1339,28 @@ def can_merge(left_region, right_region):
             left_region.nr_accesses == right_region.nr_accesses and
             left_region.age == right_region.age)
 
+def merged_regions(regions):
+    merged = []
+
+    for region in regions:
+        if len(merged) > 0:
+            last_region = merged[-1]
+            if can_merge(last_region, region):
+                last_region.end = region.end
+                if last_region.sz_filter_passed is not None:
+                    last_region.sz_filter_passed += region.sz_filter_passed
+                continue
+        merged.append(region)
+    return merged
+
 def tried_regions_to_snapshot(scheme, intervals, merge_regions):
     snapshot_end_time_ns = time.time() * 1000000000
     snapshot_start_time_ns = snapshot_end_time_ns - intervals.aggr * 1000
-    regions = []
 
-    for tried_region in scheme.tried_regions:
-        '''Merge regions that having same access pattern, since DAMON usually
-        splits regions unnecessarily to keep the min_nr_regions'''
-        if merge_regions and len(regions) > 0:
-            last_region = regions[-1]
-            if can_merge(last_region, tried_region):
-                last_region.end = tried_region.end
-                if last_region.sz_filter_passed is not None:
-                    last_region.sz_filter_passed += tried_region.sz_filter_passed
-                continue
-        regions.append(tried_region)
+    if merge_regions:
+        regions = merged_regions(scheme.tried_regions)
+    else:
+        regions = [r for r in scheme.tried_regions]
     if scheme.tried_bytes is not None:
         total_bytes = scheme.tried_bytes
     else:
