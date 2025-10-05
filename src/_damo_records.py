@@ -1687,6 +1687,8 @@ def get_snapshot_records_of_damon_stat(request):
                 age=idle_ms * 1000, age_unit=_damon.unit_usec,
                 sz_filter_passed=0)
         regions.append(region)
+    if not request.dont_merge_regions:
+        regions = merged_regions(regions)
 
     snapshot = DamonSnapshot(
             start_time=snapshot_start_time_ns, end_time=snapshot_end_time_ns,
