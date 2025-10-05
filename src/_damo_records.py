@@ -1670,8 +1670,8 @@ def get_snapshot_records_of_damon_stat(request):
             nr_accesses_sample = 0
 
         region = _damon.DamonRegion(
-                start=percentile * mem_total_bytes / 100,
-                end=(percentile + 1) * mem_total_bytes / 100,
+                start=int(percentile * mem_total_bytes / 100),
+                end=int((percentile + 1) * mem_total_bytes / 100),
                 nr_accesses=nr_accesses_sample,
                 nr_accesses_unit=_damon.unit_samples,
                 age=idle_ms * 1000, age_unit=_damon.unit_usec,
