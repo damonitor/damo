@@ -18,6 +18,7 @@ test_report() {
 	then
 		echo "FAIL report-$test_name"
 		echo "# for detail, vimdiff $expected $result"
+		echo "# if this is expected change, cp $result $expected"
 		exit 1
 	fi
 	echo "PASS report-$test_name"
