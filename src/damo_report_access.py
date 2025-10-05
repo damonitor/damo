@@ -1123,8 +1123,9 @@ def pr_records_raw_form(records, raw_number):
             continue
 
         base_time = snapshots[0].start_time
-        lines.append('base_time_absolute: %s\n' %
+        lines.append('base_time_absolute: %s' %
                 _damo_fmt_str.format_time_ns(base_time, raw_number))
+        lines.append('data source: %s\n' % record.data_source)
 
         for snapshot in snapshots:
             lines.append('monitoring_start:    %16s' %
