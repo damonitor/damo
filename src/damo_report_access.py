@@ -62,6 +62,9 @@ record_formatters = [
                   lambda record, fmt:
                   record.intervals.intervals_goal.to_str(fmt.raw_number),
                   'monitoring intervals'),
+        Formatter('<data source>',
+                  lambda record, fmt: record.data_source,
+                  'data source of the record'),
         Formatter('<format strings>',
                   lambda record, fmt: format_strings(fmt),
                   'current format strings')
