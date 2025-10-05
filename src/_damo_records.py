@@ -189,6 +189,7 @@ class DamonSnapshot:
             ])
 
 record_data_source_unknown = 'unknown'
+record_data_source_damon_stat = 'damon_stat'
 
 class DamonRecord:
     '''
@@ -1643,7 +1644,8 @@ def get_snapshot_records_of_damon_stat(request):
                 max_sample_us=10000000))
 
     record = DamonRecord(kd_idx=-1, ctx_idx=0, intervals=snapshot_intervals,
-                         scheme_idx=None, target_id=0, scheme_filters=[])
+                         scheme_idx=None, target_id=0, scheme_filters=[],
+                         data_source=record_data_source_damon_stat)
 
     snapshot_end_time_ns = time.time() * 1000000000
     snapshot_start_time_ns = snapshot_end_time_ns - aggr_interval_us * 1000
