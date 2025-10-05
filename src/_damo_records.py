@@ -1663,7 +1663,11 @@ def get_snapshot_records_of_damon_stat(request):
         return None, 'MemTotal retrieval fail'
 
     regions = []
-    for percentile, idle_ms in enumerate(idle_ms_percentiles):
+    for percentile in range(100):
+        idle_ms_min = idle_ms_percentiles[percentile]
+        idle_ms_max = idle_ms_percentiles[percentile + 1]
+        idle_ms = int((idle_ms_min + idle_ms_max) / 2)
+
         if idle_ms < 0:
             nr_accesses_sample = 10
         else:
