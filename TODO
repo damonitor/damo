@@ -43,6 +43,7 @@
 - Support DAMON_STAT from 'damo record' and 'damo report access'
   - Support cold memory tail or idle time percentiles format on
     'damo report access'.
+  - Use estimated memory bandwidth from DAMON_STAT.
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
