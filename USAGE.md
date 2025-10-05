@@ -570,7 +570,24 @@ for retrieving status of specific parts.
 ### `damo report access`
 
 `damo report access` visualizes DAMON's access monitoring result snapshots in
-customizable formats.  Users can set it to use `damo record`-generated
+customizable formats.  From where the data to visualize is retrieved is decided
+based on the given command line options and system status.
+
+- If `--input_file` option is given with `damo record`-generated monitoring
+  results record, the record is used.
+- If no data source specification command line option is given, the source of
+  data is decided based on the system status.
+  - If any `damo start`-started DAMON instance is running, its current
+    monitoring results snapshot is used.
+  - Else if `./damon.data` file exists, use `./damon.data` as `--input_file`.
+  - Else if
+    [`DAMON_STAT`](https://docs.kernel.org/admin-guide/mm/damon/stat.html) is
+    running, its `memory_idle_ms_percentiles` snapshot is used.  Note that
+    `memory_idle_ms_percentiles` provides only a subset of the access pattern,
+    and hence re-constructed access pattern information lacks many details and
+    accuracy.
+
+Users can set it to use `damo record`-generated
 monitoring results record as the source using `--input_file` option.  If
 `--input_file` is not provided and DAMON is running, it captures snapshot from
 the running DAMON and uses it as the source.  If `--input_file` is not provided,
