@@ -188,6 +188,8 @@ class DamonSnapshot:
             ('sample_interval_us', sample_interval_us),
             ])
 
+record_data_source_unknown = 'unknown'
+
 class DamonRecord:
     '''
     Contains data access monitoring results for single target
@@ -199,9 +201,10 @@ class DamonRecord:
     target_id = None
     scheme_filters = None
     snapshots = None
+    data_source = None # source of data that used to generate this.
 
     def __init__(self, kd_idx, ctx_idx, intervals, scheme_idx, target_id,
-                 scheme_filters):
+                 scheme_filters, data_source=record_data_source_unknown):
         self.kdamond_idx = kd_idx
         self.context_idx = ctx_idx
         self.intervals = intervals
@@ -209,6 +212,7 @@ class DamonRecord:
         self.target_id = target_id
         self.scheme_filters = scheme_filters
         self.snapshots = []
+        self.data_source = data_source
 
     @classmethod
     def from_kvpairs(cls, kv):
@@ -218,6 +222,11 @@ class DamonRecord:
                 kv[keyword] = None
         if not 'scheme_filters' in kv:
             kv['scheme_filters'] = []
+        # data_source was introduced after v2.9.8
+        if not 'data_source' in kv:
+            data_source = record_data_source_unknown
+        else:
+            data_source = kv['data_source']
 
         record = DamonRecord(
                 kv['kdamond_idx'], kv['context_idx'],
@@ -225,7 +234,7 @@ class DamonRecord:
                 if kv['intervals'] is not None else None,
                 kv['scheme_idx'], kv['target_id'],
                 [_damon.DamosFilter.from_kvpairs(pairs) for pairs in
-                 kv['scheme_filters']])
+                 kv['scheme_filters']], data_source=data_source)
         record.snapshots = [DamonSnapshot.from_kvpairs(s)
                 for s in kv['snapshots']]
 
@@ -245,6 +254,7 @@ class DamonRecord:
         else:
             ordered_dict['scheme_filters'] = []
         ordered_dict['snapshots'] = [s.to_kvpairs(raw) for s in self.snapshots]
+        ordered_dict['data_source'] = self.data_source
         return ordered_dict
 
     def can_merge(self, other):
