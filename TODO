@@ -41,10 +41,6 @@
 - support 2d heatmap on report access
 - Support drgn based 'damo diagnose'
 - Support DAMON_STAT from 'damo record' and 'damo report access'
-  - If 'damo record' is called in ongoing snapshot recording mode while
-    DAMON_STAT running, record DAMON_STAT snapshots.
-  - If 'damo report' is called in live snapshot mode and DAMON_STAT is running,
-    record DAMON_STAT snapshots.
   - Support cold memory tail or idle time percentiles format on
     'damo report access'.
 
