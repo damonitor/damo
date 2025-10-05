@@ -1617,8 +1617,62 @@ def should_get_snapshot_from_damon_stat(request):
 
     return True
 
+def read_damon_stat_param(param_name):
+    file_path = os.path.join('/sys/module/damon_stat/parameters', param_name)
+    with open(file_path, 'r') as f:
+        return f.read().strip()
+
 def get_snapshot_records_of_damon_stat(request):
-    return None, 'damon_stat snapshot feature is under the construction'
+    aggr_interval_us = int(read_damon_stat_param('aggr_interval_us'))
+    sample_interval_us = aggr_interval_us / 20
+    snapshot_intervals = _damon.DamonIntervals(
+            sample=sample_interval_us, aggr=aggr_interval_us,
+            ops_update=60* 1000 * 1000,
+            intervals_goal=_damon.DamonIntervalsGoal(
+                access_bp=400, aggrs=3, min_sample_us=5000,
+                max_sample_us=10000000))
+
+    record = DamonRecord(kd_idx=-1, ctx_idx=0, intervals=snapshot_intervals,
+                         scheme_idx=None, target_id=0, scheme_filters=[])
+
+    snapshot_end_time_ns = time.time() * 1000000000
+    snapshot_start_time_ns = snapshot_end_time_ns - aggr_interval_us * 1000
+    idle_ms_percentiles = read_damon_stat_param('memory_idle_ms_percentiles')
+    idle_ms_percentiles = [int(x) for x in idle_ms_percentiles.split(',')]
+
+    mem_total_bytes = None
+    with open('/proc/meminfo', 'r') as f:
+        for line in f:
+            fields = line.split()
+            if fields[0] != 'MemTotal:':
+                continue
+            mem_total_bytes = int(fields[1]) * 1024
+    if mem_total_bytes is None:
+        return None, 'MemTotal retrieval fail'
+
+    regions = []
+    for percentile, idle_ms in enumerate(idle_ms_percentiles):
+        if idle_ms < 0:
+            nr_accesses_sample = 10
+        else:
+            nr_accesses_sample = 0
+
+        region = _damon.DamonRegion(
+                start=percentile * mem_total_bytes / 100,
+                end=(percentile + 1) * mem_total_bytes / 100,
+                nr_accesses=nr_accesses_sample,
+                nr_accesses_unit=_damon.unit_samples,
+                age=idle_ms * 1000, age_unit=_damon.unit_usec,
+                sz_filter_passed=0)
+        regions.append(region)
+
+    snapshot = DamonSnapshot(
+            start_time=snapshot_start_time_ns, end_time=snapshot_end_time_ns,
+            regions=regions, total_bytes=mem_total_bytes, damos_stats=None,
+            sample_interval_us=sample_interval_us)
+
+    record.snapshots = [snapshot]
+    return [record], None
 
 def get_snapshot_records_of(request):
     '''
