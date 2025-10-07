@@ -260,18 +260,29 @@ def damos_quotas_cons_arg(cmd_args):
 
 def damos_options_to_quota_goal(garg):
     # garg is the user inputs
-    # garg should be <metric> <target value> [<current value>|<nid>]
-    # [current value] is given for only 'user_input' <metric>
-    # [nid] is given for only node_mem_{used,free}_bp
-    if not len(garg) in [2, 3]:
+    # garg should be <metric> <target value> [<optional>...]
+    # for user_input, one optional argument for "current value" is given.
+    # for node_mem[cg]_{used,free}_bp, one optional argument for node id is
+    # given.
+    # for node_memcg_{used,free}_bp, one more optional argument for memcg path
+    # is given.
+    if not len(garg) in [2, 3, 4]:
         return None, 'Wrong --damos_quota_goal (%s)' % garg
     metric, target_value, optionals = garg[0], garg[1], garg[2:]
     current_value = 0
     nid = None
-    if _damon.DamosQuotaGoal.metric_require_nid(metric):
+    memcg_path = None
+    if metric in [_damon.qgoal_node_mem_used_bp,
+                  _damon.qgoal_node_mem_free_bp]:
         if len(optionals) != 1:
             return None, 'nid is not given or something else is given'
         nid = optionals[0]
+    elif metric in [_damon.qgoal_node_memcg_used_bp,
+                    _damon.qgoal_node_memcg_free_bp]:
+        if len(optionals) != 2:
+            return None, 'nid and memcg_path required'
+        nid = optionals[0]
+        memcg_path = optionals[1]
     elif metric == 'user_input':
         if len(optionals) != 1:
             return None, 'current value is not given or something else is given'
@@ -279,7 +290,8 @@ def damos_options_to_quota_goal(garg):
     try:
         return _damon.DamosQuotaGoal(
                 metric=metric, target_value=target_value,
-                current_value=current_value, nid=nid), None
+                current_value=current_value,
+                nid=nid, memcg_path=memcg_path), None
     except Exception as e:
         return None, 'DamosQuotaGoal creation fail (%s, %s)' % (garg, e)
 
