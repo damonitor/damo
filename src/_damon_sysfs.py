@@ -703,10 +703,15 @@ def files_content_to_quota_goals(files_content):
     goals = []
     for goal_kv in number_sorted_dirs(files_content):
         if 'target_metric' in goal_kv:
+            if 'path' in goal_kv:
+                memcg_path = goal_kv['path']
+            else:
+                memcg_path = None
             goals.append(
                     _damon.DamosQuotaGoal(
                         metric=goal_kv['target_metric'].strip(),
                         nid=goal_kv['nid'] if 'nid' in goal_kv else None,
+                        memcg_path=memcg_path,
                         target_value=goal_kv['target_value'],
                         current_value=goal_kv['current_value']))
         else:
