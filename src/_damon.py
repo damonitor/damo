@@ -645,8 +645,13 @@ class DamosQuotaGoal:
             # later.
             return DamosQuotaGoal(target_value=kv['target_value_bp'],
                                   current_value=kv['current_value_bp'])
+        if 'memcg_path' in kv:
+            memcg_path = kv['memcg_path']
+        else:
+            memcg_path = None
         return DamosQuotaGoal(
                 metric=kv['metric'], nid=kv['nid'] if 'nid' in kv else None,
+                memcg_path=memcg_path,
                 target_value=kv['target_value'],
                 current_value=kv['current_value'])
 
@@ -655,6 +660,7 @@ class DamosQuotaGoal:
             ('metric', self.metric),
             ('nid', _damo_fmt_str.format_nr(self.nid, raw)
              if self.nid is not None else None),
+            ('memcg_path', self.memcg_path),
             ('target_value', _damo_fmt_str.format_nr(self.target_value,
                 raw)),
             ('current_value', _damo_fmt_str.format_nr(self.current_value,
