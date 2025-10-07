@@ -587,16 +587,19 @@ class DamosQuotaGoal:
     target_value = None
     current_value = None
     nid = None
+    memcg_path = None
     quotas = None
 
     def __init__(self, metric=qgoal_user_input,
-                 target_value='0', current_value='0', nid=None):
+                 target_value='0', current_value='0', nid=None,
+                 memcg_path=None):
         if not metric in qgoal_metrics:
             raise Exception('unsupported DAMOS quota goal metric')
         self.metric = metric
         if metric == qgoal_some_mem_psi_us:
             self.target_value = _damo_fmt_str.text_to_us(target_value)
         elif metric in [qgoal_node_mem_used_bp, qgoal_node_mem_free_bp,
+                        qgoal_node_memcg_used_bp, qgoal_node_memcg_free_bp,
                         qgoal_active_mem_bp, qgoal_inactive_mem_bp]:
             self.target_value = _damo_fmt_str.text_to_bp(target_value)
         else:
@@ -606,6 +609,7 @@ class DamosQuotaGoal:
             self.nid = None
         else:
             self.nid = _damo_fmt_str.text_to_nr(nid)
+        self.memcg_path = memcg_path
 
     @classmethod
     def metric_require_nid(cls, metric):
