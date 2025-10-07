@@ -704,7 +704,7 @@ def files_content_to_quota_goals(files_content):
     for goal_kv in number_sorted_dirs(files_content):
         if 'target_metric' in goal_kv:
             if 'path' in goal_kv:
-                memcg_path = goal_kv['path']
+                memcg_path = goal_kv['path'].strip()
             else:
                 memcg_path = None
             goals.append(
