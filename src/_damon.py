@@ -634,6 +634,7 @@ class DamosQuotaGoal:
     def __eq__(self, other):
         return (type(self) == type(other) and self.metric == other.metric and
                 self.nid == other.nid and
+                self.memcg_path == other.memcg_path and
                 self.target_value == other.target_value and
                 self.current_value == other.current_value)
 
