@@ -618,11 +618,24 @@ class DamosQuotaGoal:
     def has_nid(self):
         return DamosQuotaGoal.metric_require_nid(self.metric)
 
+    @classmethod
+    def metric_require_memcg_path(cls, metric):
+        return metric in [qgoal_node_memcg_used_bp, qgoal_node_memcg_free_bp]
+
+    def has_memcg_path(self):
+        return DamosQuotaGoal.metric_require_memcg_path(self.metric)
+
     def to_str(self, raw):
         metric_str = self.metric
+        additional_words = []
         if self.has_nid():
-            metric_str = '%s (nid %s)' % (
-                    metric_str, _damo_fmt_str.format_nr(self.nid, raw))
+            additional_words.append('nid %s' %
+                                    _damo_fmt_str.format_nr(self.nid, raw))
+        if self.has_memcg_path():
+            additional_words.append('memcg %s' % self.memcg_path)
+
+        if len(additional_words) > 0:
+            metric_str = '%s (%s)' % (metric_str, ', '.join(additional_words))
         return 'metric %s target %s current %s' % (
                 metric_str,
                 _damo_fmt_str.format_nr(self.target_value, raw),
