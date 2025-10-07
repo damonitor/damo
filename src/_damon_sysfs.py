@@ -282,6 +282,12 @@ def write_quota_goal_dir(dir_path, goal):
         if err is not None:
             return err
 
+    if goal.has_memcg_path():
+        err = _damo_fs.write_file(
+                os.path.join(dir_path, 'path'), '%s' % goal.memcg_path)
+        if err is not None:
+            return err
+
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'target_value'),
             '%d' % goal.target_value)
