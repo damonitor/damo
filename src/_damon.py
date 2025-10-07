@@ -573,10 +573,13 @@ qgoal_user_input = 'user_input'
 qgoal_some_mem_psi_us = 'some_mem_psi_us'
 qgoal_node_mem_used_bp = 'node_mem_used_bp'
 qgoal_node_mem_free_bp = 'node_mem_free_bp'
+qgoal_node_memcg_used_bp = 'node_memcg_used_bp'
+qgoal_node_memcg_free_bp = 'node_memcg_free_bp'
 qgoal_active_mem_bp = 'active_mem_bp'
 qgoal_inactive_mem_bp = 'inactive_mem_bp'
 qgoal_metrics = [qgoal_user_input, qgoal_some_mem_psi_us,
                  qgoal_node_mem_used_bp, qgoal_node_mem_free_bp,
+                 qgoal_node_memcg_used_bp, qgoal_node_memcg_free_bp,
                  qgoal_active_mem_bp, qgoal_inactive_mem_bp]
 
 class DamosQuotaGoal:
