@@ -1197,11 +1197,6 @@ def start_recording_perf(handle):
         handle.perf_profile_pipe = subprocess.Popen(cmd)
 
 def start_recording(handle):
-    kdamonds_file_path = '%s.kdamonds' % handle.file_path
-    with open(kdamonds_file_path, 'w') as f:
-        json.dump([k.to_kvpairs() for k in handle.kdamonds], f, indent=4)
-    os.chmod(kdamonds_file_path, handle.file_permission)
-
     start_recording_perf(handle)
 
     start_time = time.time()
@@ -1244,6 +1239,11 @@ def start_recording(handle):
         time.sleep(sleep_time)
 
 def finish_recording(handle):
+    kdamonds_file_path = '%s.kdamonds' % handle.file_path
+    with open(kdamonds_file_path, 'w') as f:
+        json.dump([k.to_kvpairs() for k in handle.kdamonds], f, indent=4)
+    os.chmod(kdamonds_file_path, handle.file_permission)
+
     if handle.perf_pipe:
         try:
             handle.perf_pipe.send_signal(signal.SIGINT)
