@@ -3,6 +3,7 @@
 import argparse
 import collections
 import copy
+import datetime
 import json
 import os
 import random
@@ -1136,6 +1137,12 @@ class RecordingHandle:
 
     timeout = None
 
+    # max length of records per output file.
+    # If a recording is continued longer than this, all information recorded so
+    # far is saved at self.file_path.%Y-%m-%d-%H-%M-%S/ directory.
+    max_seconds_per_file = None
+    max_seconds_per_file_exceeded = None
+
     def __init__(self, tracepoints, file_path, file_format, file_permission,
                  monitoring_intervals,
                  do_profile,
@@ -1200,6 +1207,7 @@ def start_recording(handle):
     start_recording_perf(handle)
 
     start_time = time.time()
+    last_output_saved_time = start_time
     nr_snapshots_to_take = handle.snapshot_count
     if handle.snapshot_interval_sec:
         sleep_time = handle.snapshot_interval_sec
@@ -1222,6 +1230,22 @@ def start_recording(handle):
         if (handle.timeout is not None and
             time.time() - start_time >= handle.timeout):
             break
+        if (handle.max_seconds_per_file is not None and time.time() -
+            last_output_saved_time >= handle.max_seconds_per_file):
+            last_output_saved_time = time.time()
+            handle.max_seconds_per_file_exceeded = True
+
+            save_recording_outputs(handle, handle.file_path)
+
+            if handle.mem_footprint_snapshots is not None:
+                handle.mem_footprint_snapshots = []
+            if handle.vmas_snapshots is not None:
+                handle.vmas_snapshots = []
+            if handle.proc_stats is not None:
+                handle.proc_stats = []
+            if handle.snapshot_records is not None:
+                handle.snapshot_records = []
+            start_recording_perf(handle)
 
         if handle.snapshot_request:
             if handle.snapshot_records is None:
@@ -1239,6 +1263,13 @@ def start_recording(handle):
         time.sleep(sleep_time)
 
 def save_recording_outputs(handle, file_path):
+    if handle.max_seconds_per_file_exceeded is True:
+        dirname = '%s.%s' % (
+                handle.file_path,
+                datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
+        os.mkdir(dirname)
+        file_path = os.path.join(dirname, file_path)
+
     kdamonds_file_path = '%s.kdamonds' % file_path
     with open(kdamonds_file_path, 'w') as f:
         json.dump([k.to_kvpairs() for k in handle.kdamonds], f, indent=4)
@@ -1251,6 +1282,7 @@ def save_recording_outputs(handle, file_path):
         except:
             # perf might already finished
             pass
+        os.rename(handle.file_path, file_path)
 
         if handle.file_format == file_type_perf_data:
             os.chmod(file_path, handle.file_permission)
@@ -1271,6 +1303,7 @@ def save_recording_outputs(handle, file_path):
         except:
             # perf might already finished
             pass
+        os.rename('%s.profile' % handle.file_path, '%s.profile' % file_path)
         os.chmod('%s.profile' % file_path, handle.file_permission)
 
     if handle.mem_footprint_snapshots is not None:
