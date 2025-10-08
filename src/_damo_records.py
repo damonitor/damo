@@ -1140,7 +1140,10 @@ class RecordingHandle:
     # max length of records per output file.
     # If a recording is continued longer than this, all information recorded so
     # far is saved at self.file_path.%Y-%m-%d-%H-%M-%S/ directory.
-    max_seconds_per_file = None
+    #
+    # default to 3600 seconds (1 hour).
+    # TODO: Add command line option for setting this.
+    max_seconds_per_file = 3600
     max_seconds_per_file_exceeded = None
 
     def __init__(self, tracepoints, file_path, file_format, file_permission,
