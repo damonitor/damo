@@ -1238,8 +1238,8 @@ def start_recording(handle):
 
         time.sleep(sleep_time)
 
-def finish_recording(handle):
-    kdamonds_file_path = '%s.kdamonds' % handle.file_path
+def save_recording_outputs(handle, file_path):
+    kdamonds_file_path = '%s.kdamonds' % file_path
     with open(kdamonds_file_path, 'w') as f:
         json.dump([k.to_kvpairs() for k in handle.kdamonds], f, indent=4)
     os.chmod(kdamonds_file_path, handle.file_permission)
@@ -1253,16 +1253,16 @@ def finish_recording(handle):
             pass
 
         if handle.file_format == file_type_perf_data:
-            os.chmod(handle.file_path, handle.file_permission)
+            os.chmod(file_path, handle.file_permission)
         else:
-            err = update_records_file(handle.file_path, handle.file_format,
+            err = update_records_file(file_path, handle.file_format,
                     handle.file_permission, handle.monitoring_intervals)
             if err is not None:
                 print('converting format from perf_data to %s failed (%s)' %
                         (handle.file_format, err))
 
     if handle.snapshot_records:
-        write_damon_records(handle.snapshot_records, handle.file_path,
+        write_damon_records(handle.snapshot_records, file_path,
                             handle.file_format, handle.file_permission)
 
     if handle.perf_profile_pipe is not None:
@@ -1271,18 +1271,21 @@ def finish_recording(handle):
         except:
             # perf might already finished
             pass
-        os.chmod('%s.profile' % handle.file_path, handle.file_permission)
+        os.chmod('%s.profile' % file_path, handle.file_permission)
 
     if handle.mem_footprint_snapshots is not None:
         save_mem_footprint(
                 handle.mem_footprint_snapshots,
-                '%s.mem_footprint' % handle.file_path, handle.file_permission)
+                '%s.mem_footprint' % file_path, handle.file_permission)
     if handle.vmas_snapshots is not None:
-        save_proc_vmas(handle.vmas_snapshots, '%s.vmas' % handle.file_path,
+        save_proc_vmas(handle.vmas_snapshots, '%s.vmas' % file_path,
                        handle.file_permission)
     if handle.proc_stats is not None:
-        save_proc_stats(handle.proc_stats, '%s.proc_stats' % handle.file_path,
+        save_proc_stats(handle.proc_stats, '%s.proc_stats' % file_path,
                         handle.file_permission)
+
+def finish_recording(handle):
+    save_recording_outputs(handle, handle.file_path)
 
 # for snapshot
 
