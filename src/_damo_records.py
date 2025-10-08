@@ -1183,12 +1183,7 @@ def tracepoint_supported(tracepoint):
             return True
     return False
 
-def start_recording(handle):
-    kdamonds_file_path = '%s.kdamonds' % handle.file_path
-    with open(kdamonds_file_path, 'w') as f:
-        json.dump([k.to_kvpairs() for k in handle.kdamonds], f, indent=4)
-    os.chmod(kdamonds_file_path, handle.file_permission)
-
+def start_recording_perf(handle):
     if handle.tracepoints is not None:
         tracepoints_option = []
         for tracepoint in handle.tracepoints:
@@ -1200,6 +1195,14 @@ def start_recording(handle):
     if handle.do_profile:
         cmd = [PERF, 'record', '-o', '%s.profile' % handle.file_path]
         handle.perf_profile_pipe = subprocess.Popen(cmd)
+
+def start_recording(handle):
+    kdamonds_file_path = '%s.kdamonds' % handle.file_path
+    with open(kdamonds_file_path, 'w') as f:
+        json.dump([k.to_kvpairs() for k in handle.kdamonds], f, indent=4)
+    os.chmod(kdamonds_file_path, handle.file_permission)
+
+    start_recording_perf(handle)
 
     start_time = time.time()
     nr_snapshots_to_take = handle.snapshot_count
