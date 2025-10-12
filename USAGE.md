@@ -459,6 +459,17 @@ permission.  The output files will also be owned by `root` and have `600`
 permission by default, so only root can read those.  Users can change the
 permission via `--output_permission` option.
 
+If the command runs long time, resulting output files could be too huge to
+process in a practically short time.  To avoid the problems from such too huge
+output files, `damo record` flushes the outputs per user-specified time into
+intermediate output files.  The time can be specified in seconds, using
+`--output_flush_sec` option.  The default value is 3600 seconds (one hour).
+The intermediate output files are complete ones, so can be processed like
+normal output files.  The autoamtically split outputs are stored in directories
+named as `<given_out_file>.<timestamp>`.  `<given_out_file>` is same to the
+`--out` option input, which is `damon.data` by default.  `<timestamp>` is the
+time of the intermediate record creation, in `%Y-%m-%d-%H-%M-%S` format.
+
 For the DAMON's monitoring results, it retrieves and saves every
 DAMON-generated monitoring result snapshots.  Because DAMON's monitoring result
 snapshot contains `age` information, the full record is not always required.
