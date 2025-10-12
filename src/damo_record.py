@@ -137,8 +137,8 @@ def mk_handle(args, kdamonds, monitoring_intervals):
             record_proc_stats='proc_stats' in args.do_record,
             timeout=args.timeout, snapshot_request=snapshot_request,
             snapshot_interval_sec=snapshot_interval_sec,
-            snapshot_count=snapshot_count)
-    handle.max_seconds_per_file = output_flush_sec
+            snapshot_count=snapshot_count,
+            max_seconds_per_file=output_flush_sec)
 
     return handle
 
