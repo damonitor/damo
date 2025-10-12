@@ -1997,7 +1997,7 @@ def set_argparser(parser):
     _damo_records.set_filter_argparser(parser, hide_help=True)
 
     parser.add_argument(
-            '--input', metavar='<file or special words>', nargs='+',
+            '--input', '-i', metavar='<file or special words>', nargs='+',
             action='append',
             help=' '.join([
                 'Source of the access pattern to show.',
