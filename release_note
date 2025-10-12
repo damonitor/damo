@@ -1,6 +1,14 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v3.0.0
+- Support node_memcg_{used,free}_bp DAMOS quota goal
+  (https://lore.kernel.org/20251009212042.60084-1-sj@kernel.org)
+- Save record output per given time interval (--output_flush_sec, 1 hour by
+  default)
+- Add record filter options to 'damo adjust' for splitting too huge record
+  files.
+
 v2.9.9
 - Fix lost targets bug on _damon.add_childs_target().
 - Clarify target regions inheritance behavior.
