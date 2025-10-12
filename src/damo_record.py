@@ -120,6 +120,8 @@ def mk_handle(args, kdamonds, monitoring_intervals):
         snapshot_interval_sec = None
         snapshot_count = None
 
+    output_flush_sec = _damo_fmt_str.text_to_sec(args.output_flush_sec)
+
     handle = _damo_records.RecordingHandle(
             # for access pattern monitoring
             tracepoints=tracepoints, file_path=args.out,
@@ -136,6 +138,7 @@ def mk_handle(args, kdamonds, monitoring_intervals):
             timeout=args.timeout, snapshot_request=snapshot_request,
             snapshot_interval_sec=snapshot_interval_sec,
             snapshot_count=snapshot_count)
+    handle.max_seconds_per_file = output_flush_sec
 
     return handle
 
@@ -190,6 +193,9 @@ def set_argparser(parser):
                         help='output file\'s type')
     parser.add_argument('--output_permission', type=str, default='600',
                         help='permission of the output file')
+    parser.add_argument(
+            '--output_flush_sec', type=str, default='3600',
+            help='intermediate output files flush duration in seconds')
     parser.add_argument('--perf_path', type=str, default='perf',
                         help='path of perf tool ')
     parser.add_argument('--exclude_child_tasks', action='store_false',
