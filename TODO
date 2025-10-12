@@ -44,6 +44,9 @@
   - Support cold memory tail or idle time percentiles format on
     'damo report access'.
   - Use estimated memory bandwidth from DAMON_STAT.
+- Flush output every hour (https://github.com/damonitor/damo/issues/38)
+- Allow saving filtered records as a record file
+  (https://github.com/damonitor/damo/issues/37)
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
