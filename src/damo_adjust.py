@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
-"Adjust a damon monitoring result with new attributes"
+"Adjust a damon monitoring result with filters and new attributes"
 
 import _damo_records
 
@@ -14,7 +14,13 @@ def main(args):
                 (args.output_permission, err))
         exit(1)
 
-    records, err = _damo_records.get_records(record_file=file_path)
+    record_filter, err = _damo_records.args_to_filter(args)
+    if err is not None:
+        print('filter option wrong (%s)' % err)
+        exit(1)
+
+    records, err = _damo_records.get_records(record_file=file_path,
+                                             record_filter=record_filter)
     if err:
         print('monitoring result file (%s) parsing failed (%s)' %
                 (file_path, err))
@@ -44,3 +50,4 @@ def set_argparser(parser):
             help='permission of the output file')
     parser.add_argument('--skip', type=int, metavar='<int>', default=20,
             help='number of first snapshots to skip')
+    _damo_records.set_filter_argparser(parser)

@@ -85,7 +85,8 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='validate', module=damo_validate,
             msg='validate a given record result file'),
         _damo_subcmds.DamoSubCmd(name='adjust', module=damo_adjust,
-            msg='adjust the record results with different monitoring attributes'),
+            msg='adjust the record results with filters and ' \
+                                 'different monitoring attributes'),
         _damo_subcmds.DamoSubCmd(name='convert_record_format',
             module=damo_convert_record_format,
             msg='convert DAMON result record file\'s format'),
