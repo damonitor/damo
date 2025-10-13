@@ -26,7 +26,7 @@ cleanup_files()
 
 test_record_permission()
 {
-	sudo "$damo" record "sleep 3" --timeout 3 --output_permission 611 \
+	sudo "$damo" record "sleep 5" --timeout 5 --output_permission 611 \
 		&> "$cmd_log"
 	if [ ! "$(stat -c %a damon.data)" = "611" ]
 	then
@@ -143,7 +143,7 @@ fi
 
 for damon_interface in $damon_interfaces
 do
-	test_record_validate "sleep 3" 4 "none" "$damon_interface"
+	test_record_validate "sleep 5" 5 "none" "$damon_interface"
 	test_record_validate "paddr" 3 "none" "$damon_interface"
 done
 
@@ -152,7 +152,7 @@ if sudo "$damo" features \
 	2> /dev/null | \
 	grep -w fvaddr &> /dev/null
 then
-	test_record_validate "sleep 3" 4 "4096-81920" "sysfs"
+	test_record_validate "sleep 5" 5 "4096-81920" "sysfs"
 fi
 
 test_record_permission
