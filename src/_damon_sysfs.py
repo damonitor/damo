@@ -483,6 +483,15 @@ def write_target_dir(dir_path, target):
         if err is not None:
             return err
 
+    obsolete_file = os.path.join(dir_path, 'obsolete_target')
+    if os.path.isfile(obsolete_file):
+        err = _damo_fs.write_file(
+                obsolete_file, '1' if target.obsolete else '0')
+        if err is not None:
+            return err
+    elif target.obsolete_file:
+        return 'obsolete_target unsupported'
+
     return write_target_regions_dir(
             os.path.join(dir_path, 'regions'), target.regions)
 
