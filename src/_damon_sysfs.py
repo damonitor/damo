@@ -1185,6 +1185,9 @@ def update_supported_features():
     if os.path.isfile(os.path.join(kdamond_dir_of(0), 'refresh_ms')):
         feature_supports['sysfs_refresh_ms'] = True
 
+    if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'addr_unit')):
+        feature_supports['addr_unit'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         feature_supports['ops_attrs'] = True
 
