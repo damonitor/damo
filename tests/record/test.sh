@@ -144,6 +144,43 @@ test_record_validate()
 	exit 1
 }
 
+test_sleep_record_validate()
+{
+	if [ $# -ne 4 ]
+	then
+		echo "Usage: $0 <min timeout> <max timeout> <region> \\"
+		echo "		<damon interface to use>"
+		exit 1
+	fi
+
+	local min_timeout=$1
+	local max_timeout=$2
+	local region_boundasry=$3
+	local damon_interface=$4
+
+	# for short runtime, damo gets no sufficient time to collect record.
+	# Gradually increase the timeout and retry until success, or reaching
+	# the maximum timeout.
+	for ((runtime = min_timeout ; runtime < max_timeout ; \
+		runtime += min_timeout))
+	do
+		output=$(test_record_validate_noexit "sleep $runtime" \
+			"$runtime" "$region_boundasry" "$damon_interface")
+		local rc=$?
+		if echo "$output" | grep --quiet "target snapshots is zero"
+		then
+			echo "no snapshot failure with runtime $runtime; retry"
+			continue
+		fi
+		echo "$output"
+		if [ "$rc" -ne "0" ]
+		then
+			exit 1
+		fi
+		return
+	done
+}
+
 damon_interfaces=""
 if [ -d "/sys/kernel/debug/damon" ]
 then
