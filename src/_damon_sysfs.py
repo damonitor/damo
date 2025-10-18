@@ -1011,7 +1011,9 @@ def infer_damon_version():
                                 )])])]
     err = stage_kdamonds(kdamonds)
     if err is None:
-        if os.path.isfile(os.path.join(kdamond_dir_of(0), 'refresh_ms')):
+        if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'addr_unit')):
+            version = '>v6.17'
+        elif os.path.isfile(os.path.join(kdamond_dir_of(0), 'refresh_ms')):
             version = '>v6.16'
         elif os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'dests')):
             version = '>v6.16'
