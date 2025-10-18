@@ -400,7 +400,7 @@ class DamonTarget:
     def __init__(self, pid, regions, obsolete=False):
         self.pid = pid
         self.regions = regions
-        self.obsolete = obsolete
+        self.obsolete = _damo_fmt_str.text_to_bool(obsolete)
 
     def to_str(self, raw):
         lines = []
