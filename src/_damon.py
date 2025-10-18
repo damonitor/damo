@@ -1419,6 +1419,7 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
                                         # merged in v6.16-rc1
             'schemes_dests',            # merged in v6.17-rc1
             'sysfs_refresh_ms',         # merged in v6.17-rc1
+            'addr_unit',                # merged in v6.18-rc1
             'schemes_quota_goal_node_memcg_used_free',
                                         # merged in mm
             'ops_attrs',                # hacking on damon/next
