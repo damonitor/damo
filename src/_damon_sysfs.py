@@ -850,8 +850,11 @@ def files_content_to_target(files_content):
         pid = int(files_content['pid_target'])
     except:
         pid = None
+    obsolete = False
+    if 'obsolete_target' in files_content:
+        obsolete = files_content['obsolete_target'].strip()
     regions = files_content_to_regions(files_content['regions'])
-    return _damon.DamonTarget(pid, regions)
+    return _damon.DamonTarget(pid, regions, obsolete=obsolete)
 
 def files_content_to_ops_attrs(files_content):
     use_reports = files_content['use_reports'].strip()
