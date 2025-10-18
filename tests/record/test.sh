@@ -200,7 +200,7 @@ fi
 
 for damon_interface in $damon_interfaces
 do
-	test_record_validate "sleep 5" 5 "none" "$damon_interface"
+	test_sleep_record_validate 5 16 "none" "$damon_interface"
 	test_record_validate "paddr" 3 "none" "$damon_interface"
 done
 
@@ -209,7 +209,7 @@ if sudo "$damo" features \
 	2> /dev/null | \
 	grep -w fvaddr &> /dev/null
 then
-	test_record_validate "sleep 5" 5 "4096-81920" "sysfs"
+	test_sleep_record_validate 5 16 "4096-81920" "sysfs"
 fi
 
 test_record_permission
