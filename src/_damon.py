@@ -393,17 +393,21 @@ class DamonRegion:
 
 class DamonTarget:
     pid = None
+    obsolete = None
     regions = None
     context = None
 
-    def __init__(self, pid, regions):
+    def __init__(self, pid, regions, obsolete=False):
         self.pid = pid
         self.regions = regions
+        self.obsolete = obsolete
 
     def to_str(self, raw):
         lines = []
         if self.pid is not None:
             lines.append('pid: %s' % self.pid)
+        if self.obsolete is True:
+            line.sappend('(obsolete)')
         for region in self.regions:
             lines.append('region %s' % region.to_str(raw))
         return '\n'.join(lines)
@@ -417,11 +421,15 @@ class DamonTarget:
     @classmethod
     def from_kvpairs(cls, kvpairs):
         regions = [DamonRegion.from_kvpairs(kvp) for kvp in kvpairs['regions']]
-        return DamonTarget(kvpairs['pid'], regions)
+        obsolete = False
+        if 'obsolete' in kvpairs:
+            obsolete = kvpairs['obsolete']
+        return DamonTarget(kvpairs['pid'], regions, obsolete=obsolete)
 
     def to_kvpairs(self, raw=False):
         kvp = collections.OrderedDict()
         kvp['pid'] = self.pid
+        kvp['obsolete'] = self.obsolete
         kvp['regions'] = [r.to_kvpairs(raw) for r in self.regions]
         return kvp
 

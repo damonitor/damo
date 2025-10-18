@@ -18,7 +18,7 @@ class TestDamon(unittest.TestCase):
         target_kvpairs = target.to_kvpairs()
         self.assertEqual(type(target_kvpairs), collections.OrderedDict)
         self.assertEqual(list(target_kvpairs.keys()),
-                ['pid', 'regions'])
+                ['pid', 'obsolete', 'regions'])
         self.assertEqual(target,
                 _damon.DamonTarget.from_kvpairs(target_kvpairs))
 
