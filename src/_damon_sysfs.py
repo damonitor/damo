@@ -1174,6 +1174,11 @@ def update_supported_features():
                              'nid')):
             feature_supports['schemes_quota_goal_node_mem_used_free'] = True
 
+        if os.path.isfile(
+                os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
+                             'path')):
+            feature_supports['schemes_quota_goal_node_memcg_used_free'] = True
+
     if os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'dests')):
         feature_supports['schemes_dests'] = True
 
