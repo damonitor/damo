@@ -39,13 +39,13 @@ test_record_permission()
 	echo "PASS record-permission"
 }
 
-test_record_validate()
+test_record_validate_noexit()
 {
 	if [ $# -ne 4 ]
 	then
 		echo "Usage: $0 <target> <timeout> <region> \\"
 		echo "		<damon interface to use>"
-		exit 1
+		return 1
 	fi
 
 	target=$1
@@ -62,7 +62,7 @@ test_record_validate()
 		grep -w paddr &> /dev/null
 	then
 		echo "SKIP record-validate $target $timeout (paddr unsupported)"
-		return
+		return 2
 	fi
 
 	if [ "$regions_boundary" = "none" ]
@@ -83,7 +83,7 @@ test_record_validate()
 		echo "FAIL $testname"
 		echo "(damo-record command failed with value $rc)"
 		cat "$cmd_log"
-		exit 1
+		return 3
 	fi
 
 	if [ "$regions_boundary" = "none" ]
@@ -92,7 +92,7 @@ test_record_validate()
 		then
 			echo "FAIL $testname (record file is not valid)"
 			cat "$cmd_log"
-			exit 1
+			return 4
 		fi
 	else
 		if ! sudo "$damo" validate \
@@ -100,7 +100,7 @@ test_record_validate()
 		then
 			echo "FAIL $testname (record file is not valid)"
 			cat "$cmd_log"
-			exit 1
+			return 5
 		fi
 	fi
 
@@ -108,7 +108,7 @@ test_record_validate()
 	then
 		echo "FAIL $testname (perf.data is not removed)"
 		cat "$cmd_log"
-		exit 1
+		return 6
 	fi
 
 	permission=$(stat -c %a damon.data)
@@ -116,12 +116,32 @@ test_record_validate()
 	then
 		echo "FAIL $testname (out file permission $permission)"
 		cat "$cmd_log"
-		exit 1
+		return 7
 	fi
 
 	cleanup_files
 
 	echo "PASS $testname"
+	return 0
+}
+
+test_record_validate()
+{
+	if [ $# -ne 4 ]
+	then
+		echo "Usage: $0 <target> <timeout> <region> \\"
+		echo "		<damon interface to use>"
+		exit 1
+	fi
+
+	local output=$(test_record_validate_noexit "$1" "$2" "$3" "$4")
+	local rc=$?
+	echo "$output"
+	if [ "$rc" = "0" ]
+	then
+		return
+	fi
+	exit 1
 }
 
 damon_interfaces=""
