@@ -44,8 +44,6 @@
   - Support cold memory tail or idle time percentiles format on
     'damo report access'.
   - Use estimated memory bandwidth from DAMON_STAT.
-- Retry damo record -> damo validate with longer time if generated snapshot is
-  zero.
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)

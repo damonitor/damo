@@ -1,6 +1,9 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v3.0.1
+- Update damo record test be more time-error tolerant
+
 v3.0.0
 - Save record output per user-specified time interval (--output_flush_sec, one
   hour by default).
