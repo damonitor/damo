@@ -489,7 +489,7 @@ def write_target_dir(dir_path, target):
                 obsolete_file, '1' if target.obsolete else '0')
         if err is not None:
             return err
-    elif target.obsolete_file:
+    elif target.obsolete:
         return 'obsolete_target unsupported'
 
     return write_target_regions_dir(
