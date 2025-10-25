@@ -966,8 +966,6 @@ def read_feature_support(feature_name):
 feature_supports = None
 
 def feature_supported(feature):
-    if feature_supports == None:
-        update_supported_features()
     return feature_supports[feature]
 
 # sysfs was merged in v5.18-rc1
