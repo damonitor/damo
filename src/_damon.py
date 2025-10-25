@@ -1759,6 +1759,23 @@ def pid_running(pid):
     except:
         return False
 
+def add_vaddr_child_targets_with_obsolete_support(ctx):
+    changes_made = False
+    orig_targets = ctx.targets
+    updated_targets = []
+    child_targets = []
+    for orig_target in orig_targets:
+        updated_targets.append(DamonTarget(pid=old_target.pid, regions=[]))
+        if not pid_running(old_target.pid):
+            new_targets[-1].obsolete = True
+            changes_made = True
+        for child_pid in get_childs_pids('%s' % orig_target.pid):
+            child_targets.append(DamonTarget(pid=child_pid, regions=[]))
+            changes_made = True
+    if changes_made:
+        ctx.targets = updated_targets + child_targets
+    return changes_made, orig_targets
+
 def add_vaddr_child_targets(ctx):
     '''
     Returns whether a change is made, and old targets list if a change was made
@@ -1767,6 +1784,10 @@ def add_vaddr_child_targets(ctx):
         return False, None
     if target_regions_fixed(ctx.ops):
         return False, None
+    if damon_interface == 'sysfs':
+        err, supported = _damon_sysfs.read_feature_support('obsolete_target')
+        if err is not None and supported is True:
+            return add_vaddr_child_targets_with_obsolete_support(ctx)
     old_targets = ctx.targets
     current_target_pids = []
     new_target_pids = []
