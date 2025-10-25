@@ -1758,13 +1758,14 @@ def pid_running(pid):
     except:
         return False
 
-def add_commit_vaddr_child_targets(kdamonds):
-    # TODO: Support multiple kdamonds
-    ctx = kdamonds[0].contexts[0]
+def add_vaddr_child_targets(ctx):
+    '''
+    Returns whether a change is made, and old targets list if a change was made
+    '''
     if not target_has_pid(ctx.ops):
-        return
+        return False, None
     if target_regions_fixed(ctx.ops):
-        return
+        return False, None
     old_targets = ctx.targets
     current_target_pids = []
     new_target_pids = []
@@ -1796,9 +1797,8 @@ def add_commit_vaddr_child_targets(kdamonds):
             new_target_pids.append(child_pid)
 
     if set(new_target_pids) == set(current_target_pids):
-        return None
-    # Commit the new set of targets.
-    #
+        return False, None
+
     # Set no target region because it will instruct DAMON to keep current
     # monitoring results (regions with nr_accesses, age, etc) for the target if
     # exists.
@@ -1807,6 +1807,14 @@ def add_commit_vaddr_child_targets(kdamonds):
     # monitoring results are inherited.
     ctx.targets = [DamonTarget(pid = p, regions=[])
                                        for p in new_target_pids]
+    return True, old_targets
+
+def add_commit_vaddr_child_targets(kdamonds):
+    # TODO: Support multiple kdamonds
+    ctx = kdamonds[0].contexts[0]
+    need_commit, old_targets = add_vaddr_child_targets(ctx)
+    if not need_commit:
+        return
     err = commit(kdamonds, commit_targets_only=True)
     if err is not None:
         ctx.targets = old_targets
