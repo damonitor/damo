@@ -1791,10 +1791,9 @@ def add_vaddr_child_targets(ctx):
         return False, None
     if target_regions_fixed(ctx.ops):
         return False, None
-    if damon_interface == 'sysfs':
-        err, supported = _damon_sysfs.read_feature_support('obsolete_target')
-        if err is not None and supported is True:
-            return add_vaddr_child_targets_with_obsolete_support(ctx)
+    if feature_supported('obsolete_target'):
+        return add_vaddr_child_targets_with_obsolete_support(ctx)
+
     old_targets = ctx.targets
     current_target_pids = []
     new_target_pids = []
