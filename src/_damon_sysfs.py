@@ -952,6 +952,12 @@ def read_feature_support(feature_name):
     '''
     Try to read if a given feature is supported by the running kernel.
     '''
+    if feature_name == 'obsolete_target':
+        target_dir = target_dir_of(0, 0, 0)
+        if not os.path.isdir(target_dir_of(0, 0, 0)):
+            return 'target dir not exist', None
+        return None, os.path.isfile(
+                os.path.join(target_dir, 'obsolete_target'))
     err = 'read_feature_support() is not supporting "%s" yet' % feature_name
     return err, None
 
