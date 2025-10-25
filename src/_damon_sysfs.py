@@ -948,6 +948,13 @@ def commit_quota_goals(kdamond_idxs):
         if err != None:
             return err
 
+def read_feature_support(feature_name):
+    '''
+    Try to read if a given feature is supported by the running kernel.
+    '''
+    err = 'read_feature_support() is not supporting "%s" yet' % feature_name
+    return err, None
+
 # features
 
 feature_supports = None
