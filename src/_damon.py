@@ -1625,6 +1625,23 @@ def commit_quota_goals(kdamond_idxs):
         return 'debugfs interface does not support commit_quota_goals()'
     return _damon_fs.commit_quota_goals(kdamond_idxs)
 
+def cleanup_obsolete_targets(kdamonds):
+    '''
+    When obsolete targets are committed to DAMON, DAMON removes the obsolete
+    ones inside kernel, but leave the sysfs files as is.  Cleanup the obsolete
+    sysfs files by staging only non-obsolete targets again.
+    '''
+    need_cleanup = False
+    for kd in kdamonds:
+        for ctx in kd.contexts:
+            for target in ctx.targets:
+                if target.obsolete:
+                    need_cleanup = True
+            ctx.targets = [t for t in ctx.targets if not t.obsolete]
+    if not need_cleanup:
+        return None
+    return stage_kdamonds(kdamonds)
+
 def commit(kdamonds, commit_quota_goals_only=False, commit_targets_only=False):
     if not commit_quota_goals_only and not commit_targets_only:
         err = stage_kdamonds(kdamonds)
@@ -1646,6 +1663,11 @@ def commit(kdamonds, commit_quota_goals_only=False, commit_targets_only=False):
     err = commit_staged(kdamond_idxs)
     if err:
         return 'commit staged updates filed (%s)' % err
+
+    err = cleanup_obsolete_targets(kdamonds)
+    if err is not None:
+        return 'obsolte targets cleanup failed (%s)' % err
+
     return None
 
 def update_tuned_intervals(kdamond_idxs=None):
