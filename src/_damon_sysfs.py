@@ -986,6 +986,11 @@ def ctx_dir_of(kdamond_idx, context_idx):
     return os.path.join(
             kdamond_dir_of(kdamond_idx), 'contexts', '%s' % context_idx)
 
+def target_dir_of(kdamond_idx, context_idx, target_idx):
+    return os.path.join(
+            ctx_dir_of(kdamond_idx, context_idx), 'targets',
+            '%s' % target_idx)
+
 def schemes_dir_of(kdamond_idx, context_idx):
     return os.path.join(ctx_dir_of(kdamond_idx, context_idx), 'schemes')
 
@@ -1103,6 +1108,8 @@ def update_supported_features():
             _damon.Kdamond(
                 state=None, pid=None, contexts=[
                     _damon.DamonCtx(
+                        targets=[_damon.DamonTarget(
+                            pid=None, regions=[])],
                         schemes=[_damon.Damos()])])]
     err = stage_kdamonds(kdamonds_for_feature_check)
     if err is not None:
@@ -1180,6 +1187,8 @@ def update_supported_features():
                 _damon.Kdamond(
                     state=None, pid=None, contexts=[
                         _damon.DamonCtx(
+                            targets=[_damon.DamonTarget(
+                                pid=None, regions=[])],
                             schemes=[_damon.Damos(
                                 quotas=_damon.DamosQuotas(
                                     goals=[_damon.DamosQuotaGoal()])
@@ -1208,6 +1217,9 @@ def update_supported_features():
 
     if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'addr_unit')):
         feature_supports['addr_unit'] = True
+
+    if os.path.isfile(os.path.join(target_dir_of(0, 0, 0), 'obsolete_target')):
+        feature_supports['obsolete_target'] = True
 
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         feature_supports['ops_attrs'] = True
