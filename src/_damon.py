@@ -1379,7 +1379,7 @@ import damo_version
 # similar issue could happen in future.
 #
 # Hence, damo features for online DAMON control or snapshot cannot make
-# feature_supprots correctly.  And repeated feature check is waste of time,
+# feature_supports correctly.  And repeated feature check is waste of time,
 # anyway.
 #
 # To work around, ask features that would run while DAMON is not running to
