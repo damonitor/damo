@@ -1772,9 +1772,9 @@ def add_vaddr_child_targets_with_obsolete_support(ctx):
     updated_targets = []
     child_targets = []
     for orig_target in orig_targets:
-        updated_targets.append(DamonTarget(pid=old_target.pid, regions=[]))
-        if not pid_running(old_target.pid):
-            new_targets[-1].obsolete = True
+        updated_targets.append(DamonTarget(pid=orig_target.pid, regions=[]))
+        if not pid_running(orig_target.pid):
+            updated_targets[-1].obsolete = True
             changes_made = True
         for child_pid in get_childs_pids('%s' % orig_target.pid):
             child_targets.append(DamonTarget(pid=child_pid, regions=[]))
