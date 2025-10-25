@@ -1277,6 +1277,9 @@ class DamonCtx:
 def target_has_pid(ops):
     return ops in ['vaddr', 'fvaddr']
 
+def target_regions_fixed(ops):
+    return ops in ['fvaddr', 'paddr']
+
 class Kdamond:
     state = None
     pid = None
@@ -1759,6 +1762,8 @@ def add_childs_target(kdamonds):
     # TODO: Support multiple kdamonds
     ctx = kdamonds[0].contexts[0]
     if not target_has_pid(ctx.ops):
+        return
+    if target_regions_fixed(ctx.ops):
         return
     old_targets = ctx.targets
     current_target_pids = []
