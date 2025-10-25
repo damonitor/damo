@@ -1735,9 +1735,10 @@ def pid_running(pid):
 
 def add_childs_target(kdamonds):
     # TODO: Support multiple kdamonds
-    if not target_has_pid(kdamonds[0].contexts[0].ops):
+    ctx = kdamonds[0].contexts[0]
+    if not target_has_pid(ctx.ops):
         return
-    old_targets = kdamonds[0].contexts[0].targets
+    old_targets = ctx.targets
     current_target_pids = []
     new_target_pids = []
 
@@ -1777,11 +1778,11 @@ def add_childs_target(kdamonds):
     #
     # TODO: adjust the orders of the new targets so that only appropriate past
     # monitoring results are inherited.
-    kdamonds[0].contexts[0].targets = [DamonTarget(pid = p, regions=[])
+    ctx.targets = [DamonTarget(pid = p, regions=[])
                                        for p in new_target_pids]
     err = commit(kdamonds, commit_targets_only=True)
     if err is not None:
-        kdamonds[0].contexts[0].targets = old_targets
+        ctx.targets = old_targets
         return 'commit failed (%s)' % err
 
     return None
