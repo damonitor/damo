@@ -7,6 +7,12 @@ import _damon_args
 import _damon_sysfs
 
 def main(args):
+    if args.invalidate_cache:
+        err = _damon.rm_feature_supports_file()
+        if err is not None:
+            print('invalidating cache fail (%s)' % err)
+            exit(1)
+
     _damon.ensure_root_and_initialized(args)
 
     feature_supports, err = _damon.get_feature_supports()
@@ -38,4 +44,6 @@ def set_argparser(parser):
             help='type of features to listed')
     parser.add_argument('--infer_version', action='store_true',
                         help='infer version of DAMON')
+    parser.add_argument('--invalidate_cache', action='store_true',
+                        help='check features again, from the scratch')
     _damon_args.set_common_argparser(parser)
