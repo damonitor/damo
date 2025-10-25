@@ -1166,12 +1166,16 @@ def update_supported_features():
                          'stats', 'sz_ops_filter_passed')):
         feature_supports['sz_ops_filter_passed'] = True
 
+    ops_filters_dir = os.path.join(scheme_dir_of(0, 0, 0), 'ops_filters')
+    if not os.path.isdir(ops_filters_dir):
+        ops_filters_dir = os.path.join(scheme_dir_of(0, 0, 0), 'filters')
+
     if os.path.isfile(
-            os.path.join(scheme_dir_of(0, 0, 0), 'filters', '0', 'allow')):
+            os.path.join(ops_filters_dir, '0', 'allow')):
         feature_supports['allow_filter'] = True
 
     if os.path.isfile(
-            os.path.join(scheme_dir_of(0, 0, 0), 'filters', '0', 'min')):
+            os.path.join(ops_filters_dir, '0', 'min')):
         feature_supports['schemes_filters_hugepage_size'] = True
 
     if os.path.isdir(
