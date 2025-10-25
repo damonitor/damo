@@ -1758,7 +1758,7 @@ def pid_running(pid):
     except:
         return False
 
-def add_childs_target(kdamonds):
+def add_commit_vaddr_child_targets(kdamonds):
     # TODO: Support multiple kdamonds
     ctx = kdamonds[0].contexts[0]
     if not target_has_pid(ctx.ops):

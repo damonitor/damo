@@ -1222,7 +1222,7 @@ def start_recording(handle):
     while (poll_target_pids(handle.kdamonds) or
            _damon.any_kdamond_running()):
         if handle.add_child_tasks is True:
-            _damon.add_childs_target(handle.kdamonds)
+            _damon.add_commit_vaddr_child_targets(handle.kdamonds)
 
         if handle.mem_footprint_snapshots is not None:
             record_mem_footprint(handle.kdamonds,

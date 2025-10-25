@@ -65,7 +65,7 @@ def main(args):
         print('Continue monitoring child tasks and updating DAMON targets')
         print('Press Ctrl+C to stop')
         while True:
-            _damon.add_childs_target(kdamonds)
+            _damon.add_commit_vaddr_child_targets(kdamonds)
             time.sleep(3)
 
 def set_argparser(parser):
