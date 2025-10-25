@@ -322,9 +322,6 @@ def nr_kdamonds():
 feature_supports = None
 
 def feature_supported(feature):
-    if feature_supports == None:
-        update_supported_features()
-
     return feature_supports[feature]
 
 def values_for_restore(filepath, read_val):
