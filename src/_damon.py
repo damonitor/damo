@@ -1433,6 +1433,7 @@ features = ['record',       # was in DAMON patchset, but not merged in mainline
             'addr_unit',                # merged in v6.18-rc1
             'schemes_quota_goal_node_memcg_used_free',
                                         # merged in mm, expectred for 6.19-rc1
+            'obsolete_target',          # merged in mm, expected for 6.19-rc1
             'ops_attrs',                # hacking on damon/next
             ]
 
