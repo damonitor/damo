@@ -493,9 +493,9 @@ def damon_target_for(args, idx, ops):
         obsolete = False
         if args.obsolete_targets is not None and idx in args.obsolete_targets:
             obsolete = True
-        target = _damon.DamonTarget(args.target_pid[idx]
-                if _damon.target_has_pid(ops) else None, init_regions,
-                obsolete=obsolete)
+        target = _damon.DamonTarget(
+                args.target_pid[idx] if _damon.target_has_pid(ops) else None,
+                init_regions, obsolete=obsolete)
     except Exception as e:
         return 'Wrong \'--target_pid\' argument (%s)' % e
     return target, None
