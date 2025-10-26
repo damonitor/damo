@@ -625,7 +625,7 @@ def gen_assign_targets(ctxs, args):
                 break
         target, err = damon_target_for(args, idx, ops)
         if err is not None:
-            return None, err
+            return err
         targets.append(target)
     if sum(args.nr_targets) != len(targets):
         return '--nr_targets and number of targets mismatch (%d != %d)' % (
