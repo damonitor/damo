@@ -490,6 +490,9 @@ def damon_target_for(args, idx, ops):
         return None, err
 
     try:
+        obsolete = False
+        if args.obsolete_targets is not None and idx in args.obsolete_targets:
+            obsolete = True
         target = _damon.DamonTarget(args.target_pid[idx]
                 if _damon.target_has_pid(ops) else None, init_regions)
     except Exception as e:
@@ -597,8 +600,18 @@ def fillup_none_target_args(args):
             setattr(args, attr_name,
                     attr_val + [None] * (nr_targets - len(attr_val)))
 
+def valid_obsolete_targets_args(obsolete_targets, nr_targets):
+    if obsolete_targets is None:
+        return True
+    for target_idx in obsolete_targets:
+        if target_idx >= nr_targets:
+            return False
+    return True
+
 def gen_assign_targets(ctxs, args):
     nr_targets = get_nr_targets(args)
+    if not valid_obsolete_targets_args(args.obsolete_targets, nr_targets):
+        return 'Invalid --obsolete_targets'
     targets = []
     if args.nr_targets is None:
         if len(ctxs) != 1:
@@ -950,6 +963,10 @@ def set_monitoring_argparser(parser, hide_help=False):
             '--nr_targets', metavar='<number>', nargs='+', type=int,
             help='number of monitoring targets for each context (in order)'
             if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--obsolete_targets', metavar='<target index>',
+                        nargs='+', type=int,
+                        help='obsolte targets'
+                        if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--nr_ctxs', metavar='<number>', nargs='+', type=int,
                         help='number of contexts for each kdamond (in order)'
                         if not hide_help else argparse.SUPPRESS)
