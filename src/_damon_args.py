@@ -497,7 +497,7 @@ def damon_target_for(args, idx, ops):
                 args.target_pid[idx] if _damon.target_has_pid(ops) else None,
                 init_regions, obsolete=obsolete)
     except Exception as e:
-        return 'Wrong \'--target_pid\' argument (%s)' % e
+        return None, 'Wrong \'--target_pid\' argument (%s)' % e
     return target, None
 
 def damon_ctx_for(args, idx):
