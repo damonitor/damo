@@ -1759,9 +1759,8 @@ def get_childs_pids(pid):
     return ret
 
 def pid_running(pid):
-    '''pid should be string'''
     try:
-        subprocess.check_output(['ps', '--pid', pid])
+        subprocess.check_output(['ps', '--pid', '%s' % pid])
         return True
     except:
         return False
