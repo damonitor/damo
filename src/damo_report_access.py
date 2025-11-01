@@ -1580,7 +1580,9 @@ def set_formats_handle_format_append_arg(fmt, format_args):
 def set_formats(args, records):
     fmt = ReportFormat.from_args(args)
 
-    set_formats_handle_format_set_arg(fmt, args.format)
+    fmt, err = set_formats_handle_format_set_arg(fmt, args.format)
+    if err is not None:
+        return fmt, err
     set_formats_handle_styles(fmt, args, records)
 
     if args.total_sz_only:
