@@ -1793,6 +1793,7 @@ def read_and_show(args):
         fmt, err = set_formats(args, records)
         if err is not None:
             print('format setting failed (%s)' % err)
+            exit(1)
 
         if args.on_cache is not None:
             sz_cache = _damo_fmt_str.text_to_bytes(args.on_cache[0])
