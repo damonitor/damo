@@ -44,7 +44,6 @@
   - Support cold memory tail or idle time percentiles format on
     'damo report access'.
   - Use estimated memory bandwidth from DAMON_STAT.
-- Support obsolete_target file.
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
