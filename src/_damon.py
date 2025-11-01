@@ -1588,7 +1588,8 @@ def initialize(damon_interface, debug_damon, is_stop):
     # While DAMON is running, feature checking I/O can fail, corrupt something,
     # or make something complicated.
     if any_kdamond_running():
-        return 'feature_supports loading failed (%s), and DAMON is running'
+        return 'feature_supports loading failed (%s), and DAMON is running' \
+                % err
 
     return write_feature_supports_file()
 
