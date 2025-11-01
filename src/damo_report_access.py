@@ -1439,9 +1439,10 @@ def set_formats_handle_styles(fmt, args, records):
         fmt.region_box_min_max_length = [1, 40]
         fmt.region_box_align = 'right'
         fmt.region_box_colorset = 'emotion'
-    elif args.style in ['temperature-sz-hist', 'recency-sz-hist']:
+    elif args.style in ['temperature-sz-hist', 'recency-sz-hist',
+                        'cold-memory-tail']:
         set_formats_hist_style(args, fmt, records)
-    elif args.style == 'recency-percentiles':
+    elif args.style in ['recency-percentiles', 'idle-time-percentiles']:
         set_formats_percentiles(args, fmt, records, 'recency')
     elif args.style == 'temperature-percentiles':
         set_formats_percentiles(args, fmt, records, 'temperature')
@@ -1823,8 +1824,13 @@ def add_fmt_args(parser, hide_help=False):
     # how to show, in simple selection
     parser.add_argument(
             '--style', choices=['detailed', 'simple-boxes',
-                                'temperature-sz-hist', 'recency-sz-hist',
-                                'recency-percentiles',
+                                'temperature-sz-hist',
+                                # cold-memory-tail is just another name of
+                                # recency-sz-hist
+                                'recency-sz-hist', 'cold-memory-tail',
+                                # idle-time-percentiles is just another name of
+                                # recency-percentiles
+                                'recency-percentiles', 'idle-time-percentiles',
                                 'temperature-percentiles',
                                 'cold', 'hot'],
             default='detailed',
