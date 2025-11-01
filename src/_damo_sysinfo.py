@@ -66,3 +66,17 @@ damon_features = [
         DamonFeature(name='obsolete_target', upstream_status='merged in mm, expected for 6.19-rc1'),
         DamonFeature(name='ops_attrs', upstream_status='hacking on damon/next'),
         ]
+
+system_info = None
+
+def read_sysinfo():
+    '''
+    Setup system_info as a valid SystemInfo object.
+    '''
+    pass
+
+def save_sysinfo():
+    '''
+    Save system_info as a file that we can read later.
+    '''
+    pass
