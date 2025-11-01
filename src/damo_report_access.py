@@ -1389,7 +1389,10 @@ def set_formats_percentiles(args, fmt, records, recency_or_temperature):
     fmt.format_region = ''
 
 def set_formats_handle_format_set_arg(fmt, format_arg):
-    '''Handle --format inputs except 'append' ones'''
+    '''
+    Apply --format inputs except 'append' ones, update fmt (ReportFormat).
+    Returns updated fmt and error if failed.
+    '''
     if format_arg is None:
         return fmt, None
     if len(format_arg) == 1 and len(format_arg[0]) == 1:
