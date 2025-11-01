@@ -1391,7 +1391,7 @@ def set_formats_percentiles(args, fmt, records, recency_or_temperature):
 def set_formats_handle_format_set_arg(fmt, format_arg):
     '''Handle --format inputs except 'append' ones'''
     if format_arg is None:
-        return
+        return fmt, None
     if len(format_arg) == 1 and len(format_arg[0]) == 1:
         fmt_string = format_arg[0][0]
         if os.path.isfile(fmt_string):
@@ -1421,6 +1421,7 @@ def set_formats_handle_format_set_arg(fmt, format_arg):
                 fmt.format_snapshot_tail = fmt_string
             elif target_area == 'record_tail':
                 fmt.format_record_tail = fmt_string
+    return fmt, None
 
 def set_formats_handle_styles(fmt, args, records):
     if args.style is None:
