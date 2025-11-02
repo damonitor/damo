@@ -8,6 +8,7 @@ import os
 
 import _damo_deprecation_notice
 import _damo_fs
+import _damo_sysinfo
 import _damon
 
 debugfs_root = None
@@ -430,7 +431,7 @@ def mk_feature_supports_map():
         if kd.state == 'on':
             return None, 'DAMON is running'
 
-    feature_supports = {x: False for x in _damon.features}
+    feature_supports = {x.name: False for x in _damo_sysinfo.damon_features}
 
     need_schemes_file_test = False
     if os.path.isfile(get_schemes_file()):
