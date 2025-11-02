@@ -1534,7 +1534,17 @@ def rm_feature_supports_file():
     return None
 
 def feature_supported(feature):
-    return _damon_fs.feature_supported(feature)
+    sysinfo, err = _damo_sysinfo.get_sysinfo()
+    if err is not None:
+        raise Exception(
+        'BUG.  Please report on https://github.com/damonitor/damo/issues')
+    if _damon_fs == _damon_sysfs:
+        return feature in [f.name for f in sysinfo.avail_damon_sysfs_features]
+    else:
+        return feature in [
+                f.name for f in sysinfo.avail_damon_debugfs_features]
+    raise Exception(
+            'BUG.  Please report on https://github.com/damonitor/damo/issues')
 
 def get_feature_supports():
     err = _damon_fs.update_supported_features()
