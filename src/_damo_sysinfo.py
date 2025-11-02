@@ -240,3 +240,10 @@ def save_sysinfo():
     except Exception as e:
         return 'json dump fail (%s)' % e
     return None
+
+def get_sysinfo():
+    if system_info is None:
+        err = set_sysinfo()
+        if err is not None:
+            return None, err
+    return system_info, None
