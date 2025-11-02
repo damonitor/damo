@@ -4,6 +4,8 @@ picked by human sense, so could be incomplete and missing many things.
 v3.0.3
 - damo report access: Add 'cold-memory-tail' and 'idle-memory-percentiles'
   --style option
+- Implement 'damo report sysinfo'
+- Refactor DAMON features check system
 
 v3.0.2
 - Improve monitoring results inheritance for --include_child_tasks use case, on
