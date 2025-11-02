@@ -419,13 +419,13 @@ def test_init_regions_version(paddr_supported):
     return version
 
 def update_supported_features():
+    if not os.path.isdir(get_damon_dir()):
+        return 'damon debugfs dir (%s) not found' % get_damon_dir()
+
     global feature_supports
     if feature_supports != None:
         return None
     feature_supports = {x: False for x in _damon.features}
-
-    if not os.path.isdir(get_damon_dir()):
-        return 'damon debugfs dir (%s) not found' % get_damon_dir()
 
     need_schemes_file_test = False
     if os.path.isfile(get_schemes_file()):
