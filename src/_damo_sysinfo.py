@@ -6,6 +6,8 @@ DAMON features enabled on the kernel.
 '''
 
 import collections
+import json
+import os
 
 class DamonFeature:
     name = None
@@ -128,6 +130,7 @@ damon_features = [
         ]
 
 system_info = None
+sysinfo_file_path = os.path.join(os.environ['HOME'], '.damo.sysinfo')
 
 def read_sysinfo():
     '''
@@ -138,5 +141,14 @@ def read_sysinfo():
 def save_sysinfo():
     '''
     Save system_info as a file that we can read later.
+
+    Returns error in case of failure.
     '''
-    pass
+    if system_info is None:
+        return 'system_info is not initialized'
+    try:
+        with open(sysinfo_file_path, 'w') as f:
+            json.dump(system_info.to_kvpairs(), f, indent=4)
+    except Exception as e:
+        return 'json dump fail (%s)' % e
+    return None
