@@ -1360,6 +1360,7 @@ class Kdamond:
         return kv
 
 import _damo_fs
+import _damo_sysinfo
 import _damon_dbgfs
 import _damon_sysfs
 import damo_version
@@ -1573,6 +1574,10 @@ def initialize(damon_interface, debug_damon, is_stop):
 
     if debug_damon:
         _damo_fs.debug_print_ops(True)
+
+    err = _damo_sysinfo.set_sysinfo()
+    if err is not None and not is_stop:
+        return err
 
     # try reading previously saved feature_supports file, to avoid unnecessary
     # feature check I/O
