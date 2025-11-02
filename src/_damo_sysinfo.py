@@ -222,6 +222,7 @@ def set_sysinfo():
         return None
     err = set_sysinfo_from_scratch()
     if err is None:
+        save_sysinfo()
         return None
     return 'system info setup fail (%s)' % err
 
