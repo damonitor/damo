@@ -73,6 +73,14 @@ class SystemInfo:
                     kvpairs['avail_damon_debugfs_features']]
                 )
 
+    def __eq__(self, other):
+        return self.damo_version == other.damo_version and \
+                self.kernel_version == other.kernel_version and \
+                self.avail_damon_sysfs_features == \
+                other.avail_damon_sysfs_features and \
+                self.avail_damon_debugfs_features == \
+                other.avail_damon_debugfs_features
+
 damon_features = [
         DamonFeature(
             name='record', upstream_status='withdrawn',
