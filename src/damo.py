@@ -36,10 +36,7 @@ import damo_start
 import damo_stop
 import damo_tune
 import damo_validate
-import damo_version
-
-def pr_damo_version(args_not_use):
-    print(damo_version.__version__)
+import damo_version_cmd
 
 subcmds = [
         # DAMON control
@@ -73,8 +70,8 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='args',
             module=damo_args,
             msg='generate complex arguments for other commands'),
-        _damo_subcmds.DamoSubCmd(name='version',
-            module=_damo_subcmds.DamoSubCmdModule(None, pr_damo_version),
+        _damo_subcmds.DamoSubCmd(
+            name='version', module=damo_version_cmd,
             msg='print the version number'),
         _damo_subcmds.DamoSubCmd(name='schemes', module=damo_schemes,
             msg='apply operation schemes'),
