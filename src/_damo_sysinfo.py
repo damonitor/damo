@@ -10,6 +10,8 @@ import json
 import os
 import subprocess
 
+import _damon_dbgfs
+import _damon_sysfs
 import damo_version
 
 class DamonFeature:
@@ -167,6 +169,35 @@ def valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
     if sysinfo.kernel_version != kernel_version:
         return False
     return sysinfo.tested_features == damon_features
+
+def avail_features_on(damon_fs):
+    if not damon_fs.supported():
+        return [], None
+    feature_supports_map, err = damon_fs.mk_feature_supports_map()
+    if err is not None:
+        return None, 'feature map making fail (%s)' % err
+    avail_features = [f for f in damon_features if feature_supports_map[f.name]]
+    return avail_features, None
+
+def set_sysinfo_from_scratch():
+    damo_version_ = damo_version.__version__
+    kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
+    avail_damon_sysfs_features, err = avail_features_on(_damon_sysfs)
+    if err is not None:
+        return 'sysfs feature check fail (%s)' % err
+    avail_damon_debugfs_features, err = avail_features_on(_damon_dbgfs)
+    if err is not None:
+        return 'debugfs feature check fail (%s)' % err
+    tested_features = [f for f in damon_features]
+    sysinfo = SystemInfo(
+            damo_version=damo_version_,
+            kernel_version=kernel_version,
+            avail_damon_sysfs_features=avail_damon_sysfs_features,
+            avail_damon_debugfs_features=avail_damon_debugfs_features,
+            tested_features=tested_features)
+    global system_info
+    system_info = sysinfo
+    return None
 
 def set_sysinfo():
     '''
