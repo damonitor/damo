@@ -7,14 +7,9 @@ import _damon
 import _damon_args
 import _damon_sysfs
 
-def pr_infer_version():
+def pr_infer_version(sysinfo):
     if _damon._damon_fs is not _damon_sysfs:
         print('Version inference is unavailable')
-        exit(1)
-
-    sysinfo, err = _damo_sysinfo.get_sysinfo()
-    if err is not None:
-        print('getting sysinfo fail (%s)' % err)
         exit(1)
     avail_features = {f.name for f in sysinfo.avail_damon_sysfs_features}
     append_plus = False
@@ -63,7 +58,7 @@ def main(args):
         print(json.dumps(feature_support_map, indent=4, sort_keys=True))
 
     if args.infer_version:
-        pr_infer_version()
+        pr_infer_version(sysinfo)
 
 def set_argparser(parser):
     parser.add_argument('type', nargs='?',
