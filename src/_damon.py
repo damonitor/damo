@@ -1390,54 +1390,6 @@ import damo_version
 # Specifically, ensure_initialized() receives the save/load request as
 # arguments.
 
-features = ['record',       # was in DAMON patchset, but not merged in mainline
-            'vaddr',        # merged in v5.15, thebeginning
-            'schemes',      # merged in v5.16
-            'init_regions', # merged in v5.16 (90bebce9fcd6)
-            'paddr',        # merged in v5.16 (a28397beb55b)
-            'schemes_speed_limit',      # merged in v5.16 (2b8a248d5873)
-            'schemes_quotas',           # merged in v5.16 (1cd243030059)
-            'schemes_prioritization',   # merged in v5.16 (38683e003153)
-            'schemes_wmarks',           # merged in v5.16 (ee801b7dd782)
-            'schemes_stat_succ',        # merged in v5.17 (0e92c2ee9f45)
-            'schemes_stat_qt_exceed',   # merged in v5.17 (0e92c2ee9f45)
-            'init_regions_target_idx',  # merged in v5.18 (144760f8e0c3)
-            'fvaddr',       # merged in v5.19 (b82434471cd2)
-            'schemes_tried_regions',    # merged in v6.2-rc1
-            'schemes_filters',          # merged in v6.3-rc1
-            'schemes_filters_anon',     # merged in v6.3-rc1
-            'schemes_filters_memcg',    # merged in v6.3-rc1
-            'schemes_tried_regions_sz', # merged in v6.6-rc1
-            'schemes_filters_addr',     # merged in v6.6-rc1
-            'schemes_filters_target',   # merged in v6.6-rc1
-            'schemes_apply_interval',   # merged in v6.7-rc1
-            'schemes_quota_goals',      # merged in v6.8-rc1
-            'schemes_quota_effective_bytes',    # merged in v6.9-rc1
-            'schemes_quota_goal_metric',    # merged in v6.9-rc1
-            'schemes_quota_goal_some_psi',  # merged in v6.9-rc1
-            'schemes_filters_young',    # merged in v6.10-rc1
-            'schemes_migrate',          # merged in v6.11-rc1
-            'sz_ops_filter_passed',     # merged in v6.14-rc1
-            'allow_filter',             # merged in v6.14-rc1
-            'schemes_filters_hugepage_size',
-                                        # merged in v6.15-rc1
-            'schemes_filters_unmapped', # merged in v6.15-rc1
-            'intervals_goal',           # merged in v6.15-rc1
-            'schemes_filters_core_ops_dirs',
-                                        # merged in v6.15-rc1
-            'schemes_filters_active',
-                                        # merged in v6.15-rc1
-            'schemes_quota_goal_node_mem_used_free',
-                                        # merged in v6.16-rc1
-            'schemes_dests',            # merged in v6.17-rc1
-            'sysfs_refresh_ms',         # merged in v6.17-rc1
-            'addr_unit',                # merged in v6.18-rc1
-            'schemes_quota_goal_node_memcg_used_free',
-                                        # merged in mm, expectred for 6.19-rc1
-            'obsolete_target',          # merged in mm, expected for 6.19-rc1
-            'ops_attrs',                # hacking on damon/next
-            ]
-
 _damon_fs = None
 
 def ensure_root_permission():
