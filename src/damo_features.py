@@ -55,11 +55,7 @@ def main(args):
         print(json.dumps(feature_supports, indent=4, sort_keys=True))
 
     if args.infer_version:
-        if _damon._damon_fs is not _damon_sysfs:
-            print('Version inference is unavailable')
-            exit(1)
-        print('Seems the version of DAMON is %s' %
-              _damon_sysfs.infer_damon_version())
+        pr_infer_version()
 
 def set_argparser(parser):
     parser.add_argument('type', nargs='?',
