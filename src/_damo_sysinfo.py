@@ -8,6 +8,9 @@ DAMON features enabled on the kernel.
 import collections
 import json
 import os
+import subprocess
+
+import damo_version
 
 class DamonFeature:
     name = None
@@ -157,6 +160,30 @@ def read_sysinfo():
     except Exception as e:
         return None, 'json load of %s failed' % sysinfo_file_path
     return SystemInfo.from_kvpairs(kvpairs), None
+
+def valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
+    if sysinfo.damo_version != damo_version_:
+        return False
+    if sysinfo.kernel_version != kernel_version:
+        return False
+    return sysinfo.tested_features == damon_features
+
+def set_sysinfo():
+    '''
+    Set system_info global variable.
+
+    Returns an error if failed.
+    '''
+    sysinfo, err = read_sysinfo()
+    if err is not None:
+        return 'reading saved sysinfo fail (%s)' % err
+    damo_version_ = damo_version.__version__
+    kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
+    if not valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
+        return 'cached sysinfo cannot be used'
+    global system_info
+    system_info = sysinfo
+    return None
 
 def save_sysinfo():
     '''
