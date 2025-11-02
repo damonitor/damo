@@ -134,9 +134,17 @@ sysinfo_file_path = os.path.join(os.environ['HOME'], '.damo.sysinfo')
 
 def read_sysinfo():
     '''
-    Setup system_info as a valid SystemInfo object.
+    Read save_sysinfo()-saved SystemInfo object.
+    Returns read SystemInfo object and an error string if failed.
     '''
-    pass
+    if not os.path.isfile(sysinfo_file_path):
+        return None, 'sysinfo file (%s) not found' % sysinfo_file_path
+    try:
+        with open(sysinfo_file_path, 'r') as f:
+            kvpairs = json.load(f)
+    except Exception as e:
+        return None, 'json load of %s failed' % sysinfo_file_path
+    return SystemInfo.from_kvpairs(kvpairs), None
 
 def save_sysinfo():
     '''
