@@ -17,28 +17,38 @@ import damo_version
 class DamonFeature:
     name = None
     upstream_status = None
+    upstreamed_version = None
     comments = None
 
-    def __init__(self, name, upstream_status, comments=''):
+    def __init__(self, name, upstream_status, upstreamed_version='unknown',
+                 comments=''):
         self.name = name
         self.upstream_status = upstream_status
+        self.upstreamed_version = upstreamed_version
         self.comments = comments
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('name', self.name),
             ('upstream_status', self.upstream_status),
+            ('upstreamed_version', self.upstreamed_version),
             ('comments', self.comments),
             ])
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
+        if 'upstreamed_version' in kvpairs:
+            upstreamed_version = kvpairs['upstreamed_version']
+        else:
+            upstreamed_version = 'unknown'
         return cls(kvpairs['name'], kvpairs['upstream_status'],
+                   upstreamed_version,
                    kvpairs['comments'])
 
     def __eq__(self, other):
         return self.name == other.name and \
                 self.upstream_status == other.upstream_status and \
+                self.upstreamed_version == other.upstreamed_version and \
                 self.comments == other.comments
 
 class SystemInfo:
