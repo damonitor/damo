@@ -37,8 +37,11 @@ class DamonFeature:
 class SystemInfo:
     damo_version = None
     kernel_version = None
-    avail_damon_debugfs_features = None
+
+    # list of DamonFeature objects that can be used using sysfs and debugfs
+    # interfaces.
     avail_damon_sysfs_features = None
+    avail_damon_debugfs_features = None
 
 damon_features = [
         DamonFeature(
