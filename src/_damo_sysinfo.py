@@ -43,6 +43,13 @@ class SystemInfo:
     avail_damon_sysfs_features = None
     avail_damon_debugfs_features = None
 
+    def __init__(self, damo_version, kernel_version,
+                 avail_damon_sysfs_features, avail_damon_debugfs_features):
+        self.damo_version = damo_version
+        self.kernel_version = kernel_version
+        self.avail_damon_sysfs_features = avail_damon_sysfs_features
+        self.avail_damon_debugfs_features = avail_damon_debugfs_features
+
 damon_features = [
         DamonFeature(
             name='record', upstream_status='withdrawn',
