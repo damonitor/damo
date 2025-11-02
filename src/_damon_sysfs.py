@@ -1082,13 +1082,13 @@ def infer_damon_version():
     stage_kdamonds(orig_kdamonds)
     return '<6.2'
 
-def update_supported_features():
-    if not supported():
-        return 'damon sysfs not supported'
-
-    global feature_supports
-    if feature_supports != None:
-        return None
+def mk_feature_supports_map():
+    '''
+    Returns a map indicating list of supported and unsupported DAMON features,
+    and an error if making the map failed.
+    Keys of the map are names of DAMON features.
+    Values are bool indicating whether the feature is supported.
+    '''
     feature_supports = {x: False for x in _damon.features}
 
     for feature in features_sysfs_support_from_begining:
@@ -1105,7 +1105,7 @@ def update_supported_features():
     err = stage_kdamonds(kdamonds_for_feature_check)
     if err is not None:
         stage_kdamonds(orig_kdamonds)
-        return 'staging feature check purpose kdamond failed'
+        return None, 'staging feature check purpose kdamond failed'
 
     if os.path.isdir(scheme_tried_regions_dir_of(0, 0, 0)):
         feature_supports['schemes_tried_regions'] = True
@@ -1190,7 +1190,8 @@ def update_supported_features():
         err = stage_kdamonds(kdamonds_for_feature_check)
         if err is not None:
             stage_kdamonds(orig_kdamonds)
-            return 'staging damos goal feature check purpose kdamond failed'
+            return None, \
+                    'staging damos goal feature check purpose kdamond failed'
 
         if os.path.isfile(
                 os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
@@ -1222,4 +1223,20 @@ def update_supported_features():
         for ops in ['vaddr', 'paddr', 'fvaddr']:
             feature_supports[ops] = ops in avail_ops
     err = stage_kdamonds(orig_kdamonds)
-    return err
+    if err is not None:
+        return None, 'restoring original kdamonds setup failed'
+    return feature_supports, None
+
+def update_supported_features():
+    if not supported():
+        return 'damon sysfs not supported'
+
+    global feature_supports
+    if feature_supports != None:
+        return None
+
+    feature_supports_map, err = mk_feature_supports_map()
+    if err is not None:
+        return err
+    feature_supports = feature_supports_map
+    return None
