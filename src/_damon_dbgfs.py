@@ -418,13 +418,11 @@ def test_init_regions_version(paddr_supported):
 
     return version
 
-def update_supported_features():
-    if not supported():
-        return 'damon debugfs not supported'
-
-    global feature_supports
-    if feature_supports != None:
-        return None
+def mk_feature_supports_map():
+    '''
+    Returns feature supports info map and an error if failed.
+    Read _damon_sysfs.mk_feature_supports_map() for more details.
+    '''
     feature_supports = {x: False for x in _damon.features}
 
     need_schemes_file_test = False
@@ -448,7 +446,8 @@ def update_supported_features():
             feature_supports['schemes_stat_qt_exceed'] = True
 
     if _damon.any_kdamond_running():
-        return 'debugfs feature update cannot be done while DAMON running'
+        return None, \
+                'debugfs feature update cannot be done while DAMON running'
 
     # virtual address space has supported since the beginning
     feature_supports['vaddr'] = True
@@ -477,4 +476,17 @@ def update_supported_features():
             feature_supports['schemes_stat_succ'] = True
             feature_supports['schemes_stat_qt_exceed'] = True
 
+    return feature_supports, None
+
+def update_supported_features():
+    if not supported():
+        return 'damon debugfs not supported'
+
+    global feature_supports
+    if feature_supports != None:
+        return None
+    feature_supports_map, err = mk_feature_supports_map()
+    if err is not None:
+        return 'making feature supports map fail (%s)' % err
+    feature_supports = feature_support_map
     return None
