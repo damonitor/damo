@@ -29,6 +29,11 @@ class DamonFeature:
         return cls(kvpairs['name'], kvpairs['upstream_status'],
                    kvpairs['comments'])
 
+    def __eq__(self, other):
+        return self.name == other.name and \
+                self.upstream_status == other.upstream_status and \
+                self.comments == other.comments
+
 class SystemInfo:
     damo_version = None
     kernel_version = None
