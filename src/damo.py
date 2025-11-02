@@ -51,7 +51,7 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='record', module=damo_record,
             msg='record data accesses and additional information'),
         _damo_subcmds.DamoSubCmd(name='report', module=damo_report,
-            msg='visualize the \'record\'-generated or snapshot data'),
+            msg='visualize damo-generated data'),
         _damo_subcmds.DamoSubCmd(name='replay', module=damo_replay,
             msg='replay the recorded data accesses'),
 
