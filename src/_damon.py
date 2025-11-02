@@ -1478,13 +1478,6 @@ def write_feature_supports_file():
     with open(feature_supports_file_path, 'w') as f:
         json.dump(to_save, f, indent=4, sort_keys=True)
 
-def rm_feature_supports_file():
-    try:
-        os.remove(feature_supports_file_path)
-    except Exception as e:
-        return '%s' % e
-    return None
-
 def feature_supported(feature):
     sysinfo, err = _damo_sysinfo.get_sysinfo()
     if err is not None:
