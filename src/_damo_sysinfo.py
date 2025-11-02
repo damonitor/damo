@@ -5,6 +5,8 @@ Contains code for managing system information including kernel version and
 DAMON features enabled on the kernel.
 '''
 
+import collections
+
 class DamonFeature:
     name = None
     upstream_status = None
@@ -14,6 +16,18 @@ class DamonFeature:
         self.name = name
         self.upstream_status = upstream_status
         self.comments = comments
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('name', self.name),
+            ('upstream_status', self.upstream_status),
+            ('comments', self.comments),
+            ])
+
+    @classmethod
+    def from_kvpairs(cls, kvpairs):
+        return cls(kvpairs['name'], kvpairs['upstream_status'],
+                   kvpairs['comments'])
 
 class SystemInfo:
     damo_version = None
