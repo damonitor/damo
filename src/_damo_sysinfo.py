@@ -241,6 +241,13 @@ def save_sysinfo():
         return 'json dump fail (%s)' % e
     return None
 
+def rm_sysinfo_file():
+    try:
+        os.remove(sysinfo_file_path)
+    except Exception as e:
+        return '%s' % e
+    return None
+
 def get_sysinfo():
     if system_info is None:
         err = set_sysinfo()
