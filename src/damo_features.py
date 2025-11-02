@@ -31,28 +31,36 @@ def pr_infer_version():
 
 def main(args):
     if args.invalidate_cache:
-        err = _damon.rm_feature_supports_file()
+        err = _damo_sysfs.rm_sysinfo_file()
         if err is not None:
             print('invalidating cache fail (%s)' % err)
             exit(1)
 
     _damon.ensure_root_and_initialized(args)
 
-    feature_supports, err = _damon.get_feature_supports()
-    if err != None:
-        print('getting feature supports info failed (%s)' % err)
+    sysinfo, err = _damo_sysinfo.get_sysinfo()
+    if err is not None:
+        print('getting system info failed (%s)' % err)
         exit(1)
-    for feature in sorted(feature_supports.keys()):
-        supported = feature_supports[feature]
+    feature_names = sorted([f.name for f in _damo_sysinfo.damon_features])
+    if _damon._damon_fs is _damon_sysfs:
+        avail_features = {f.name for f in sysinfo.avail_damon_sysfs_features}
+    else:
+        avail_features = {f.name for f in sysinfo.avail_damon_debugfs_features}
+    feature_support_map = {}
+    for feature_name in feature_names:
+        supported = feature_name in avail_features
         if args.type == 'all':
-            print('%s: %s' % (feature,
+            print('%s: %s' % (feature_name,
                 'Supported' if supported else 'Unsupported'))
         elif args.type == 'supported' and supported:
-            print(feature)
+            print(feature_name)
         elif args.type == 'unsupported' and not supported:
-            print(feature)
+            print(feature_name)
+        elif args.type == 'json':
+            feature_support_map[feature_name] = supported
     if args.type == 'json':
-        print(json.dumps(feature_supports, indent=4, sort_keys=True))
+        print(json.dumps(feature_support_map, indent=4, sort_keys=True))
 
     if args.infer_version:
         pr_infer_version()
