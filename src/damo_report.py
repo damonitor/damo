@@ -8,6 +8,7 @@ import damo_report_footprint
 import damo_report_heatmap
 import damo_report_holistic
 import damo_report_profile
+import damo_report_sysinfo
 import damo_report_times
 import damo_wss
 
@@ -33,6 +34,9 @@ subcmds = [
             msg='times of record having specific access pattern'),
         _damo_subcmds.DamoSubCmd(name='nr_regions', module=damo_nr_regions,
             msg='number of DAMON-regions'),
+        _damo_subcmds.DamoSubCmd(
+            name='sysinfo', module=damo_report_sysinfo,
+            msg='system information'),
         ]
 
 def main(args):
