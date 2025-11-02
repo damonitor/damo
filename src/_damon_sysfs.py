@@ -110,13 +110,7 @@ def update_schemes_tried_bytes(kdamond_idxs):
 
 'Return error'
 def update_schemes_tried_regions(kdamond_idxs):
-    err = __write_state_file(kdamond_idxs, 'update_schemes_tried_regions')
-    if err != None:
-        if not feature_supported('schemes_tried_regions'):
-            err = '%s (DAMON feature \'schemes_tried_regions\' is not supported on the current kernel. It is available on kernel version 6.2 and later)' % err
-        else:
-            err = '%s (concurrent threads doing writes)' % err
-    return err
+    return __write_state_file(kdamond_idxs, 'update_schemes_tried_regions')
 
 'Return error'
 def update_schemes_quota_effective_bytes(kdamond_idxs):
