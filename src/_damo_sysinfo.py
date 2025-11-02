@@ -50,6 +50,29 @@ class SystemInfo:
         self.avail_damon_sysfs_features = avail_damon_sysfs_features
         self.avail_damon_debugfs_features = avail_damon_debugfs_features
 
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('damo_version', self.damo_version),
+            ('kernel_version', self.kernel_version),
+            ('avail_damon_sysfs_features',
+             [f.to_kvpairs(raw) for f in self.avail_damon_sysfs_features]),
+            ('avail_damon_debugfs_features',
+             [f.to_kvpairs(raw) for f in self.avail_damon_debugfs_features]),
+            ])
+
+    @classmethod
+    def from_kvpairs(cls, kvpairs):
+        return cls(
+                damo_version=kvpairs['damo_version'],
+                kernel_version=kvpairs['kernel_version'],
+                avail_damon_sysfs_features=[
+                    DamonFeature.from_kvpairs(kvp) for kvp in
+                    kvpairs['avail_damon_sysfs_features']],
+                avail_damon_debugfs_features=[
+                    DamonFeature.from_kvpairs(kvp) for kvp in
+                    kvpairs['avail_damon_debugfs_features']]
+                )
+
 damon_features = [
         DamonFeature(
             name='record', upstream_status='withdrawn',
