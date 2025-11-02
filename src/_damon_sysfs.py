@@ -1104,9 +1104,8 @@ def update_supported_features():
                         schemes=[_damon.Damos()])])]
     err = stage_kdamonds(kdamonds_for_feature_check)
     if err is not None:
-        print('staging feature check purpose kdamond failed')
         stage_kdamonds(orig_kdamonds)
-        exit(1)
+        return 'staging feature check purpose kdamond failed'
 
     if os.path.isdir(scheme_tried_regions_dir_of(0, 0, 0)):
         feature_supports['schemes_tried_regions'] = True
@@ -1190,9 +1189,8 @@ def update_supported_features():
                                 )])])]
         err = stage_kdamonds(kdamonds_for_feature_check)
         if err is not None:
-            print('staging damos goal feature check purpose kdamond failed')
             stage_kdamonds(orig_kdamonds)
-            exit(1)
+            return 'staging damos goal feature check purpose kdamond failed'
 
         if os.path.isfile(
                 os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
