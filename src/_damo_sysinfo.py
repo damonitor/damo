@@ -45,12 +45,18 @@ class SystemInfo:
     avail_damon_sysfs_features = None
     avail_damon_debugfs_features = None
 
+    # list of DamonFeature objects that tested to generate
+    # avail_damon_{sys,debug}fs_features.
+    tested_features = None
+
     def __init__(self, damo_version, kernel_version,
-                 avail_damon_sysfs_features, avail_damon_debugfs_features):
+                 avail_damon_sysfs_features, avail_damon_debugfs_features,
+                 tested_features):
         self.damo_version = damo_version
         self.kernel_version = kernel_version
         self.avail_damon_sysfs_features = avail_damon_sysfs_features
         self.avail_damon_debugfs_features = avail_damon_debugfs_features
+        self.tested_features = tested_features
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
@@ -60,6 +66,8 @@ class SystemInfo:
              [f.to_kvpairs(raw) for f in self.avail_damon_sysfs_features]),
             ('avail_damon_debugfs_features',
              [f.to_kvpairs(raw) for f in self.avail_damon_debugfs_features]),
+            ('tested_features',
+             [f.to_kvpairs(raw) for f in self.tested_features]),
             ])
 
     @classmethod
@@ -72,7 +80,10 @@ class SystemInfo:
                     kvpairs['avail_damon_sysfs_features']],
                 avail_damon_debugfs_features=[
                     DamonFeature.from_kvpairs(kvp) for kvp in
-                    kvpairs['avail_damon_debugfs_features']]
+                    kvpairs['avail_damon_debugfs_features']],
+                tested_features=[
+                    DamonFeature.from_kvpairs(kvp) for kvp in
+                    kvpairs['tested_features']],
                 )
 
     def __eq__(self, other):
@@ -81,7 +92,8 @@ class SystemInfo:
                 self.avail_damon_sysfs_features == \
                 other.avail_damon_sysfs_features and \
                 self.avail_damon_debugfs_features == \
-                other.avail_damon_debugfs_features
+                other.avail_damon_debugfs_features and \
+                self.tested_features == other.tested_features
 
 damon_features = [
         DamonFeature(

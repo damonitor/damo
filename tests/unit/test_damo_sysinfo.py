@@ -27,7 +27,8 @@ class TestDamoSysinfo(unittest.TestCase):
                 damo_version='v3.1.1',
                 kernel_version='6.18.0-rc2-mm-new-damon+',
                 avail_damon_sysfs_features=[f for f in features[:2]],
-                avail_damon_debugfs_features=[f for f in features[2:]])
+                avail_damon_debugfs_features=[f for f in features[2:]],
+                tested_features=features)
         kvpairs = sinfo.to_kvpairs()
         sinfo2 = _damo_sysinfo.SystemInfo.from_kvpairs(kvpairs)
         self.assertEqual(sinfo, sinfo2)
