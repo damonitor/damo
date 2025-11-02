@@ -1665,6 +1665,10 @@ def update_schemes_tried_bytes(kdamond_idxs=None):
     return _damon_fs.update_schemes_tried_bytes(kdamond_idxs)
 
 def update_schemes_tried_regions(kdamond_idxs=None):
+    if not feature_supported('schemes_tried_regions'):
+        return 'DAMON feature \'schemes_tried_regions\' is not supported' \
+                ' on the current kernel.  ' \
+                'It is available on kernel version 6.2 and later'
     if kdamond_idxs == None:
         kdamond_idxs = running_kdamond_idxs()
     return _damon_fs.update_schemes_tried_regions(kdamond_idxs)
