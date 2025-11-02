@@ -1095,6 +1095,12 @@ def mk_feature_supports_map():
         feature_supports[feature] = True
 
     orig_kdamonds = current_kdamonds()
+    # While DAMON is running, feature checking I/O can fail, corrupt something,
+    # or make something complicated.  Just don't do that.
+    for kd in orig_kdamonds:
+        if kd.state == 'on':
+            return None, 'DAMON is running'
+
     kdamonds_for_feature_check = [
             _damon.Kdamond(
                 state=None, pid=None, contexts=[
