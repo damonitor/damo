@@ -1083,14 +1083,14 @@ def infer_damon_version():
     return '<6.2'
 
 def update_supported_features():
-    global feature_supports
+    if not supported():
+        return 'damon sysfs not supported'
 
+    global feature_supports
     if feature_supports != None:
         return None
     feature_supports = {x: False for x in _damon.features}
 
-    if not supported():
-        return 'damon sysfs not supported'
     for feature in features_sysfs_support_from_begining:
         feature_supports[feature] = True
 
