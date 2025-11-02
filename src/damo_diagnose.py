@@ -2,6 +2,7 @@
 
 import json
 
+import _damo_sysinfo
 import _damon
 import damo_lru_sort
 import damo_reclaim
@@ -10,6 +11,11 @@ def main(args):
     _damon.ensure_root_permission()
 
     report = {}
+    sysinfo, err = _damo_sysinfo.get_sysinfo()
+    if err is not None:
+        print('get_sysinfo fail (%s)' % err)
+        exit(1)
+    report['sysinfo'] = sysinfo.to_kvpairs()
     for damon_interface in ['sysfs', 'debugfs']:
         if not damon_interface in report:
             report[damon_interface] = {}
@@ -23,12 +29,6 @@ def main(args):
             print('DAMON interface set with %s failed: %s' %
                   (damon_interface, err))
             exit(1)
-        feature_supports, err = _damon.get_feature_supports()
-        if err is not None:
-            print('get_feature_supports for %s failed: %s' %
-                  (damon_interface, err))
-            exit(1)
-        report[damon_interface]['feature_supports'] = feature_supports
 
         kdamonds, err = _damon.update_read_kdamonds(
                 nr_retries=6, update_stats=True, update_tried_regions=True,
