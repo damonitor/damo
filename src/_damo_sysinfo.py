@@ -188,6 +188,9 @@ damon_features = [
         DamonFeature(name='schemes_apply_interval',
                      upstream_status='merged in v6.7-rc1',
                      upstreamed_version='6.7'),
+        DamonFeature(name='trace_damos_before_apply',
+                     upstream_status='merged in v6.7-rc1 (c603c630b509)',
+                     upstreamed_version='6.7'),
         DamonFeature(name='schemes_quota_goals',
                      upstream_status='merged in v6.8-rc1',
                      upstreamed_version='6.8'),
@@ -235,6 +238,12 @@ damon_features = [
                      upstreamed_version='6.17'),
         DamonFeature(name='sysfs_refresh_ms',
                      upstream_status='merged in v6.17-rc1',
+                     upstreamed_version='6.17'),
+        DamonFeature(name='trace_damon_monitor_intervals_tune',
+                     upstream_status='merged in v6.17-rc1 (214db7028727)',
+                     upstreamed_version='6.17'),
+        DamonFeature(name='trace_damos_esz',
+                     upstream_status='merged in v6.17-rc1 (a86d695193bf);',
                      upstreamed_version='6.17'),
         DamonFeature(name='addr_unit',
                      upstream_status='merged in v6.18-rc1',
@@ -319,8 +328,16 @@ def get_avail_damon_trace_features():
     tracepoints, err = get_damon_tracepoints()
     if err is not None:
         return None, err
-    if 'damon:damon_aggregated' in tracepoints:
-        features.append(damon_feature_of_name('trace_damon_aggregated'))
+    tracepoint_to_feature_name_map = {
+            'damon:damon_aggregated': 'trace_damon_aggregated',
+            'damon:damos_before_apply': 'trace_damos_before_apply',
+            'damon:damon_monitor_intervals_tune':
+            'trace_damon_monitor_intervals_tune',
+            'damon:damos_esz': 'trace_damos_esz',
+            }
+    for tracepoint, feature_name in tracepoint_to_feature_name_map.items():
+        if tracepoint in tracepoints:
+            features.append(damon_feature_of_name(feature_name))
     return features, err
 
 def set_sysinfo_from_scratch():
