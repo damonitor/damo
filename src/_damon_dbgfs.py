@@ -492,5 +492,5 @@ def update_supported_features():
     feature_supports_map, err = mk_feature_supports_map()
     if err is not None:
         return 'making feature supports map fail (%s)' % err
-    feature_supports = feature_support_map
+    feature_supports = feature_supports_map
     return None
