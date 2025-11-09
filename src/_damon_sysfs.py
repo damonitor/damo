@@ -947,9 +947,6 @@ def commit_quota_goals(kdamond_idxs):
 
 feature_supports = None
 
-def feature_supported(feature):
-    return feature_supports[feature]
-
 # sysfs was merged in v5.18-rc1
 features_sysfs_support_from_begining = [
         'schemes',
