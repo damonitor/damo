@@ -1365,31 +1365,6 @@ import _damon_dbgfs
 import _damon_sysfs
 import damo_version
 
-# System check
-
-# damo supports all DAMON-enabled kernels.  For that, damo maintains list of
-# the DAMON features, and a dict saying whether the feature is supported on the
-# running kernel.  Since the supports depend on underlying DAMON interface, the
-# dict is populated by _damon_fs, and saved as _damon_fs.feature_supports.
-#
-# The feature_supports population cannot be fully done while DAMON is running,
-# particularly in case of debugfs.  Specifically, it has to do writing some
-# values to some files and check if it success or fails.  While DAMON is
-# running, such writing may always fail (-EBUSY).  Sysfs is ok for now since it
-# allows writing files while DAMON is running, except 'state' file.  But,
-# similar issue could happen in future.
-#
-# Hence, damo features for online DAMON control or snapshot cannot make
-# feature_supports correctly.  And repeated feature check is waste of time,
-# anyway.
-#
-# To work around, ask features that would run while DAMON is not running to
-# build the feature_supports dict, and write on feature_supports_file_path
-# file.  If the file already exists and valid, other damo features that depends
-# on feature_supports setup feature_supports dict by reading it from the file.
-# Specifically, ensure_initialized() receives the save/load request as
-# arguments.
-
 _damon_fs = None
 
 def ensure_root_permission():
