@@ -1012,10 +1012,10 @@ def mk_feature_supports_map():
     Keys of the map are names of DAMON features.
     Values are bool indicating whether the feature is supported.
     '''
-    feature_supports = {x.name: False for x in _damo_sysinfo.damon_features}
+    supports_map = {x.name: False for x in _damo_sysinfo.damon_features}
 
     for feature in features_sysfs_support_from_begining:
-        feature_supports[feature] = True
+        supports_map[feature] = True
 
     orig_kdamonds = current_kdamonds()
     # While DAMON is running, feature checking I/O can fail, corrupt something,
@@ -1037,47 +1037,47 @@ def mk_feature_supports_map():
         return None, 'staging feature check purpose kdamond failed'
 
     if os.path.isdir(scheme_tried_regions_dir_of(0, 0, 0)):
-        feature_supports['schemes_tried_regions'] = True
+        supports_map['schemes_tried_regions'] = True
 
     if os.path.isfile(os.path.join(scheme_tried_regions_dir_of(0, 0, 0),
             'total_bytes')):
-        feature_supports['schemes_tried_regions_sz'] = True
+        supports_map['schemes_tried_regions_sz'] = True
         # address and target filter types are added in v6.6-rc1, together with
         # schemes_tried_regions_sz
-        feature_supports['schemes_filters_addr'] = True
-        feature_supports['schemes_filters_target'] = True
+        supports_map['schemes_filters_addr'] = True
+        supports_map['schemes_filters_target'] = True
 
     if os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'filters')):
-        feature_supports['schemes_filters'] = True
+        supports_map['schemes_filters'] = True
         # anon and memcg were supported from the beginning
-        feature_supports['schemes_filters_anon'] = True
-        feature_supports['schemes_filters_memcg'] = True
+        supports_map['schemes_filters_anon'] = True
+        supports_map['schemes_filters_memcg'] = True
         kdamonds_for_feature_check[0].contexts[0].schemes[0].filters = [
                 _damon.DamosFilter('young', True)]
         err = stage_kdamonds(kdamonds_for_feature_check)
         if err is None:
-            feature_supports['schemes_filters_young'] = True
+            supports_map['schemes_filters_young'] = True
 
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'apply_interval_us')):
-        feature_supports['schemes_apply_interval'] = True
+        supports_map['schemes_apply_interval'] = True
 
     if os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals')):
-        feature_supports['schemes_quota_goals'] = True
+        supports_map['schemes_quota_goals'] = True
 
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'quotas',
                                    'effective_bytes')):
-        feature_supports['schemes_quota_effective_bytes'] = True
+        supports_map['schemes_quota_effective_bytes'] = True
         # goal_metric and goal_some_psi will be merged together with effective bytes.
-        feature_supports['schemes_quota_goal_metric'] = True
-        feature_supports['schemes_quota_goal_some_psi'] = True
+        supports_map['schemes_quota_goal_metric'] = True
+        supports_map['schemes_quota_goal_some_psi'] = True
 
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'target_nid')):
-        feature_supports['schemes_migrate'] = True
+        supports_map['schemes_migrate'] = True
 
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0),
                          'stats', 'sz_ops_filter_passed')):
-        feature_supports['sz_ops_filter_passed'] = True
+        supports_map['sz_ops_filter_passed'] = True
 
     ops_filters_dir = os.path.join(scheme_dir_of(0, 0, 0), 'ops_filters')
     if not os.path.isdir(ops_filters_dir):
@@ -1085,27 +1085,27 @@ def mk_feature_supports_map():
 
     if os.path.isfile(
             os.path.join(ops_filters_dir, '0', 'allow')):
-        feature_supports['allow_filter'] = True
+        supports_map['allow_filter'] = True
 
     if os.path.isfile(
             os.path.join(ops_filters_dir, '0', 'min')):
-        feature_supports['schemes_filters_hugepage_size'] = True
+        supports_map['schemes_filters_hugepage_size'] = True
 
     if os.path.isdir(
             os.path.join(ctx_dir_of(0, 0),
                          'monitoring_attrs', 'intervals', 'intervals_goal')):
-        feature_supports['intervals_goal'] = True
+        supports_map['intervals_goal'] = True
 
     if os.path.isdir(
             os.path.join(scheme_dir_of(0, 0, 0), 'core_filters')):
-        feature_supports['schemes_filters_core_ops_dirs'] = True
+        supports_map['schemes_filters_core_ops_dirs'] = True
 
         # unmapped and active pages DAMOS filters are merged into v6.15
         # together with core_ops_dirs
-        feature_supports['schemes_filters_unmapped'] = True
-        feature_supports['schemes_filters_active'] = True
+        supports_map['schemes_filters_unmapped'] = True
+        supports_map['schemes_filters_active'] = True
 
-    if feature_supports['schemes_quota_goals'] is True:
+    if supports_map['schemes_quota_goals'] is True:
         kdamonds_for_feature_check = [
                 _damon.Kdamond(
                     state=None, pid=None, contexts=[
@@ -1125,36 +1125,36 @@ def mk_feature_supports_map():
         if os.path.isfile(
                 os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
                              'nid')):
-            feature_supports['schemes_quota_goal_node_mem_used_free'] = True
+            supports_map['schemes_quota_goal_node_mem_used_free'] = True
 
         if os.path.isfile(
                 os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
                              'path')):
-            feature_supports['schemes_quota_goal_node_memcg_used_free'] = True
+            supports_map['schemes_quota_goal_node_memcg_used_free'] = True
 
     if os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'dests')):
-        feature_supports['schemes_dests'] = True
+        supports_map['schemes_dests'] = True
 
     if os.path.isfile(os.path.join(kdamond_dir_of(0), 'refresh_ms')):
-        feature_supports['sysfs_refresh_ms'] = True
+        supports_map['sysfs_refresh_ms'] = True
 
     if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'addr_unit')):
-        feature_supports['addr_unit'] = True
+        supports_map['addr_unit'] = True
 
     if os.path.isfile(os.path.join(target_dir_of(0, 0, 0), 'obsolete_target')):
-        feature_supports['obsolete_target'] = True
+        supports_map['obsolete_target'] = True
 
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
-        feature_supports['ops_attrs'] = True
+        supports_map['ops_attrs'] = True
 
     avail_ops, err = _avail_ops()
     if err == None:
         for ops in ['vaddr', 'paddr', 'fvaddr']:
-            feature_supports[ops] = ops in avail_ops
+            supports_map[ops] = ops in avail_ops
     err = stage_kdamonds(orig_kdamonds)
     if err is not None:
         return None, 'restoring original kdamonds setup failed'
-    return feature_supports, None
+    return supports_map, None
 
 def update_supported_features():
     if not supported():
