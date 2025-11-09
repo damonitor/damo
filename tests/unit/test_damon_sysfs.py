@@ -12,23 +12,6 @@ import _damon_sysfs
 
 class TestDamonSysfs(unittest.TestCase):
     def test_json_kdamonds_staging(self):
-        _damon_sysfs.feature_supports = {
-                'fvaddr': True,
-                'init_regions': True,
-                'init_regions_target_idx': True,
-                'paddr': True,
-                'record': False,
-                'schemes': True,
-                'schemes_prioritization': True,
-                'schemes_quotas': True,
-                'schemes_quota_goals': True,
-                'schemes_speed_limit': True,
-                'schemes_tried_regions': True,
-                'schemes_wmarks': True,
-                'schemes_filters': True,
-                'schemes_apply_interval': True,
-                'vaddr': True}
-
         sysfs_dict = {
                 "nr_kdamonds": "1\n",
                 "0": {
