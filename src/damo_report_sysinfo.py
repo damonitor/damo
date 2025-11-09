@@ -22,6 +22,9 @@ def main(args):
     print('Debugfs avail DAMON features')
     for feature in sysinfo.avail_damon_debugfs_features:
         pr_feature(feature)
+    print('DAMON trace features')
+    for feature in sysinfo.avail_damon_trace_features:
+        pr_feature(feature)
 
 def set_argparser(parser):
     return parser
