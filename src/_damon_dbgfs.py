@@ -425,12 +425,6 @@ def mk_feature_supports_map():
     Read _damon_sysfs.mk_feature_supports_map() for more details.
     '''
 
-    # avoid unnecessary staged files corruption and feature check i/o failures.
-    orig_kdamonds = current_kdamonds()
-    for kd in orig_kdamonds:
-        if kd.state == 'on':
-            return None, 'DAMON is running'
-
     feature_supports = {x.name: False for x in _damo_sysinfo.damon_features}
 
     need_schemes_file_test = False
@@ -452,6 +446,10 @@ def mk_feature_supports_map():
             feature_supports['schemes_quotas'] = True
             feature_supports['schemes_stat_succ'] = True
             feature_supports['schemes_stat_qt_exceed'] = True
+
+    if _damon.any_kdamond_running():
+        return None, \
+                'debugfs feature update cannot be done while DAMON running'
 
     # virtual address space has supported since the beginning
     feature_supports['vaddr'] = True
