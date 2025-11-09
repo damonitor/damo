@@ -129,6 +129,9 @@ damon_features = [
             comments='was in DAMON patchset, but not merged in mainline'),
         DamonFeature(name='vaddr', upstream_status='merged in v5.15',
                      upstreamed_version='5.15'),
+        DamonFeature(name='trace_damon_aggregated',
+                      upstream_status='merged in v5.15 (2fcb93629ad8)',
+                      upstreamed_version='5.15'),
         DamonFeature(name='schemes', upstream_status='merged in v5.16',
                      upstreamed_version='5.16'),
         DamonFeature(name='init_regions',
@@ -292,6 +295,34 @@ def avail_features_on(damon_fs):
     avail_features = [f for f in damon_features if feature_supports_map[f.name]]
     return avail_features, None
 
+def get_damon_tracepoints():
+    '''
+    returns list of DAMON tracepoint names and an error
+    '''
+    try:
+        perf_output = subprocess.check_output(
+                ['perf', 'list', 'tracepoint']).decode().strip()
+    except Exception as e:
+        return None, 'perf list fail (%s)' % e
+    points = []
+    for line in perf_output.split('\n'):
+        fields = line.split()
+        if fields[0].startswith('damon:'):
+            points.append(fields[0])
+    return points, None
+
+def damon_feature_of_name(name):
+    return [f for f in damon_features if f.name == name][0]
+
+def get_avail_damon_trace_features():
+    features = []
+    tracepoints, err = get_damon_tracepoints()
+    if err is not None:
+        return None, err
+    if 'damon:damon_aggregated' in tracepoints:
+        features.append(damon_feature_of_name('trace_damon_aggregated'))
+    return features, err
+
 def set_sysinfo_from_scratch():
     damo_version_ = damo_version.__version__
     kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
@@ -301,12 +332,17 @@ def set_sysinfo_from_scratch():
     avail_damon_debugfs_features, err = avail_features_on(_damon_dbgfs)
     if err is not None:
         return 'debugfs feature check fail (%s)' % err
+    avail_damon_trace_features, err = get_avail_damon_trace_features()
+    if err is not None:
+        return 'trace feature check fail (%s)' % err
+
     tested_features = [f for f in damon_features]
     sysinfo = SystemInfo(
             damo_version=damo_version_,
             kernel_version=kernel_version,
             avail_damon_sysfs_features=avail_damon_sysfs_features,
             avail_damon_debugfs_features=avail_damon_debugfs_features,
+            avail_damon_trace_features=avail_damon_trace_features,
             tested_features=tested_features)
     global system_info
     system_info = sysinfo
