@@ -1506,8 +1506,11 @@ def initialize(damon_interface, debug_damon, is_stop):
     if debug_damon:
         _damo_fs.debug_print_ops(True)
 
+    if is_stop:
+        return None
+
     err = _damo_sysinfo.set_sysinfo()
-    if err is not None and not is_stop:
+    if err is not None:
         return err
 
     # setup _damon_dbgfs.feature_supports for legacy feature checks
