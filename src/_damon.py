@@ -1509,15 +1509,6 @@ def initialize(damon_interface, debug_damon, is_stop):
     if is_stop:
         return None
 
-    err = _damo_sysinfo.set_sysinfo()
-    if err is not None:
-        return err
-
-    # setup _damon_dbgfs.feature_supports for legacy feature checks
-    sysinfo, err = _damo_sysinfo.get_sysinfo()
-    _damon_dbgfs.feature_supports = {
-            f.name: True for f in sysinfo.avail_damon_debugfs_features}
-
     # try reading previously saved feature_supports file, to avoid unnecessary
     # feature check I/O
     err = read_feature_supports_file()
