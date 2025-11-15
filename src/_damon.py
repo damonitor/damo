@@ -1424,17 +1424,6 @@ def get_feature_supports():
         return None, err
     return _damon_fs.feature_supports, None
 
-def set_feature_supports(feature_supports):
-    features = sorted([f.name for f in _damo_sysinfo.damon_features])
-    if features != sorted(feature_supports.keys()):
-        # The feature_supports_file is old.  E.g., The file has written by old
-        # version of damo, and then being read by new version.
-        # e.g., https://github.com/awslabs/damo/issues/103
-        return 'feature supports file is not updated'
-
-    _damon_fs.feature_supports = feature_supports
-    return None
-
 def set_damon_interface(damon_interface):
     global _damon_fs
     if damon_interface == 'sysfs':
