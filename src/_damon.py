@@ -1387,24 +1387,6 @@ feature_supports_file_path = os.path.join(os.environ['HOME'],
 # Format version 3 file contains the version of damo.
 feature_support_file_format_ver = 3
 
-def version_mismatch(feature_supports):
-    if not 'file_format_ver' in feature_supports:
-        file_format_ver = 0
-    else:
-        file_format_ver = feature_supports['file_format_ver']
-    if file_format_ver != feature_support_file_format_ver:
-        return 'unsupported format version %s' % file_format_ver
-    kernel_ver = feature_supports['kernel_version']
-    current_kernel_ver = subprocess.check_output(['uname', '-r']).decode()
-    if kernel_ver != current_kernel_ver:
-        return 'kernel is different from that created %s (%s != %s)' % (
-                feature_supports_file_path, kernel_ver, current_kernel_ver)
-    damo_ver = feature_supports['damo_version']
-    if damo_ver != damo_version.__version__:
-        return 'damo version is different from that created %s (%s != %s)' % (
-                feature_supports_file_path, damo_ver, damo_version.__version__)
-    return None
-
 def feature_supported(feature):
     sysinfo, err = _damo_sysinfo.get_sysinfo()
     if err is not None:
