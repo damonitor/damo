@@ -365,7 +365,7 @@ def set_sysinfo_from_scratch():
     system_info = sysinfo
     return None
 
-def set_sysinfo():
+def load_sysinfo():
     '''
     Set system_info global variable.
 
@@ -404,7 +404,7 @@ def rm_sysinfo_file():
 
 def get_sysinfo():
     if system_info is None:
-        err = set_sysinfo()
+        err = load_sysinfo()
         if err is not None:
             return None, err
     return system_info, None
