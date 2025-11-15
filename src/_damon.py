@@ -1418,12 +1418,6 @@ def feature_supported(feature):
     raise Exception(
             'BUG.  Please report on https://github.com/damonitor/damo/issues')
 
-def get_feature_supports():
-    err = _damon_fs.update_supported_features()
-    if err != None:
-        return None, err
-    return _damon_fs.feature_supports, None
-
 def set_damon_interface(damon_interface):
     global _damon_fs
     if damon_interface == 'sysfs':
