@@ -1512,25 +1512,7 @@ def initialize(damon_interface, debug_damon, is_stop):
     err = _damo_sysinfo.load_sysinfo()
     if err is not None:
         return err
-
-    # try reading previously saved feature_supports file, to avoid unnecessary
-    # feature check I/O
-    err = read_feature_supports_file()
-    if err is None:
-        return err
-
-    # stop would be called while DAMON is running.  It can success without
-    # knowing features.  Just proceed.
-    if is_stop:
-        return None
-
-    # While DAMON is running, feature checking I/O can fail, corrupt something,
-    # or make something complicated.
-    if any_kdamond_running():
-        return 'feature_supports loading failed (%s), and DAMON is running' \
-                % err
-
-    return write_feature_supports_file()
+    return None
 
 initialized = False
 def ensure_initialized(args, is_stop):
