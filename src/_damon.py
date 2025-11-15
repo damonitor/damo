@@ -1372,9 +1372,6 @@ def ensure_root_permission():
         print('Run as root')
         exit(1)
 
-feature_supports_file_path = os.path.join(os.environ['HOME'],
-        '.damo.damon_feature_supports')
-
 def feature_supported(feature):
     sysinfo, err = _damo_sysinfo.get_sysinfo()
     if err is not None:
