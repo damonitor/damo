@@ -9,16 +9,28 @@ import _test_damo_common
 _test_damo_common.add_damo_dir_to_syspath()
 
 import _damo_fs
+import _damo_sysinfo
 import _damon
 import _damon_dbgfs
 
 def set_damon_dbgfs_features():
-    _damon_dbgfs.feature_supports = {'init_regions': True, 'schemes': True,
-            'schemes_stat_qt_exceed': True, 'init_regions_target_idx': True,
-            'schemes_prioritization': True, 'schemes_tried_regions': False,
-            'record': False, 'schemes_quotas': True, 'fvaddr': False,
-            'paddr': True, 'schemes_wmarks': True, 'schemes_speed_limit': True,
-            'schemes_stat_succ': True, 'vaddr': True}
+    avail_features = []
+    for name, support in {
+            'init_regions': True, 'schemes': True, 'schemes_stat_qt_exceed':
+            True, 'init_regions_target_idx': True, 'schemes_prioritization':
+            True, 'schemes_tried_regions': False, 'record': False,
+            'schemes_quotas': True, 'fvaddr': False, 'paddr': True,
+            'schemes_wmarks': True, 'schemes_speed_limit': True,
+            'schemes_stat_succ': True, 'vaddr': True}.items():
+        if not support:
+            continue
+        for feature in _damo_sysinfo.damon_features:
+            if feature.name == name:
+                avail_features.append(feature)
+    _damo_sysinfo.system_info = _damo_sysinfo.SystemInfo(
+            damo_version=None, kernel_version=None,
+            avail_damon_sysfs_features=[],
+            avail_damon_debugfs_features=avail_features)
 
 class TestDamonDbgfs(unittest.TestCase):
     def test_nr_kdamonds(self):
