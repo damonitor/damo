@@ -1405,54 +1405,6 @@ def version_mismatch(feature_supports):
                 feature_supports_file_path, damo_ver, damo_version.__version__)
     return None
 
-def read_feature_supports_file():
-    '''Return error string'''
-    if not os.path.isfile(feature_supports_file_path):
-        return '%s not exist' % feature_supports_file_path
-    try:
-        with open(feature_supports_file_path, 'r') as f:
-            feature_supports = json.load(f)
-    except Exception as e:
-        return 'reading feature supports failed (%s)' % e
-
-    err = version_mismatch(feature_supports)
-    if err is not None:
-        return err
-
-    if not damon_interface() in feature_supports:
-        return 'no feature_supports for %s interface saved' % damon_interface()
-    return set_feature_supports(feature_supports[damon_interface()])
-
-def write_feature_supports_file():
-    '''Return error string'''
-    feature_supports, err = get_feature_supports()
-    if err != None:
-        return 'get_feature_supports() failed (%s)' % err
-
-    to_save = {}
-    # if feature supports file has the information for file system that
-    # different from the one current execution is using, keep it.
-    if os.path.isfile(feature_supports_file_path):
-        with open(feature_supports_file_path, 'r') as f:
-            try:
-                to_save = json.load(f)
-            except:
-                # Maybe previous writing was something wrong.  Just overwrite.
-                to_save = {}
-        # if it is written by old version of damo, discard previously written
-        # things.
-        if version_mismatch(to_save) is not None:
-            to_save = {}
-
-    to_save['file_format_ver'] = feature_support_file_format_ver
-    to_save['kernel_version'] = subprocess.check_output(
-            ['uname', '-r']).decode()
-    to_save['damo_version'] = damo_version.__version__
-    to_save[damon_interface()] = feature_supports
-
-    with open(feature_supports_file_path, 'w') as f:
-        json.dump(to_save, f, indent=4, sort_keys=True)
-
 def feature_supported(feature):
     sysinfo, err = _damo_sysinfo.get_sysinfo()
     if err is not None:
