@@ -616,7 +616,7 @@ def do_interactive_edit(args):
             continue
         break
     answer = input('Enter (1. Time, 2. Space, 3. Time and Space): ')
-    if anaswer == '1':
+    if answer == '1':
         target = edit_time
     if answer == '2':
         target = edit_space
