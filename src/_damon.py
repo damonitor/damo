@@ -1509,6 +1509,10 @@ def initialize(damon_interface, debug_damon, is_stop):
     if is_stop:
         return None
 
+    err = _damo_sysinfo.load_sysinfo()
+    if err is not None:
+        return err
+
     # try reading previously saved feature_supports file, to avoid unnecessary
     # feature check I/O
     err = read_feature_supports_file()
