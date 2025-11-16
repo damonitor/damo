@@ -339,5 +339,28 @@ class TestDamon(unittest.TestCase):
         self.assertEqual(age.usec, 12)
         self.assertEqual(age.aggr_intervals, 456)
 
+    def test_best_effort_target_arrange(self):
+        updated_targets = [
+                _damon.DamonTarget(pid=1),
+                _damon.DamonTarget(pid=2, obsolete=True),
+                _damon.DamonTarget(pid=3),
+                _damon.DamonTarget(pid=4, obsolete=True),
+                ]
+        new_targets = [
+                _damon.DamonTarget(pid=5),
+                _damon.DamonTarget(pid=6),
+                _damon.DamonTarget(pid=7),
+                ]
+        expect_targets = [
+                _damon.DamonTarget(pid=1),
+                _damon.DamonTarget(pid=5),
+                _damon.DamonTarget(pid=3),
+                _damon.DamonTarget(pid=6),
+                _damon.DamonTarget(pid=7),
+                ]
+        result_targets = _damon.best_effort_target_arrange(
+                updated_targets, new_targets)
+        self.assertEqual(result_targets, expect_targets)
+
 if __name__ == '__main__':
     unittest.main()
