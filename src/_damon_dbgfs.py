@@ -320,8 +320,6 @@ def nr_kdamonds():
 
 # features
 
-feature_supports = None
-
 def feature_supported(feature_name):
     sysinfo, err = _damo_sysinfo.get_sysinfo()
     if err is not None:
@@ -486,16 +484,3 @@ def mk_feature_supports_map():
             feature_supports['schemes_stat_qt_exceed'] = True
 
     return feature_supports, None
-
-def update_supported_features():
-    if not supported():
-        return 'damon debugfs not supported'
-
-    global feature_supports
-    if feature_supports != None:
-        return None
-    feature_supports_map, err = mk_feature_supports_map()
-    if err is not None:
-        return 'making feature supports map fail (%s)' % err
-    feature_supports = feature_supports_map
-    return None
