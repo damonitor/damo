@@ -397,7 +397,7 @@ class DamonTarget:
     regions = None
     context = None
 
-    def __init__(self, pid, regions, obsolete=False):
+    def __init__(self, pid, regions=[], obsolete=False):
         self.pid = pid
         self.regions = regions
         self.obsolete = _damo_fmt_str.text_to_bool(obsolete)
