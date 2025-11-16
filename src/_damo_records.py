@@ -1312,8 +1312,13 @@ def save_recording_outputs(handle, file_path):
         except:
             # perf might already finished
             pass
-        os.rename('%s.profile' % handle.file_path, '%s.profile' % file_path)
-        os.chmod('%s.profile' % file_path, handle.file_permission)
+        if not os.path.isfile('%s.profile' % handle.file_path):
+            # perf output might not generated due to absence of events.
+            pass
+        else:
+            os.rename('%s.profile' % handle.file_path, '%s.profile' %
+                      file_path)
+            os.chmod('%s.profile' % file_path, handle.file_permission)
 
     if handle.mem_footprint_snapshots is not None:
         save_mem_footprint(
