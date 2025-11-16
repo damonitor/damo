@@ -155,7 +155,16 @@ def main(args):
     signal.signal(signal.SIGTERM, sighandler)
 
     # Now the real works
-    if not _damon_args.is_ongoing_target(args):
+    if _damon_args.is_ongoing_target(args):
+        if not _damon.any_kdamond_running():
+            print('DAMON is not turned on')
+            exit(1)
+
+        # TODO: Support multiple kdamonds, multiple contexts
+        monitoring_intervals = data_for_cleanup.orig_kdamonds[
+                0].contexts[0].intervals
+        kdamonds = data_for_cleanup.orig_kdamonds
+    else:
         err, kdamonds = _damon_args.turn_damon_on(args)
         if err:
             print('could not turn DAMON on (%s)' % err)
@@ -166,15 +175,6 @@ def main(args):
         monitoring_intervals = kdamonds[0].contexts[0].intervals
         now_kdamonds = _damon.current_kdamonds()
         kdamonds[0].pid = now_kdamonds[0].pid
-    else:
-        if not _damon.any_kdamond_running():
-            print('DAMON is not turned on')
-            exit(1)
-
-        # TODO: Support multiple kdamonds, multiple contexts
-        monitoring_intervals = data_for_cleanup.orig_kdamonds[
-                0].contexts[0].intervals
-        kdamonds = data_for_cleanup.orig_kdamonds
 
     record_handle = mk_handle(args, kdamonds, monitoring_intervals)
 
