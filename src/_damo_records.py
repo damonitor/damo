@@ -1209,6 +1209,10 @@ def start_recording_perf(handle):
         cmd = [PERF, 'record', '-o', '%s.profile' % handle.file_path]
         handle.perf_profile_pipe = subprocess.Popen(cmd)
 
+def record_source_is_running(record_handle):
+    return poll_target_pids(record_handle.kdamonds) or \
+            _damon.any_kdamond_running()
+
 def start_recording(handle):
     start_recording_perf(handle)
 
@@ -1219,8 +1223,7 @@ def start_recording(handle):
         sleep_time = handle.snapshot_interval_sec
     else:
         sleep_time = 1
-    while (poll_target_pids(handle.kdamonds) or
-           _damon.any_kdamond_running()):
+    while record_source_is_running(handle):
         if handle.add_child_tasks is True:
             _damon.add_commit_vaddr_child_targets(handle.kdamonds)
 
