@@ -1582,7 +1582,34 @@ def pid_running(pid):
     except:
         return False
 
-def add_vaddr_child_targets_with_obsolete_support(ctx):
+def best_effort_target_arrange(updated_targets, new_targets):
+    '''
+    Targets arrangement for kernels not supporting obsolete_target feature.
+
+    On the kernel, users cannot specify whether a target is obsolete.  Remove
+    those.  Also, DAMON will inherit monitoring results of targets of same
+    index.  Try to keep existing targets have same index as a best effort.
+    '''
+    for idx, old_target in enumerate(updated_targets):
+        if old_target.obsolete and len(new_targets) > 0:
+            updated_targets[idx] = new_targets[0]
+            new_targets = new_targets[1:]
+            # todo: the new target will unnecessarily inherit old target's
+            # monitoring results.  Avoid it if possible.
+    if len(new_targets) > 0:
+        return updated_targets + new_targets
+    # todo: try to further keep the index
+    return [t for t in updated_targets if t.obsolete is False]
+
+def add_vaddr_child_targets(ctx):
+    '''
+    Returns whether a change is made, and old targets list if a change was made
+    '''
+    if not target_has_pid(ctx.ops):
+        return False, None
+    if target_regions_fixed(ctx.ops):
+        return False, None
+
     changes_made = False
     orig_targets = ctx.targets
     updated_targets = []
@@ -1596,62 +1623,12 @@ def add_vaddr_child_targets_with_obsolete_support(ctx):
             child_targets.append(DamonTarget(pid=child_pid, regions=[]))
             changes_made = True
     if changes_made:
-        ctx.targets = updated_targets + child_targets
+        if feature_supported('obsolete_target'):
+            ctx.targets = updated_targets + child_targets
+        else:
+            ctx.targets = best_effort_target_arrange(
+                    updated_targets, child_targets)
     return changes_made, orig_targets
-
-def add_vaddr_child_targets(ctx):
-    '''
-    Returns whether a change is made, and old targets list if a change was made
-    '''
-    if not target_has_pid(ctx.ops):
-        return False, None
-    if target_regions_fixed(ctx.ops):
-        return False, None
-    if feature_supported('obsolete_target'):
-        return add_vaddr_child_targets_with_obsolete_support(ctx)
-
-    old_targets = ctx.targets
-    current_target_pids = []
-    new_target_pids = []
-
-    for target in old_targets:
-        if target is None:
-            continue
-        current_target_pids.append('%s' % target.pid)
-
-    for target_pid in current_target_pids:
-        # If this is already in new_target_pids, we have already recursively
-        # searched for its children as well.
-        if target_pid in new_target_pids:
-            continue
-        # Don't consider already terminated targets since committing already
-        # terminated targets to DAMON fails
-        if not pid_running(target_pid):
-            continue
-
-        new_target_pids.append(target_pid)
-        childs_pids = get_childs_pids(target_pid)
-        if len(childs_pids) == 0:
-            continue
-
-        for child_pid in childs_pids:
-            # skip the child if already in the targets
-            if child_pid in new_target_pids:
-                continue
-            new_target_pids.append(child_pid)
-
-    if set(new_target_pids) == set(current_target_pids):
-        return False, None
-
-    # Set no target region because it will instruct DAMON to keep current
-    # monitoring results (regions with nr_accesses, age, etc) for the target if
-    # exists.
-    #
-    # TODO: adjust the orders of the new targets so that only appropriate past
-    # monitoring results are inherited.
-    ctx.targets = [DamonTarget(pid = p, regions=[])
-                                       for p in new_target_pids]
-    return True, old_targets
 
 def add_commit_vaddr_child_targets(kdamonds):
     need_commit = False
