@@ -440,12 +440,12 @@ def mk_feature_supports_map():
         if nr_fields == 0:
             need_schemes_file_test = True
         elif nr_fields == 20:   # v5.16
-            feature_supports['schemes_speed_limit'] = True
+            feature_supports['schemes_size_quota'] = True
             feature_supports['schemes_prioritization'] = True
             feature_supports['schemes_wmarks'] = True
             feature_supports['schemes_quotas'] = True
         elif nr_fields == 23:   # v5.17 or later
-            feature_supports['schemes_speed_limit'] = True
+            feature_supports['schemes_size_quota'] = True
             feature_supports['schemes_prioritization'] = True
             feature_supports['schemes_wmarks'] = True
             feature_supports['schemes_quotas'] = True
@@ -471,12 +471,12 @@ def mk_feature_supports_map():
     if need_schemes_file_test:
         # 'schemes' receives 18 numbers input and has three stats (v5.16)
         if test_debugfs_file_schemes(18):
-            feature_supports['schemes_speed_limit'] = True
+            feature_supports['schemes_size_quota'] = True
             feature_supports['schemes_prioritization'] = True
             feature_supports['schemes_wmarks'] = True
             feature_supports['schemes_quotas'] = True
         elif test_debugfs_file_schemes_stat_extended(18):
-            feature_supports['schemes_speed_limit'] = True
+            feature_supports['schemes_size_quota'] = True
             feature_supports['schemes_prioritization'] = True
             feature_supports['schemes_wmarks'] = True
             feature_supports['schemes_quotas'] = True

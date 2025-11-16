@@ -952,7 +952,7 @@ features_sysfs_support_from_begining = [
         'vaddr',
         'paddr',
         'init_regions_target_idx',
-        'schemes_speed_limit',
+        'schemes_size_quota',
         'schemes_quotas',
         'schemes_prioritization',
         'schemes_wmarks',
