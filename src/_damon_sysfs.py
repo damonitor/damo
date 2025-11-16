@@ -945,8 +945,6 @@ def commit_quota_goals(kdamond_idxs):
 
 # features
 
-feature_supports = None
-
 # sysfs was merged in v5.18-rc1
 features_sysfs_support_from_begining = [
         'schemes',
@@ -1155,17 +1153,3 @@ def mk_feature_supports_map():
     if err is not None:
         return None, 'restoring original kdamonds setup failed'
     return supports_map, None
-
-def update_supported_features():
-    if not supported():
-        return 'damon sysfs not supported'
-
-    global feature_supports
-    if feature_supports != None:
-        return None
-
-    feature_supports_map, err = mk_feature_supports_map()
-    if err is not None:
-        return err
-    feature_supports = feature_supports_map
-    return None
