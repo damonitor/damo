@@ -5,6 +5,8 @@ v3.0.5
 - Fix a bug in 'damo report heatmap --interactive_edit'.
 - Available damon feature check cleanups.
 - damo record: Support taking snapshots from DAMON_STAT.
+- Improve --include_child_tasks monitoring results inheritance on kernels not
+  supporting obsolete targets feature.
 
 v3.0.4
 - Fix debugfs interface support bug that was introduced by v3.0.3.
