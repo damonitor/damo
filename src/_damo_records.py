@@ -1210,6 +1210,8 @@ def start_recording_perf(handle):
         handle.perf_profile_pipe = subprocess.Popen(cmd)
 
 def record_source_is_running(record_handle):
+    if record_handle.snapshot_request is not None and damon_stat_avail():
+        return True
     return poll_target_pids(record_handle.kdamonds) or \
             _damon.any_kdamond_running()
 
