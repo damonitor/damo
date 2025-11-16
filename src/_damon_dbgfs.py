@@ -138,7 +138,7 @@ def write_schemes(dir_path, schemes, intervals):
     scheme_file_input_lines = []
     for scheme in schemes:
         scheme_file_input_lines.append(damos_to_debugfs_input(scheme,
-            intervals, feature_supported('schemes_quotas')))
+            intervals, feature_supported('schemes_time_quota')))
     scheme_file_input = '\n'.join(scheme_file_input_lines)
     if scheme_file_input == '':
         scheme_file_input = '\n'
@@ -443,12 +443,12 @@ def mk_feature_supports_map():
             feature_supports['schemes_size_quota'] = True
             feature_supports['schemes_prioritization'] = True
             feature_supports['schemes_wmarks'] = True
-            feature_supports['schemes_quotas'] = True
+            feature_supports['schemes_time_quota'] = True
         elif nr_fields == 23:   # v5.17 or later
             feature_supports['schemes_size_quota'] = True
             feature_supports['schemes_prioritization'] = True
             feature_supports['schemes_wmarks'] = True
-            feature_supports['schemes_quotas'] = True
+            feature_supports['schemes_time_quota'] = True
             feature_supports['schemes_stat_succ'] = True
             feature_supports['schemes_stat_qt_exceed'] = True
 
@@ -474,12 +474,12 @@ def mk_feature_supports_map():
             feature_supports['schemes_size_quota'] = True
             feature_supports['schemes_prioritization'] = True
             feature_supports['schemes_wmarks'] = True
-            feature_supports['schemes_quotas'] = True
+            feature_supports['schemes_time_quota'] = True
         elif test_debugfs_file_schemes_stat_extended(18):
             feature_supports['schemes_size_quota'] = True
             feature_supports['schemes_prioritization'] = True
             feature_supports['schemes_wmarks'] = True
-            feature_supports['schemes_quotas'] = True
+            feature_supports['schemes_time_quota'] = True
             feature_supports['schemes_stat_succ'] = True
             feature_supports['schemes_stat_qt_exceed'] = True
 

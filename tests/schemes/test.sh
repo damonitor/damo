@@ -67,7 +67,7 @@ test_stat() {
 	if ! sudo "$damo" features supported \
 		--damon_interface_DEPRECATED "$damon_interface" \
 		2> /dev/null | \
-		grep -w schemes_quotas > /dev/null
+		grep -w schemes_time_quota > /dev/null
 	then
 		echo "SKIP $testname (unsupported)"
 		return

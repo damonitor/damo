@@ -19,7 +19,7 @@ def set_damon_sysfs_features():
             'init_regions': True, 'schemes': True, 'schemes_stat_qt_exceed':
             True, 'init_regions_target_idx': True, 'schemes_prioritization':
             True, 'schemes_tried_regions': False, 'record': False,
-            'schemes_quotas': True, 'fvaddr': False, 'paddr': True,
+            'schemes_time_quota': True, 'fvaddr': False, 'paddr': True,
             'schemes_wmarks': True, 'schemes_size_quota': True,
             'schemes_stat_succ': True, 'vaddr': True}.items():
         if not support:
