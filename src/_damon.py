@@ -1654,16 +1654,24 @@ def add_vaddr_child_targets(ctx):
     return True, old_targets
 
 def add_commit_vaddr_child_targets(kdamonds):
-    if len(kdamonds) == 0:
-        return
-    # TODO: Support multiple kdamonds
-    ctx = kdamonds[0].contexts[0]
-    need_commit, old_targets = add_vaddr_child_targets(ctx)
+    need_commit = False
+    old_targets_list = []
+    for kd in kdamonds:
+        for ctx in kd.contexts:
+            ctx = kdamonds[0].contexts[0]
+            need_commit_, old_targets = add_vaddr_child_targets(ctx)
+            if need_commit_ is True:
+                need_commit = True
+            old_targets_list.append(old_targets)
     if not need_commit:
         return
     err = commit(kdamonds, commit_targets_only=True)
     if err is not None:
-        ctx.targets = old_targets
+        idx = 0
+        for kd in kdamonds:
+            for ctx in kd.contexts:
+                ctx.targets = old_targets[idx]
+                idx += 1
         return 'commit failed (%s)' % err
 
     return None
