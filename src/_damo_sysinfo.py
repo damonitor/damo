@@ -122,6 +122,10 @@ class SystemInfo:
                 other.avail_damon_trace_features and \
                 self.tested_features == other.tested_features
 
+    def trace_feature_available(self, feature_name):
+        return len([f for f in self.avail_damon_trace_features
+                    if f.name == feature_name]) == 1
+
 damon_features = [
         DamonFeature(
             name='record', upstream_status='withdrawn',
