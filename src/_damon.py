@@ -1400,38 +1400,34 @@ def set_damon_interface(damon_interface):
         return 'DAMON interface (%s) not supported' % damon_interface
     return None
 
-def initialize(damon_interface, debug_damon, is_stop):
+def initialize(damon_interface, debug_damon, load_sysinfo):
     err = set_damon_interface(damon_interface)
     if err is not None:
         return err
-
     if debug_damon:
         _damo_fs.debug_print_ops(True)
-
-    if is_stop:
-        return None
-
-    err = _damo_sysinfo.load_sysinfo()
-    if err is not None:
-        return err
+    if load_sysinfo:
+        err = _damo_sysinfo.load_sysinfo()
+        if err is not None:
+            return err
     return None
 
 initialized = False
-def ensure_initialized(args, is_stop):
+def ensure_initialized(args, load_sysinfo):
     global initialized
 
     if initialized:
         return
-    err = initialize(args.damon_interface_DEPRECATED, args.debug_damon,
-                     is_stop)
+    err = initialize(
+            args.damon_interface_DEPRECATED, args.debug_damon, load_sysinfo)
     if err != None:
         print(err)
         exit(1)
     initialized = True
 
-def ensure_root_and_initialized(args, is_stop=False):
+def ensure_root_and_initialized(args, load_sysinfo=True):
     ensure_root_permission()
-    ensure_initialized(args, is_stop)
+    ensure_initialized(args, load_sysinfo)
 
 # DAMON control
 
