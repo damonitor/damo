@@ -1433,13 +1433,6 @@ def ensure_root_and_initialized(args, is_stop=False):
     ensure_root_permission()
     ensure_initialized(args, is_stop)
 
-def damon_interface():
-    if _damon_fs == _damon_sysfs:
-        return 'sysfs'
-    elif _damon_fs == _damon_dbgfs:
-        return 'debugfs'
-    raise Exception('_damo_fs is neither _damon_sysfs nor _damon_dbgfs')
-
 # DAMON control
 
 def stage_kdamonds(kdamonds):
