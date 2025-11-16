@@ -1185,7 +1185,8 @@ class RecordingHandle:
         return True
 
 def tracepoint_supported(tracepoint):
-    output = subprocess.check_output([PERF, 'list']).decode().strip()
+    output = subprocess.check_output(
+            [PERF, 'list', 'tracepoint']).decode().strip()
     for line in output.split('\n'):
         fields = line.split()
         if len(fields) < 3:
