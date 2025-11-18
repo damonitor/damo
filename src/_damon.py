@@ -1257,7 +1257,7 @@ class DamonCtx:
                 DamonIntervals.from_kvpairs(kv['intervals'])
                     if 'intervals' in kv else DamonIntervals(),
                 DamonNrRegionsRange.from_kvpairs(kv['nr_regions'])
-                    if 'nr_regions' in kv else DAmonNrRegionsRange(),
+                    if 'nr_regions' in kv else DamonNrRegionsRange(),
                 [Damos.from_kvpairs(s) for s in kv['schemes']]
                     if 'schemes' in kv else [])
         return ctx
