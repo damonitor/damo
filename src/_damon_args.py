@@ -855,12 +855,49 @@ def stage_kdamonds(args):
         return None, 'cannot apply kdamonds from args (%s)' % err
     return kdamonds, None
 
+def damos_filter_invalidity(filter):
+    # todo: support non-memcg filters
+    if filter.filter_type != 'memcg':
+        return None
+    memcg_path = filter.memcg_path
+    if not memcg_path.startswith('/'):
+        return 'path should start with "/"'
+    cgroup_mount_path = None
+    with open('/proc/mounts', 'r') as f:
+        for line in f:
+            fields = line.split()
+            if not fields[2] in ['cgroup', 'cgroup2']:
+                continue
+            cgroup_mount_path = fields[1]
+            break
+    if cgroup_mount_path is None:
+        return 'cgroup is not mounted'
+    memcg_realpath = os.path.join(cgroup_mount_path, memcg_path[1:])
+    if not os.path.isdir(memcg_realpath):
+        return '%s not found' % memcg_realpath
+    return None
+
+def infer_start_or_commit_fail_reason(kdamonds):
+    for kidx, kd in enumerate(kdamonds):
+        for cidx, ctx in enumerate(kd.contexts):
+            for sidx, scheme in enumerate(ctx.schemes):
+                for fidx, filter in enumerate(scheme.filters):
+                    reason = damos_filter_invalidity(filter)
+                    if reason is not None:
+                        return ''.join([
+                            'wrong %d/%d/%d/%d-th ' % (kidx, cidx, sidx, fidx),
+                            'kdamond/context/scheme/filter (%s)' % reason])
+    return None
+
 def commit_kdamonds(args, commit_quota_goals_only):
     kdamonds, err = kdamonds_for(args)
     if err:
         return None, 'cannot create kdamonds to commit from args (%s)' % err
     err = _damon.commit(kdamonds, commit_quota_goals_only)
     if err:
+        inferred_reason = infer_start_or_commit_fail_reason(kdamonds)
+        if inferred_reason is not None:
+            err = '%s (%s)' % (err, inferred_reason)
         return None, 'cannot commit kdamonds (%s)' % err
     return kdamonds, None
 
@@ -868,8 +905,14 @@ def turn_damon_on(args):
     kdamonds, err = stage_kdamonds(args)
     if err:
         return err, None
-    return _damon.turn_damon_on(
-            ['%s' % kidx for kidx, k in enumerate(kdamonds)]), kdamonds
+    err = _damon.turn_damon_on(
+            ['%s' % kidx for kidx, k in enumerate(kdamonds)])
+    if err is not None:
+        inferred_reason = infer_start_or_commit_fail_reason(kdamonds)
+        if inferred_reason is not None:
+            err = '%s (%s)' % (err, inferred_reason)
+        return err, None
+    return None, kdamonds
 
 # Commandline options setup helpers
 
