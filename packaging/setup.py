@@ -11,7 +11,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="damo",
-    version=damo_version.__version__,
+    version=damo_version.get_release_version(),
     author="SeongJae Park",
     author_email="sj@kernel.org",
     description="DAMON user-space tool",
