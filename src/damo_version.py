@@ -21,7 +21,6 @@ def get_real_version():
             ['git', '-C', damo_dir, 'describe']).decode().strip()
 
 def main(args):
-    # todo: print 'git describe' if git repo version is being used.
     print(get_release_version())
 
 def set_argparser(parser):
