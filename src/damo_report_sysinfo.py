@@ -38,5 +38,5 @@ def set_argparser(parser):
             '--print', nargs='+',
             choices=['versions', 'sysfs_features', 'debugfs_features',
                      'trace_features', 'all'],
-            default=['all'], help='info to print')
+            default=['versions'], help='info to print')
     return parser
