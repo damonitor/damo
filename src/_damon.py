@@ -13,7 +13,6 @@ import subprocess
 import time
 
 import _damo_fmt_str
-import damo_version
 
 # Core data structures
 
@@ -1363,7 +1362,6 @@ import _damo_fs
 import _damo_sysinfo
 import _damon_dbgfs
 import _damon_sysfs
-import damo_version
 
 _damon_fs = None
 
