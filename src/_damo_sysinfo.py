@@ -291,7 +291,7 @@ def set_sysinfo_from_cache():
     sysinfo, err = read_sysinfo()
     if err is not None:
         return 'reading saved sysinfo fail (%s)' % err
-    damo_version_ = damo_version.get_release_version()
+    damo_version_ = damo_version.get_real_version()
     kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
     if not valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
         return 'cached sysinfo cannot be used'
@@ -345,7 +345,7 @@ def get_avail_damon_trace_features():
     return features, err
 
 def set_sysinfo_from_scratch():
-    damo_version_ = damo_version.get_release_version()
+    damo_version_ = damo_version.get_real_version()
     kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
     avail_damon_sysfs_features, err = avail_features_on(_damon_sysfs)
     if err is not None:
