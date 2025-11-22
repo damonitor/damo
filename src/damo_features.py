@@ -8,21 +8,10 @@ import _damon_args
 import _damon_sysfs
 
 def pr_infer_version(sysinfo):
-    if _damon._damon_fs is not _damon_sysfs:
-        print('Version inference is unavailable')
-        exit(1)
-    avail_features = {f.name for f in sysinfo.avail_damon_sysfs_features}
-    append_plus = False
-    for feature in reversed(_damo_sysinfo.damon_features):
-        if feature.name in avail_features:
-            if feature.upstreamed_version in ['none', 'unknown']:
-                append_plus = True
-            else:
-                version = feature.upstreamed_version
-                if append_plus:
-                    version = '%s+' % version
-                print('Seems the version of DAMON is %s' % version)
-                return
+    version, err = sysinfo.infer_damon_version()
+    if err is not None:
+        print('Version inference fail (%s)' % err)
+    print('Seems the version of DAMON is %s' % version)
 
 def main(args):
     if args.invalidate_cache:
