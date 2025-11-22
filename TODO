@@ -45,7 +45,6 @@
     'damo report access'.
   - Use estimated memory bandwidth from DAMON_STAT.
 - damo start,tune: inform unsupported features.
-- Add git commit info to 'damo version'.
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)

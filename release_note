@@ -4,6 +4,7 @@ picked by human sense, so could be incomplete and missing many things.
 v3.0.6
 - damo report damon: Support yaml format with --format option.
 - Provide wrong memcg DAMOS filter error detail.
+- sysinfo: use git-based damo version if available.
 
 v3.0.5
 - Fix a bug in 'damo report heatmap --interactive_edit'.
