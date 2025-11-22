@@ -16,6 +16,9 @@ def main(args):
         exit(1)
     print('damo version: %s' % sysinfo.damo_version)
     print('kernel version: %s' % sysinfo.kernel_version)
+    version, err = sysinfo.infer_damon_version()
+    if err is None:
+        print('DAMON version: %s' % version)
     print('Sysfs avail DAMON features')
     for feature in sysinfo.avail_damon_sysfs_features:
         pr_feature(feature)
