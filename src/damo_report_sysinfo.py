@@ -14,20 +14,29 @@ def main(args):
     if err is not None:
         print('getting sysinfo fail (%s)' % err)
         exit(1)
-    print('damo version: %s' % sysinfo.damo_version)
-    print('kernel version: %s' % sysinfo.kernel_version)
-    version, err = sysinfo.infer_damon_version()
-    if err is None:
-        print('DAMON version: %s' % version)
-    print('Sysfs avail DAMON features')
-    for feature in sysinfo.avail_damon_sysfs_features:
-        pr_feature(feature)
-    print('Debugfs avail DAMON features')
-    for feature in sysinfo.avail_damon_debugfs_features:
-        pr_feature(feature)
-    print('DAMON trace features')
-    for feature in sysinfo.avail_damon_trace_features:
-        pr_feature(feature)
+    if 'versions' in args.print or 'all' in args.print:
+        print('damo version: %s' % sysinfo.damo_version)
+        print('kernel version: %s' % sysinfo.kernel_version)
+        version, err = sysinfo.infer_damon_version()
+        if err is None:
+            print('DAMON version: %s' % version)
+    if 'sysfs_features' in args.print or 'all' in args.print:
+        print('Sysfs avail DAMON features')
+        for feature in sysinfo.avail_damon_sysfs_features:
+            pr_feature(feature)
+    if 'debugfs_features' in args.print or 'all' in args.print:
+        print('Debugfs avail DAMON features')
+        for feature in sysinfo.avail_damon_debugfs_features:
+            pr_feature(feature)
+    if 'trace_features' in args.print or 'all' in args.print:
+        print('DAMON trace features')
+        for feature in sysinfo.avail_damon_trace_features:
+            pr_feature(feature)
 
 def set_argparser(parser):
+    parser.add_argument(
+            '--print', nargs='+',
+            choices=['versions', 'sysfs_features', 'debugfs_features',
+                     'trace_features', 'all'],
+            default=['all'], help='info to print')
     return parser
