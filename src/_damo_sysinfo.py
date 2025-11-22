@@ -126,6 +126,23 @@ class SystemInfo:
         return len([f for f in self.avail_damon_trace_features
                     if f.name == feature_name]) == 1
 
+    def infer_damon_version(self):
+        '''Return version string and error'''
+        if len(self.avail_damon_sysfs_features) == 0:
+            return None, 'no sysfs features'
+        avail_features = {f.name for f in self.avail_damon_sysfs_features}
+        append_plus = False
+        for feature in reversed(damon_features):
+            if feature.name in avail_features:
+                if feature.upstreamed_version in ['none', 'unknown']:
+                    append_plus = True
+                else:
+                    version = feature.upstreamed_version
+                    if append_plus:
+                        version = '%s+' % version
+                    return version, None
+        return None, 'only non-upstreamed features'
+
 damon_features = [
         DamonFeature(
             name='record', upstream_status='withdrawn',
