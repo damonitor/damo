@@ -7,7 +7,7 @@ def get_release_version():
 
 def main(args):
     # todo: print 'git describe' if git repo version is being used.
-    print(__version__)
+    print(get_release_version())
 
 def set_argparser(parser):
     return parser
