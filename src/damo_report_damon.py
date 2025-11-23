@@ -4,6 +4,7 @@
 Show status of DAMON.
 """
 
+import argparse
 import collections
 import json
 import random
@@ -187,7 +188,9 @@ def set_argparser(parser):
             '--format', choices=['json', 'yaml', 'report'],
             help='format of the output')
     parser.add_argument('--json', action='store_true', default=False,
-            help='print output in json format')
+                        # suppress help message in favor of --format.
+                        # help='print output in json format')
+                        help=argparse.SUPPRESS)
     parser.add_argument('--raw', action='store_true', default=False,
             help='print raw numbers')
     parser.add_argument('--show_cpu_usage', action='store_true', default=False,
