@@ -952,9 +952,11 @@ class DamosStats:
     sz_ops_filter_passed = None
     qt_exceeds = None
     nr_snapshots = None
+    max_nr_snapshots = None
 
     def __init__(self, nr_tried=0, sz_tried=0, nr_applied=0, sz_applied=0,
-                 sz_ops_filter_passed=0, qt_exceeds=0, nr_snapshots=0):
+                 sz_ops_filter_passed=0, qt_exceeds=0, nr_snapshots=0,
+                 max_nr_snapshots=0):
         self.nr_tried = _damo_fmt_str.text_to_nr(nr_tried)
         self.sz_tried = _damo_fmt_str.text_to_bytes(sz_tried)
         self.nr_applied = _damo_fmt_str.text_to_nr(nr_applied)
@@ -963,6 +965,7 @@ class DamosStats:
                 sz_ops_filter_passed)
         self.qt_exceeds = _damo_fmt_str.text_to_nr(qt_exceeds)
         self.nr_snapshots = _damo_fmt_str.text_to_nr(nr_snapshots)
+        self.max_nr_snapshots = _damo_fmt_str.text_to_nr(max_nr_snapshots)
 
     def to_str(self, raw):
         return '\n'.join([
@@ -977,8 +980,9 @@ class DamosStats:
             'quota exceeded %s times' %
             _damo_fmt_str.format_nr(self.qt_exceeds, raw),
             _damo_fmt_str.format_sz(self.sz_ops_filter_passed, raw),
-            'tried %s snapshots' %
-            _damo_fmt_str.format_nr(self.nr_snapshots, raw),
+            'tried %s snapshots (max %s)' %
+            (_damo_fmt_str.format_nr(self.nr_snapshots, raw),
+             _damo_fmt_str.format_nr(self.max_nr_snapshots, raw)),
             ])
 
     def __str__(self):
@@ -994,6 +998,8 @@ class DamosStats:
                 self.sz_ops_filter_passed, raw)
         kv['qt_exceeds'] = _damo_fmt_str.format_nr(self.qt_exceeds, raw)
         kv['nr_snapshots'] = _damo_fmt_str.format_nr(self.nr_snapshots, raw)
+        kv['max_nr_snapshots'] = _damo_fmt_str.format_nr(
+                self.max_nr_snapshots, raw)
         return kv
 
     @classmethod
@@ -1002,10 +1008,15 @@ class DamosStats:
             nr_snapshots = kv['nr_snapshots']
         else:
             nr_snapshots = 0
+        if 'max_nr_snapshots' in kv:
+            max_nr_snapshots = kv['max_nr_snapshots']
+        else:
+            max_nr_snapshots = 0
         return cls(kv['nr_tried'], kv['sz_tried'],
                    kv['nr_applied'], kv['sz_applied'],
                    kv['sz_ops_filter_passed'], kv['qt_exceeds'],
-                   nr_snapshots=nr_snapshots)
+                   nr_snapshots=nr_snapshots,
+                   max_nr_snapshots=max_nr_snapshots)
 
 # TODO: check support of pageout and lru_(de)prio
 damos_actions = [
