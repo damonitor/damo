@@ -5,6 +5,8 @@ v3.0.6
 - damo report damon: Support yaml format with --format option.
 - Provide wrong memcg DAMOS filter error detail.
 - sysinfo: use git-based damo version if available.
+- Support nr_stats and max_nr_stats
+  (https://lore.kernel.org/20251123184329.85287-1-sj@kernel.org).
 
 v3.0.5
 - Fix a bug in 'damo report heatmap --interactive_edit'.
