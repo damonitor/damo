@@ -314,8 +314,10 @@ def damos_options_to_quotas(quotas, goals):
         return None, 'Wrong --damos_quotas (%s, %s)' % (qargs, e)
     return quotas, None
 
-def damos_options_to_scheme(sz_region, access_rate, age, action,
-        apply_interval, quotas, goals, wmarks, target_nid, filters, dests):
+def damos_options_to_scheme(
+        sz_region, access_rate, age, action,
+        apply_interval, quotas, goals, wmarks, target_nid, filters, dests,
+        max_nr_snapshots):
     if quotas != None:
         quotas, err = damos_options_to_quotas(quotas, goals)
         if err is not None:
@@ -333,13 +335,18 @@ def damos_options_to_scheme(sz_region, access_rate, age, action,
     if err != None:
         return None, err
 
+    if max_nr_snapshots is None:
+        stats = _damon.DamosStats()
+    else:
+        stats = _damon.DamosStats(max_nr_snapshots=max_nr_snapshots)
+
     try:
         return _damon.Damos(
                 access_pattern=_damon.DamosAccessPattern(sz_region,
                     access_rate, _damon.unit_percent, age, _damon.unit_usec),
                 action=action, target_nid=target_nid,
                 dests=dests, apply_interval_us=apply_interval, quotas=quotas,
-                watermarks=wmarks, filters=filters), None
+                watermarks=wmarks, filters=filters, stats=stats), None
     except Exception as e:
         return None, 'Wrong \'--damos_*\' argument (%s)' % e
 
@@ -399,6 +406,9 @@ def verify_set_damos_args_len(args):
         args.damos_nr_filters = [len(args.damos_filter)]
     if sum(args.damos_nr_filters) != len(args.damos_filter):
         return 'wrong --damos_nr_filters'
+
+    if len(args.damos_max_nr_snapshots) > nr_schemes:
+        return 'too much --damos_max_nr_snapshots'
     return None
 
 def fillup_default_damos_args(args):
@@ -413,6 +423,8 @@ def fillup_default_damos_args(args):
             nr_schemes - len(args.damos_apply_interval))
     args.damos_quotas += [None] * (nr_schemes - len(args.damos_quotas))
     args.damos_wmarks += [None] * (nr_schemes - len(args.damos_wmarks))
+    args.damos_max_nr_snapshots += [None] * (
+            nr_schemes - len(args.damos_max_nr_snapshots))
 
 def damos_options_to_schemes(args):
     set_args_damos_quotas(args)
@@ -462,7 +474,7 @@ def damos_options_to_schemes(args):
                 args.damos_access_rate[i], args.damos_age[i],
                 args.damos_action[i], args.damos_apply_interval[i],
                 args.damos_quotas[i], qgoals, args.damos_wmarks[i],
-                target_nid, filters, dests)
+                target_nid, filters, dests, args.damos_max_nr_snapshots[i])
         if err != None:
             return [], err
         schemes.append(scheme)
@@ -1101,6 +1113,9 @@ def set_damos_argparser(parser, hide_help):
                 '<low mark (permil)>'),
             help='damos watermarks'
             if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--damos_max_nr_snapshots', action='append', default=[],
+            help='damos max_nr_snapshots')
     parser.add_argument('--nr_schemes', metavar='<number>', nargs='+', type=int,
                         help='number of schemes for each context (in order)'
                         if not hide_help else argparse.SUPPRESS)
