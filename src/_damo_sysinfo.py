@@ -364,6 +364,8 @@ def get_avail_damon_trace_features():
             'damon:damon_monitor_intervals_tune':
             'trace_damon_monitor_intervals_tune',
             'damon:damos_esz': 'trace_damos_esz',
+            'damon:damos_stat_after_apply_interval':
+            'trace/damos_stat_after_apply_interval',
             }
     for tracepoint, feature_name in tracepoint_to_feature_name_map.items():
         if tracepoint in tracepoints:
