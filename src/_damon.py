@@ -974,7 +974,8 @@ class DamosStats:
                 _damo_fmt_str.format_sz(self.sz_applied, raw)),
             '%s passed filters' %
             _damo_fmt_str.format_sz(self.sz_ops_filter_passed, raw),
-            'quota exceeded %d times' % self.qt_exceeds,
+            'quota exceeded %s times' %
+            _damo_fmt_str.format_nr(self.qt_exceeds, raw),
             _damo_fmt_str.format_sz(self.sz_ops_filter_passed, raw),
             'tried %s snapshots' %
             _damo_fmt_str.format_nr(self.nr_snapshots, raw),
