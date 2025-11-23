@@ -45,6 +45,7 @@
     'damo report access'.
   - Use estimated memory bandwidth from DAMON_STAT.
 - damo start,tune: inform unsupported features.
+- Make --perf_path of 'damo record' aligned with _damo_sysinfo.
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
