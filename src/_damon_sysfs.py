@@ -1142,6 +1142,16 @@ def mk_feature_supports_map():
     if os.path.isfile(os.path.join(target_dir_of(0, 0, 0), 'obsolete_target')):
         supports_map['obsolete_target'] = True
 
+    if os.path.isfile(
+            os.path.join(scheme_dir_of(0, 0, 0),
+                         'stats', 'nr_snapshots')):
+        supports_map['damos/stat/nr_snapshots'] = True
+
+    if os.path.isfile(
+            os.path.join(scheme_dir_of(0, 0, 0),
+                         'stats', 'max_nr_snapshots')):
+        supports_map['damos/max_nr_snapshots'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['ops_attrs'] = True
 
