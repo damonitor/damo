@@ -438,6 +438,17 @@ def write_scheme_dir(dir_path, scheme):
     else:
         if scheme.apply_interval_us:
             return 'the kernel is not supporting schemes apply interval'
+
+    max_nr_snapshots_file = os.path.join(dir_path, 'stats', 'max_nr_snapshots')
+    if os.path.isfile(max_nr_snapshots_file):
+        err = _damo_fs.write_file(max_nr_snapshots_file,
+                                  '%d' % scheme.stats.max_nr_snapshots)
+        if err is not None:
+            return err
+    else:
+        if scheme.stats.max_nr_snapshots:
+            return 'the kernel is not supporting max_nr_snapshots'
+
     return None
 
 def write_schemes_dir(dir_path, schemes):
