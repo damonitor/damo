@@ -3,12 +3,20 @@
 import os
 import subprocess
 
-import _damo_subproc
-
 __version__ = '3.0.5'
 
 def get_release_version():
     return __version__
+
+# Because this module is used from packaging/setup.py, _damo_*.py modules on
+# src/ directory cannot be imported.  Otherwise, packaging/build.sh fails.
+# Implement avail_cmd() here.
+def avail_cmd(cmd):
+    try:
+        subprocess.check_output(['which', cmd], stderr=subprocess.DEVNULL)
+        return True
+    except:
+        return False
 
 def get_real_version():
     src_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,7 +24,7 @@ def get_real_version():
     git_dir = os.path.join(damo_dir, '.git')
     if not os.path.isdir(git_dir):
         return get_release_version()
-    if not _damo_subproc.avail_cmd('git'):
+    if not avail_cmd('git'):
         return get_release_version()
     return subprocess.check_output(
             ['git', '--git-dir', git_dir, 'describe']).decode().strip()
