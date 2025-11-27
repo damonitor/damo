@@ -46,6 +46,10 @@
   - Use estimated memory bandwidth from DAMON_STAT.
 - damo start,tune: inform unsupported features.
 - Make --perf_path of 'damo record' aligned with _damo_sysinfo.
+- Use max_nr_snapshot for snapshot DAMOS uninstall
+- Support DAMON tracepoints other than those for regions in easy way.
+  - adding --repeat and --use_tracepoint to 'damo report damon'?
+  - adding 'damo trace'?
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
