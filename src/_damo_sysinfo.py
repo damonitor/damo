@@ -54,6 +54,8 @@ class DamonFeature:
 class SystemInfo:
     damo_version = None
     kernel_version = None
+    perf_path = None
+    perf_version = None
 
     # list of DamonFeature objects that can be used using sysfs and debugfs
     # interfaces.
@@ -67,9 +69,12 @@ class SystemInfo:
 
     def __init__(self, damo_version, kernel_version,
                  avail_damon_sysfs_features, avail_damon_debugfs_features,
-                 avail_damon_trace_features=[], tested_features=[]):
+                 avail_damon_trace_features=[], tested_features=[],
+                 perf_path=None, perf_version=None):
         self.damo_version = damo_version
         self.kernel_version = kernel_version
+        self.perf_path = perf_path
+        self.perf_version = perf_version
         self.avail_damon_sysfs_features = avail_damon_sysfs_features
         self.avail_damon_debugfs_features = avail_damon_debugfs_features
         self.avail_damon_trace_features = avail_damon_trace_features
