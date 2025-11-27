@@ -144,8 +144,12 @@ class SystemInfo:
 
     def infer_damon_version(self):
         '''Return version string and error'''
+        if len(self.avail_damon_sysfs_features) == 0 and \
+                len(self.avail_damon_debugfs_features) == 0 and \
+                len(self.avail_damon_trace_features) == 0:
+                    return '<5.15', None
         if len(self.avail_damon_sysfs_features) == 0:
-            return None, 'no sysfs features'
+            return '>=5.15', None
         avail_features = {f.name for f in self.avail_damon_sysfs_features}
         append_plus = False
         for feature in reversed(damon_features):
