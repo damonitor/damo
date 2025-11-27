@@ -84,6 +84,8 @@ class SystemInfo:
         return collections.OrderedDict([
             ('damo_version', self.damo_version),
             ('kernel_version', self.kernel_version),
+            ('perf_path', self.perf_path),
+            ('perf_version', self.perf_version),
             ('avail_damon_sysfs_features',
              [f.to_kvpairs(raw) for f in self.avail_damon_sysfs_features]),
             ('avail_damon_debugfs_features',
@@ -96,12 +98,19 @@ class SystemInfo:
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
+        perf_path = None
+        if 'perf_path' in kvpairs:
+            perf_path = kvpairs['perf_path']
+        perf_version = None
+        if 'perf_version' in kvpairs:
+            perf_version = kvpairs['perf_version']
         damon_trace_features = []
         if 'avail_damon_trace_features' in kvpairs:
             damon_trace_features = kvpairs['avail_damon_trace_features']
         return cls(
                 damo_version=kvpairs['damo_version'],
                 kernel_version=kvpairs['kernel_version'],
+                perf_path=perf_path, perf_version=perf_version,
                 avail_damon_sysfs_features=[
                     DamonFeature.from_kvpairs(kvp) for kvp in
                     kvpairs['avail_damon_sysfs_features']],
@@ -119,6 +128,8 @@ class SystemInfo:
     def __eq__(self, other):
         return self.damo_version == other.damo_version and \
                 self.kernel_version == other.kernel_version and \
+                self.perf_path == other.perf_path and \
+                self.perf_version == other.perf_version and \
                 self.avail_damon_sysfs_features == \
                 other.avail_damon_sysfs_features and \
                 self.avail_damon_debugfs_features == \
