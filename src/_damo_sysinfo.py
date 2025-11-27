@@ -391,6 +391,16 @@ def get_avail_damon_trace_features():
 def set_sysinfo_from_scratch():
     damo_version_ = damo_version.get_real_version()
     kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
+    try:
+        perf_path = subprocess.check_output(['which', 'perf']).decode().strip()
+    except:
+        perf_path = None
+    if perf_path is not None:
+        perf_version = subprocess.check_output(
+                ['perf', '--version']).decode().strip()
+    else:
+        perf_version = None
+
     avail_damon_sysfs_features, err = avail_features_on(_damon_sysfs)
     if err is not None:
         return 'sysfs feature check fail (%s)' % err
@@ -405,6 +415,7 @@ def set_sysinfo_from_scratch():
     sysinfo = SystemInfo(
             damo_version=damo_version_,
             kernel_version=kernel_version,
+            perf_path=perf_path, perf_version=perf_version,
             avail_damon_sysfs_features=avail_damon_sysfs_features,
             avail_damon_debugfs_features=avail_damon_debugfs_features,
             avail_damon_trace_features=avail_damon_trace_features,
