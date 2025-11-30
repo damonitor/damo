@@ -940,6 +940,31 @@ def files_content_to_target(files_content):
     regions = files_content_to_regions(files_content['regions'])
     return _damon.DamonTarget(pid, regions, obsolete=obsolete)
 
+def files_content_to_sample_filter(files_content):
+    filter_type = files_content['type'].strip()
+    matching = files_content['matching'].strip()
+    allow = files_content['matching'].strip()
+    cpumask = files_content['cpumask'].strip()
+    tid_arr = files_content['tid_arr'].strip()
+    return _damon.DamonSampleFilter(
+            filter_type=filter_type, matching=matching, allow=allow,
+            cpumask=cpumask, tid_arr=tid_arr)
+
+def files_content_to_sample_filters(files_content):
+    return [files_content_to_sample_filter(filter_kv)
+                for filter_kv in numbered_dirs_content(
+                    files_content, 'nr_filters')]
+
+def files_content_to_sample_control(files_content):
+    page_table = files_content['primitives']['page_table'].strip()
+    page_fault = files_content['primitives']['page_fault'].strip()
+    primitives_enabled = _damon.DamonPrimitivesEnabled(
+            page_table=page_table, page_fault=page_fault)
+    sample_filters = files_content_to_sample_filters(files_content['filters'])
+    return _damon.DamonSampleControl(
+            primitives_enabled=primitives_enabled,
+            sample_filters=sample_filters)
+
 def files_content_to_ops_attrs(files_content):
     use_reports = files_content['use_reports'].strip()
     write_only = files_content['write_only'].strip()
@@ -967,6 +992,11 @@ def files_content_to_context(files_content):
     nr_regions = _damon.DamonNrRegionsRange(
             int(nr_regions_content['min']),
             int(nr_regions_content['max']))
+    if 'sample' in mon_attrs_content:
+        sample_control = files_content_to_sample_control(
+                mon_attrs_content['sample'])
+    else:
+        sample_control = _damon.DamonSampleControl()
     ops = files_content['operations'].strip()
     if 'operations_attrs' in files_content:
         ops_attrs = files_content_to_ops_attrs(
@@ -985,7 +1015,7 @@ def files_content_to_context(files_content):
                 schemes_content, 'nr_schemes')]
 
     return _damon.DamonCtx(ops, targets, intervals, nr_regions, schemes,
-                           ops_attrs=ops_attrs)
+                           ops_attrs=ops_attrs, sample_control=sample_control)
 
 def files_content_to_kdamond(files_content):
     contexts_content = files_content['contexts']
