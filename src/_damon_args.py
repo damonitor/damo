@@ -512,27 +512,10 @@ def damon_target_for(args, idx, ops):
         return None, 'Wrong \'--target_pid\' argument (%s)' % e
     return target, None
 
-def damon_ctx_for(args, idx):
-    if args.ops[idx] is None:
-        if args.target_pid[idx] is None:
-            args.ops[idx] = 'paddr'
-        else:
-            args.ops[idx] = 'vaddr'
-
-    try:
-        intervals = damon_intervals_for(
-                args.monitoring_intervals[idx], args.sample[idx],
-                args.aggr[idx], args.updr[idx],
-                args.monitoring_intervals_goal[idx])
-    except Exception as e:
-        return None, 'invalid intervals arguments (%s)' % e
-    try:
-        nr_regions = damon_nr_regions_range_for(
-                args.monitoring_nr_regions_range[idx],
-                args.minr[idx], args.maxr[idx])
-    except Exception as e:
-        return None, 'invalid nr_regions arguments (%s)' % e
-    ops = args.ops[idx]
+def build_sample_control_ops_attrs(args, idx):
+    '''
+    Returns DamonSampleControl, OpsAttrs, and an error
+    '''
     if args.exp_ops_use_reports[idx] is not None:
         use_reports = args.exp_ops_use_reports[idx]
     else:
@@ -554,11 +537,38 @@ def damon_ctx_for(args, idx):
                 use_reports=use_reports, write_only=write_only, cpus=cpus,
                 tids=tids)
     except Exception as e:
-        return None, 'invalid ops_attrs arguments (%s)' % e
+        return None, None, 'invalid ops_attrs arguments (%s)' % e
+    return None, ops_attrs, None
+
+def damon_ctx_for(args, idx):
+    if args.ops[idx] is None:
+        if args.target_pid[idx] is None:
+            args.ops[idx] = 'paddr'
+        else:
+            args.ops[idx] = 'vaddr'
 
     try:
-        ctx = _damon.DamonCtx(ops, None, intervals, nr_regions, schemes=[],
-                              ops_attrs=ops_attrs)
+        intervals = damon_intervals_for(
+                args.monitoring_intervals[idx], args.sample[idx],
+                args.aggr[idx], args.updr[idx],
+                args.monitoring_intervals_goal[idx])
+    except Exception as e:
+        return None, 'invalid intervals arguments (%s)' % e
+    try:
+        nr_regions = damon_nr_regions_range_for(
+                args.monitoring_nr_regions_range[idx],
+                args.minr[idx], args.maxr[idx])
+    except Exception as e:
+        return None, 'invalid nr_regions arguments (%s)' % e
+    ops = args.ops[idx]
+    sample_control, ops_attrs, err = build_sample_control_ops_attrs(args, idx)
+    if err is not None:
+        return None, 'exp_ops_* handling fail (%s)' % err
+
+    try:
+        ctx = _damon.DamonCtx(
+                ops, None, intervals, nr_regions, schemes=[],
+                sample_control=sample_control, ops_attrs=ops_attrs)
         return ctx, None
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
