@@ -1357,11 +1357,13 @@ class DamonCtx:
     targets = None
     intervals = None
     nr_regions = None
+    sample_control = None
     schemes = None
     kdamond = None
 
     def __init__(self, ops='paddr', targets=None, intervals=None,
-                 nr_regions=None, schemes=None, ops_attrs=None):
+                 nr_regions=None, schemes=None, ops_attrs=None,
+                 sample_control=None):
         self.ops = ops
         self.ops_attrs = ops_attrs if ops_attrs is not None else OpsAttrs()
         self.targets = targets if targets is not None else []
@@ -1371,6 +1373,9 @@ class DamonCtx:
                           if intervals is not None else DamonIntervals())
         self.nr_regions = (nr_regions if nr_regions is not None
                            else DamonNrRegionsRange())
+        if sample_control is None:
+            sample_control = DamonSampleControl()
+        self.sample_control = sample_control
         self.schemes = schemes if schemes is not None else Damos()
         for scheme in self.schemes:
             scheme.context = self
@@ -1399,6 +1404,8 @@ class DamonCtx:
             lines.append('scheme %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(
                 scheme.to_str(raw, params_only, omit_damos_tried_regions), 4))
+        lines.append('access sample control')
+        lines.append('%s' % self.sample_control.to_str(raw))
         return '\n'.join(lines)
 
     def __str__(self):
@@ -1412,6 +1419,11 @@ class DamonCtx:
 
     @classmethod
     def from_kvpairs(cls, kv):
+        if 'sample_control' in kv:
+            sample_control = DamonSampleControl.from_kvpairs(
+                    kv['sample_control'])
+        else:
+            sample_control = DamonSampleControl()
         ctx = DamonCtx(
                 kv['ops'],
                 [DamonTarget.from_kvpairs(t) for t in kv['targets']],
@@ -1420,7 +1432,8 @@ class DamonCtx:
                 DamonNrRegionsRange.from_kvpairs(kv['nr_regions'])
                     if 'nr_regions' in kv else DamonNrRegionsRange(),
                 [Damos.from_kvpairs(s) for s in kv['schemes']]
-                    if 'schemes' in kv else [])
+                    if 'schemes' in kv else [],
+                sample_control=sample_control)
         return ctx
 
     def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
@@ -1431,6 +1444,7 @@ class DamonCtx:
             kv['intervals'] = self.intervals.to_kvpairs(raw)
         if not omit_defaults or self.nr_regions != DamonNrRegionsRange():
             kv['nr_regions'] = self.nr_regions.to_kvpairs(raw)
+        kv['sample_control'] = self.sample_control.to_kvpairs(raw)
         kv['schemes'] = [s.to_kvpairs(raw, omit_defaults, params_only)
                          for s in self.schemes]
         return kv
