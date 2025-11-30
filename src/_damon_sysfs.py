@@ -1172,6 +1172,11 @@ def mk_feature_supports_map():
                          'stats', 'max_nr_snapshots')):
         supports_map['damos/max_nr_snapshots'] = True
 
+    if os.path.isdir(
+            os.path.join(ctx_dir_of(0, 0),
+                         'monitoring_attrs', 'sample')):
+                supports_map['damon_sample_control'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['ops_attrs'] = True
 
