@@ -18,6 +18,7 @@ except ModuleNotFoundError as e:
     pass
 
 import _damo_subproc
+import _damo_sysinfo
 import _damon
 import damo_pa_layout
 
@@ -532,13 +533,43 @@ def build_sample_control_ops_attrs(args, idx):
         tids = args.exp_ops_tids[idx]
     else:
         tids = ''
-    try:
-        ops_attrs = _damon.OpsAttrs(
-                use_reports=use_reports, write_only=write_only, cpus=cpus,
-                tids=tids)
-    except Exception as e:
-        return None, None, 'invalid ops_attrs arguments (%s)' % e
-    return None, ops_attrs, None
+    use_sample_control, err = _damo_sysinfo.damon_sysfs_feature_available(
+            'damon_sample_control')
+    if err is not None:
+        return None, None, \
+                'damon_sample_control feature check fail (%s)' % support
+    if use_sample_control is False:
+        try:
+            ops_attrs = _damon.OpsAttrs(
+                    use_reports=use_reports, write_only=write_only, cpus=cpus,
+                    tids=tids)
+        except Exception as e:
+            return None, None, 'invalid ops_attrs arguments (%s)' % e
+        return None, ops_attrs, None
+
+    if use_reports:
+        page_table, page_fault = False, True
+    else:
+        page_table, page_fault = True, False
+    primitives_enabled = _damon.DamonPrimitivesEnabled(
+            page_table=page_table, page_fault=page_fault)
+    sample_filters = []
+    if write_only:
+        sample_filters.append(_damon.DamonSampleFilter(
+            filter_type=_damon.damon_filter_type_write, matching=True,
+            allow=True))
+    if cpus != 'all':
+        sample_filters.append(_damon.DamonSampleFilter(
+            filter_type=_damon.damon_filter_type_cpumask, matching=True,
+            allow=True, cpumask=cpus))
+    if tids != '':
+        sample_filters.append(_damon.DamonSampleFilter(
+            filter_type=_damon.damon_filter_type_threads, matching=True,
+            allow=True, tid_arr=tids))
+    sample_control = _damon.DamonSampleControl(
+            primitives_enabled=primitives_enabled,
+            sample_filters=sample_filters)
+    return sample_control, None, None
 
 def damon_ctx_for(args, idx):
     if args.ops[idx] is None:
