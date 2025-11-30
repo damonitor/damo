@@ -184,6 +184,66 @@ class DamonNrRegionsRange:
             ('max', _damo_fmt_str.format_nr(self.maximum, raw)),
             ])
 
+damon_filter_type_cpumask = 'cpumask'
+damon_filter_type_threads = 'threads'
+damon_filter_type_write = 'write'
+
+class DamonSampleFilter:
+    filter_type = None
+    matching = None
+    allow = None
+    cpumask = None # the kernel-accepting cpumask string or None
+    tid_arr = None # the kernel-accepting integer array string or None
+
+    def __init__(self, filter_type, matching, allow, cpumask=None,
+                 tid_arr=None):
+        self.filter_type = filter_type
+        self.matching = matching
+        self.allow = allow
+        self.cpumask = cpumask
+        self.tid_arr = tid_arr
+
+    def to_str(self, raw):
+        words = []
+        if self.allow:
+            words.append('allow')
+        else:
+            words.append('reject')
+        if self.matching is False:
+            words.append('none')
+        words.append(self.filter_type)
+        if self.filter_type == damon_filter_type_cpumask:
+            words.append(self.cpumask)
+        elif self.filter_type == damon_filter_type_threads:
+            words.append(self.tid_arr)
+        return ' '.join(words)
+
+    def __str__(self):
+        return self.to_str(False)
+
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+                self.filter_type == other.filter_type and \
+                self.matching == other.matching and \
+                self.allow == other.allow and \
+                self.cpumask == other.cpumask and self.tid_arr == other.tid_arr
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamonSampleFilter(
+                filter_type=kv['filter_type'], matching=kv['matching'],
+                allow=kv['allow'], cpumask=kv['cpumask'],
+                tid_arr=kv['tid_arr'])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('filter_type', self.filter_type),
+            ('matching', self.matching),
+            ('allow', self.allow),
+            ('cpumask', self.cpumask),
+            ('tid_arr', self.tid_arr),
+            ])
+
 unit_percent = 'percent'
 unit_samples = 'samples'
 unit_usec = 'usec'
