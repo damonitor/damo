@@ -549,6 +549,70 @@ def write_ops_attrs_dir(dir_path, ops_attrs):
     if err is not None:
         return err
 
+def write_sample_filter_dir(dir_path, sample_filter):
+    err = _damo_fs.write_file(
+            os.path.join(dir_path, 'type'), sample_filter.filter_type)
+    if err is not None:
+        return err
+
+    err = _damo_fs.write_file(
+            os.path.join(dir_path, 'matching'),
+            'Y' if sample_filter.matching else 'N')
+    if err is not None:
+        return err
+    err = _damo_fs.write_file(
+            os.path.join(dir_path, 'allow'),
+            'Y' if sample_filter.allow else 'N')
+    if err is not None:
+        return err
+
+    if sample_filter.filter_type == _damon.damon_filter_type_cpumask:
+        err = _damo_fs.write_file(
+                os.path.join(dir_path, 'cpumask'), sample_filter.cpumask)
+        if err is not None:
+            return err
+    elif sample_filter.filter_type == _damon.damon_filter_type_threads:
+        err = _damo_fs.write_file(
+                os.path.join(dir_path, 'tid_arr'), sample_filter.tid_arr)
+        if err is not None:
+            return err
+    return None
+
+def write_sample_filters_dir(dir_path, filters):
+    if not os.path.isdir(dir_path):
+        if len(filters) == 0:
+            return None
+        return 'the kernel is not supporting sample filters'
+
+    err = ensure_nr_file_for(os.path.join(dir_path, 'nr_filters'), filters)
+    if err is not None:
+        return err
+
+    for idx, sample_filter in enumerate(filters):
+        err = write_sample_filter_dir(
+                os.path.join(dir_path, '%d' % idx), sample_filter)
+        if err is not None:
+            return err
+    return None
+
+    err = _damo_fs.write_file
+
+def write_sample_control_dir(dir_path, sample_control):
+    if not os.path.isdir(dir_path):
+        return None
+    err = _damo_fs.write_file(
+            os.path.join(dir_path, 'primitives', 'page_table'),
+            'Y' if sample_control.primitives_enabled.page_table else 'N')
+    if err is not None:
+        return err
+    err = _damo_fs.write_file(
+            os.path.join(dir_path, 'primitives', 'page_fault'),
+            'Y' if sample_control.primitives_enabled.page_fault else 'N')
+    if err is not None:
+        return err
+    return write_sample_filters_dir(
+            os.path.join(dir_path, 'filters'), sample_control.sample_filters)
+
 def write_monitoring_attrs_dir(dir_path, context):
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'intervals', 'sample_us'),
@@ -581,9 +645,14 @@ def write_monitoring_attrs_dir(dir_path, context):
     if err is not None:
         return err
 
-    return _damo_fs.write_file(
+    err = _damo_fs.write_file(
             os.path.join(dir_path, 'nr_regions', 'max'),
             '%d' % context.nr_regions.maximum)
+    if err is not None:
+        return err
+
+    return write_sample_control_dir(
+            os.path.join(dir_path, 'sample'), context.sample_control)
 
 def write_context_dir(dir_path, context):
     err = _damo_fs.write_file(os.path.join(dir_path, 'operations'),
