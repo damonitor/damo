@@ -279,6 +279,50 @@ class DamonPrimitivesEnabled:
             ('page_fault', self.page_fault),
             ])
 
+class DamonSampleControl:
+    primitives_enabled = None
+    sample_filters = None
+
+    def __init__(self, primitives_enabled=None, sample_filters=None):
+        if primitives_enabled is None:
+            primitives_enabled = DamonPrimitivesEnabled()
+        if sample_filters is None:
+            sample_filters = []
+        self.primitives_enabled = primitives_enabled
+        self.sample_filters = sample_filters
+
+    def to_str(self, raw):
+        lines = [
+                'enabled primitives: %s' % self.primitives_enabled.to_str(raw)]
+        if len(self.sample_filters) > 0:
+            lines.append('Filters')
+            for filter in self.sample_filters:
+                lines.append('- %s' % filter.to_str(raw))
+        return '\n'.join(lines)
+
+    def __str__(self):
+        return self.to_str(False)
+
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+                self.primitives_enabled == other.primitives_enabled and \
+                self.sample_filters == other.sample_filters
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamonSampleControl(
+                primitives_enabled=DamonPrimitivesEnabled.from_kvpairs(
+                    kv['primitives_enabled']),
+                sample_filters=[DamonSampleFilter.from_kvpairs(kvpairs)
+                                for kvpairs in kv['sample_filters']])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('primitives_enabled', self.primitives_enabled.to_kvpairs(raw)),
+            ('sample_filters', [
+                f.to_kvpairs(raw) for f in self.sample_filters]),
+            ])
+
 unit_percent = 'percent'
 unit_samples = 'samples'
 unit_usec = 'usec'
