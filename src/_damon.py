@@ -244,6 +244,41 @@ class DamonSampleFilter:
             ('tid_arr', self.tid_arr),
             ])
 
+class DamonPrimitivesEnabled:
+    page_table = None
+    page_fault = None
+
+    def __init__(self, page_table=True, page_fault=False):
+        self.page_table = _damo_fmt_str.text_to_bool(page_table)
+        self.page_fault = _damo_fmt_str.text_to_bool(page_fault)
+
+    def to_str(self, raw):
+        words = []
+        if self.page_table is True:
+            words.append('page_table')
+        if self.page_fault is True:
+            words.append('page_fault')
+        return ', '.join(words)
+
+    def __str__(self):
+        return self.to_str(False)
+
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+                self.page_table == other.page_table and \
+                self.page_fault == other.page_fault
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamonPrimitivesEnabled(
+                page_table=kv['page_table'], page_fault=kv['page_fault'])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('page_table', self.page_table),
+            ('page_fault', self.page_fault),
+            ])
+
 unit_percent = 'percent'
 unit_samples = 'samples'
 unit_usec = 'usec'
