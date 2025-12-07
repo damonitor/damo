@@ -513,10 +513,28 @@ def damon_target_for(args, idx, ops):
         return None, 'Wrong \'--target_pid\' argument (%s)' % e
     return target, None
 
+def sample_control_to_ops_attrs_args(args, idx):
+    sample_primitives = args.sample_primitives[idx]
+    if sample_primitives is None:
+        return None
+    ops_use_reports = args.exp_ops_use_reports[idx]
+    if sample_primitives is not None and ops_use_reports is not None:
+        return '--sample_primitives and --exp_ops_use_reports used together'
+    if sample_primitives == ['page_table']:
+        args.exp_ops_use_reports[idx] = 'N'
+    elif sample_primitives == ['page_fault']:
+        args.exp_ops_use_reports[idx] = 'Y'
+    else:
+        return '--sample_primitives of %s is not supported for now' % \
+                sample_primitives
+
 def build_sample_control_ops_attrs(args, idx):
     '''
     Returns DamonSampleControl, OpsAttrs, and an error
     '''
+    err = sample_control_to_ops_attrs_args(args, idx)
+    if err is not None:
+        return None, None, err
     if args.exp_ops_use_reports[idx] is not None:
         use_reports = args.exp_ops_use_reports[idx]
     else:
@@ -634,7 +652,7 @@ def fillup_none_ctx_args(args):
             'ops', 'exp_ops_use_reports', 'exp_ops_write_only', 'exp_ops_cpus',
             'exp_ops_tids', 'sample', 'aggr', 'updr', 'minr', 'maxr',
             'monitoring_intervals', 'monitoring_intervals_goal',
-            'monitoring_nr_regions_range']:
+            'monitoring_nr_regions_range', 'sample_primitives']:
         attr_val = getattr(args, attr_name)
         if attr_val is None:
             setattr(args, attr_name, [None] * nr_ctxs)
@@ -1015,6 +1033,10 @@ def set_monitoring_attrs_argparser(parser, hide_help=False):
     parser.add_argument('--monitoring_nr_regions_range', nargs=2,
                         metavar=('<min>', '<max>'), action='append',
                         help='min/max number of monitoring regions'
+                        if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--sample_primitives', action='append',
+                        choices=['page_table', 'page_fault'], nargs='+',
+                        help='access sampling primitives to use'
                         if not hide_help else argparse.SUPPRESS)
 
 def set_monitoring_damos_common_args(parser, hide_help=False):
