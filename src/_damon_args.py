@@ -639,7 +639,6 @@ def fillup_none_ctx_args(args):
         if attr_val is None:
             setattr(args, attr_name, [None] * nr_ctxs)
         elif len(attr_val) < nr_ctxs:
-            print(attr_name, attr_val)
             setattr(args, attr_name,
                     attr_val + [None] * (nr_ctxs - len(attr_val)))
 
