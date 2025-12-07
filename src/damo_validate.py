@@ -84,7 +84,7 @@ def set_argparser(parser):
     parser.add_argument('--input', '-i', type=str, metavar='<file>',
             default='damon.data', help='input file name')
     parser.add_argument('--aggr', metavar='<microseconds>', type=int, nargs=2,
-            default=[80000, 120000],
+            default=[75000, 125000],
             help='min/max valid sample intervals (us)')
     parser.add_argument('--nr_regions', metavar='<number of regions>',
             type=int, nargs=2, default=[3, 1200],
