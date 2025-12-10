@@ -50,6 +50,7 @@
 - Support DAMON tracepoints other than those for regions in easy way.
   - adding --repeat and --use_tracepoint to 'damo report damon'?
   - adding 'damo trace'?
+- Use tracepoint directly, instead of perf.
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
