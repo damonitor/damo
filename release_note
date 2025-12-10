@@ -2,9 +2,10 @@ This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
 v3.0.7
-- sysinfo: support perf information.
-- sysinfo: support <5.15 DAMON version inference.
-- support 'damon sample control' feature.
+- sysinfo: Support perf information.
+- sysinfo: Support <5.15 DAMON version inference.
+- Support 'damon sample control' feature.
+- Add --sample_primitives option.
 
 v3.0.6
 - damo report damon: Support yaml format with --format option.
