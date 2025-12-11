@@ -26,8 +26,11 @@ def get_real_version():
         return get_release_version()
     if not avail_cmd('git'):
         return get_release_version()
-    return subprocess.check_output(
-            ['git', '--git-dir', git_dir, 'describe']).decode().strip()
+    try:
+        return subprocess.check_output(
+                ['git', '--git-dir', git_dir, 'describe']).decode().strip()
+    except subprocess.CalledProcessError:
+        return get_release_version()
 
 def main(args):
     print(get_release_version())
