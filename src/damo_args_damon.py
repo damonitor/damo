@@ -56,7 +56,7 @@ def main(args):
             print('--out and report format cannot be used together')
             exit(1)
         damo_report_damon.pr_kdamonds(
-                kdamonds, json_format=False, raw_nr=args.raw, show_cpu=False)
+                kdamonds, args.format, raw_nr=args.raw, show_cpu=False)
         return
 
     if args.format == 'json':
