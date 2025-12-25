@@ -8,19 +8,20 @@ import _test_damo_common
 _test_damo_common.add_damo_dir_to_syspath()
 
 import _damo_sysinfo
+import _damon_features
 
 class TestDamoSysinfo(unittest.TestCase):
     def test_damon_feature_kvpair_conversion(self):
-        f = _damo_sysinfo.DamonFeature(
+        f = _damon_features.DamonFeature(
                 name='foo', upstream_status='bar', comments='baz')
         kvpairs = f.to_kvpairs()
-        f2 = _damo_sysinfo.DamonFeature.from_kvpairs(kvpairs)
+        f2 = _damon_features.DamonFeature.from_kvpairs(kvpairs)
         self.assertEqual(f, f2)
 
     def test_systeminfo_kvpair_conversion(self):
         features = []
         for i in range(4):
-            features.append(_damo_sysinfo.DamonFeature(
+            features.append(_damon_features.DamonFeature(
                 name='foo %s' % i, upstream_status='bar %s' % i,
                 comments='baz %s' % i))
         sinfo = _damo_sysinfo.SystemInfo(

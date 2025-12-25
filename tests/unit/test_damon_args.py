@@ -11,6 +11,7 @@ _test_damo_common.add_damo_dir_to_syspath()
 import _damo_sysinfo
 import _damon
 import _damon_args
+import _damon_features
 import _damon_sysfs
 
 def set_damon_sysfs_features():
@@ -24,7 +25,7 @@ def set_damon_sysfs_features():
             'schemes_stat_succ': True, 'vaddr': True}.items():
         if not support:
             continue
-        for feature in _damo_sysinfo.damon_features:
+        for feature in _damon_features.features_list:
             if feature.name == name:
                 avail_features.append(feature)
     _damo_sysinfo.system_info = _damo_sysinfo.SystemInfo(

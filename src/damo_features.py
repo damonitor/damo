@@ -5,6 +5,7 @@ import json
 import _damo_sysinfo
 import _damon
 import _damon_args
+import _damon_features
 import _damon_sysfs
 
 def pr_infer_version(sysinfo):
@@ -26,7 +27,7 @@ def main(args):
     if err is not None:
         print('getting system info failed (%s)' % err)
         exit(1)
-    feature_names = sorted([f.name for f in _damo_sysinfo.damon_features])
+    feature_names = sorted([f.name for f in _damon_features.features_list])
     if _damon._damon_fs is _damon_sysfs:
         avail_features = {f.name for f in sysinfo.avail_damon_sysfs_features}
     else:

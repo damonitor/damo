@@ -9,8 +9,8 @@ import time
 
 import _damo_fmt_str
 import _damo_fs
-import _damo_sysinfo
 import _damon
+import _damon_features
 
 sysfs_root = None
 
@@ -1129,7 +1129,7 @@ def mk_feature_supports_map():
     Keys of the map are names of DAMON features.
     Values are bool indicating whether the feature is supported.
     '''
-    supports_map = {x.name: False for x in _damo_sysinfo.damon_features}
+    supports_map = {x.name: False for x in _damon_features.features_list}
 
     for feature in features_sysfs_support_from_begining:
         supports_map[feature] = True

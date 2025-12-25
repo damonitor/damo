@@ -11,45 +11,9 @@ import os
 import subprocess
 
 import _damon_dbgfs
+import _damon_features
 import _damon_sysfs
 import damo_version
-
-class DamonFeature:
-    name = None
-    upstream_status = None
-    upstreamed_version = None
-    comments = None
-
-    def __init__(self, name, upstream_status, upstreamed_version='unknown',
-                 comments=''):
-        self.name = name
-        self.upstream_status = upstream_status
-        self.upstreamed_version = upstreamed_version
-        self.comments = comments
-
-    def to_kvpairs(self, raw=False):
-        return collections.OrderedDict([
-            ('name', self.name),
-            ('upstream_status', self.upstream_status),
-            ('upstreamed_version', self.upstreamed_version),
-            ('comments', self.comments),
-            ])
-
-    @classmethod
-    def from_kvpairs(cls, kvpairs):
-        if 'upstreamed_version' in kvpairs:
-            upstreamed_version = kvpairs['upstreamed_version']
-        else:
-            upstreamed_version = 'unknown'
-        return cls(kvpairs['name'], kvpairs['upstream_status'],
-                   upstreamed_version,
-                   kvpairs['comments'])
-
-    def __eq__(self, other):
-        return self.name == other.name and \
-                self.upstream_status == other.upstream_status and \
-                self.upstreamed_version == other.upstreamed_version and \
-                self.comments == other.comments
 
 class SystemInfo:
     damo_version = None
@@ -57,13 +21,13 @@ class SystemInfo:
     perf_path = None
     perf_version = None
 
-    # list of DamonFeature objects that can be used using sysfs and debugfs
-    # interfaces.
+    # list of _damon_features.DamonFeature objects that can be used using sysfs
+    # and debugfs interfaces.
     avail_damon_sysfs_features = None
     avail_damon_debugfs_features = None
     avail_damon_trace_features = None
 
-    # list of DamonFeature objects that tested to generate
+    # list of _damon_features.DamonFeature objects that tested to generate
     # avail_damon_{sys,debug}fs_features.
     tested_features = None
 
@@ -112,16 +76,16 @@ class SystemInfo:
                 kernel_version=kvpairs['kernel_version'],
                 perf_path=perf_path, perf_version=perf_version,
                 avail_damon_sysfs_features=[
-                    DamonFeature.from_kvpairs(kvp) for kvp in
+                    _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     kvpairs['avail_damon_sysfs_features']],
                 avail_damon_debugfs_features=[
-                    DamonFeature.from_kvpairs(kvp) for kvp in
+                    _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     kvpairs['avail_damon_debugfs_features']],
                 avail_damon_trace_features=[
-                    DamonFeature.from_kvpairs(kvp) for kvp in
+                    _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     damon_trace_features],
                 tested_features=[
-                    DamonFeature.from_kvpairs(kvp) for kvp in
+                    _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     kvpairs['tested_features']],
                 )
 
@@ -152,7 +116,7 @@ class SystemInfo:
             return '>=5.15', None
         avail_features = {f.name for f in self.avail_damon_sysfs_features}
         append_plus = False
-        for feature in reversed(damon_features):
+        for feature in reversed(_damon_features.features_list):
             if feature.name in avail_features:
                 if feature.upstreamed_version in ['none', 'unknown']:
                     append_plus = True
@@ -162,156 +126,6 @@ class SystemInfo:
                         version = '%s+' % version
                     return version, None
         return None, 'only non-upstreamed features'
-
-damon_features = [
-        DamonFeature(
-            name='record', upstream_status='withdrawn',
-            upstreamed_version='none',
-            comments='was in DAMON patchset, but not merged in mainline'),
-        DamonFeature(name='vaddr', upstream_status='merged in v5.15',
-                     upstreamed_version='5.15'),
-        DamonFeature(name='trace_damon_aggregated',
-                      upstream_status='merged in v5.15 (2fcb93629ad8)',
-                      upstreamed_version='5.15'),
-        DamonFeature(name='schemes', upstream_status='merged in v5.16',
-                     upstreamed_version='5.16'),
-        DamonFeature(name='init_regions',
-                     upstream_status='merged in v5.16 (90bebce9fcd6)',
-                     upstreamed_version='5.16'),
-        DamonFeature(name='paddr',
-                     upstream_status='merged in v5.16 (a28397beb55b)',
-                     upstreamed_version='5.16'),
-        DamonFeature(name='schemes_size_quota',
-                     upstream_status='merged in v5.16 (2b8a248d5873)',
-                     upstreamed_version='5.16'),
-        DamonFeature(name='schemes_time_quota',
-                     upstream_status='merged in v5.16 (1cd243030059)',
-                     upstreamed_version='5.16'),
-        DamonFeature(name='schemes_prioritization',
-                     upstream_status='merged in v5.16 (38683e003153)',
-                     upstreamed_version='5.16'),
-        DamonFeature(name='schemes_wmarks',
-                     upstream_status='merged in v5.16 (ee801b7dd782)',
-                     upstreamed_version='5.16'),
-        DamonFeature(name='schemes_stat_succ',
-                     upstream_status='merged in v5.17 (0e92c2ee9f45)',
-                     upstreamed_version='5.17'),
-        DamonFeature(name='schemes_stat_qt_exceed',
-                     upstream_status='merged in v5.17 (0e92c2ee9f45)',
-                     upstreamed_version='5.17'),
-        DamonFeature(name='init_regions_target_idx',
-                     upstream_status='merged in v5.18 (144760f8e0c3)',
-                     upstreamed_version='5.18'),
-        DamonFeature(name='fvaddr',
-                     upstream_status='merged in v5.19 (b82434471cd2)',
-                     upstreamed_version='5.19'),
-        DamonFeature(name='schemes_tried_regions',
-                     upstream_status='merged in v6.2-rc1',
-                     upstreamed_version='6.2'),
-        DamonFeature(name='schemes_filters',
-                     upstream_status='merged in v6.3-rc1',
-                     upstreamed_version='6.3'),
-        DamonFeature(name='schemes_filters_anon',
-                     upstream_status='merged in v6.3-rc1',
-                     upstreamed_version='6.3'),
-        DamonFeature(name='schemes_filters_memcg',
-                     upstream_status='merged in v6.3-rc1',
-                     upstreamed_version='6.3'),
-        DamonFeature(name='schemes_tried_regions_sz',
-                     upstream_status='merged in v6.6-rc1',
-                     upstreamed_version='6.6'),
-        DamonFeature(name='schemes_filters_addr',
-                     upstream_status='merged in v6.6-rc1',
-                     upstreamed_version='6.6'),
-        DamonFeature(name='schemes_filters_target',
-                     upstream_status='merged in v6.6-rc1',
-                     upstreamed_version='6.6'),
-        DamonFeature(name='schemes_apply_interval',
-                     upstream_status='merged in v6.7-rc1',
-                     upstreamed_version='6.7'),
-        DamonFeature(name='trace_damos_before_apply',
-                     upstream_status='merged in v6.7-rc1 (c603c630b509)',
-                     upstreamed_version='6.7'),
-        DamonFeature(name='schemes_quota_goals',
-                     upstream_status='merged in v6.8-rc1',
-                     upstreamed_version='6.8'),
-        DamonFeature(name='schemes_quota_effective_bytes',
-                     upstream_status='merged in v6.9-rc1',
-                     upstreamed_version='6.9'),
-        DamonFeature(name='schemes_quota_goal_metric',
-                     upstream_status='merged in v6.9-rc1',
-                     upstreamed_version='6.9'),
-        DamonFeature(name='schemes_quota_goal_some_psi',
-                     upstream_status='merged in v6.9-rc1',
-                     upstreamed_version='6.9'),
-        DamonFeature(name='schemes_filters_young',
-                     upstream_status='merged in v6.10-rc1',
-                     upstreamed_version='6.10'),
-        DamonFeature(name='schemes_migrate',
-                     upstream_status='merged in v6.11-rc1',
-                     upstreamed_version='6.11'),
-        DamonFeature(name='sz_ops_filter_passed',
-                     upstream_status='merged in v6.14-rc1',
-                     upstreamed_version='6.14'),
-        DamonFeature(name='allow_filter',
-                     upstream_status='merged in v6.14-rc1',
-                     upstreamed_version='6.14'),
-        DamonFeature(name='schemes_filters_hugepage_size',
-                     upstream_status='merged in v6.15-rc1',
-                     upstreamed_version='6.15'),
-        DamonFeature(name='schemes_filters_unmapped',
-                     upstream_status='merged in v6.15-rc1',
-                     upstreamed_version='6.15'),
-        DamonFeature(name='intervals_goal',
-                     upstream_status='merged in v6.15-rc1',
-                     upstreamed_version='6.15'),
-        DamonFeature(name='schemes_filters_core_ops_dirs',
-                     upstream_status='merged in v6.15-rc1',
-                     upstreamed_version='6.15'),
-        DamonFeature(name='schemes_filters_active',
-                     upstream_status='merged in v6.15-rc1',
-                     upstreamed_version='6.15'),
-        DamonFeature(name='schemes_quota_goal_node_mem_used_free',
-                     upstream_status='merged in v6.16-rc1',
-                     upstreamed_version='6.16'),
-        DamonFeature(name='schemes_dests',
-                     upstream_status='merged in v6.17-rc1',
-                     upstreamed_version='6.17'),
-        DamonFeature(name='sysfs_refresh_ms',
-                     upstream_status='merged in v6.17-rc1',
-                     upstreamed_version='6.17'),
-        DamonFeature(name='trace_damon_monitor_intervals_tune',
-                     upstream_status='merged in v6.17-rc1 (214db7028727)',
-                     upstreamed_version='6.17'),
-        DamonFeature(name='trace_damos_esz',
-                     upstream_status='merged in v6.17-rc1 (a86d695193bf);',
-                     upstreamed_version='6.17'),
-        DamonFeature(name='addr_unit',
-                     upstream_status='merged in v6.18-rc1',
-                     upstreamed_version='6.18'),
-        DamonFeature(name='schemes_quota_goal_node_memcg_used_free',
-                     upstream_status='merged in mm, expectred for 6.19-rc1',
-                     upstreamed_version='none'),
-        DamonFeature(name='obsolete_target',
-                     upstream_status='merged in mm, expected for 6.19-rc1',
-                     upstreamed_version='none'),
-        DamonFeature(name='damos/stat/nr_snapshots',
-                     upstream_status='RFC sent',
-                     upstreamed_version='none'),
-        DamonFeature(name='damos/max_nr_snapshots',
-                     upstream_status='RFC sent',
-                     upstreamed_version='none'),
-        DamonFeature(name='trace/damos_stat_after_apply_interval',
-                     upstream_status='RFC sent',
-                     upstreamed_version='none'),
-        DamonFeature(name='damon_sample_control',
-                     upstream_status='hacking on damon/next',
-                     upstreamed_version='none',
-                     comments='a replacement of ops_attrs'),
-        DamonFeature(name='ops_attrs',
-                     upstream_status='hacking on damon/next',
-                     upstreamed_version='none'),
-        ]
 
 system_info = None
 sysinfo_file_path = os.path.join(os.environ['HOME'], '.damo.sysinfo')
@@ -335,7 +149,7 @@ def valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
         return False
     if sysinfo.kernel_version != kernel_version:
         return False
-    return sysinfo.tested_features == damon_features
+    return sysinfo.tested_features == _damon_features.features_list
 
 def set_sysinfo_from_cache():
     sysinfo, err = read_sysinfo()
@@ -355,7 +169,8 @@ def avail_features_on(damon_fs):
     feature_supports_map, err = damon_fs.mk_feature_supports_map()
     if err is not None:
         return None, 'feature map making fail (%s)' % err
-    avail_features = [f for f in damon_features if feature_supports_map[f.name]]
+    avail_features = [f for f in _damon_features.features_list
+                      if feature_supports_map[f.name]]
     return avail_features, None
 
 def get_damon_tracepoints():
@@ -375,7 +190,7 @@ def get_damon_tracepoints():
     return points, None
 
 def damon_feature_of_name(name):
-    return [f for f in damon_features if f.name == name][0]
+    return [f for f in _damon_features.features_list if f.name == name][0]
 
 def get_avail_damon_trace_features():
     features = []
@@ -419,7 +234,7 @@ def set_sysinfo_from_scratch():
     if err is not None:
         return 'trace feature check fail (%s)' % err
 
-    tested_features = [f for f in damon_features]
+    tested_features = [f for f in _damon_features.features_list]
     sysinfo = SystemInfo(
             damo_version=damo_version_,
             kernel_version=kernel_version,

@@ -1,0 +1,190 @@
+# SPDX-License-Identifier: GPL-2.0
+
+import collections
+
+class DamonFeature:
+    name = None
+    upstream_status = None
+    upstreamed_version = None
+    comments = None
+
+    def __init__(self, name, upstream_status, upstreamed_version='unknown',
+                 comments=''):
+        self.name = name
+        self.upstream_status = upstream_status
+        self.upstreamed_version = upstreamed_version
+        self.comments = comments
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('name', self.name),
+            ('upstream_status', self.upstream_status),
+            ('upstreamed_version', self.upstreamed_version),
+            ('comments', self.comments),
+            ])
+
+    @classmethod
+    def from_kvpairs(cls, kvpairs):
+        if 'upstreamed_version' in kvpairs:
+            upstreamed_version = kvpairs['upstreamed_version']
+        else:
+            upstreamed_version = 'unknown'
+        return cls(kvpairs['name'], kvpairs['upstream_status'],
+                   upstreamed_version,
+                   kvpairs['comments'])
+
+    def __eq__(self, other):
+        return self.name == other.name and \
+                self.upstream_status == other.upstream_status and \
+                self.upstreamed_version == other.upstreamed_version and \
+                self.comments == other.comments
+
+features_list = [
+        DamonFeature(
+            name='record', upstream_status='withdrawn',
+            upstreamed_version='none',
+            comments='was in DAMON patchset, but not merged in mainline'),
+        DamonFeature(name='vaddr', upstream_status='merged in v5.15',
+                     upstreamed_version='5.15'),
+        DamonFeature(name='trace_damon_aggregated',
+                      upstream_status='merged in v5.15 (2fcb93629ad8)',
+                      upstreamed_version='5.15'),
+        DamonFeature(name='schemes', upstream_status='merged in v5.16',
+                     upstreamed_version='5.16'),
+        DamonFeature(name='init_regions',
+                     upstream_status='merged in v5.16 (90bebce9fcd6)',
+                     upstreamed_version='5.16'),
+        DamonFeature(name='paddr',
+                     upstream_status='merged in v5.16 (a28397beb55b)',
+                     upstreamed_version='5.16'),
+        DamonFeature(name='schemes_size_quota',
+                     upstream_status='merged in v5.16 (2b8a248d5873)',
+                     upstreamed_version='5.16'),
+        DamonFeature(name='schemes_time_quota',
+                     upstream_status='merged in v5.16 (1cd243030059)',
+                     upstreamed_version='5.16'),
+        DamonFeature(name='schemes_prioritization',
+                     upstream_status='merged in v5.16 (38683e003153)',
+                     upstreamed_version='5.16'),
+        DamonFeature(name='schemes_wmarks',
+                     upstream_status='merged in v5.16 (ee801b7dd782)',
+                     upstreamed_version='5.16'),
+        DamonFeature(name='schemes_stat_succ',
+                     upstream_status='merged in v5.17 (0e92c2ee9f45)',
+                     upstreamed_version='5.17'),
+        DamonFeature(name='schemes_stat_qt_exceed',
+                     upstream_status='merged in v5.17 (0e92c2ee9f45)',
+                     upstreamed_version='5.17'),
+        DamonFeature(name='init_regions_target_idx',
+                     upstream_status='merged in v5.18 (144760f8e0c3)',
+                     upstreamed_version='5.18'),
+        DamonFeature(name='fvaddr',
+                     upstream_status='merged in v5.19 (b82434471cd2)',
+                     upstreamed_version='5.19'),
+        DamonFeature(name='schemes_tried_regions',
+                     upstream_status='merged in v6.2-rc1',
+                     upstreamed_version='6.2'),
+        DamonFeature(name='schemes_filters',
+                     upstream_status='merged in v6.3-rc1',
+                     upstreamed_version='6.3'),
+        DamonFeature(name='schemes_filters_anon',
+                     upstream_status='merged in v6.3-rc1',
+                     upstreamed_version='6.3'),
+        DamonFeature(name='schemes_filters_memcg',
+                     upstream_status='merged in v6.3-rc1',
+                     upstreamed_version='6.3'),
+        DamonFeature(name='schemes_tried_regions_sz',
+                     upstream_status='merged in v6.6-rc1',
+                     upstreamed_version='6.6'),
+        DamonFeature(name='schemes_filters_addr',
+                     upstream_status='merged in v6.6-rc1',
+                     upstreamed_version='6.6'),
+        DamonFeature(name='schemes_filters_target',
+                     upstream_status='merged in v6.6-rc1',
+                     upstreamed_version='6.6'),
+        DamonFeature(name='schemes_apply_interval',
+                     upstream_status='merged in v6.7-rc1',
+                     upstreamed_version='6.7'),
+        DamonFeature(name='trace_damos_before_apply',
+                     upstream_status='merged in v6.7-rc1 (c603c630b509)',
+                     upstreamed_version='6.7'),
+        DamonFeature(name='schemes_quota_goals',
+                     upstream_status='merged in v6.8-rc1',
+                     upstreamed_version='6.8'),
+        DamonFeature(name='schemes_quota_effective_bytes',
+                     upstream_status='merged in v6.9-rc1',
+                     upstreamed_version='6.9'),
+        DamonFeature(name='schemes_quota_goal_metric',
+                     upstream_status='merged in v6.9-rc1',
+                     upstreamed_version='6.9'),
+        DamonFeature(name='schemes_quota_goal_some_psi',
+                     upstream_status='merged in v6.9-rc1',
+                     upstreamed_version='6.9'),
+        DamonFeature(name='schemes_filters_young',
+                     upstream_status='merged in v6.10-rc1',
+                     upstreamed_version='6.10'),
+        DamonFeature(name='schemes_migrate',
+                     upstream_status='merged in v6.11-rc1',
+                     upstreamed_version='6.11'),
+        DamonFeature(name='sz_ops_filter_passed',
+                     upstream_status='merged in v6.14-rc1',
+                     upstreamed_version='6.14'),
+        DamonFeature(name='allow_filter',
+                     upstream_status='merged in v6.14-rc1',
+                     upstreamed_version='6.14'),
+        DamonFeature(name='schemes_filters_hugepage_size',
+                     upstream_status='merged in v6.15-rc1',
+                     upstreamed_version='6.15'),
+        DamonFeature(name='schemes_filters_unmapped',
+                     upstream_status='merged in v6.15-rc1',
+                     upstreamed_version='6.15'),
+        DamonFeature(name='intervals_goal',
+                     upstream_status='merged in v6.15-rc1',
+                     upstreamed_version='6.15'),
+        DamonFeature(name='schemes_filters_core_ops_dirs',
+                     upstream_status='merged in v6.15-rc1',
+                     upstreamed_version='6.15'),
+        DamonFeature(name='schemes_filters_active',
+                     upstream_status='merged in v6.15-rc1',
+                     upstreamed_version='6.15'),
+        DamonFeature(name='schemes_quota_goal_node_mem_used_free',
+                     upstream_status='merged in v6.16-rc1',
+                     upstreamed_version='6.16'),
+        DamonFeature(name='schemes_dests',
+                     upstream_status='merged in v6.17-rc1',
+                     upstreamed_version='6.17'),
+        DamonFeature(name='sysfs_refresh_ms',
+                     upstream_status='merged in v6.17-rc1',
+                     upstreamed_version='6.17'),
+        DamonFeature(name='trace_damon_monitor_intervals_tune',
+                     upstream_status='merged in v6.17-rc1 (214db7028727)',
+                     upstreamed_version='6.17'),
+        DamonFeature(name='trace_damos_esz',
+                     upstream_status='merged in v6.17-rc1 (a86d695193bf);',
+                     upstreamed_version='6.17'),
+        DamonFeature(name='addr_unit',
+                     upstream_status='merged in v6.18-rc1',
+                     upstreamed_version='6.18'),
+        DamonFeature(name='schemes_quota_goal_node_memcg_used_free',
+                     upstream_status='merged in mm, expectred for 6.19-rc1',
+                     upstreamed_version='none'),
+        DamonFeature(name='obsolete_target',
+                     upstream_status='merged in mm, expected for 6.19-rc1',
+                     upstreamed_version='none'),
+        DamonFeature(name='damos/stat/nr_snapshots',
+                     upstream_status='RFC sent',
+                     upstreamed_version='none'),
+        DamonFeature(name='damos/max_nr_snapshots',
+                     upstream_status='RFC sent',
+                     upstreamed_version='none'),
+        DamonFeature(name='trace/damos_stat_after_apply_interval',
+                     upstream_status='RFC sent',
+                     upstreamed_version='none'),
+        DamonFeature(name='damon_sample_control',
+                     upstream_status='hacking on damon/next',
+                     upstreamed_version='none',
+                     comments='a replacement of ops_attrs'),
+        DamonFeature(name='ops_attrs',
+                     upstream_status='hacking on damon/next',
+                     upstreamed_version='none'),
+        ]
