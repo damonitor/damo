@@ -18,6 +18,10 @@ import _damon
 import _damon_args
 import damo_report_access
 
+traceevent_damon_aggregated = 'damon_aggregated'
+traceevent_damon_monitor_intervals_tune = 'damon_monitor_intervals_tune'
+traceevent_damos_before_apply = 'damos_before_apply'
+
 PERF = 'perf'
 perf_event_damon_aggregated = 'damon:damon_aggregated'
 perf_event_damon_monitor_intervals_tune = 'damon:damon_monitor_intervals_tune'
@@ -517,7 +521,8 @@ def parse_damon_trace_intervals_tune(line):
     if len(fields) != 6:
         return False, None
     tracepoint_name = fields[4][:-1]
-    if tracepoint_name != perf_event_damon_monitor_intervals_tune:
+    if not tracepoint_name in [traceevent_damon_monitor_intervals_tune,
+                               perf_event_damon_monitor_intervals_tune]:
         return False, None
     return True, int(fields[5].split('=')[1])
 
