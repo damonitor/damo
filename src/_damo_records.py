@@ -528,6 +528,29 @@ def parse_damon_trace_intervals_tune(line):
         return False, None
     return True, int(fields[5].split('=')[1])
 
+def damon_trace_fields(line):
+    '''
+    Receives a line from 'trace-cmd report' or 'perf script' outputs and return
+    fields starting from the timestamp (the fourth field).
+
+    In case of trace-cmd report, the format is like,
+
+           kdamond.0-264454 [007] ..... 92627.258073: damon_aggregated: \
+                   target_id=0 nr_regions=10 8255430656-8372879360: 0 1
+
+    In case of perf script, the format is like,
+
+            kthreadd  264573 [003] 93212.176071: damon:damon_aggregated: \
+                    target_id=0 nr_regions=4 6945607680-8372879360: 0 0
+
+    The format from the fourth field is identical for both cases, and hence a
+    single parsing logic can be used.
+    '''
+    fields = line.split()
+    if len(fields) < 4:
+        return None
+    return fields[3:]
+
 def parse_damon_trace(trace_text, monitoring_intervals):
     '''
     Parse DAMON tracepoints.  trace_text could be output of 'perf script' or
