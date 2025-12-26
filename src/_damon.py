@@ -489,8 +489,7 @@ class DamonRegion:
         return self.to_str(False)
 
     def __eq__(self, other):
-        if self.nr_accesses == None:
-            return type(self) == type(other) and '%s' % self == '%s' % other
+        return type(self) == type(other) and '%s' % self == '%s' % other
 
     # For aggregate_snapshots() support
     def __hash__(self):
