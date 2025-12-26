@@ -520,7 +520,7 @@ def parse_perf_script_tune_line(line):
         return False, None
     return True, int(fields[3].split(')')[0])
 
-def parse_perf_script(script_output, monitoring_intervals):
+def parse_damon_trace(script_output, monitoring_intervals):
     records = []
     snapshot = None
     snapshot_sample_interval_us = None
@@ -573,7 +573,7 @@ def parse_perf_damon_record(record_file, monitoring_intervals):
                     stderr=fnull).decode()
     except Exception as e:
         return None, 'failed perf-script (%s)' % e
-    return parse_perf_script(perf_script_output, monitoring_intervals)
+    return parse_damon_trace(perf_script_output, monitoring_intervals)
 
 def set_perf_path(perf_path):
     global PERF
@@ -632,7 +632,7 @@ def parse_records_file(record_file, monitoring_intervals=None):
     if file_type == 'ASCII text':
         with open(record_file, 'r') as f:
             perf_script_output = f.read()
-        return parse_perf_script(perf_script_output, monitoring_intervals)
+        return parse_damon_trace(perf_script_output, monitoring_intervals)
 
     return parse_perf_damon_record(record_file, monitoring_intervals)
 
