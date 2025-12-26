@@ -629,13 +629,9 @@ def parse_records_file(record_file, monitoring_intervals=None):
                 perf_script_output = subprocess.check_output(
                         [PERF, 'script', '--force', '-i', record_file],
                         stderr=fnull).decode()
-        except:
-            # Should be record format file
-            pass
-    if perf_script_output is not None:
-        return parse_perf_script(perf_script_output, monitoring_intervals)
-    else:
-        return None, 'parsing %s failed' % record_file
+        except Exception as e:
+            return None, 'failed perf-script (%s)' % e
+    return parse_perf_script(perf_script_output, monitoring_intervals)
 
 # for writing monitoring results to a file
 
