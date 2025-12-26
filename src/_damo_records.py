@@ -728,7 +728,8 @@ def write_damon_records(records, file_path, file_type, file_permission=None):
         os.chmod(file_path, file_permission)
     return None
 
-def rewrite_record_file(src_file, dst_file, file_format, file_permission=None,
+def convert_perf_to_damon_data(
+        src_file, dst_file, file_format, file_permission=None,
         monitoring_intervals=None):
     records, err = parse_perf_damon_record(src_file, monitoring_intervals)
     if err:
@@ -1320,7 +1321,7 @@ def save_recording_outputs(handle, file_path):
         if handle.file_format == file_type_perf_data:
             os.chmod(file_path, handle.file_permission)
         else:
-            err = rewrite_record_file(
+            err = convert_perf_to_damon_data(
                     src_file=file_path, dst_file=file_path,
                     file_format=handle.file_format,
                     file_permission=handle.file_permission,
