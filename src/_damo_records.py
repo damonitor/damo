@@ -560,6 +560,21 @@ def parse_perf_script(script_output, monitoring_intervals):
     set_first_snapshot_start_time(records)
     return records, None
 
+def parse_perf_damon_record(record_file, monitoring_intervals):
+    '''Returns DamonRecord list and error'''
+    try:
+        with open(os.devnull, 'w') as fnull:
+            # in some setup, perf record file ends up having no proper
+            # ownership.  There's no reason to be strict about that from
+            # damo.  As long as we can, just parse it with '--force'
+            # option.
+            perf_script_output = subprocess.check_output(
+                    [PERF, 'script', '--force', '-i', record_file],
+                    stderr=fnull).decode()
+    except Exception as e:
+        return None, 'failed perf-script (%s)' % e
+    return parse_perf_script(perf_script_output, monitoring_intervals)
+
 def set_perf_path(perf_path):
     global PERF
     PERF = perf_path
@@ -614,24 +629,12 @@ def parse_records_file(record_file, monitoring_intervals=None):
         except Exception as e:
             return None, 'failed parsing json compressed file (%s)' % e
 
-    perf_script_output = None
     if file_type == 'ASCII text':
         with open(record_file, 'r') as f:
             perf_script_output = f.read()
-    else:
-        # might be perf data
-        try:
-            with open(os.devnull, 'w') as fnull:
-                # in some setup, perf record file ends up having no proper
-                # ownership.  There's no reason to be strict about that from
-                # damo.  As long as we can, just parse it with '--force'
-                # option.
-                perf_script_output = subprocess.check_output(
-                        [PERF, 'script', '--force', '-i', record_file],
-                        stderr=fnull).decode()
-        except Exception as e:
-            return None, 'failed perf-script (%s)' % e
-    return parse_perf_script(perf_script_output, monitoring_intervals)
+        return parse_perf_script(perf_script_output, monitoring_intervals)
+
+    return parse_perf_damon_record(record_file, monitoring_intervals)
 
 # for writing monitoring results to a file
 
