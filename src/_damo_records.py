@@ -429,9 +429,9 @@ def parse_damon_aggregated_trace_cmd_report_line(line):
 
 def parse_damon_aggregated_perf_script_fields(fields):
     '''
-    The line is like below:
+    The fields is like below:
 
-    kdamond.0  4452 [000] 82877.315633: damon:damon_aggregated: \
+    82877.315633: damon:damon_aggregated: \
             target_id=18446623435582458880 nr_regions=17 \
             140731667070976-140731668037632: 0 3
 
@@ -440,17 +440,17 @@ def parse_damon_aggregated_perf_script_fields(fields):
     [1] https://lore.kernel.org/linux-mm/df8d52f1fb2f353a62ff34dc09fe99e32ca1f63f.1636610337.git.xhao@linux.alibaba.com/
     '''
 
-    if not len(fields) in [9, 10]:
+    if not len(fields) in [6, 7]:
         return None, None, None, None
 
-    end_time = int(float(fields[3][:-1]) * 1000000000)
-    target_id = int(fields[5].split('=')[1])
-    nr_regions = int(fields[6].split('=')[1])
+    end_time = int(float(fields[0][:-1]) * 1000000000)
+    target_id = int(fields[2].split('=')[1])
+    nr_regions = int(fields[3].split('=')[1])
 
-    start_addr, end_addr = [int(x) for x in fields[7][:-1].split('-')]
-    nr_accesses = int(fields[8])
-    if len(fields) == 10:
-        age = int(fields[9])
+    start_addr, end_addr = [int(x) for x in fields[4][:-1].split('-')]
+    nr_accesses = int(fields[5])
+    if len(fields) == 7:
+        age = int(fields[6])
     else:
         age = None
     region = _damon.DamonRegion(start_addr, end_addr, nr_accesses,
@@ -460,46 +460,49 @@ def parse_damon_aggregated_perf_script_fields(fields):
 
 def parse_damos_before_apply_perf_script_fields(fields):
     '''
-    The line is like below:
+    The fields is like below:
 
-    kdamond.0  4452 [000] 82877.315633: damon:damon_aggregated: \
+    82877.315633: damon:damon_aggregated: \
             target_id=18446623435582458880 nr_regions=17 \
             140731667070976-140731668037632: 0 3
 
     Note that the last field is not in the early version[1].
 
-    line is like below for damos_before_apply:
+    The fields is like below for damos_before_apply:
 
-    kdamond.0 47293 [000] 80801.060214: damon:damos_before_apply: \
+    80801.060214: damon:damos_before_apply: \
             ctx_idx=0 scheme_idx=0 target_idx=0 nr_regions=11 \
             121932607488-135128711168: 0 136
 
     [1] https://lore.kernel.org/linux-mm/df8d52f1fb2f353a62ff34dc09fe99e32ca1f63f.1636610337.git.xhao@linux.alibaba.com/
     '''
 
-    if len(fields) != 12:
+    if len(fields) != 9:
         return None, None, None, None
 
-    end_time = int(float(fields[3][:-1]) * 1000000000)
-    target_id = int(fields[7].split('=')[1])
-    nr_regions = int(fields[8].split('=')[1])
+    end_time = int(float(fields[0][:-1]) * 1000000000)
+    target_id = int(fields[4].split('=')[1])
+    nr_regions = int(fields[5].split('=')[1])
 
-    start_addr, end_addr = [int(x) for x in fields[9][:-1].split('-')]
-    nr_accesses = int(fields[10])
-    age = int(fields[11])
+    start_addr, end_addr = [int(x) for x in fields[6][:-1].split('-')]
+    nr_accesses = int(fields[7])
+    age = int(fields[8])
     region = _damon.DamonRegion(start_addr, end_addr, nr_accesses,
             _damon.unit_samples, age, _damon.unit_aggr_intervals)
 
     return region, end_time, target_id, nr_regions
 
-def parse_damon_trace_region(line):
+def parse_damon_trace_region(fields):
     '''
-    line could be that for damon_aggregated or damos_before_apply events
+    fields could be that for damon_aggregated or damos_before_apply events
+
+    The fields would be in format of
+
+    <timestamp> <tracepoint name> ...
     '''
-    fields = line.strip().split()
-    if not len(fields) > 5:
+    if len(fields) < 2:
         return None, None, None, None
-    traceevent = fields[4][:-1]
+    traceevent = fields[1][:-1]
     if traceevent in [traceevent_damon_aggregated,
                       perf_event_damon_aggregated]:
         return parse_damon_aggregated_perf_script_fields(fields)
@@ -567,7 +570,7 @@ def parse_damon_trace(trace_text, monitoring_intervals):
         if parsed is True:
             continue
         region, end_time, target_id, nr_regions = parse_damon_trace_region(
-                line)
+                fields)
         if region is None:
             continue
 
