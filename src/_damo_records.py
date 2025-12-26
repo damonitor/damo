@@ -500,9 +500,11 @@ def parse_damon_trace_line(line):
     if not len(fields) > 5:
         return None, None, None, None
     traceevent = fields[4][:-1]
-    if traceevent == perf_event_damon_aggregated:
+    if traceevent in [traceevent_damon_aggregated,
+                      perf_event_damon_aggregated]:
         return parse_damon_aggregated_perf_script_fields(fields)
-    elif traceevent == perf_event_damos_before_apply:
+    elif traceevent in [traceevent_damos_before_apply,
+                        perf_event_damos_before_apply]:
         return parse_damos_before_apply_perf_script_fields(fields)
     else:
         return None, None, None, None
