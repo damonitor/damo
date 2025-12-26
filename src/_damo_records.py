@@ -730,7 +730,7 @@ def write_damon_records(records, file_path, file_type, file_permission=None):
 
 def rewrite_record_file(src_file, dst_file, file_format, file_permission=None,
         monitoring_intervals=None):
-    records, err = parse_records_file(src_file, monitoring_intervals)
+    records, err = parse_perf_damon_record(src_file, monitoring_intervals)
     if err:
         return err
     return write_damon_records(records, dst_file, file_format,
