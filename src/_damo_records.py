@@ -492,7 +492,7 @@ def parse_damos_before_apply_perf_script_fields(fields):
 
     return region, end_time, target_id, nr_regions
 
-def parse_damon_trace_line(line):
+def parse_damon_trace_region(line):
     '''
     line could be that for damon_aggregated or damos_before_apply events
     '''
@@ -542,7 +542,8 @@ def parse_damon_trace(trace_text, monitoring_intervals):
                 line)
         if parsed is True:
             continue
-        region, end_time, target_id, nr_regions = parse_damon_trace_line(line)
+        region, end_time, target_id, nr_regions = parse_damon_trace_region(
+                line)
         if region is None:
             continue
 
