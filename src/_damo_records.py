@@ -509,24 +509,22 @@ def parse_damon_trace_region(line):
     else:
         return None, None, None, None
 
-def parse_damon_trace_intervals_tune(line):
+def parse_damon_trace_intervals_tune(fields):
     '''
-    The line is in format of, e.g.,
+    Example fields:
 
-    kthreadd  264487 [007] 92713.218210: damon:damon_monitor_intervals_tune: sample_us=80000
+    ['92713.218210:', 'damon:damon_monitor_intervals_tune:', 'sample_us=80000']
 
     Return if the line is for damon_monitor_intervals_tune, and if so, the
     sample_us value.
      '''
-
-    fields = line.split()
-    if len(fields) != 6:
+    if len(fields) != 3:
         return False, None
-    tracepoint_name = fields[4][:-1]
+    tracepoint_name = fields[1][:-1]
     if not tracepoint_name in [traceevent_damon_monitor_intervals_tune,
                                perf_event_damon_monitor_intervals_tune]:
         return False, None
-    return True, int(fields[5].split('=')[1])
+    return True, int(fields[2].split('=')[1])
 
 def damon_trace_fields(line):
     '''
@@ -561,8 +559,11 @@ def parse_damon_trace(trace_text, monitoring_intervals):
     snapshot_sample_interval_us = None
 
     for line in trace_text.split('\n'):
+        fields = damon_trace_fields(line)
+        if fields is None:
+            continue
         parsed, snapshot_sample_interval_us = parse_damon_trace_intervals_tune(
-                line)
+                fields)
         if parsed is True:
             continue
         region, end_time, target_id, nr_regions = parse_damon_trace_region(
