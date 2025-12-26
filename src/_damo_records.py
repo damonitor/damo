@@ -520,12 +520,12 @@ def parse_perf_script_tune_line(line):
         return False, None
     return True, int(fields[3].split(')')[0])
 
-def parse_damon_trace(script_output, monitoring_intervals):
+def parse_damon_trace(trace_text, monitoring_intervals):
     records = []
     snapshot = None
     snapshot_sample_interval_us = None
 
-    for line in script_output.split('\n'):
+    for line in trace_text.split('\n'):
         parsed, snapshot_sample_interval_us = parse_perf_script_tune_line(line)
         if parsed is True:
             continue
