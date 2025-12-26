@@ -521,6 +521,10 @@ def parse_perf_script_tune_line(line):
     return True, int(fields[3].split(')')[0])
 
 def parse_damon_trace(trace_text, monitoring_intervals):
+    '''
+    Parse DAMON tracepoints.  trace_text could be output of 'perf script' or
+    'trace-cmd report'.
+    '''
     records = []
     snapshot = None
     snapshot_sample_interval_us = None
