@@ -506,19 +506,20 @@ def parse_damon_trace_line(line):
 def parse_damon_trace_intervals_tune(line):
     '''
     The line is in format of, e.g.,
-    35359.794 kdamond.0/57030 damon:damon_monitor_intervals_tune(sample_us: 100000)
+
+    kthreadd  264487 [007] 92713.218210: damon:damon_monitor_intervals_tune: sample_us=80000
 
     Return if the line is for damon_monitor_intervals_tune, and if so, the
     sample_us value.
      '''
 
     fields = line.split()
-    if len(fields) != 4:
+    if len(fields) != 6:
         return False, None
-    tracepoint_name = fields[2].split('(')[0]
+    tracepoint_name = fields[4][:-1]
     if tracepoint_name != perf_event_damon_monitor_intervals_tune:
         return False, None
-    return True, int(fields[3].split(')')[0])
+    return True, int(fields[5].split('=')[1])
 
 def parse_damon_trace(trace_text, monitoring_intervals):
     '''
