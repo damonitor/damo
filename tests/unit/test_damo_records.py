@@ -135,5 +135,26 @@ class TestDamon(unittest.TestCase):
                 _damo_records.parse_sort_bytes_ranges_input(
                     [[10, 20], [5, 7]]), ([[5, 7], [10, 20]], None))
 
+    def test_parse_damon_aggregated_trace(self):
+        self.assertEqual(
+                _damo_records.parse_damon_aggregated_trace_cmd_report_line(
+                    'cpus=8'), (None, None, None, None))
+        returns = _damo_records.parse_damon_aggregated_trace_cmd_report_line(
+                ' '.join(['kdamond.0-259868 [004] ..... 85712.242158:',
+                          'damon_aggregated: target_id=0 nr_regions=11',
+                          '4294967296-4697088000: 0 485']))
+        expect = _damon.DamonRegion(start=4294967296, end=4697088000,
+                                    nr_accesses=0,
+                                    nr_accesses_unit=_damon.unit_samples,
+                                    age=485,
+                                    age_unit=_damon.unit_aggr_intervals)
+        self.assertEqual(returns[0],
+                _damon.DamonRegion(start=4294967296, end=4697088000,
+                                    nr_accesses=0,
+                                    nr_accesses_unit=_damon.unit_samples,
+                                    age=485,
+                                    age_unit=_damon.unit_aggr_intervals))
+        self.assertEqual(returns[1:], (85712242158000, 0, 11))
+
 if __name__ == '__main__':
     unittest.main()
