@@ -503,7 +503,7 @@ def parse_perf_script_line(line):
     else:
         return None, None, None, None
 
-def parse_perf_script_tune_line(line):
+def parse_damon_trace_intervals_tune(line):
     '''
     The line is in format of, e.g.,
     35359.794 kdamond.0/57030 damon:damon_monitor_intervals_tune(sample_us: 100000)
@@ -530,7 +530,8 @@ def parse_damon_trace(trace_text, monitoring_intervals):
     snapshot_sample_interval_us = None
 
     for line in trace_text.split('\n'):
-        parsed, snapshot_sample_interval_us = parse_perf_script_tune_line(line)
+        parsed, snapshot_sample_interval_us = parse_damon_trace_intervals_tune(
+                line)
         if parsed is True:
             continue
         region, end_time, target_id, nr_regions = parse_perf_script_line(line)
