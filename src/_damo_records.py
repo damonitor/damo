@@ -737,11 +737,6 @@ def rewrite_record_file(src_file, dst_file, file_format, file_permission=None,
     return write_damon_records(records, dst_file, file_format,
             file_permission)
 
-def update_records_file(file_path, file_format, file_permission=None,
-        monitoring_intervals=None):
-    return rewrite_record_file(file_path, file_path, file_format,
-            file_permission, monitoring_intervals)
-
 # for recording
 
 # Meaning of the fields of ProcMemFootprint are as below.
@@ -1326,8 +1321,11 @@ def save_recording_outputs(handle, file_path):
         if handle.file_format == file_type_perf_data:
             os.chmod(file_path, handle.file_permission)
         else:
-            err = update_records_file(file_path, handle.file_format,
-                    handle.file_permission, handle.monitoring_intervals)
+            err = rewrite_record_file(
+                    src_file=file_path, dst_file=file_path,
+                    file_format=handle.file_format,
+                    file_permission=handle.file_permission,
+                    monitoring_intervals=handle.monitoring_intervals)
             if err is not None:
                 print('converting format from perf_data to %s failed (%s)' %
                         (handle.file_format, err))
