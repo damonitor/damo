@@ -66,10 +66,11 @@ def handle_args(args):
         if os.path.isfile(footprint_file_path):
             os.rename(footprint_file_path, footprint_file_path + '.old')
 
-    err = _damo_records.set_perf_path(args.perf_path)
-    if err != None:
-        print(err)
-        exit(-3)
+    if args.perf_path is not None:
+        err = _damo_records.set_perf_path(args.perf_path)
+        if err != None:
+            print(err)
+            exit(-3)
 
 def tracepoints_from_args(args):
     if not 'access' in args.do_record or args.snapshot is not None:
@@ -211,8 +212,7 @@ def set_argparser(parser):
     parser.add_argument(
             '--output_flush_sec', type=str, default='3600',
             help='intermediate output files flush duration in seconds')
-    parser.add_argument('--perf_path', type=str, default='perf',
-                        help='path of perf tool ')
+    parser.add_argument('--perf_path', type=str, help='path of perf tool')
     parser.add_argument('--exclude_child_tasks', action='store_false',
                         dest='include_child_tasks',
                         help='do not record access of child processes')
