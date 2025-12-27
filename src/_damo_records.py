@@ -1164,7 +1164,7 @@ class RecordingHandle:
     # for access patterns tracing
     tracepoints = None
     monitoring_intervals = None
-    perf_pipe = None
+    damon_tracer_pipe = None
 
     # for access patterns snapshot
     snapshot_request = None # SnapshotRequest object.
@@ -1256,7 +1256,7 @@ def start_recording_perf(handle):
         for tracepoint in handle.tracepoints:
             if tracepoint_supported(tracepoint):
                 tracepoints_option += ['-e', tracepoint]
-        handle.perf_pipe = subprocess.Popen(
+        handle.damon_tracer_pipe = subprocess.Popen(
                 [PERF, 'record', '-a', '-o', handle.file_path] +
                 tracepoints_option)
     if handle.do_profile:
@@ -1340,10 +1340,10 @@ def save_recording_outputs(handle, file_path):
         json.dump([k.to_kvpairs() for k in handle.kdamonds], f, indent=4)
     os.chmod(kdamonds_file_path, handle.file_permission)
 
-    if handle.perf_pipe:
+    if handle.damon_tracer_pipe:
         try:
-            handle.perf_pipe.send_signal(signal.SIGINT)
-            handle.perf_pipe.wait()
+            handle.damon_tracer_pipe.send_signal(signal.SIGINT)
+            handle.damon_tracer_pipe.wait()
         except:
             # perf might already finished
             pass
