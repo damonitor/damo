@@ -142,6 +142,11 @@ def mk_handle(args, kdamonds, monitoring_intervals):
             snapshot_interval_sec=snapshot_interval_sec,
             snapshot_count=snapshot_count,
             max_seconds_per_file=output_flush_sec)
+    if args.perf_path is not None:
+        err = handle.set_perf_path(args.perf_path)
+        if err is not None:
+            print('--perf_path handling fail (%s)' % err)
+            cleanup_exit(1)
 
     return handle
 
