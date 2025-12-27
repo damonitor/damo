@@ -427,7 +427,7 @@ def parse_damon_aggregated_trace_cmd_report_line(line):
 
     return region, end_time_ns, target_id, nr_regions
 
-def parse_damon_aggregated_perf_script_fields(fields):
+def parse_damon_trace_aggregated(fields):
     '''
     The fields is like below:
 
@@ -505,7 +505,7 @@ def parse_damon_trace_region(fields):
     traceevent = fields[1][:-1]
     if traceevent in [traceevent_damon_aggregated,
                       perf_event_damon_aggregated]:
-        return parse_damon_aggregated_perf_script_fields(fields)
+        return parse_damon_trace_aggregated(fields)
     elif traceevent in [traceevent_damos_before_apply,
                         perf_event_damos_before_apply]:
         return parse_damos_before_apply_perf_script_fields(fields)
