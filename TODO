@@ -51,6 +51,11 @@
   - adding --repeat and --use_tracepoint to 'damo report damon'?
   - adding 'damo trace'?
 - Use tracepoint directly, instead of perf.
+- Add more trace-cmd/perf output parsing test in test_damo_records.py
+  - Test old version damon_aggregated event (no age)
+  - Test damos_before_apply trace
+  - Test damon_intervals_tune trace
+  - Test non-damon trace events
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
