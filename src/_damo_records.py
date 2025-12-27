@@ -1169,6 +1169,7 @@ class RecordingHandle:
     tracepoints = None
     monitoring_intervals = None
     damon_tracer_pipe = None
+    damon_tracer = None
 
     # for access patterns snapshot
     snapshot_request = None # SnapshotRequest object.
@@ -1210,6 +1211,7 @@ class RecordingHandle:
                  record_vmas, record_proc_stats, timeout, snapshot_request,
                  snapshot_interval_sec, snapshot_count,
                  max_seconds_per_file=3600):
+        self.damon_tracer = 'perf'
         self.tracepoints = tracepoints
         self.file_path = file_path
         self.file_format = file_format
@@ -1353,14 +1355,15 @@ def save_recording_outputs(handle, file_path):
             pass
         os.rename(handle.file_path, file_path)
 
-        err = convert_perf_to_damon_data(
-                src_file=file_path, dst_file=file_path,
-                file_format=handle.file_format,
-                file_permission=handle.file_permission,
-                monitoring_intervals=handle.monitoring_intervals)
-        if err is not None:
-            print('converting format from perf_data to %s failed (%s)' %
-                    (handle.file_format, err))
+        if handle.damon_tracer == 'perf':
+            err = convert_perf_to_damon_data(
+                    src_file=file_path, dst_file=file_path,
+                    file_format=handle.file_format,
+                    file_permission=handle.file_permission,
+                    monitoring_intervals=handle.monitoring_intervals)
+            if err is not None:
+                print('converting format from perf_data to %s failed (%s)' %
+                        (handle.file_format, err))
 
     if handle.snapshot_records:
         write_damon_records(handle.snapshot_records, file_path,
