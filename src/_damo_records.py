@@ -591,7 +591,8 @@ def parse_damon_trace(trace_text, monitoring_intervals):
     set_first_snapshot_start_time(records)
     return records, None
 
-def parse_perf_damon_record(record_file, monitoring_intervals):
+def parse_perf_damon_record(
+        record_file, monitoring_intervals, perf_cmd='perf'):
     '''Returns DamonRecord list and error'''
     try:
         with open(os.devnull, 'w') as fnull:
@@ -600,7 +601,7 @@ def parse_perf_damon_record(record_file, monitoring_intervals):
             # damo.  As long as we can, just parse it with '--force'
             # option.
             perf_script_output = subprocess.check_output(
-                    [PERF, 'script', '--force', '-i', record_file],
+                    [perf_cmd, 'script', '--force', '-i', record_file],
                     stderr=fnull).decode()
     except Exception as e:
         return None, 'failed perf-script (%s)' % e
@@ -655,7 +656,8 @@ def parse_records_file(record_file, monitoring_intervals=None):
             perf_script_output = f.read()
         return parse_damon_trace(perf_script_output, monitoring_intervals)
 
-    return parse_perf_damon_record(record_file, monitoring_intervals)
+    return parse_perf_damon_record(
+            record_file, monitoring_intervals, perf_cmd='perf')
 
 # for writing monitoring results to a file
 
@@ -751,12 +753,13 @@ def write_damon_records(records, file_path, file_type, file_permission=None):
 
 def convert_perf_to_damon_data(
         src_file, dst_file, file_format, file_permission=None,
-        monitoring_intervals=None):
+        monitoring_intervals=None, perf_cmd='perf'):
     if file_format == file_type_perf_data:
         os.chmod(file_path, handle.file_permission)
         return None
 
-    records, err = parse_perf_damon_record(src_file, monitoring_intervals)
+    records, err = parse_perf_damon_record(
+            src_file, monitoring_intervals, perf_cmd=perf_cmd)
     if err:
         return err
     return write_damon_records(records, dst_file, file_format,
@@ -1257,9 +1260,9 @@ class RecordingHandle:
         self.perf_path = perf_path
         return None
 
-def tracepoint_supported(tracepoint):
+def tracepoint_supported(tracepoint, perf_cmd):
     output = subprocess.check_output(
-            [PERF, 'list', 'tracepoint']).decode().strip()
+            [perf_cmd, 'list', 'tracepoint']).decode().strip()
     for line in output.split('\n'):
         fields = line.split()
         if len(fields) < 3:
@@ -1271,14 +1274,18 @@ def tracepoint_supported(tracepoint):
     return False
 
 def start_damon_tracing(handle):
+    perf_cmd = 'perf'
+    if handle.perf_path is not None:
+        perf_cmd = handle.perf_cmd
+
     if handle.tracepoints is not None:
         tracepoints_option = []
         for tracepoint in handle.tracepoints:
-            if tracepoint_supported(tracepoint):
+            if tracepoint_supported(tracepoint, perf_cmd):
                 tracepoints_option += ['-e', tracepoint]
         if handle.damon_tracer == 'perf':
             handle.damon_tracer_pipe = subprocess.Popen(
-                    [PERF, 'record', '-a', '-o', handle.file_path] +
+                    [perf_cmd, 'record', '-a', '-o', handle.file_path] +
                     tracepoints_option)
         elif handle.damon_tracer == 'trace-cmd':
             handle.damon_tracer_pipe = subprocess.Popen(
@@ -1286,7 +1293,7 @@ def start_damon_tracing(handle):
                     tracepoints_option,
                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     if handle.do_profile:
-        cmd = [PERF, 'record', '-o', '%s.profile' % handle.file_path]
+        cmd = [perf_cmd, 'record', '-o', '%s.profile' % handle.file_path]
         handle.perf_profile_pipe = subprocess.Popen(cmd)
 
 def record_source_is_running(record_handle):
@@ -1376,11 +1383,15 @@ def save_recording_outputs(handle, file_path):
         os.rename(handle.file_path, file_path)
 
         if handle.damon_tracer == 'perf':
+            perf_cmd = 'perf'
+            if handle.perf_path is not None:
+                perf_cmd = handle.perf_path
             err = convert_perf_to_damon_data(
                     src_file=file_path, dst_file=file_path,
                     file_format=handle.file_format,
                     file_permission=handle.file_permission,
-                    monitoring_intervals=handle.monitoring_intervals)
+                    monitoring_intervals=handle.monitoring_intervals,
+                    perf_cmd=perf_cmd)
             if err is not None:
                 print('converting format from perf_data to %s failed (%s)' %
                         (handle.file_format, err))
