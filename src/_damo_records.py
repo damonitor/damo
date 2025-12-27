@@ -458,7 +458,7 @@ def parse_damon_trace_aggregated(fields):
 
     return region, end_time, target_id, nr_regions
 
-def parse_damos_before_apply_perf_script_fields(fields):
+def parse_damos_trace_before_apply(fields):
     '''
     The fields is like below:
 
@@ -508,7 +508,7 @@ def parse_damon_trace_region(fields):
         return parse_damon_trace_aggregated(fields)
     elif traceevent in [traceevent_damos_before_apply,
                         perf_event_damos_before_apply]:
-        return parse_damos_before_apply_perf_script_fields(fields)
+        return parse_damos_trace_before_apply(fields)
     else:
         return None, None, None, None
 
