@@ -610,19 +610,9 @@ def set_perf_path(perf_path):
     global PERF
     PERF = perf_path
 
-    # Test perf record for damon event
-    err = None
-    if _damo_subproc.avail_cmd(PERF):
-        try:
-            subprocess.check_output(
-                    [PERF, 'record', '-e', perf_event_damon_aggregated, '--',
-                        'sleep', '0'],
-                    stderr=subprocess.PIPE)
-        except:
-            err = 'perf record not working with "%s"' % PERF
-    else:
-        err = 'perf not found at "%s"' % PERF
-    return err
+    if not _damo_subproc.avail_cmd(PERF):
+        return 'perf not found at "%s"' % PERF
+    return None
 
 def parse_json(json_str):
     kvpairs = json.loads(json_str)
