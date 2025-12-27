@@ -1250,7 +1250,7 @@ def tracepoint_supported(tracepoint):
             return True
     return False
 
-def start_recording_perf(handle):
+def start_damon_tracing(handle):
     if handle.tracepoints is not None:
         tracepoints_option = []
         for tracepoint in handle.tracepoints:
@@ -1270,7 +1270,7 @@ def record_source_is_running(record_handle):
             _damon.any_kdamond_running()
 
 def start_recording(handle):
-    start_recording_perf(handle)
+    start_damon_tracing(handle)
 
     start_time = time.time()
     last_output_saved_time = start_time
@@ -1310,7 +1310,7 @@ def start_recording(handle):
                 handle.proc_stats = []
             if handle.snapshot_records is not None:
                 handle.snapshot_records = []
-            start_recording_perf(handle)
+            start_damon_tracing(handle)
 
         if handle.snapshot_request:
             if handle.snapshot_records is None:
