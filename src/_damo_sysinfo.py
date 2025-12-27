@@ -187,15 +187,29 @@ def get_damon_tracepoints():
     returns list of DAMON tracepoint names and an error
     '''
     try:
-        perf_output = subprocess.check_output(
-                ['perf', 'list', 'tracepoint']).decode().strip()
+        output = subprocess.check_output(['mount']).decode().strip()
     except Exception as e:
-        return None, 'perf list fail (%s)' % e
-    points = []
-    for line in perf_output.split('\n'):
+        return 'reading mounts fail (%s)' % e
+    tracefs_path = None
+    for line in output.split('\n'):
         fields = line.split()
-        if fields[0].startswith('damon:'):
-            points.append(fields[0])
+        if len(fields) < 5:
+            continue
+        # expectation line:
+        # tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,...)
+        if fields[4] == 'tracefs':
+            tracefs_path = fields[2]
+            break
+    if tracefs_path is None:
+        return None, 'tracefs is not mounted'
+    points = []
+    try:
+        with open(os.path.join(tracefs_path, 'available_events'), 'r') as f:
+            for line in f:
+                if line.startswith('damon:'):
+                    points.append(line.strip())
+    except Exception as e:
+        return None, 'available tracepoints reading fail'
     return points, None
 
 def damon_feature_of_name(name):
