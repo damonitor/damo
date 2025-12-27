@@ -1170,6 +1170,9 @@ class RecordingHandle:
     file_format = None
     file_permission = None
 
+    # for custom perf
+    perf_path = None
+
     # for access patterns tracing
     tracepoints = None
     monitoring_intervals = None
@@ -1247,6 +1250,12 @@ class RecordingHandle:
         if self.snapshot_interval_sec == 0 and self.snapshot_count < 5:
             return False
         return True
+
+    def set_perf_path(self, perf_path):
+        if not _damo_subproc.avail_cmd(perf_path):
+            return 'perf not found at "%s"' % perf_path
+        self.perf_path = perf_path
+        return None
 
 def tracepoint_supported(tracepoint):
     output = subprocess.check_output(
