@@ -67,12 +67,6 @@ def handle_args(args):
         if os.path.isfile(footprint_file_path):
             os.rename(footprint_file_path, footprint_file_path + '.old')
 
-    if args.perf_path is not None:
-        err = _damo_records.set_perf_path(args.perf_path)
-        if err != None:
-            print(err)
-            exit(-3)
-
 def tracepoints_from_args(args):
     if not 'access' in args.do_record or args.snapshot is not None:
         return None

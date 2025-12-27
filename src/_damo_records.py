@@ -22,7 +22,6 @@ traceevent_damon_aggregated = 'damon_aggregated'
 traceevent_damon_monitor_intervals_tune = 'damon_monitor_intervals_tune'
 traceevent_damos_before_apply = 'damos_before_apply'
 
-PERF = 'perf'
 perf_event_damon_aggregated = 'damon:damon_aggregated'
 perf_event_damon_monitor_intervals_tune = 'damon:damon_monitor_intervals_tune'
 perf_event_damos_before_apply = 'damon:damos_before_apply'
@@ -606,14 +605,6 @@ def parse_perf_damon_record(
     except Exception as e:
         return None, 'failed perf-script (%s)' % e
     return parse_damon_trace(perf_script_output, monitoring_intervals)
-
-def set_perf_path(perf_path):
-    global PERF
-    PERF = perf_path
-
-    if not _damo_subproc.avail_cmd(PERF):
-        return 'perf not found at "%s"' % PERF
-    return None
 
 def parse_json(json_str):
     kvpairs = json.loads(json_str)
