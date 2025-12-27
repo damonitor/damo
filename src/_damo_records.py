@@ -772,6 +772,21 @@ def convert_perf_to_damon_data(
     return write_damon_records(records, dst_file, file_format,
             file_permission)
 
+def convert_trace_cmd_to_damon_data(
+        file_path, file_format, file_permission, monitoring_intervals):
+    try:
+        with open(os.devnull, 'w') as fnull:
+            output = subprocess.check_output(
+                    ['trace-cmd', 'report', '-i', file_path],
+                    stderr=fnull).decode()
+    except Exception as e:
+        return 'trace-cmd report fail (%s)' % e
+    records, err = parse_damon_trace(output, monitoring_intervals)
+    if err:
+        return 'trace-cmd output parsing fail (%s)' % err
+    return write_damon_records(records, file_path, file_format,
+                               file_permission)
+
 # for recording
 
 # Meaning of the fields of ProcMemFootprint are as below.
@@ -1364,6 +1379,10 @@ def save_recording_outputs(handle, file_path):
             if err is not None:
                 print('converting format from perf_data to %s failed (%s)' %
                         (handle.file_format, err))
+        if handle.damon_tracer == 'trace-cmd':
+            err = convert_trace_cmd_to_damon_data(
+                    file_path, handle.file_format, handle.file_permission,
+                    handle.monitoring_intervals)
 
     if handle.snapshot_records:
         write_damon_records(handle.snapshot_records, file_path,
