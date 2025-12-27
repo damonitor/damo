@@ -762,6 +762,10 @@ def write_damon_records(records, file_path, file_type, file_permission=None):
 def convert_perf_to_damon_data(
         src_file, dst_file, file_format, file_permission=None,
         monitoring_intervals=None):
+    if file_format == file_type_perf_data:
+        os.chmod(file_path, handle.file_permission)
+        return None
+
     records, err = parse_perf_damon_record(src_file, monitoring_intervals)
     if err:
         return err
@@ -1349,17 +1353,14 @@ def save_recording_outputs(handle, file_path):
             pass
         os.rename(handle.file_path, file_path)
 
-        if handle.file_format == file_type_perf_data:
-            os.chmod(file_path, handle.file_permission)
-        else:
-            err = convert_perf_to_damon_data(
-                    src_file=file_path, dst_file=file_path,
-                    file_format=handle.file_format,
-                    file_permission=handle.file_permission,
-                    monitoring_intervals=handle.monitoring_intervals)
-            if err is not None:
-                print('converting format from perf_data to %s failed (%s)' %
-                        (handle.file_format, err))
+        err = convert_perf_to_damon_data(
+                src_file=file_path, dst_file=file_path,
+                file_format=handle.file_format,
+                file_permission=handle.file_permission,
+                monitoring_intervals=handle.monitoring_intervals)
+        if err is not None:
+            print('converting format from perf_data to %s failed (%s)' %
+                    (handle.file_format, err))
 
     if handle.snapshot_records:
         write_damon_records(handle.snapshot_records, file_path,
