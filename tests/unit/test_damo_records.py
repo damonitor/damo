@@ -149,15 +149,15 @@ class TestDamon(unittest.TestCase):
         returns = _damo_records.parse_damon_trace_region(
                 ['85712.242158:',
                           'damon_aggregated:', 'target_id=0', 'nr_regions=11',
-                          '4294967296-4697088000:', '0', '485'])
+                          '4294967296-4697088000:', '1', '485'])
         expect = _damon.DamonRegion(start=4294967296, end=4697088000,
-                                    nr_accesses=0,
+                                    nr_accesses=1,
                                     nr_accesses_unit=_damon.unit_samples,
                                     age=485,
                                     age_unit=_damon.unit_aggr_intervals)
         self.assertEqual(returns[0],
                 _damon.DamonRegion(start=4294967296, end=4697088000,
-                                    nr_accesses=0,
+                                    nr_accesses=1,
                                     nr_accesses_unit=_damon.unit_samples,
                                     age=485,
                                     age_unit=_damon.unit_aggr_intervals))
@@ -167,13 +167,13 @@ class TestDamon(unittest.TestCase):
         self.assertEqual(_damo_records.parse_damon_trace_region(
             _damo_records.damon_trace_fields(
                 '        kthreadd  264573 [002] 93214.744389:             '
-                'damon:damon_aggregated: target_id=0 nr_regions=10 '
-                '7473692672-8372879360: 0 0')),
+                'damon:damon_aggregated: target_id=12 nr_regions=10 '
+                '7473692672-8372879360: 3 4')),
             (_damon.DamonRegion(
-                start=7473692672, end=8372879360, nr_accesses=0,
-                nr_accesses_unit=_damon.unit_samples, age=0,
+                start=7473692672, end=8372879360, nr_accesses=3,
+                nr_accesses_unit=_damon.unit_samples, age=4,
                 age_unit=_damon.unit_aggr_intervals),
-             93214744389000, 0, 10))
+             93214744389000, 12, 10))
 
 if __name__ == '__main__':
     unittest.main()
