@@ -1225,8 +1225,8 @@ class RecordingHandle:
                  kdamonds, add_child_tasks, record_mem_footprint,
                  record_vmas, record_proc_stats, timeout, snapshot_request,
                  snapshot_interval_sec, snapshot_count,
-                 max_seconds_per_file=3600):
-        self.damon_tracer = 'perf'
+                 max_seconds_per_file=3600, damon_tracer='perf'):
+        self.damon_tracer = damon_tracer
         self.tracepoints = tracepoints
         self.file_path = file_path
         self.file_format = file_format

@@ -4,6 +4,7 @@
 Record monitored data access patterns.
 """
 
+import argparse
 import json
 import os
 import signal
@@ -125,6 +126,7 @@ def mk_handle(args, kdamonds, monitoring_intervals):
 
     handle = _damo_records.RecordingHandle(
             # for access pattern monitoring
+            damon_tracer=args.damon_tracer,
             tracepoints=tracepoints, file_path=args.out,
             file_format=args.output_type,
             file_permission=args.output_permission,
@@ -230,6 +232,11 @@ def set_argparser(parser):
                         choices=['access', 'cpu_profile', 'mem_footprint',
                                  'vmas', 'proc_stats'],
                         help='what to do record')
+    parser.add_argument('--damon_tracer', metavar='cmd', default='perf',
+                        choices=['perf', 'trace-cmd'],
+                        # tracer to use.  Hide this as this is an experimental
+                        # option.
+                        help=argparse.SUPPRESS)
     _damo_records.set_snapshot_damos_filters_option(parser)
     _damo_records.set_filter_argparser(parser)
     return parser
