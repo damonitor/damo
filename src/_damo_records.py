@@ -1284,7 +1284,8 @@ def start_damon_tracing(handle):
         elif handle.damon_tracer == 'trace-cmd':
             handle.damon_tracer_pipe = subprocess.Popen(
                     ['trace-cmd', 'record', '-o', handle.file_path] +
-                    tracepoints_option)
+                    tracepoints_option,
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     if handle.do_profile:
         cmd = [PERF, 'record', '-o', '%s.profile' % handle.file_path]
         handle.perf_profile_pipe = subprocess.Popen(cmd)
