@@ -10,6 +10,7 @@ import json
 import os
 import subprocess
 
+import _damo_subproc
 import _damon_dbgfs
 import _damon_features
 import _damon_sysfs
@@ -18,6 +19,7 @@ import damo_version
 class SystemInfo:
     damo_version = None
     kernel_version = None
+    trace_cmd_version = None
     perf_path = None
     perf_version = None
 
@@ -34,9 +36,10 @@ class SystemInfo:
     def __init__(self, damo_version, kernel_version,
                  avail_damon_sysfs_features, avail_damon_debugfs_features,
                  avail_damon_trace_features=[], tested_features=[],
-                 perf_path=None, perf_version=None):
+                 perf_path=None, perf_version=None, trace_cmd_version=None):
         self.damo_version = damo_version
         self.kernel_version = kernel_version
+        self.trace_cmd_version=trace_cmd_version
         self.perf_path = perf_path
         self.perf_version = perf_version
         self.avail_damon_sysfs_features = avail_damon_sysfs_features
@@ -48,6 +51,7 @@ class SystemInfo:
         return collections.OrderedDict([
             ('damo_version', self.damo_version),
             ('kernel_version', self.kernel_version),
+            ('trace_cmd_version', self.trace_cmd_version),
             ('perf_path', self.perf_path),
             ('perf_version', self.perf_version),
             ('avail_damon_sysfs_features',
@@ -62,6 +66,9 @@ class SystemInfo:
 
     @classmethod
     def from_kvpairs(cls, kvpairs):
+        trace_cmd_version = None
+        if 'trace_cmd_version' in kvpairs:
+            trace_cmd_version = kvpairs['trace_cmd_version']
         perf_path = None
         if 'perf_path' in kvpairs:
             perf_path = kvpairs['perf_path']
@@ -74,6 +81,7 @@ class SystemInfo:
         return cls(
                 damo_version=kvpairs['damo_version'],
                 kernel_version=kvpairs['kernel_version'],
+                trace_cmd_version=trace_cmd_version,
                 perf_path=perf_path, perf_version=perf_version,
                 avail_damon_sysfs_features=[
                     _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
@@ -92,6 +100,7 @@ class SystemInfo:
     def __eq__(self, other):
         return self.damo_version == other.damo_version and \
                 self.kernel_version == other.kernel_version and \
+                self.trace_cmd_version == other.trace_cmd_version and \
                 self.perf_path == other.perf_path and \
                 self.perf_version == other.perf_version and \
                 self.avail_damon_sysfs_features == \
@@ -211,9 +220,25 @@ def get_avail_damon_trace_features():
             features.append(damon_feature_of_name(feature_name))
     return features, err
 
+def get_trace_cmd_version():
+    if not _damo_subproc.avail_cmd('trace-cmd'):
+        return None
+    try:
+        output = subprocess.check_output(['trace-cmd']).decode().strip()
+    except Exception as e:
+        output = e.output.decode().strip()
+    for line in output.split('\n'):
+        # version line is, e.g., trace-cmd version 3.3.1 (not-a-git-repo)
+        if not line.startswith('trace-cmd version '):
+            continue
+        fields = line.split()
+        return ' '.join(fields[2:])
+    return None
+
 def set_sysinfo_from_scratch():
     damo_version_ = damo_version.get_real_version()
     kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
+    trace_cmd_version = get_trace_cmd_version()
     try:
         perf_path = subprocess.check_output(['which', 'perf']).decode().strip()
     except:
@@ -238,6 +263,7 @@ def set_sysinfo_from_scratch():
     sysinfo = SystemInfo(
             damo_version=damo_version_,
             kernel_version=kernel_version,
+            trace_cmd_version=trace_cmd_version,
             perf_path=perf_path, perf_version=perf_version,
             avail_damon_sysfs_features=avail_damon_sysfs_features,
             avail_damon_debugfs_features=avail_damon_debugfs_features,
