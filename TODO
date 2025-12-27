@@ -56,6 +56,8 @@
   - Test damos_before_apply trace
   - Test damon_intervals_tune trace
   - Test non-damon trace events
+- Support tracefs-unmounted system
+  - Should just work as long as 'damo record' is not being used.
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
