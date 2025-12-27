@@ -460,21 +460,11 @@ def parse_damon_trace_aggregated(fields):
 
 def parse_damos_trace_before_apply(fields):
     '''
-    The fields is like below:
-
-    82877.315633: damon:damon_aggregated: \
-            target_id=18446623435582458880 nr_regions=17 \
-            140731667070976-140731668037632: 0 3
-
-    Note that the last field is not in the early version[1].
-
-    The fields is like below for damos_before_apply:
+    The fields would be in format of
 
     80801.060214: damon:damos_before_apply: \
             ctx_idx=0 scheme_idx=0 target_idx=0 nr_regions=11 \
             121932607488-135128711168: 0 136
-
-    [1] https://lore.kernel.org/linux-mm/df8d52f1fb2f353a62ff34dc09fe99e32ca1f63f.1636610337.git.xhao@linux.alibaba.com/
     '''
 
     if len(fields) != 9:
