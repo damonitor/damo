@@ -7,6 +7,7 @@ import _damo_dist
 import _damo_fmt_str
 import _damo_print
 import _damo_records
+import _damo_subproc
 import damo_record_info
 import damo_report_footprint
 import damo_report_heatmap
@@ -81,15 +82,16 @@ def fmt_report_short(args):
             line += '%15s ' % val
         lines.append(line)
 
-    lines.append('')
-    lines.append('# Hotspot functions')
-    if args.profile is None:
-        args.profile = args.access_pattern + '.profile'
+    if _damo_subproc.avail_cmd('perf'):
+        lines.append('')
+        lines.append('# Hotspot functions')
+        if args.profile is None:
+            args.profile = args.access_pattern + '.profile'
 
-    cmd = [args.perf_path, 'report', '-i', args.profile, '--stdio']
-    output_lines = subprocess.check_output(cmd).decode().split('\n')
-    output_lines = output_lines[5:21]
-    lines += output_lines
+        cmd = [args.perf_path, 'report', '-i', args.profile, '--stdio']
+        output_lines = subprocess.check_output(cmd).decode().split('\n')
+        output_lines = output_lines[5:21]
+        lines += output_lines
 
     return '\n'.join(lines)
 
