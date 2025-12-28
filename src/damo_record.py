@@ -13,6 +13,7 @@ import time
 
 import _damo_fmt_str
 import _damo_records
+import _damo_subproc
 import _damon
 import _damon_args
 
@@ -118,9 +119,14 @@ def mk_handle(args, kdamonds, monitoring_intervals):
 
     output_flush_sec = _damo_fmt_str.text_to_sec(args.output_flush_sec)
 
+    damon_tracer = args.damon_tracer
+    if not _damo_subproc.avail_cmd(damon_tracer):
+        print('damon tracer (%s) is unavailable' % damon_tracer)
+        cleanup_exit(1)
+
     handle = _damo_records.RecordingHandle(
             # for access pattern monitoring
-            damon_tracer=args.damon_tracer,
+            damon_tracer=damon_tracer,
             tracepoints=tracepoints, file_path=args.out,
             file_format=args.output_type,
             file_permission=args.output_permission,
