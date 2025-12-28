@@ -20,6 +20,10 @@ def main(args):
         version, err = sysinfo.infer_damon_version()
         if err is None:
             print('DAMON version: %s' % version)
+    if 'fs_info' in args.print or 'all' in args.print:
+        print('sysfs: %s' % sysinfo.sysfs_path)
+        print('tracefs: %s' % sysinfo.tracefs_path)
+        print('debugfs: %s' % sysinfo.debugfs_path)
     if 'trace_cmd_info' in args.print or 'all' in args.print:
         print('trace-cmd version: %s' % sysinfo.trace_cmd_version)
     if 'perf_info' in args.print or 'all' in args.print:
@@ -41,7 +45,7 @@ def main(args):
 def set_argparser(parser):
     parser.add_argument(
             '--print', nargs='+',
-            choices=['versions', 'trace_cmd_info', 'perf_info',
+            choices=['versions', 'fs_info', 'trace_cmd_info', 'perf_info',
                      'sysfs_features', 'debugfs_features', 'trace_features',
                      'all'],
             default=['versions'], help='info to print')
