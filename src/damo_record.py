@@ -122,11 +122,17 @@ def mk_handle(args, kdamonds, monitoring_intervals):
     do_records = args.do_record
     damon_tracer = args.damon_tracer
     if damon_tracer is not None:
-        if not _damo_subproc.avail_cmd(damon_tracer):
-            print('--damon_tracer (%s) is unavailable')
+        tracer = damon_tracer
+        if tracer == 'perf' and args.perf_path is not None:
+            tracer = args.perf_path
+        if not _damo_subproc.avail_cmd(tracer):
+            print('--damon_tracer (%s) is unavailable' % tracer)
             cleanup_exit(1)
     else:
-        if _damo_subproc.avail_cmd('perf'):
+        perf_path = 'perf'
+        if args.perf_path is not None:
+            perf_path = args.perf_path
+        if _damo_subproc.avail_cmd(perf_path):
             damon_tracer = 'perf'
         elif _damo_subproc.avail_cmd('trace-cmd'):
             damon_tracer = 'trace-cmd'
