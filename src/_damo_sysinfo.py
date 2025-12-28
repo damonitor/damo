@@ -266,14 +266,7 @@ def get_trace_cmd_version():
         return ' '.join(fields[2:])
     return None
 
-def get_sysinfo_from_scratch():
-    damo_version_ = damo_version.get_real_version()
-    kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
-    sysfs_path = _damo_fs.dev_mount_point('sysfs')
-    tracefs_path = _damo_fs.dev_mount_point('tracefs')
-    debugfs_path = _damo_fs.dev_mount_point('debugfs')
-
-    trace_cmd_version = get_trace_cmd_version()
+def get_perf_path_version():
     try:
         perf_path = subprocess.check_output(['which', 'perf']).decode().strip()
     except:
@@ -283,6 +276,17 @@ def get_sysinfo_from_scratch():
                 ['perf', '--version']).decode().strip()
     else:
         perf_version = None
+    return perf_path, perf_version
+
+def get_sysinfo_from_scratch():
+    damo_version_ = damo_version.get_real_version()
+    kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
+    sysfs_path = _damo_fs.dev_mount_point('sysfs')
+    tracefs_path = _damo_fs.dev_mount_point('tracefs')
+    debugfs_path = _damo_fs.dev_mount_point('debugfs')
+
+    trace_cmd_version = get_trace_cmd_version()
+    perf_path, perf_version = get_perf_path_version()
 
     avail_damon_sysfs_features, err = avail_features_on(_damon_sysfs)
     if err is not None:
