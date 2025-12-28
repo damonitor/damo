@@ -1251,10 +1251,13 @@ class RecordingHandle:
         self.perf_path = perf_path
         return None
 
-def tracepoint_supported(tracepoint, perf_cmd):
+def tracepoint_supported(tracepoint, tracer):
     output = subprocess.check_output(
-            [perf_cmd, 'list', 'tracepoint']).decode().strip()
+            [tracer, 'list', 'tracepoint']).decode().strip()
     for line in output.split('\n'):
+        if tracer == 'trace-cmd' and line == tracepoint:
+            return True
+
         fields = line.split()
         if len(fields) < 3:
             continue
@@ -1272,7 +1275,7 @@ def start_damon_tracing(handle):
     if handle.tracepoints is not None:
         tracepoints_option = []
         for tracepoint in handle.tracepoints:
-            if tracepoint_supported(tracepoint, perf_cmd):
+            if tracepoint_supported(tracepoint, handle.damon_tracer):
                 tracepoints_option += ['-e', tracepoint]
         if handle.damon_tracer == 'perf':
             handle.damon_tracer_pipe = subprocess.Popen(
