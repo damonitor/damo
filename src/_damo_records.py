@@ -14,6 +14,7 @@ import zlib
 
 import _damo_fmt_str
 import _damo_subproc
+import _damo_sysinfo
 import _damon
 import _damon_args
 import damo_report_access
@@ -1251,22 +1252,6 @@ class RecordingHandle:
         self.perf_path = perf_path
         return None
 
-def tracepoint_supported(tracepoint, tracer):
-    output = subprocess.check_output(
-            [tracer, 'list', 'tracepoint']).decode().strip()
-    for line in output.split('\n'):
-        if tracer == 'trace-cmd' and line == tracepoint:
-            return True
-
-        fields = line.split()
-        if len(fields) < 3:
-            continue
-        if fields[1:3] != ['[Tracepoint', 'event]']:
-            continue
-        if fields[0] == tracepoint:
-            return True
-    return False
-
 def start_damon_tracing(handle):
     perf_cmd = 'perf'
     if handle.perf_path is not None:
@@ -1275,7 +1260,7 @@ def start_damon_tracing(handle):
     if handle.tracepoints is not None:
         tracepoints_option = []
         for tracepoint in handle.tracepoints:
-            if tracepoint_supported(tracepoint, handle.damon_tracer):
+            if _damo_sysinfo.damon_tracepoint_available(tracepoint):
                 tracepoints_option += ['-e', tracepoint]
         if handle.damon_tracer == 'perf':
             handle.damon_tracer_pipe = subprocess.Popen(
