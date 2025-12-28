@@ -10,6 +10,8 @@ def pr_feature(feature):
 
 def main(args):
     _damon.ensure_root_permission()
+    if args.invalidate_cache:
+        _damo_sysinfo.rm_sysinfo_file()
     sysinfo, err = _damo_sysinfo.get_sysinfo()
     if err is not None:
         print('getting sysinfo fail (%s)' % err)
@@ -49,4 +51,6 @@ def set_argparser(parser):
                      'sysfs_features', 'debugfs_features', 'trace_features',
                      'all'],
             default=['versions'], help='info to print')
+    parser.add_argument('--invalidate_cache', action='store_true',
+                        help='invalidate cached sysinfo')
     return parser
