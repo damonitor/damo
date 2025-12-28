@@ -232,20 +232,21 @@ def get_damon_tracepoints():
 def damon_feature_of_name(name):
     return [f for f in _damon_features.features_list if f.name == name][0]
 
+tracepoint_to_feature_name_map = {
+        'damon:damon_aggregated': 'trace_damon_aggregated',
+        'damon:damos_before_apply': 'trace_damos_before_apply',
+        'damon:damon_monitor_intervals_tune':
+        'trace_damon_monitor_intervals_tune',
+        'damon:damos_esz': 'trace_damos_esz',
+        'damon:damos_stat_after_apply_interval':
+        'trace/damos_stat_after_apply_interval',
+        }
+
 def get_avail_damon_trace_features():
     features = []
     tracepoints, err = get_damon_tracepoints()
     if err is not None:
         return None, err
-    tracepoint_to_feature_name_map = {
-            'damon:damon_aggregated': 'trace_damon_aggregated',
-            'damon:damos_before_apply': 'trace_damos_before_apply',
-            'damon:damon_monitor_intervals_tune':
-            'trace_damon_monitor_intervals_tune',
-            'damon:damos_esz': 'trace_damos_esz',
-            'damon:damos_stat_after_apply_interval':
-            'trace/damos_stat_after_apply_interval',
-            }
     for tracepoint, feature_name in tracepoint_to_feature_name_map.items():
         if tracepoint in tracepoints:
             features.append(damon_feature_of_name(feature_name))
@@ -415,3 +416,10 @@ def damon_sysfs_feature_available(feature_name):
         if f.name == feature_name:
             return True, None
     return False, None
+
+def damon_tracepoint_available(tracepoint):
+    sysinfo, err = get_sysinfo()
+    if err is not None:
+        return False
+    feature_name = tracepoint_to_feature_name_map[tracepoint]
+    return feature_name in [f.name for f in sysinfo.avail_damon_trace_features]
