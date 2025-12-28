@@ -1255,7 +1255,7 @@ class RecordingHandle:
 def start_damon_tracing(handle):
     perf_cmd = 'perf'
     if handle.perf_path is not None:
-        perf_cmd = handle.perf_cmd
+        perf_cmd = handle.perf_path
 
     if handle.tracepoints is not None:
         tracepoints_option = []
