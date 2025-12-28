@@ -119,10 +119,22 @@ def mk_handle(args, kdamonds, monitoring_intervals):
 
     output_flush_sec = _damo_fmt_str.text_to_sec(args.output_flush_sec)
 
+    do_records = args.do_record
     damon_tracer = args.damon_tracer
-    if not _damo_subproc.avail_cmd(damon_tracer):
-        print('damon tracer (%s) is unavailable' % damon_tracer)
-        cleanup_exit(1)
+    if damon_tracer is not None:
+        if not _damo_subproc.avail_cmd(damon_tracer):
+            print('--damon_tracer (%s) is unavailable')
+            cleanup_exit(1)
+    else:
+        if _damo_subproc.avail_cmd('perf'):
+            damon_tracer = 'perf'
+        elif _damo_subproc.avail_cmd('trace-cmd'):
+            damon_tracer = 'trace-cmd'
+            if 'cpu_profile' in do_records:
+                do_records.remove('cpu_profile')
+        else:
+            print('Please install trace-cmd or perf and retry')
+            cleanup_exit(1)
 
     handle = _damo_records.RecordingHandle(
             # for access pattern monitoring
@@ -237,7 +249,7 @@ def set_argparser(parser):
                         choices=['access', 'cpu_profile', 'mem_footprint',
                                  'vmas', 'proc_stats'],
                         help='what to do record')
-    parser.add_argument('--damon_tracer', metavar='cmd', default='perf',
+    parser.add_argument('--damon_tracer', metavar='cmd',
                         choices=['perf', 'trace-cmd'],
                         # tracer to use.  Hide this as this is an experimental
                         # option.
