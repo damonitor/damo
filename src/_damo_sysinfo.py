@@ -169,7 +169,7 @@ class SystemInfo:
 system_info = None
 sysinfo_file_path = os.path.join(os.environ['HOME'], '.damo.sysinfo')
 
-def read_sysinfo():
+def read_sysinfo_file():
     '''
     Read save_sysinfo()-saved SystemInfo object.
     Returns read SystemInfo object and an error string if failed.
@@ -191,7 +191,7 @@ def valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
     return sysinfo.tested_features == _damon_features.features_list
 
 def set_sysinfo_from_cache():
-    sysinfo, err = read_sysinfo()
+    sysinfo, err = read_sysinfo_file()
     if err is not None:
         return 'reading saved sysinfo fail (%s)' % err
     damo_version_ = damo_version.get_real_version()
