@@ -309,13 +309,22 @@ def get_sysinfo_from_scratch():
             tested_features=tested_features)
     return sysinfo, None
 
-def set_sysinfo_from_scratch():
-    sysinfo, err = get_sysinfo_from_scratch()
-    if err is not None:
-        return err
-    global system_info
-    system_info = sysinfo
-    return None
+def version_mismatch(sysinfo):
+    if sysinfo.damo_version != damo_version.get_real_version():
+        return True
+    kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
+    if sysinfo.kernel_version != kernel_version:
+        return True
+    if sysinfo.tested_features != _damon_features.features_list:
+        return True
+    return False
+
+def update_cached_info(cached_info):
+    if cached_info is None:
+        return get_sysinfo_from_scratch()
+    if version_mismatch(cached_info):
+        return get_sysinfo_from_scratch()
+    return cached_info, None
 
 def load_sysinfo():
     '''
@@ -323,14 +332,19 @@ def load_sysinfo():
 
     Returns an error if failed.
     '''
-    err = set_sysinfo_from_cache()
-    if err is None:
-        return None
-    err = set_sysinfo_from_scratch()
-    if err is None:
-        save_sysinfo_file()
-        return None
-    return 'system info setup fail (%s)' % err
+    cached_info, cache_read_err = read_sysinfo_file()
+    info, err = update_cached_info(cached_info)
+    if err is not None:
+        errs = []
+        if cache_read_err is not None:
+            errs.append('cache read fail (%s)' % cache_read_err)
+        errs.append('info update fail (%s)' % err)
+        return 'sysinfo loading fail (%s)' % ', '.join(errs)
+
+    global system_info
+    system_info = info
+    save_sysinfo_file()
+    return None
 
 def save_sysinfo_file():
     '''
