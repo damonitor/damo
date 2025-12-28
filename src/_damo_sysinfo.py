@@ -329,6 +329,9 @@ def update_cached_info(cached_info):
     if version_mismatch(cached_info):
         return get_sysinfo_from_scratch()
 
+    trace_cmd_version = get_trace_cmd_version()
+    perf_path, perf_version = get_perf_path_version()
+
     sysfs_path = _damo_fs.dev_mount_point('sysfs')
     if cached_info.sysfs_path != sysfs_path:
         cached_info.sysfs_path = sysfs_path
