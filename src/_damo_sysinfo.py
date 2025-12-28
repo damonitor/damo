@@ -10,6 +10,7 @@ import json
 import os
 import subprocess
 
+import _damo_fs
 import _damo_subproc
 import _damon_dbgfs
 import _damon_features
@@ -186,20 +187,7 @@ def get_damon_tracepoints():
     '''
     returns list of DAMON tracepoint names and an error
     '''
-    try:
-        output = subprocess.check_output(['mount']).decode().strip()
-    except Exception as e:
-        return 'reading mounts fail (%s)' % e
-    tracefs_path = None
-    for line in output.split('\n'):
-        fields = line.split()
-        if len(fields) < 5:
-            continue
-        # expectation line:
-        # tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,...)
-        if fields[4] == 'tracefs':
-            tracefs_path = fields[2]
-            break
+    tracefs_path = _damo_fs.dev_mount_point('tracefs')
     if tracefs_path is None:
         return None, 'tracefs is not mounted'
     points = []
