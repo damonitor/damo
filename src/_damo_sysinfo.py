@@ -324,6 +324,31 @@ def update_cached_info(cached_info):
         return get_sysinfo_from_scratch()
     if version_mismatch(cached_info):
         return get_sysinfo_from_scratch()
+
+    sysfs_path = _damo_fs.dev_mount_point('sysfs')
+    if cached_info.sysfs_path != sysfs_path:
+        cached_info.sysfs_path = sysfs_path
+        avail_damon_sysfs_features, err = avail_features_on(_damon_sysfs)
+        if err is not None:
+            return None, 'damon sysfs features update fail (%s)' % err
+        cached_info.avail_damon_sysfs_features = avail_damon_sysfs_features
+
+    tracefs_path = _damo_fs.dev_mount_point('tracefs')
+    if cached_info.tracefs_path != tracefs_path:
+        cached_info.tracefs_path = tracefs_path
+        avail_damon_trace_features, err = get_avail_damon_trace_features()
+        if err is not None:
+            return None, 'damon trace features update fail (%s)' % err
+        cached_info.avail_damon_trace_features = avail_damon_trace_features
+
+    debugfs_path = _damo_fs.dev_mount_point('debugfs')
+    if cached_info.debugfs_path != debugfs_path:
+        cached_info.debugfs_path = debugfs_path
+        avail_damon_debugfs_features, err = avail_features_on(_damon_debugfs)
+        if err is not None:
+            return None, 'damon debugfs features update fail (%s)' % err
+        cached_info.avail_damon_debugfs_features = avail_damon_debugfs_features
+
     return cached_info, None
 
 def load_sysinfo():
