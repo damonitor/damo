@@ -266,7 +266,7 @@ def get_trace_cmd_version():
         return ' '.join(fields[2:])
     return None
 
-def set_sysinfo_from_scratch():
+def get_sysinfo_from_scratch():
     damo_version_ = damo_version.get_real_version()
     kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
     sysfs_path = _damo_fs.dev_mount_point('sysfs')
@@ -286,13 +286,13 @@ def set_sysinfo_from_scratch():
 
     avail_damon_sysfs_features, err = avail_features_on(_damon_sysfs)
     if err is not None:
-        return 'sysfs feature check fail (%s)' % err
+        return None, 'sysfs feature check fail (%s)' % err
     avail_damon_debugfs_features, err = avail_features_on(_damon_dbgfs)
     if err is not None:
-        return 'debugfs feature check fail (%s)' % err
+        return None, 'debugfs feature check fail (%s)' % err
     avail_damon_trace_features, err = get_avail_damon_trace_features()
     if err is not None:
-        return 'trace feature check fail (%s)' % err
+        return None, 'trace feature check fail (%s)' % err
 
     tested_features = [f for f in _damon_features.features_list]
     sysinfo = SystemInfo(
@@ -307,6 +307,12 @@ def set_sysinfo_from_scratch():
             avail_damon_debugfs_features=avail_damon_debugfs_features,
             avail_damon_trace_features=avail_damon_trace_features,
             tested_features=tested_features)
+    return sysinfo, None
+
+def set_sysinfo_from_scratch():
+    sysinfo, err = get_sysinfo_from_scratch()
+    if err is not None:
+        return err
     global system_info
     system_info = sysinfo
     return None
