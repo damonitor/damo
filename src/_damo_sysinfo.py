@@ -20,6 +20,11 @@ import damo_version
 class SystemInfo:
     damo_version = None
     kernel_version = None
+
+    sysfs_path = None
+    tracefs_path = None
+    debugfs_path = None
+
     trace_cmd_version = None
     perf_path = None
     perf_version = None
@@ -37,9 +42,15 @@ class SystemInfo:
     def __init__(self, damo_version, kernel_version,
                  avail_damon_sysfs_features, avail_damon_debugfs_features,
                  avail_damon_trace_features=[], tested_features=[],
-                 perf_path=None, perf_version=None, trace_cmd_version=None):
+                 perf_path=None, perf_version=None, trace_cmd_version=None,
+                 sysfs_path=None, tracefs_path=None, debugfs_path=None):
         self.damo_version = damo_version
         self.kernel_version = kernel_version
+
+        self.sysfs_path = sysfs_path
+        self.tracefs_path = tracefs_path
+        self.debugfs_path = debugfs_path
+
         self.trace_cmd_version=trace_cmd_version
         self.perf_path = perf_path
         self.perf_version = perf_version
@@ -52,6 +63,9 @@ class SystemInfo:
         return collections.OrderedDict([
             ('damo_version', self.damo_version),
             ('kernel_version', self.kernel_version),
+            ('sysfs_path', self.sysfs_path),
+            ('tracefs_path', self.tracefs_path),
+            ('debugfs_path', self.debugfs_path),
             ('trace_cmd_version', self.trace_cmd_version),
             ('perf_path', self.perf_path),
             ('perf_version', self.perf_version),
@@ -79,9 +93,21 @@ class SystemInfo:
         damon_trace_features = []
         if 'avail_damon_trace_features' in kvpairs:
             damon_trace_features = kvpairs['avail_damon_trace_features']
+        sysfs_path = None
+        if 'sysfs_path' in kvpairs:
+            sysfs_path = kvpairs['sysfs_path']
+        tracefs_path = None
+        if 'tracefs_path' in kvpairs:
+            tracefs_path = kvpairs['tracefs_path']
+        debugfs_path = None
+        if 'debugfs_path' in kvpairs:
+            debugfs_path = kvpairs['debugfs_path']
         return cls(
                 damo_version=kvpairs['damo_version'],
                 kernel_version=kvpairs['kernel_version'],
+                sysfs_path=sysfs_path,
+                tracefs_path=tracefs_path,
+                debugfs_path=debugfs_path,
                 trace_cmd_version=trace_cmd_version,
                 perf_path=perf_path, perf_version=perf_version,
                 avail_damon_sysfs_features=[
@@ -101,6 +127,9 @@ class SystemInfo:
     def __eq__(self, other):
         return self.damo_version == other.damo_version and \
                 self.kernel_version == other.kernel_version and \
+                self.sysfs_path == other.sysfs_path and \
+                self.tracefs_path == other.tracefs_path and \
+                self.debugfs_path == other.debugfs_path and \
                 self.trace_cmd_version == other.trace_cmd_version and \
                 self.perf_path == other.perf_path and \
                 self.perf_version == other.perf_version and \
@@ -240,6 +269,10 @@ def get_trace_cmd_version():
 def set_sysinfo_from_scratch():
     damo_version_ = damo_version.get_real_version()
     kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
+    sysfs_path = _damo_fs.dev_mount_point('sysfs')
+    tracefs_path = _damo_fs.dev_mount_point('tracefs')
+    debugfs_path = _damo_fs.dev_mount_point('debugfs')
+
     trace_cmd_version = get_trace_cmd_version()
     try:
         perf_path = subprocess.check_output(['which', 'perf']).decode().strip()
@@ -265,6 +298,9 @@ def set_sysinfo_from_scratch():
     sysinfo = SystemInfo(
             damo_version=damo_version_,
             kernel_version=kernel_version,
+            sysfs_path=sysfs_path,
+            tracefs_path=tracefs_path,
+            debugfs_path=debugfs_path,
             trace_cmd_version=trace_cmd_version,
             perf_path=perf_path, perf_version=perf_version,
             avail_damon_sysfs_features=avail_damon_sysfs_features,
