@@ -171,7 +171,7 @@ sysinfo_file_path = os.path.join(os.environ['HOME'], '.damo.sysinfo')
 
 def read_sysinfo_file():
     '''
-    Read save_sysinfo()-saved SystemInfo object.
+    Read save_sysinfo_file()-saved SystemInfo object.
     Returns read SystemInfo object and an error string if failed.
     '''
     if not os.path.isfile(sysinfo_file_path):
@@ -322,11 +322,11 @@ def load_sysinfo():
         return None
     err = set_sysinfo_from_scratch()
     if err is None:
-        save_sysinfo()
+        save_sysinfo_file()
         return None
     return 'system info setup fail (%s)' % err
 
-def save_sysinfo():
+def save_sysinfo_file():
     '''
     Save system_info as a file that we can read later.
 
