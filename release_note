@@ -2,7 +2,7 @@ This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
 v3.0.9
-- Support 'perf' uninstalled systems.
+- Support 'perf' unavailable systems.
   - Require 'trace-cmd' instead, for 'damo record'.
 
 v3.0.8
