@@ -162,22 +162,15 @@ class TestDamon(unittest.TestCase):
 
     def test_parse_damon_trace_region(self):
         # trace-cmd output
-        returns = _damo_records.parse_damon_trace_region(
-                ['85712.242158:',
-                          'damon_aggregated:', 'target_id=0', 'nr_regions=11',
-                          '4294967296-4697088000:', '1', '485'])
-        expect = _damon.DamonRegion(start=4294967296, end=4697088000,
-                                    nr_accesses=1,
-                                    nr_accesses_unit=_damon.unit_samples,
-                                    age=485,
-                                    age_unit=_damon.unit_aggr_intervals)
-        self.assertEqual(returns[0],
-                _damon.DamonRegion(start=4294967296, end=4697088000,
-                                    nr_accesses=1,
-                                    nr_accesses_unit=_damon.unit_samples,
-                                    age=485,
-                                    age_unit=_damon.unit_aggr_intervals))
-        self.assertEqual(returns[1:], (85712242158000, 0, 11))
+        self.assertEqual(_damo_records.parse_damon_trace_region(
+            _damo_records.damon_trace_fields(
+                '       kdamond.0-48034 [007] .....  5435.406849: '
+                'damon_aggregated:     target_id=12 nr_regions=3 '
+                '4294967296-8372879360: 4 5')),
+            (_damon.DamonRegion(
+                start=4294967296, end=8372879360, nr_accesses=4,
+                nr_accesses_unit=_damon.unit_samples, age=5,
+                age_unit=_damon.unit_aggr_intervals), 5435406849000, 12, 3))
 
         # perf-script output
         self.assertEqual(_damo_records.parse_damon_trace_region(
