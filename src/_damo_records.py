@@ -400,33 +400,6 @@ def record_of(target_id, records, intervals):
     records.append(record)
     return record
 
-def parse_damon_aggregated_trace_cmd_report_line(line):
-    '''
-    The line is like below:
-
-    cpus=8
-           kdamond.0-259868 [004] ..... 85712.242158: damon_aggregated: \
-                   target_id=0 nr_regions=11 4294967296-4697088000: 0 485
-    '''
-    fields = line.split()
-    if not len(fields) in [9, 10]:
-        return None, None, None, None
-
-    end_time_ns = int(float(fields[3][:-1]) * 1000000000)
-    target_id = int(fields[5].split('=')[1])
-    nr_regions = int(fields[6].split('=')[1])
-
-    start_addr, end_addr = [int(x) for x in fields[7][:-1].split('-')]
-    nr_accesses = int(fields[8])
-    if len(fields) == 10:
-        age = int(fields[9])
-    else:
-        age = None
-    region = _damon.DamonRegion(start_addr, end_addr, nr_accesses,
-            _damon.unit_samples, age, _damon.unit_aggr_intervals)
-
-    return region, end_time_ns, target_id, nr_regions
-
 def parse_damon_trace_aggregated(fields):
     '''
     The fields is like below:
