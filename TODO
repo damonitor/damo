@@ -53,6 +53,7 @@
 - Add more trace-cmd/perf output parsing test in test_damo_records.py
   - Test damos_before_apply trace
   - Test non-damon trace events
+- Refactor 'damo monitor'
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
