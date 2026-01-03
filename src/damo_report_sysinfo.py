@@ -40,7 +40,7 @@ def main(args):
         for feature in sysinfo.avail_damon_debugfs_features:
             pr_feature(feature)
     if 'trace_features' in args.print or 'all' in args.print:
-        print('DAMON trace features')
+        print('Avail DAMON trace features')
         for feature in sysinfo.avail_damon_trace_features:
             pr_feature(feature)
 
