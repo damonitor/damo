@@ -136,6 +136,7 @@ class TestDamon(unittest.TestCase):
                     [[10, 20], [5, 7]]), ([[5, 7], [10, 20]], None))
 
     def test_damon_trace_fields(self):
+        # trace-cmd report output
         self.assertEqual(_damo_records.damon_trace_fields('cpus=8'), None)
         self.assertEqual(_damo_records.damon_trace_fields(
             '       kdamond.0-263515 [000] ..... 92566.021974: '
@@ -143,6 +144,15 @@ class TestDamon(unittest.TestCase):
             '4294967296-4701806592: 0 1635'),
             ['92566.021974:', 'damon_aggregated:', 'target_id=0',
              'nr_regions=11', '4294967296-4701806592:', '0', '1635'])
+
+        # perf script output
+        self.assertEqual(
+                _damo_records.damon_trace_fields(
+                    '        kthreadd  264573 [003] 93211.675342:'
+                    '             damon:damon_aggregated: target_id=0 '
+                    'nr_regions=2 4294967296-5518340096: 0 0'),
+                '93211.675342: damon:damon_aggregated: target_id=0 nr_regions=2 '
+                '4294967296-5518340096: 0 0'.split())
 
     def test_parse_damon_trace_region(self):
         # trace-cmd output
