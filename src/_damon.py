@@ -421,6 +421,8 @@ class DamonAge:
     def to_str(self, unit, raw):
         if unit == unit_usec:
             return _damo_fmt_str.format_time_us_exact(self.usec, raw)
+        if self.aggr_intervals is None:
+            return 'unkown %s' % unit_aggr_intervals
         return '%s %s' % (_damo_fmt_str.format_nr(self.aggr_intervals, raw),
                 unit_aggr_intervals)
 
