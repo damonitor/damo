@@ -203,5 +203,30 @@ class TestDamon(unittest.TestCase):
                 age_unit=_damon.unit_aggr_intervals),
              93214744389000, 12, 10))
 
+    def test_parse_damon_trace_intervals_tune(self):
+        self.assertEqual(_damo_records.parse_damon_trace_intervals_tune(
+            _damo_records.damon_trace_fields(
+                '       kdamond.0-48034 [007] .....  5435.619246: '
+                'damon_monitor_intervals_tune: sample_us=1234')),
+            (True, 1234))
+        self.assertEqual(_damo_records.parse_damon_trace_intervals_tune(
+            _damo_records.damon_trace_fields(
+                '       kdamond.0-48034 [007] .....  5435.406849: '
+                'damon_aggregated:     target_id=12 nr_regions=3 '
+                '4294967296-8372879360: 4 5')),
+            (False, None))
+
+        self.assertEqual(_damo_records.parse_damon_trace_intervals_tune(
+            _damo_records.damon_trace_fields(
+                '        kthreadd  264573 [003] 93211.464138: '
+                'damon:damon_monitor_intervals_tune: sample_us=1234')),
+            (True, 1234))
+        self.assertEqual(_damo_records.parse_damon_trace_intervals_tune(
+            _damo_records.damon_trace_fields(
+                '        kthreadd  264573 [002] 93214.744389:             '
+                'damon:damon_aggregated: target_id=12 nr_regions=10 '
+                '7473692672-8372879360: 3')),
+            (False, None))
+
 if __name__ == '__main__':
     unittest.main()
