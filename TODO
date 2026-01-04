@@ -54,6 +54,7 @@
   - Test damos_before_apply trace
   - Test non-damon trace events
 - Refactor 'damo monitor'
+- Make modules better controlled with main commands
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
