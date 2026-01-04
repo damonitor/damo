@@ -35,13 +35,9 @@ class SystemInfo:
     avail_damon_debugfs_features = None
     avail_damon_trace_features = None
 
-    # list of _damon_features.DamonFeature objects that tested to generate
-    # avail_damon_{sys,debug}fs_features.
-    tested_features = None
-
     def __init__(self, damo_version, kernel_version,
                  avail_damon_sysfs_features, avail_damon_debugfs_features,
-                 avail_damon_trace_features=[], tested_features=[],
+                 avail_damon_trace_features=[],
                  perf_path=None, perf_version=None, trace_cmd_version=None,
                  sysfs_path=None, tracefs_path=None, debugfs_path=None):
         self.damo_version = damo_version
@@ -57,7 +53,6 @@ class SystemInfo:
         self.avail_damon_sysfs_features = avail_damon_sysfs_features
         self.avail_damon_debugfs_features = avail_damon_debugfs_features
         self.avail_damon_trace_features = avail_damon_trace_features
-        self.tested_features = tested_features
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
@@ -75,8 +70,6 @@ class SystemInfo:
              [f.to_kvpairs(raw) for f in self.avail_damon_debugfs_features]),
             ('avail_damon_trace_features',
              [f.to_kvpairs(raw) for f in self.avail_damon_trace_features]),
-            ('tested_features',
-             [f.to_kvpairs(raw) for f in self.tested_features]),
             ])
 
     @classmethod
@@ -119,9 +112,6 @@ class SystemInfo:
                 avail_damon_trace_features=[
                     _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     damon_trace_features],
-                tested_features=[
-                    _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
-                    kvpairs['tested_features']],
                 )
 
     def __eq__(self, other):
@@ -138,8 +128,7 @@ class SystemInfo:
                 self.avail_damon_debugfs_features == \
                 other.avail_damon_debugfs_features and \
                 self.avail_damon_trace_features == \
-                other.avail_damon_trace_features and \
-                self.tested_features == other.tested_features
+                other.avail_damon_trace_features
 
     def trace_feature_available(self, feature_name):
         return len([f for f in self.avail_damon_trace_features
@@ -188,7 +177,7 @@ def valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
         return False
     if sysinfo.kernel_version != kernel_version:
         return False
-    return sysinfo.tested_features == _damon_features.features_list
+    return True
 
 def set_sysinfo_from_cache():
     sysinfo, err = read_sysinfo_file()
@@ -299,7 +288,6 @@ def get_sysinfo_from_scratch():
     if err is not None:
         return None, 'trace feature check fail (%s)' % err
 
-    tested_features = [f for f in _damon_features.features_list]
     sysinfo = SystemInfo(
             damo_version=damo_version_,
             kernel_version=kernel_version,
@@ -310,8 +298,7 @@ def get_sysinfo_from_scratch():
             perf_path=perf_path, perf_version=perf_version,
             avail_damon_sysfs_features=avail_damon_sysfs_features,
             avail_damon_debugfs_features=avail_damon_debugfs_features,
-            avail_damon_trace_features=avail_damon_trace_features,
-            tested_features=tested_features)
+            avail_damon_trace_features=avail_damon_trace_features)
     return sysinfo, None
 
 def version_mismatch(sysinfo):
@@ -319,8 +306,6 @@ def version_mismatch(sysinfo):
         return True
     kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
     if sysinfo.kernel_version != kernel_version:
-        return True
-    if sysinfo.tested_features != _damon_features.features_list:
         return True
     return False
 
