@@ -55,6 +55,10 @@
   - Test non-damon trace events
 - Refactor 'damo monitor'
 - Make modules better controlled with main commands
+- Integrate SystemInfo.avail_damon_{sysfs,debugfs,trace,modules}[_features]
+  - Just avail_features
+  - duplicate sysfs and debugfs features, to have 'sysfs/' or 'debugfs/'
+    prefix.
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
