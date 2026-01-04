@@ -37,7 +37,7 @@ class SystemInfo:
 
     def __init__(self, damo_version, kernel_version,
                  avail_damon_sysfs_features, avail_damon_debugfs_features,
-                 avail_damon_trace_features=[],
+                 avail_damon_trace_features,
                  perf_path=None, perf_version=None, trace_cmd_version=None,
                  sysfs_path=None, tracefs_path=None, debugfs_path=None):
         self.damo_version = damo_version
