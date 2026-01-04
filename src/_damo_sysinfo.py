@@ -34,10 +34,11 @@ class SystemInfo:
     avail_damon_sysfs_features = None
     avail_damon_debugfs_features = None
     avail_damon_trace_features = None
+    avail_damon_modules = None
 
     def __init__(self, damo_version, kernel_version,
                  avail_damon_sysfs_features, avail_damon_debugfs_features,
-                 avail_damon_trace_features,
+                 avail_damon_trace_features, avail_damon_modules=None,
                  perf_path=None, perf_version=None, trace_cmd_version=None,
                  sysfs_path=None, tracefs_path=None, debugfs_path=None):
         self.damo_version = damo_version
@@ -53,6 +54,10 @@ class SystemInfo:
         self.avail_damon_sysfs_features = avail_damon_sysfs_features
         self.avail_damon_debugfs_features = avail_damon_debugfs_features
         self.avail_damon_trace_features = avail_damon_trace_features
+
+        if avail_damon_modules is None:
+            avail_damon_modules = []
+        self.avail_damon_modules = avail_damon_modules
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
@@ -70,6 +75,8 @@ class SystemInfo:
              [f.to_kvpairs(raw) for f in self.avail_damon_debugfs_features]),
             ('avail_damon_trace_features',
              [f.to_kvpairs(raw) for f in self.avail_damon_trace_features]),
+            ('avail_damon_modules',
+             [f.to_kvpairs(raw) for f in self.avail_damon_modules]),
             ])
 
     @classmethod
@@ -86,6 +93,9 @@ class SystemInfo:
         damon_trace_features = []
         if 'avail_damon_trace_features' in kvpairs:
             damon_trace_features = kvpairs['avail_damon_trace_features']
+        damon_modules = []
+        if 'avail_damon_modules' in kvpairs:
+            damon_modules = kvpairs['avail_damon_modules']
         sysfs_path = None
         if 'sysfs_path' in kvpairs:
             sysfs_path = kvpairs['sysfs_path']
@@ -112,6 +122,9 @@ class SystemInfo:
                 avail_damon_trace_features=[
                     _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     damon_trace_features],
+                avail_damon_modules=[
+                    _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
+                    damon_modules],
                 )
 
     def __eq__(self, other):
@@ -128,7 +141,8 @@ class SystemInfo:
                 self.avail_damon_debugfs_features == \
                 other.avail_damon_debugfs_features and \
                 self.avail_damon_trace_features == \
-                other.avail_damon_trace_features
+                other.avail_damon_trace_features and \
+                self.avail_damon_modules == other.avail_damon_modules
 
     def trace_feature_available(self, feature_name):
         return len([f for f in self.avail_damon_trace_features
