@@ -255,6 +255,22 @@ def get_avail_damon_trace_features():
             features.append(damon_feature_of_name(feature_name))
     return features, err
 
+def get_avail_damon_modules():
+    features = []
+    sysfs_path = _damo_fs.dev_mount_point('sysfs')
+    if sysfs_path is None:
+        return features
+    mod_path = os.path.join(sysfs_path, 'module')
+    if not os.path.isdir(mod_path):
+        return features
+    if os.path.isdir(os.path.join(mod_path, 'damon_reclaim')):
+        features.append(damon_feature_of_name('module/damon_reclaim'))
+    if os.path.isdir(os.path.join(mod_path, 'damon_lru_sort')):
+        features.append(damon_feature_of_name('module/damon_lru_sort'))
+    if os.path.isdir(os.path.join(mod_path, 'damon_stat')):
+        features.append(damon_feature_of_name('module/damon_stat'))
+    return features
+
 def get_trace_cmd_version():
     if not _damo_subproc.avail_cmd('trace-cmd'):
         return None
