@@ -257,9 +257,17 @@ def get_avail_damon_trace_features():
 
 def get_avail_damon_modules():
     features = []
+
+    if _damon_dbgfs.supported():
+        features.append(damon_feature_of_name('module/damon_debugfs'))
+
     sysfs_path = _damo_fs.dev_mount_point('sysfs')
     if sysfs_path is None:
         return features
+
+    if _damon_sysfs.supported():
+        features.append(damon_feature_of_name('module/damon_sysfs'))
+
     mod_path = os.path.join(sysfs_path, 'module')
     if not os.path.isdir(mod_path):
         return features
