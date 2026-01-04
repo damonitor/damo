@@ -317,6 +317,7 @@ def get_sysinfo_from_scratch():
     avail_damon_trace_features, err = get_avail_damon_trace_features()
     if err is not None:
         return None, 'trace feature check fail (%s)' % err
+    avail_damon_modules = get_avail_damon_modules()
 
     sysinfo = SystemInfo(
             damo_version=damo_version_,
@@ -328,7 +329,8 @@ def get_sysinfo_from_scratch():
             perf_path=perf_path, perf_version=perf_version,
             avail_damon_sysfs_features=avail_damon_sysfs_features,
             avail_damon_debugfs_features=avail_damon_debugfs_features,
-            avail_damon_trace_features=avail_damon_trace_features)
+            avail_damon_trace_features=avail_damon_trace_features,
+            avail_damon_modules=avail_damon_modules)
     return sysinfo, None
 
 def version_mismatch(sysinfo):
@@ -355,6 +357,8 @@ def update_cached_info(cached_info):
         if err is not None:
             return None, 'damon sysfs features update fail (%s)' % err
         cached_info.avail_damon_sysfs_features = avail_damon_sysfs_features
+
+        cached_info.avail_damon_modules = get_avail_damon_modules()
 
     tracefs_path = _damo_fs.dev_mount_point('tracefs')
     if cached_info.tracefs_path != tracefs_path:
