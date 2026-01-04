@@ -43,13 +43,17 @@ def main(args):
         print('Avail DAMON trace features')
         for feature in sysinfo.avail_damon_trace_features:
             pr_feature(feature)
+    if 'modules' in args.print or 'all' in args.print:
+        print('Avail DAMON modules')
+        for feature in sysinfo.avail_damon_modules:
+            pr_feature(feature)
 
 def set_argparser(parser):
     parser.add_argument(
             '--print', nargs='+',
             choices=['versions', 'fs_info', 'trace_cmd_info', 'perf_info',
                      'sysfs_features', 'debugfs_features', 'trace_features',
-                     'all'],
+                     'modules', 'all'],
             default=['versions'], help='info to print')
     parser.add_argument('--invalidate_cache', action='store_true',
                         help='invalidate cached sysinfo')
