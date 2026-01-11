@@ -27,6 +27,7 @@ class TestDamoSysinfo(unittest.TestCase):
         sinfo = _damo_sysinfo.SystemInfo(
                 damo_version='v3.1.1',
                 kernel_version='6.18.0-rc2-mm-new-damon+',
+                avail_damon_features=[f for f in features],
                 avail_damon_sysfs_features=[f for f in features[:2]],
                 avail_damon_debugfs_features=[f for f in features[2:]],
                 avail_damon_trace_features=[])
