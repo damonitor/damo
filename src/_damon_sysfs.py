@@ -1068,14 +1068,14 @@ def commit_quota_goals(kdamond_idxs):
 features_sysfs_support_from_begining = [
         'sysfs/schemes',
         'sysfs/init_regions',
-        'vaddr',
+        'sysfs/vaddr',
         'sysfs/paddr',
-        'schemes_size_quota',
+        'sysfs/schemes_size_quota',
         'sysfs/schemes_time_quota',
-        'schemes_prioritization',
-        'schemes_wmarks',
+        'sysfs/schemes_prioritization',
+        'sysfs/schemes_wmarks',
         'sysfs/schemes_stat_succ',
-        'schemes_stat_qt_exceed',
+        'sysfs/schemes_stat_qt_exceed',
         ]
 
 def kdamond_dir_of(kdamond_idx):

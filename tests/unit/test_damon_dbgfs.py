@@ -18,15 +18,15 @@ def set_damon_dbgfs_features():
     avail_features = []
     for name, support in {
             'debugfs/init_regions': True, 'debugfs/schemes': True,
-            'schemes_stat_qt_exceed': True,
+            'debugfs/schemes_stat_qt_exceed': True,
             'debugfs/init_regions_target_idx': True,
-            'schemes_prioritization': True,
-            'sysfs/schemes_tried_regions': False, 'record': False,
+            'debugfs/schemes_prioritization': True,
+            'sysfs/schemes_tried_regions': False, 'debugfs/record': False,
             'debugfs/schemes_time_quota': True,
             'sysfs/schemes_time_quota': True,
             'fvaddr': False, 'debugfs/paddr': True,
-            'schemes_wmarks': True, 'schemes_size_quota': True,
-            'debugfs/schemes_stat_succ': True, 'vaddr': True}.items():
+            'debugfs/schemes_wmarks': True, 'debugfs/schemes_size_quota': True,
+            'debugfs/schemes_stat_succ': True, 'debugfs/vaddr': True}.items():
         if not support:
             continue
         for feature in _damon_features.features_list:

@@ -441,14 +441,14 @@ def mk_feature_supports_map():
         if nr_fields == 0:
             need_schemes_file_test = True
         elif nr_fields == 20:   # v5.16
-            feature_supports['schemes_size_quota'] = True
-            feature_supports['schemes_prioritization'] = True
-            feature_supports['schemes_wmarks'] = True
+            feature_supports['debugfs/schemes_size_quota'] = True
+            feature_supports['debugfs/schemes_prioritization'] = True
+            feature_supports['debugfs/schemes_wmarks'] = True
             feature_supports['debugfs/schemes_time_quota'] = True
         elif nr_fields == 23:   # v5.17 or later
-            feature_supports['schemes_size_quota'] = True
-            feature_supports['schemes_prioritization'] = True
-            feature_supports['schemes_wmarks'] = True
+            feature_supports['debugfs/schemes_size_quota'] = True
+            feature_supports['debugfs/schemes_prioritization'] = True
+            feature_supports['debugfs/schemes_wmarks'] = True
             feature_supports['debugfs/schemes_time_quota'] = True
             feature_supports['debugfs/schemes_stat_succ'] = True
             feature_supports['schemes_stat_qt_exceed'] = True
@@ -458,7 +458,7 @@ def mk_feature_supports_map():
                 'debugfs feature update cannot be done while DAMON running'
 
     # virtual address space has supported since the beginning
-    feature_supports['vaddr'] = True
+    feature_supports['debugfs/vaddr'] = True
     if test_debugfs_file(get_target_ids_file(), 'paddr\n', '42\n'):
         feature_supports['debugfs/paddr'] = True
 
@@ -472,16 +472,16 @@ def mk_feature_supports_map():
     if need_schemes_file_test:
         # 'schemes' receives 18 numbers input and has three stats (v5.16)
         if test_debugfs_file_schemes(18):
-            feature_supports['schemes_size_quota'] = True
-            feature_supports['schemes_prioritization'] = True
-            feature_supports['schemes_wmarks'] = True
+            feature_supports['debugfs/schemes_size_quota'] = True
+            feature_supports['debugfs/schemes_prioritization'] = True
+            feature_supports['debugfs/schemes_wmarks'] = True
             feature_supports['debugfs/schemes_time_quota'] = True
         elif test_debugfs_file_schemes_stat_extended(18):
-            feature_supports['schemes_size_quota'] = True
-            feature_supports['schemes_prioritization'] = True
-            feature_supports['schemes_wmarks'] = True
+            feature_supports['debugfs/schemes_size_quota'] = True
+            feature_supports['debugfs/schemes_prioritization'] = True
+            feature_supports['debugfs/schemes_wmarks'] = True
             feature_supports['debugfs/schemes_time_quota'] = True
             feature_supports['debugfs/schemes_stat_succ'] = True
-            feature_supports['schemes_stat_qt_exceed'] = True
+            feature_supports['debugfs/schemes_stat_qt_exceed'] = True
 
     return feature_supports, None

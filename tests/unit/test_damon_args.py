@@ -19,16 +19,21 @@ def set_damon_sysfs_features():
     for name, support in {
             'debugfs/init_regions': True, 'sysfs/init_regions': True,
             'debugfs/schemes': True, 'sysfs/schemes': True,
-            'schemes_stat_qt_exceed': True,
+            'debugfs/schemes_stat_qt_exceed': True,
+            'sysfs/schemes_stat_qt_exceed': True,
             'debugfs/init_regions_target_idx': True,
-            'schemes_prioritization': True,
+            'debugfs/schemes_prioritization': True,
+            'sysfs/schemes_prioritization': True,
             'sysfs/schemes_tried_regions': False, 'record': False,
             'debugfs/schemes_time_quota': True,
             'sysfs/schemes_time_quota': True, 'fvaddr': False,
             'debugfs/paddr': True, 'sysfs/paddr': True,
-            'schemes_wmarks': True, 'schemes_size_quota': True,
+            'debugfs/schemes_wmarks': True, 'sysfs/schemes_wmarks': True,
+            'debugfs/schemes_size_quota': True,
+            'sysfs/schemes_size_quota': True,
             'debugfs/schemes_stat_succ': True, 'sysfs/schemes_stat_succ': True,
-            'vaddr': True}.items():
+            'debugfs/vaddr': True, 'sysfs/vaddr': True,
+            }.items():
         if not support:
             continue
         for feature in _damon_features.features_list:
