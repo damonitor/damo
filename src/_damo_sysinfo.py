@@ -163,10 +163,6 @@ class SystemInfo:
     def feature_available(self, feature_name):
         return feature_name in [f.name for f in self.avail_damon_features]
 
-    def trace_feature_available(self, feature_name):
-        return len([f for f in self.avail_damon_trace_features
-                    if f.name == feature_name]) == 1
-
     def infer_damon_version(self):
         '''Return version string and error'''
         if len(self.avail_damon_sysfs_features) == 0 and \
