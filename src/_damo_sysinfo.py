@@ -487,7 +487,7 @@ def damon_tracepoint_available(tracepoint):
     if err is not None:
         return False
     feature_name = tracepoint_to_feature_name_map[tracepoint]
-    return feature_name in [f.name for f in sysinfo.avail_damon_trace_features]
+    return feature_name in [f.name for f in sysinfo.avail_damon_features]
 
 def damon_feature_available(feature_name):
     sysinfo, err = get_sysinfo()
