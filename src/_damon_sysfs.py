@@ -1154,7 +1154,7 @@ def mk_feature_supports_map():
         return None, 'staging feature check purpose kdamond failed'
 
     if os.path.isdir(scheme_tried_regions_dir_of(0, 0, 0)):
-        supports_map['schemes_tried_regions'] = True
+        supports_map['sysfs/schemes_tried_regions'] = True
 
     if os.path.isfile(os.path.join(scheme_tried_regions_dir_of(0, 0, 0),
             'total_bytes')):
