@@ -1157,43 +1157,43 @@ def mk_feature_supports_map():
 
     if os.path.isfile(os.path.join(scheme_tried_regions_dir_of(0, 0, 0),
             'total_bytes')):
-        supports_map['schemes_tried_regions_sz'] = True
+        supports_map['sysfs/schemes_tried_regions_sz'] = True
         # address and target filter types are added in v6.6-rc1, together with
         # schemes_tried_regions_sz
         supports_map['sysfs/schemes_filters_addr'] = True
-        supports_map['schemes_filters_target'] = True
+        supports_map['sysfs/schemes_filters_target'] = True
 
     if os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'filters')):
-        supports_map['schemes_filters'] = True
+        supports_map['sysfs/schemes_filters'] = True
         # anon and memcg were supported from the beginning
-        supports_map['schemes_filters_anon'] = True
-        supports_map['schemes_filters_memcg'] = True
+        supports_map['sysfs/schemes_filters_anon'] = True
+        supports_map['sysfs/schemes_filters_memcg'] = True
         kdamonds_for_feature_check[0].contexts[0].schemes[0].filters = [
                 _damon.DamosFilter('young', True)]
         err = stage_kdamonds(kdamonds_for_feature_check)
         if err is None:
-            supports_map['schemes_filters_young'] = True
+            supports_map['sysfs/schemes_filters_young'] = True
 
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'apply_interval_us')):
         supports_map['sysfs/schemes_apply_interval'] = True
 
     if os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals')):
-        supports_map['schemes_quota_goals'] = True
+        supports_map['sysfs/schemes_quota_goals'] = True
 
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'quotas',
                                    'effective_bytes')):
         supports_map['sysfs/schemes_quota_effective_bytes'] = True
         # goal_metric and goal_some_psi will be merged together with effective bytes.
-        supports_map['schemes_quota_goal_metric'] = True
-        supports_map['schemes_quota_goal_some_psi'] = True
+        supports_map['sysfs/schemes_quota_goal_metric'] = True
+        supports_map['sysfs/schemes_quota_goal_some_psi'] = True
 
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'target_nid')):
-        supports_map['schemes_migrate'] = True
+        supports_map['sysfs/schemes_migrate'] = True
 
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0),
                          'stats', 'sz_ops_filter_passed')):
-        supports_map['sz_ops_filter_passed'] = True
+        supports_map['sysfs/sz_ops_filter_passed'] = True
 
     ops_filters_dir = os.path.join(scheme_dir_of(0, 0, 0), 'ops_filters')
     if not os.path.isdir(ops_filters_dir):
@@ -1201,27 +1201,27 @@ def mk_feature_supports_map():
 
     if os.path.isfile(
             os.path.join(ops_filters_dir, '0', 'allow')):
-        supports_map['allow_filter'] = True
+        supports_map['sysfs/allow_filter'] = True
 
     if os.path.isfile(
             os.path.join(ops_filters_dir, '0', 'min')):
-        supports_map['schemes_filters_hugepage_size'] = True
+        supports_map['sysfs/schemes_filters_hugepage_size'] = True
 
     if os.path.isdir(
             os.path.join(ctx_dir_of(0, 0),
                          'monitoring_attrs', 'intervals', 'intervals_goal')):
-        supports_map['intervals_goal'] = True
+        supports_map['sysfs/intervals_goal'] = True
 
     if os.path.isdir(
             os.path.join(scheme_dir_of(0, 0, 0), 'core_filters')):
-        supports_map['schemes_filters_core_ops_dirs'] = True
+        supports_map['sysfs/schemes_filters_core_ops_dirs'] = True
 
         # unmapped and active pages DAMOS filters are merged into v6.15
         # together with core_ops_dirs
-        supports_map['schemes_filters_unmapped'] = True
-        supports_map['schemes_filters_active'] = True
+        supports_map['sysfs/schemes_filters_unmapped'] = True
+        supports_map['sysfs/schemes_filters_active'] = True
 
-    if supports_map['schemes_quota_goals'] is True:
+    if supports_map['sysfs/schemes_quota_goals'] is True:
         kdamonds_for_feature_check = [
                 _damon.Kdamond(
                     state=None, pid=None, contexts=[
@@ -1241,21 +1241,21 @@ def mk_feature_supports_map():
         if os.path.isfile(
                 os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
                              'nid')):
-            supports_map['schemes_quota_goal_node_mem_used_free'] = True
+            supports_map['sysfs/schemes_quota_goal_node_mem_used_free'] = True
 
         if os.path.isfile(
                 os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
                              'path')):
-            supports_map['schemes_quota_goal_node_memcg_used_free'] = True
+            supports_map['sysfs/schemes_quota_goal_node_memcg_used_free'] = True
 
     if os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'dests')):
-        supports_map['schemes_dests'] = True
+        supports_map['sysfs/schemes_dests'] = True
 
     if os.path.isfile(os.path.join(kdamond_dir_of(0), 'refresh_ms')):
-        supports_map['sysfs_refresh_ms'] = True
+        supports_map['sysfs/refresh_ms'] = True
 
     if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'addr_unit')):
-        supports_map['addr_unit'] = True
+        supports_map['sysfs/addr_unit'] = True
 
     if os.path.isfile(os.path.join(target_dir_of(0, 0, 0), 'obsolete_target')):
         supports_map['sysfs/obsolete_target'] = True
@@ -1263,26 +1263,25 @@ def mk_feature_supports_map():
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0),
                          'stats', 'nr_snapshots')):
-        supports_map['damos/stat/nr_snapshots'] = True
+        supports_map['syfs/damos_stat_nr_snapshots'] = True
 
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0),
                          'stats', 'max_nr_snapshots')):
-        supports_map['damos/max_nr_snapshots'] = True
+        supports_map['sysfs/damos_max_nr_snapshots'] = True
 
     if os.path.isdir(
             os.path.join(ctx_dir_of(0, 0),
                          'monitoring_attrs', 'sample')):
-                supports_map['damon_sample_control'] = True
+                supports_map['sysfs/damon_sample_control'] = True
 
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
-        supports_map['ops_attrs'] = True
+        supports_map['sysfs/ops_attrs'] = True
 
     avail_ops, err = _avail_ops()
     if err == None:
-        for ops in ['vaddr', 'fvaddr']:
-            supports_map[ops] = ops in avail_ops
-        supports_map['sysfs/paddr'] = 'paddr' in avail_ops
+        for ops in ['vaddr', 'paddr', 'fvaddr']:
+            supports_map['sysfs/%s' % ops] = ops in avail_ops
     err = stage_kdamonds(orig_kdamonds)
     if err is not None:
         return None, 'restoring original kdamonds setup failed'

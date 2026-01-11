@@ -26,7 +26,7 @@ def set_damon_sysfs_features():
             'sysfs/schemes_prioritization': True,
             'sysfs/schemes_tried_regions': False, 'debugfs/record': False,
             'debugfs/schemes_time_quota': True,
-            'sysfs/schemes_time_quota': True, 'fvaddr': False,
+            'sysfs/schemes_time_quota': True, 'sysfs/fvaddr': False,
             'debugfs/paddr': True, 'sysfs/paddr': True,
             'debugfs/schemes_wmarks': True, 'sysfs/schemes_wmarks': True,
             'debugfs/schemes_size_quota': True,

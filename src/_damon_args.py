@@ -552,7 +552,7 @@ def build_sample_control_ops_attrs(args, idx):
     else:
         tids = ''
     use_sample_control = _damo_sysinfo.damon_sysfs_feature_available(
-            'damon_sample_control')
+            'sysfs/damon_sample_control')
     if use_sample_control is False:
         try:
             ops_attrs = _damon.OpsAttrs(
