@@ -1074,7 +1074,7 @@ features_sysfs_support_from_begining = [
         'sysfs/schemes_time_quota',
         'schemes_prioritization',
         'schemes_wmarks',
-        'schemes_stat_succ',
+        'sysfs/schemes_stat_succ',
         'schemes_stat_qt_exceed',
         ]
 

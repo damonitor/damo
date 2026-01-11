@@ -27,7 +27,8 @@ def set_damon_sysfs_features():
             'sysfs/schemes_time_quota': True, 'fvaddr': False,
             'debugfs/paddr': True, 'sysfs/paddr': True,
             'schemes_wmarks': True, 'schemes_size_quota': True,
-            'schemes_stat_succ': True, 'vaddr': True}.items():
+            'debugfs/schemes_stat_succ': True, 'sysfs/schemes_stat_succ': True,
+            'vaddr': True}.items():
         if not support:
             continue
         for feature in _damon_features.features_list:
