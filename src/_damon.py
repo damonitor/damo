@@ -1730,7 +1730,8 @@ def update_schemes_status(stats=True, tried_regions=True,
         if err != None:
             return err
 
-    if quota_effective_bytes and feature_supported('schemes_quota_effective_bytes'):
+    if quota_effective_bytes and feature_supported(
+            'sysfs/schemes_quota_effective_bytes'):
         return update_schemes_quota_effective_bytes(idxs)
 
     return None

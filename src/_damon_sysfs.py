@@ -1183,7 +1183,7 @@ def mk_feature_supports_map():
 
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'quotas',
                                    'effective_bytes')):
-        supports_map['schemes_quota_effective_bytes'] = True
+        supports_map['sysfs/schemes_quota_effective_bytes'] = True
         # goal_metric and goal_some_psi will be merged together with effective bytes.
         supports_map['schemes_quota_goal_metric'] = True
         supports_map['schemes_quota_goal_some_psi'] = True
