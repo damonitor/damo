@@ -33,20 +33,24 @@ def main(args):
         print('perf version: %s' % sysinfo.perf_version)
     if 'sysfs_features' in args.print or 'all' in args.print:
         print('Sysfs avail DAMON features')
-        for feature in sysinfo.avail_damon_sysfs_features:
-            pr_feature(feature)
+        for feature in sysinfo.avail_damon_features:
+            if feature.name.startswith('sysfs/'):
+                pr_feature(feature)
     if 'debugfs_features' in args.print or 'all' in args.print:
         print('Debugfs avail DAMON features')
-        for feature in sysinfo.avail_damon_debugfs_features:
-            pr_feature(feature)
+        for feature in sysinfo.avail_damon_features:
+            if feature.name.startswith('debugfs/'):
+                pr_feature(feature)
     if 'trace_features' in args.print or 'all' in args.print:
         print('Avail DAMON trace features')
-        for feature in sysinfo.avail_damon_trace_features:
-            pr_feature(feature)
+        for feature in sysinfo.avail_damon_features:
+            if feature.name.startswith('trace/'):
+                pr_feature(feature)
     if 'modules' in args.print or 'all' in args.print:
         print('Avail DAMON modules')
-        for feature in sysinfo.avail_damon_modules:
-            pr_feature(feature)
+        for feature in sysinfo.avail_damon_features:
+            if feature.name.startswith('module/'):
+                pr_feature(feature)
 
 def set_argparser(parser):
     parser.add_argument(
