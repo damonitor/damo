@@ -199,7 +199,7 @@ def write_kdamonds(dir_path, kdamonds):
                 dir_path, ctx.targets[0], _damon.target_has_pid(ctx.ops))
         if err:
             return err
-    if not feature_supported('schemes'):
+    if not feature_supported('debugfs/schemes'):
         return None
 
     err = write_schemes(dir_path, ctx.schemes, ctx.intervals)
@@ -297,7 +297,7 @@ def files_content_to_kdamonds(files_content):
                 else target_id] if len(regions_dict) > 0 else []))
 
     schemes = []
-    if feature_supported('schemes'):
+    if feature_supported('debugfs/schemes'):
         for line in files_content['schemes'].split('\n'):
             if line.strip() == '':
                 continue
@@ -435,7 +435,7 @@ def mk_feature_supports_map():
 
     need_schemes_file_test = False
     if os.path.isfile(get_schemes_file()):
-        feature_supports['schemes'] = True
+        feature_supports['debugfs/schemes'] = True
         with open(get_schemes_file(), 'r') as f:
             nr_fields = len(f.read().strip().split())
         if nr_fields == 0:
