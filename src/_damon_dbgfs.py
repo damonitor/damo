@@ -139,7 +139,8 @@ def write_schemes(dir_path, schemes, intervals):
     scheme_file_input_lines = []
     for scheme in schemes:
         scheme_file_input_lines.append(damos_to_debugfs_input(scheme,
-            intervals, feature_supported('debugfs/schemes_time_quota')))
+            intervals, _damo_sysinfo.damon_feature_available(
+                'debugfs/schemes_time_quota')))
     scheme_file_input = '\n'.join(scheme_file_input_lines)
     if scheme_file_input == '':
         scheme_file_input = '\n'
@@ -154,17 +155,18 @@ def write_target(dir_path, target, target_has_pid):
             return err
         tid = target.pid
     else:
-        if not feature_supported('debugfs/paddr'):
+        if not _damo_sysinfo.damon_feature_available('debugfs/paddr'):
             raise Exception('paddr is not supported')
         err = _damo_fs.write_file(
                 os.path.join(dir_path, 'target_ids'), 'paddr\n')
         if err is not None:
             return err
         tid = 42
-    if feature_supported('debugfs/init_regions_target_idx'):
+    if _damo_sysinfo.damon_feature_available(
+            'debugfs/init_regions_target_idx'):
         tid = 0
 
-    if feature_supported('debugfs/init_regions'):
+    if _damo_sysinfo.damon_feature_available('debugfs/init_regions'):
         string = ' '.join(['%s %d %d' % (tid, r.start, r.end) for r in
             target.regions])
         err = _damo_fs.write_file(
@@ -199,7 +201,7 @@ def write_kdamonds(dir_path, kdamonds):
                 dir_path, ctx.targets[0], _damon.target_has_pid(ctx.ops))
         if err:
             return err
-    if not feature_supported('debugfs/schemes'):
+    if not _damo_sysinfo.damon_feature_available('debugfs/schemes'):
         return None
 
     err = write_schemes(dir_path, ctx.schemes, ctx.intervals)
@@ -232,7 +234,7 @@ def debugfs_schemes_output_fields_to_access_pattern(fields, intervals_us):
 
 def debugfs_output_to_damos(output, intervals_us):
     fields = [int(x) for x in output.strip().split()]
-    if feature_supported('debugfs/schemes_stat_succ'):
+    if _damo_sysinfo.damon_feature_available('debugfs/schemes_stat_succ'):
         nr_stat_fields = 5
     else:
         nr_stat_fields = 2
@@ -276,7 +278,8 @@ def files_content_to_kdamonds(files_content):
     regions_dict = {}
     # Reading init_regions fails when DAMON is running.  Do the parsing only
     # when DAMON is off.
-    if state == 'off' and feature_supported('debugfs/init_regions'):
+    if state == 'off' and _damo_sysinfo.damon_feature_available(
+            'debugfs/init_regions'):
         fields = [int(x) for x in files_content['init_regions'].strip().split()]
         for i in range(0, len(fields), 3):
             id_or_index = fields[i]
@@ -293,11 +296,12 @@ def files_content_to_kdamonds(files_content):
         targets.append(_damon.DamonTarget(
             pid=target_id if not is_paddr else None,
             regions=regions_dict[idx
-                if feature_supported('debugfs/init_regions_target_idx')
+                if _damo_sysinfo.damon_feature_available(
+                    'debugfs/init_regions_target_idx')
                 else target_id] if len(regions_dict) > 0 else []))
 
     schemes = []
-    if feature_supported('debugfs/schemes'):
+    if _damo_sysinfo.damon_feature_available('debugfs/schemes'):
         for line in files_content['schemes'].split('\n'):
             if line.strip() == '':
                 continue
@@ -320,9 +324,6 @@ def nr_kdamonds():
     return 1
 
 # features
-
-def feature_supported(feature_name):
-    return _damo_sysinfo.damon_feature_available(feature_name)
 
 def values_for_restore(filepath, read_val):
     if read_val == '':
