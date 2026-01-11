@@ -32,15 +32,13 @@ class SystemInfo:
     # DAMON features that available on current kernel.
     avail_damon_features = None
 
-    # list of _damon_features.DamonFeature objects that can be used using sysfs
-    # and debugfs interfaces.
-    avail_damon_sysfs_features = None
+    # fields to be removed, in favor of avail_damon_features
     avail_damon_debugfs_features = None
     avail_damon_trace_features = None
     avail_damon_modules = None
 
     def __init__(self, damo_version, kernel_version,
-                 avail_damon_sysfs_features, avail_damon_debugfs_features,
+                 avail_damon_debugfs_features,
                  avail_damon_trace_features, avail_damon_modules=None,
                  perf_path=None, perf_version=None, trace_cmd_version=None,
                  sysfs_path=None, tracefs_path=None, debugfs_path=None,
@@ -58,7 +56,6 @@ class SystemInfo:
 
         self.avail_damon_features = avail_damon_features
 
-        self.avail_damon_sysfs_features = avail_damon_sysfs_features
         self.avail_damon_debugfs_features = avail_damon_debugfs_features
         self.avail_damon_trace_features = avail_damon_trace_features
 
@@ -78,8 +75,6 @@ class SystemInfo:
             ('perf_version', self.perf_version),
             ('avail_damon_features',
              [f.to_kvpairs(raw) for f in self.avail_damon_features]),
-            ('avail_damon_sysfs_features',
-             [f.to_kvpairs(raw) for f in self.avail_damon_sysfs_features]),
             ('avail_damon_debugfs_features',
              [f.to_kvpairs(raw) for f in self.avail_damon_debugfs_features]),
             ('avail_damon_trace_features',
@@ -128,9 +123,6 @@ class SystemInfo:
                 avail_damon_features=[
                     _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     avail_damon_features],
-                avail_damon_sysfs_features=[
-                    _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
-                    kvpairs['avail_damon_sysfs_features']],
                 avail_damon_debugfs_features=[
                     _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     kvpairs['avail_damon_debugfs_features']],
@@ -151,8 +143,6 @@ class SystemInfo:
                 self.trace_cmd_version == other.trace_cmd_version and \
                 self.perf_path == other.perf_path and \
                 self.perf_version == other.perf_version and \
-                self.avail_damon_sysfs_features == \
-                other.avail_damon_sysfs_features and \
                 self.avail_damon_debugfs_features == \
                 other.avail_damon_debugfs_features and \
                 self.avail_damon_trace_features == \
@@ -326,9 +316,12 @@ def get_sysinfo_from_scratch():
     trace_cmd_version = get_trace_cmd_version()
     perf_path, perf_version = get_perf_path_version()
 
+    avail_damon_features = []
     avail_damon_sysfs_features, err = avail_features_on(_damon_sysfs)
     if err is not None:
         return None, 'sysfs feature check fail (%s)' % err
+    avail_damon_features += avail_damon_sysfs_features
+
     avail_damon_debugfs_features, err = avail_features_on(_damon_dbgfs)
     if err is not None:
         return None, 'debugfs feature check fail (%s)' % err
@@ -337,9 +330,7 @@ def get_sysinfo_from_scratch():
         return None, 'trace feature check fail (%s)' % err
     avail_damon_modules = get_avail_damon_modules()
 
-    avail_damon_features = []
     avail_damon_features += avail_damon_modules
-    avail_damon_features += avail_damon_sysfs_features
     avail_damon_features += avail_damon_trace_features
     avail_damon_features += avail_damon_debugfs_features
 
@@ -352,7 +343,6 @@ def get_sysinfo_from_scratch():
             trace_cmd_version=trace_cmd_version,
             perf_path=perf_path, perf_version=perf_version,
             avail_damon_features=avail_damon_features,
-            avail_damon_sysfs_features=avail_damon_sysfs_features,
             avail_damon_debugfs_features=avail_damon_debugfs_features,
             avail_damon_trace_features=avail_damon_trace_features,
             avail_damon_modules=avail_damon_modules)
@@ -381,7 +371,6 @@ def update_cached_info(cached_info):
         avail_damon_sysfs_features, err = avail_features_on(_damon_sysfs)
         if err is not None:
             return None, 'damon sysfs features update fail (%s)' % err
-        cached_info.avail_damon_sysfs_features = avail_damon_sysfs_features
 
         cached_info.avail_damon_modules = get_avail_damon_modules()
 
