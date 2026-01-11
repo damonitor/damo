@@ -1067,7 +1067,7 @@ def commit_quota_goals(kdamond_idxs):
 # sysfs was merged in v5.18-rc1
 features_sysfs_support_from_begining = [
         'schemes',
-        'init_regions',
+        'sysfs/init_regions',
         'vaddr',
         'sysfs/paddr',
         'schemes_size_quota',

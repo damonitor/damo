@@ -164,7 +164,7 @@ def write_target(dir_path, target, target_has_pid):
     if feature_supported('debugfs/init_regions_target_idx'):
         tid = 0
 
-    if feature_supported('init_regions'):
+    if feature_supported('debugfs/init_regions'):
         string = ' '.join(['%s %d %d' % (tid, r.start, r.end) for r in
             target.regions])
         err = _damo_fs.write_file(
@@ -276,7 +276,7 @@ def files_content_to_kdamonds(files_content):
     regions_dict = {}
     # Reading init_regions fails when DAMON is running.  Do the parsing only
     # when DAMON is off.
-    if state == 'off' and feature_supported('init_regions'):
+    if state == 'off' and feature_supported('debugfs/init_regions'):
         fields = [int(x) for x in files_content['init_regions'].strip().split()]
         for i in range(0, len(fields), 3):
             id_or_index = fields[i]
@@ -463,7 +463,7 @@ def mk_feature_supports_map():
         feature_supports['debugfs/paddr'] = True
 
     if os.path.isfile(get_init_regions_file()):
-        feature_supports['init_regions'] = True
+        feature_supports['debugfs/init_regions'] = True
         init_regions_version = test_init_regions_version(
                 feature_supports['debugfs/paddr'])
         if init_regions_version == 2:

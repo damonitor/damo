@@ -17,8 +17,9 @@ import _damon_sysfs
 def set_damon_sysfs_features():
     avail_features = []
     for name, support in {
-            'init_regions': True, 'schemes': True, 'schemes_stat_qt_exceed':
-            True, 'debugfs/init_regions_target_idx': True,
+            'debugfs/init_regions': True, 'sysfs/init_regions': True,
+            'schemes': True, 'schemes_stat_qt_exceed': True,
+            'debugfs/init_regions_target_idx': True,
             'schemes_prioritization': True,
             'sysfs/schemes_tried_regions': False, 'record': False,
             'debugfs/schemes_time_quota': True,
