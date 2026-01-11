@@ -236,11 +236,11 @@ def damon_feature_of_name(name):
     return [f for f in _damon_features.features_list if f.name == name][0]
 
 tracepoint_to_feature_name_map = {
-        'damon:damon_aggregated': 'trace_damon_aggregated',
-        'damon:damos_before_apply': 'trace_damos_before_apply',
+        'damon:damon_aggregated': 'trace/damon_aggregated',
+        'damon:damos_before_apply': 'trace/damos_before_apply',
         'damon:damon_monitor_intervals_tune':
-        'trace_damon_monitor_intervals_tune',
-        'damon:damos_esz': 'trace_damos_esz',
+        'trace/damon_monitor_intervals_tune',
+        'damon:damos_esz': 'trace/damos_esz',
         'damon:damos_stat_after_apply_interval':
         'trace/damos_stat_after_apply_interval',
         }
