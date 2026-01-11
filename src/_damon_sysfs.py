@@ -1176,7 +1176,7 @@ def mk_feature_supports_map():
             supports_map['schemes_filters_young'] = True
 
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'apply_interval_us')):
-        supports_map['schemes_apply_interval'] = True
+        supports_map['sysfs/schemes_apply_interval'] = True
 
     if os.path.isdir(os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals')):
         supports_map['schemes_quota_goals'] = True
