@@ -28,10 +28,7 @@ def main(args):
         print('getting system info failed (%s)' % err)
         exit(1)
     feature_names = sorted([f.name for f in _damon_features.features_list])
-    if _damon._damon_fs is _damon_sysfs:
-        avail_features = {f.name for f in sysinfo.avail_damon_sysfs_features}
-    else:
-        avail_features = {f.name for f in sysinfo.avail_damon_debugfs_features}
+    avail_features = [f.name for f in sysinfo.avail_damon_features]
     feature_support_map = {}
     for feature_name in feature_names:
         supported = feature_name in avail_features
