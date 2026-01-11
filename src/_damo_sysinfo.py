@@ -383,6 +383,15 @@ def update_cached_info(cached_info):
 
         cached_info.avail_damon_modules = get_avail_damon_modules()
 
+        avail_damon_features = []
+        for f in cached_info.avail_damon_features:
+            if f.name.startswith('sysfs/') or f.name.startswith('module/'):
+                continue
+            avail_damon_features.append(f)
+        avail_damon_features += avail_damon_sysfs_feastures
+        avail_damon_features += cached_info.avail_damon_modules
+        cached_info.avail_damon_features = avail_damon_features
+
     tracefs_path = _damo_fs.dev_mount_point('tracefs')
     if cached_info.tracefs_path != tracefs_path:
         cached_info.tracefs_path = tracefs_path
@@ -391,6 +400,14 @@ def update_cached_info(cached_info):
             return None, 'damon trace features update fail (%s)' % err
         cached_info.avail_damon_trace_features = avail_damon_trace_features
 
+        avail_damon_features = []
+        for f in cached_info.avail_damon_features:
+            if f.name.startswith('trace/'):
+                continue
+            avail_damon_features.append(f)
+        avail_damon_features += cached_info.avail_damon_trace_features
+        cached_info.avail_damon_features = avail_damon_features
+
     debugfs_path = _damo_fs.dev_mount_point('debugfs')
     if cached_info.debugfs_path != debugfs_path:
         cached_info.debugfs_path = debugfs_path
@@ -398,6 +415,14 @@ def update_cached_info(cached_info):
         if err is not None:
             return None, 'damon debugfs features update fail (%s)' % err
         cached_info.avail_damon_debugfs_features = avail_damon_debugfs_features
+
+        avail_damon_features = []
+        for f in cached_info.avail_damon_features:
+            if f.name.startswith('debugfs/'):
+                continue
+            avail_damon_features.append(f)
+        avail_damon_features += avail_damon_debugfs_features
+        cached_info.avail_damon_features = avail_damon_features
 
     return cached_info, None
 
