@@ -482,15 +482,6 @@ def get_sysinfo():
             return None, err
     return system_info, None
 
-def damon_sysfs_feature_available(feature_name):
-    sysinfo, err = get_sysinfo()
-    if err is not None:
-        return False
-    for f in sysinfo.avail_damon_sysfs_features:
-        if f.name == feature_name:
-            return True
-    return False
-
 def damon_tracepoint_available(tracepoint):
     sysinfo, err = get_sysinfo()
     if err is not None:
