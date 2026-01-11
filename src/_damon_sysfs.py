@@ -1259,7 +1259,7 @@ def mk_feature_supports_map():
         supports_map['addr_unit'] = True
 
     if os.path.isfile(os.path.join(target_dir_of(0, 0, 0), 'obsolete_target')):
-        supports_map['obsolete_target'] = True
+        supports_map['sysfs/obsolete_target'] = True
 
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0),

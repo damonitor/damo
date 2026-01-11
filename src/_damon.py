@@ -1799,7 +1799,7 @@ def add_vaddr_child_targets(ctx):
             child_targets.append(DamonTarget(pid=child_pid, regions=[]))
             changes_made = True
     if changes_made:
-        if feature_supported('obsolete_target'):
+        if feature_supported('sysfs/obsolete_target'):
             ctx.targets = updated_targets + child_targets
         else:
             ctx.targets = best_effort_target_arrange(
