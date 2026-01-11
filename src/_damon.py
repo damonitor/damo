@@ -1548,17 +1548,7 @@ def ensure_root_permission():
         exit(1)
 
 def feature_supported(feature):
-    sysinfo, err = _damo_sysinfo.get_sysinfo()
-    if err is not None:
-        raise Exception(
-        'BUG.  Please report on https://github.com/damonitor/damo/issues')
-    if _damon_fs == _damon_sysfs:
-        return feature in [f.name for f in sysinfo.avail_damon_sysfs_features]
-    else:
-        return feature in [
-                f.name for f in sysinfo.avail_damon_debugfs_features]
-    raise Exception(
-            'BUG.  Please report on https://github.com/damonitor/damo/issues')
+    return _damo_sysinfo.damon_feature_available(feature)
 
 def set_damon_interface(damon_interface):
     global _damon_fs
