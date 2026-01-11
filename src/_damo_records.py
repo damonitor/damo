@@ -1817,7 +1817,8 @@ def get_snapshot_records_of(request):
             access_pattern = request.record_filter.access_pattern
 
             addr_ranges = request.record_filter.address_ranges
-            if addr_ranges and _damon.feature_supported('schemes_filters_addr'):
+            if addr_ranges and _damon.feature_supported(
+                    'sysfs/schemes_filters_addr'):
                 for start, end in addr_ranges:
                     filters.append(_damon.DamosFilter(
                         'addr', False,
@@ -1910,9 +1911,9 @@ def get_records(tried_regions_of=None, record_file=None,
                 total_sz_only=False, dont_merge_regions=True):
     # If record is live snapshot, access pattern filtering is applied with
     # get_snapshot_records_of() because it uses DAMOS to get the snapshot.  If
-    # the kernel has schemes_filters_addr feature, address ranges filter is
-    # also applied.  Also, snapshot time range filter makes no sense for live
-    # snapshot.
+    # the kernel has sysfs/schemes_filters_addr feature, address ranges filter
+    # is also applied.  Also, snapshot time range filter makes no sense for
+    # live snapshot.
     # To avoid confusing caller, copy filter, modify the filter as necessary
     # and apply only necessary filters at once at last stage.
     if record_filter:
@@ -1928,7 +1929,7 @@ def get_records(tried_regions_of=None, record_file=None,
         if err is not None:
             return None, err
         filter_copy.access_pattern = None
-        if _damon.feature_supported('schemes_filters_addr'):
+        if _damon.feature_supported('sysfs/schemes_filters_addr'):
             filter_copy.address_ranges = None
             filter_copy.snapshot_time_ranges = None
     else:
