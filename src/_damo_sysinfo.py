@@ -33,11 +33,10 @@ class SystemInfo:
     avail_damon_features = None
 
     # fields to be removed, in favor of avail_damon_features
-    avail_damon_trace_features = None
     avail_damon_modules = None
 
     def __init__(self, damo_version, kernel_version,
-                 avail_damon_trace_features, avail_damon_modules=None,
+                 avail_damon_modules=None,
                  perf_path=None, perf_version=None, trace_cmd_version=None,
                  sysfs_path=None, tracefs_path=None, debugfs_path=None,
                  avail_damon_features=None):
@@ -53,8 +52,6 @@ class SystemInfo:
         self.perf_version = perf_version
 
         self.avail_damon_features = avail_damon_features
-
-        self.avail_damon_trace_features = avail_damon_trace_features
 
         if avail_damon_modules is None:
             avail_damon_modules = []
@@ -72,8 +69,6 @@ class SystemInfo:
             ('perf_version', self.perf_version),
             ('avail_damon_features',
              [f.to_kvpairs(raw) for f in self.avail_damon_features]),
-            ('avail_damon_trace_features',
-             [f.to_kvpairs(raw) for f in self.avail_damon_trace_features]),
             ('avail_damon_modules',
              [f.to_kvpairs(raw) for f in self.avail_damon_modules]),
             ])
@@ -92,9 +87,6 @@ class SystemInfo:
         avail_damon_features = []
         if 'avail_damon_features' in kvpairs:
             avail_damon_features = kvpairs['avail_damon_features']
-        damon_trace_features = []
-        if 'avail_damon_trace_features' in kvpairs:
-            damon_trace_features = kvpairs['avail_damon_trace_features']
         damon_modules = []
         if 'avail_damon_modules' in kvpairs:
             damon_modules = kvpairs['avail_damon_modules']
@@ -118,9 +110,6 @@ class SystemInfo:
                 avail_damon_features=[
                     _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     avail_damon_features],
-                avail_damon_trace_features=[
-                    _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
-                    damon_trace_features],
                 avail_damon_modules=[
                     _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     damon_modules],
@@ -135,8 +124,6 @@ class SystemInfo:
                 self.trace_cmd_version == other.trace_cmd_version and \
                 self.perf_path == other.perf_path and \
                 self.perf_version == other.perf_version and \
-                self.avail_damon_trace_features == \
-                other.avail_damon_trace_features and \
                 self.avail_damon_modules == other.avail_damon_modules and \
                 self.avail_damon_features == other.avail_damon_features
 
@@ -320,10 +307,10 @@ def get_sysinfo_from_scratch():
     avail_damon_trace_features, err = get_avail_damon_trace_features()
     if err is not None:
         return None, 'trace feature check fail (%s)' % err
+    avail_damon_features += avail_damon_trace_features
     avail_damon_modules = get_avail_damon_modules()
 
     avail_damon_features += avail_damon_modules
-    avail_damon_features += avail_damon_trace_features
 
     sysinfo = SystemInfo(
             damo_version=damo_version_,
@@ -334,7 +321,6 @@ def get_sysinfo_from_scratch():
             trace_cmd_version=trace_cmd_version,
             perf_path=perf_path, perf_version=perf_version,
             avail_damon_features=avail_damon_features,
-            avail_damon_trace_features=avail_damon_trace_features,
             avail_damon_modules=avail_damon_modules)
     return sysinfo, None
 
@@ -379,14 +365,13 @@ def update_cached_info(cached_info):
         avail_damon_trace_features, err = get_avail_damon_trace_features()
         if err is not None:
             return None, 'damon trace features update fail (%s)' % err
-        cached_info.avail_damon_trace_features = avail_damon_trace_features
 
         avail_damon_features = []
         for f in cached_info.avail_damon_features:
             if f.name.startswith('trace/'):
                 continue
             avail_damon_features.append(f)
-        avail_damon_features += cached_info.avail_damon_trace_features
+        avail_damon_features += avail_damon_trace_features
         cached_info.avail_damon_features = avail_damon_features
 
     debugfs_path = _damo_fs.dev_mount_point('debugfs')

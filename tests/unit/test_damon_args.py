@@ -41,8 +41,7 @@ def set_damon_sysfs_features():
                 avail_features.append(feature)
     _damo_sysinfo.system_info = _damo_sysinfo.SystemInfo(
             damo_version=None, kernel_version=None,
-            avail_damon_features=avail_features,
-            avail_damon_trace_features=[])
+            avail_damon_features=avail_features)
 
 class TestDamonArgs(unittest.TestCase):
     def test_damon_ctxs_for(self):
