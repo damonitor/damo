@@ -51,7 +51,7 @@ class DamonFeature:
 # old feature names are incrementally being updated.
 features_list = [
         DamonFeature(
-            name='record', upstream_status='withdrawn',
+            name='debugfs/record', upstream_status='withdrawn',
             upstreamed_version='none',
             comments='was in DAMON patchset, but not merged in mainline'),
         DamonFeature(name='debugfs/vaddr', upstream_status='merged in v5.15',
