@@ -1069,7 +1069,7 @@ features_sysfs_support_from_begining = [
         'schemes',
         'init_regions',
         'vaddr',
-        'paddr',
+        'sysfs/paddr',
         'init_regions_target_idx',
         'schemes_size_quota',
         'sysfs/schemes_time_quota',
@@ -1281,8 +1281,9 @@ def mk_feature_supports_map():
 
     avail_ops, err = _avail_ops()
     if err == None:
-        for ops in ['vaddr', 'paddr', 'fvaddr']:
+        for ops in ['vaddr', 'fvaddr']:
             supports_map[ops] = ops in avail_ops
+        supports_map['sysfs/paddr'] = 'paddr' in avail_ops
     err = stage_kdamonds(orig_kdamonds)
     if err is not None:
         return None, 'restoring original kdamonds setup failed'

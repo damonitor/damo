@@ -22,7 +22,7 @@ def set_damon_dbgfs_features():
             True, 'sysfs/schemes_tried_regions': False, 'record': False,
             'debugfs/schemes_time_quota': True,
             'sysfs/schemes_time_quota': True,
-            'fvaddr': False, 'paddr': True,
+            'fvaddr': False, 'debugfs/paddr': True,
             'schemes_wmarks': True, 'schemes_size_quota': True,
             'schemes_stat_succ': True, 'vaddr': True}.items():
         if not support:

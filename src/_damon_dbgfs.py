@@ -154,7 +154,7 @@ def write_target(dir_path, target, target_has_pid):
             return err
         tid = target.pid
     else:
-        if not feature_supported('paddr'):
+        if not feature_supported('debugfs/paddr'):
             raise Exception('paddr is not supported')
         err = _damo_fs.write_file(
                 os.path.join(dir_path, 'target_ids'), 'paddr\n')
@@ -460,12 +460,12 @@ def mk_feature_supports_map():
     # virtual address space has supported since the beginning
     feature_supports['vaddr'] = True
     if test_debugfs_file(get_target_ids_file(), 'paddr\n', '42\n'):
-        feature_supports['paddr'] = True
+        feature_supports['debugfs/paddr'] = True
 
     if os.path.isfile(get_init_regions_file()):
         feature_supports['init_regions'] = True
         init_regions_version = test_init_regions_version(
-                feature_supports['paddr'])
+                feature_supports['debugfs/paddr'])
         if init_regions_version == 2:
             feature_supports['init_regions_target_idx'] = True
 
