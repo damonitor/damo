@@ -39,6 +39,16 @@ class DamonFeature:
                 self.upstreamed_version == other.upstreamed_version and \
                 self.comments == other.comments
 
+# naming convention: <interface>/<feature>
+# e.g.,
+# - debugfs/vaddr
+# - sysfs/vaddr
+# - trace/damon_aggregated
+# - reclaim/mem_pressure_goal
+# - lru_sort/autotune
+# - stat/negative_idle_time
+#
+# old feature names are incrementally being updated.
 features_list = [
         DamonFeature(
             name='record', upstream_status='withdrawn',
