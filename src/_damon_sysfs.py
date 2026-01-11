@@ -1070,7 +1070,6 @@ features_sysfs_support_from_begining = [
         'init_regions',
         'vaddr',
         'sysfs/paddr',
-        'init_regions_target_idx',
         'schemes_size_quota',
         'sysfs/schemes_time_quota',
         'schemes_prioritization',

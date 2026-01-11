@@ -161,7 +161,7 @@ def write_target(dir_path, target, target_has_pid):
         if err is not None:
             return err
         tid = 42
-    if feature_supported('init_regions_target_idx'):
+    if feature_supported('debugfs/init_regions_target_idx'):
         tid = 0
 
     if feature_supported('init_regions'):
@@ -293,7 +293,7 @@ def files_content_to_kdamonds(files_content):
         targets.append(_damon.DamonTarget(
             pid=target_id if not is_paddr else None,
             regions=regions_dict[idx
-                if feature_supported('init_regions_target_idx')
+                if feature_supported('debugfs/init_regions_target_idx')
                 else target_id] if len(regions_dict) > 0 else []))
 
     schemes = []
@@ -467,7 +467,7 @@ def mk_feature_supports_map():
         init_regions_version = test_init_regions_version(
                 feature_supports['debugfs/paddr'])
         if init_regions_version == 2:
-            feature_supports['init_regions_target_idx'] = True
+            feature_supports['debugfs/init_regions_target_idx'] = True
 
     if need_schemes_file_test:
         # 'schemes' receives 18 numbers input and has three stats (v5.16)
