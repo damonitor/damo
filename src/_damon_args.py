@@ -551,7 +551,7 @@ def build_sample_control_ops_attrs(args, idx):
         tids = args.exp_ops_tids[idx]
     else:
         tids = ''
-    use_sample_control = _damo_sysinfo.damon_sysfs_feature_available(
+    use_sample_control = _damo_sysinfo.damon_feature_available(
             'sysfs/damon_sample_control')
     if use_sample_control is False:
         try:
