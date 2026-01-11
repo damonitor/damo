@@ -322,14 +322,7 @@ def nr_kdamonds():
 # features
 
 def feature_supported(feature_name):
-    sysinfo, err = _damo_sysinfo.get_sysinfo()
-    if err is not None:
-        # this should be called after load_sysinfo() success.
-        raise Exception('BUG')
-    for feature in sysinfo.avail_damon_debugfs_features:
-        if feature.name == feature_name:
-            return True
-    return False
+    return _damo_sysinfo.damon_feature_available(feature_name)
 
 def values_for_restore(filepath, read_val):
     if read_val == '':
