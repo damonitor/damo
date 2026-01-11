@@ -29,6 +29,9 @@ class SystemInfo:
     perf_path = None
     perf_version = None
 
+    # DAMON features that available on current kernel.
+    avail_damon_features = None
+
     # list of _damon_features.DamonFeature objects that can be used using sysfs
     # and debugfs interfaces.
     avail_damon_sysfs_features = None
@@ -40,7 +43,8 @@ class SystemInfo:
                  avail_damon_sysfs_features, avail_damon_debugfs_features,
                  avail_damon_trace_features, avail_damon_modules=None,
                  perf_path=None, perf_version=None, trace_cmd_version=None,
-                 sysfs_path=None, tracefs_path=None, debugfs_path=None):
+                 sysfs_path=None, tracefs_path=None, debugfs_path=None,
+                 avail_damon_features=None):
         self.damo_version = damo_version
         self.kernel_version = kernel_version
 
@@ -51,6 +55,9 @@ class SystemInfo:
         self.trace_cmd_version=trace_cmd_version
         self.perf_path = perf_path
         self.perf_version = perf_version
+
+        self.avail_damon_features = avail_damon_features
+
         self.avail_damon_sysfs_features = avail_damon_sysfs_features
         self.avail_damon_debugfs_features = avail_damon_debugfs_features
         self.avail_damon_trace_features = avail_damon_trace_features
@@ -69,6 +76,8 @@ class SystemInfo:
             ('trace_cmd_version', self.trace_cmd_version),
             ('perf_path', self.perf_path),
             ('perf_version', self.perf_version),
+            ('avail_damon_features',
+             [f.to_kvpairs(raw) for f in self.avail_damon_features]),
             ('avail_damon_sysfs_features',
              [f.to_kvpairs(raw) for f in self.avail_damon_sysfs_features]),
             ('avail_damon_debugfs_features',
@@ -90,6 +99,9 @@ class SystemInfo:
         perf_version = None
         if 'perf_version' in kvpairs:
             perf_version = kvpairs['perf_version']
+        avail_damon_features = []
+        if 'avail_damon_features' in kvpairs:
+            avail_damon_features = kvpairs['avail_damon_features']
         damon_trace_features = []
         if 'avail_damon_trace_features' in kvpairs:
             damon_trace_features = kvpairs['avail_damon_trace_features']
@@ -113,6 +125,9 @@ class SystemInfo:
                 debugfs_path=debugfs_path,
                 trace_cmd_version=trace_cmd_version,
                 perf_path=perf_path, perf_version=perf_version,
+                avail_damon_features=[
+                    _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
+                    avail_damon_features],
                 avail_damon_sysfs_features=[
                     _damon_features.DamonFeature.from_kvpairs(kvp) for kvp in
                     kvpairs['avail_damon_sysfs_features']],
@@ -142,7 +157,11 @@ class SystemInfo:
                 other.avail_damon_debugfs_features and \
                 self.avail_damon_trace_features == \
                 other.avail_damon_trace_features and \
-                self.avail_damon_modules == other.avail_damon_modules
+                self.avail_damon_modules == other.avail_damon_modules and \
+                self.avail_damon_features == other.avail_damon_features
+
+    def feature_available(self, feature_name):
+        return feature_name in [f.name for f in self.avail_damon_features]
 
     def trace_feature_available(self, feature_name):
         return len([f for f in self.avail_damon_trace_features
