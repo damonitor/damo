@@ -1547,9 +1547,6 @@ def ensure_root_permission():
         print('Run as root')
         exit(1)
 
-def feature_supported(feature):
-    return _damo_sysinfo.damon_feature_available(feature)
-
 def set_damon_interface(damon_interface):
     global _damon_fs
     if damon_interface == 'sysfs':
@@ -1681,7 +1678,8 @@ def update_schemes_tried_bytes(kdamond_idxs=None):
     return _damon_fs.update_schemes_tried_bytes(kdamond_idxs)
 
 def update_schemes_tried_regions(kdamond_idxs=None):
-    if not feature_supported('sysfs/schemes_tried_regions'):
+    if not _damo_sysinfo.damon_feature_available(
+            'sysfs/schemes_tried_regions'):
         return 'DAMON feature \'schemes_tried_regions\' is not supported' \
                 ' on the current kernel.  ' \
                 'It is available on kernel version 6.2 and later'
@@ -1715,12 +1713,13 @@ def update_schemes_status(stats=True, tried_regions=True,
         err = update_schemes_stats(idxs)
         if err != None:
             return err
-    if tried_regions and feature_supported('sysfs/schemes_tried_regions'):
+    if tried_regions and _damo_sysinfo.damon_feature_available(
+            'sysfs/schemes_tried_regions'):
         err = update_schemes_tried_regions(idxs)
         if err != None:
             return err
 
-    if quota_effective_bytes and feature_supported(
+    if quota_effective_bytes and _damo_sysinfo.damon_feature_available(
             'sysfs/schemes_quota_effective_bytes'):
         return update_schemes_quota_effective_bytes(idxs)
 
@@ -1789,7 +1788,7 @@ def add_vaddr_child_targets(ctx):
             child_targets.append(DamonTarget(pid=child_pid, regions=[]))
             changes_made = True
     if changes_made:
-        if feature_supported('sysfs/obsolete_target'):
+        if _damo_sysinfo.damon_feature_available('sysfs/obsolete_target'):
             ctx.targets = updated_targets + child_targets
         else:
             ctx.targets = best_effort_target_arrange(

@@ -1415,7 +1415,7 @@ def find_install_scheme(scheme_to_find):
             ctx_has_the_scheme = False
             for sidx, scheme in enumerate(ctx.schemes):
                 if scheme.effectively_equal(scheme_to_find, ctx.intervals):
-                    if _damon.feature_supported(
+                    if _damo_sysinfo.damon_feature_available(
                             'sysfs/schemes_apply_interval'):
                         scheme_to_find.apply_interval_us = ctx.intervals.sample
                     ctx_has_the_scheme = True
@@ -1424,7 +1424,8 @@ def find_install_scheme(scheme_to_find):
             if ctx_has_the_scheme:
                 continue
 
-            if _damon.feature_supported('sysfs/schemes_apply_interval'):
+            if _damo_sysinfo.damon_feature_available(
+                    'sysfs/schemes_apply_interval'):
                 scheme_to_find.apply_interval_us = ctx.intervals.sample
             ctx.schemes.append(scheme_to_find)
             installed = True
@@ -1817,7 +1818,7 @@ def get_snapshot_records_of(request):
             access_pattern = request.record_filter.access_pattern
 
             addr_ranges = request.record_filter.address_ranges
-            if addr_ranges and _damon.feature_supported(
+            if addr_ranges and _damo_sysinfo.damon_feature_available(
                     'sysfs/schemes_filters_addr'):
                 for start, end in addr_ranges:
                     filters.append(_damon.DamosFilter(
@@ -1929,7 +1930,7 @@ def get_records(tried_regions_of=None, record_file=None,
         if err is not None:
             return None, err
         filter_copy.access_pattern = None
-        if _damon.feature_supported('sysfs/schemes_filters_addr'):
+        if _damo_sysinfo.damon_feature_available('sysfs/schemes_filters_addr'):
             filter_copy.address_ranges = None
             filter_copy.snapshot_time_ranges = None
     else:
