@@ -11,7 +11,7 @@ def log(msg):
 
 def handle_report_access(words, cword):
     if cword == 3 or words[cword].startswith('-'):
-        print('--input --snapshot_damos_filter --style')
+        print('--input --snapshot_damos_filter --style --help')
         return
     # cword is larger than 3.
     prev = words[cword - 1]
@@ -31,7 +31,7 @@ def handle_report_access(words, cword):
 
 def handle_report(words, cword):
     if cword == 2:
-        print('access damon holistic heatmap sysinfo')
+        print('access damon holistic heatmap sysinfo --help')
         return
     report_type = words[2]
     if report_type == 'access':
@@ -42,17 +42,21 @@ def handle_help(words, cword):
     if cword == 2:
         print(' '.join([
             'damon_param_options', 'access_filter_options',
-            'access_format_options']))
+            'access_format_options', '--help']))
         return
     if cword == 3:
         topic = words[2]
         if topic == 'damon_param_options':
-            print('all monitoring damos')
+            print('all monitoring damos --help')
             return
         if topic == 'access_format_options':
             print(' '.join([
                 'options', 'record_format_keywords',
-                'snapshot_format_keywords', 'region_format_keywords']))
+                'snapshot_format_keywords', 'region_format_keywords',
+                '--help']))
+            return
+        if topic == 'access_filter_options':
+            print('--help')
 
 def handle_cli_complete():
     '''
@@ -71,7 +75,7 @@ def handle_cli_complete():
     if cword == 0:
         return True
     if cword == 1:
-        print('start stop tune record report help version')
+        print('start stop tune record report help version --help')
     cmd = words[1]
     if cmd == 'report':
         handle_report(words, cword)
