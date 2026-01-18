@@ -55,7 +55,7 @@ def damos_quota_goal_candidates(words, cword):
 
 def damos_filter_candidates(words, cword):
     prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
-    if prev_option != '--damos_filter':
+    if not prev_option in ['--damos_filter', '--snapshot_damos_filter']:
         return []
     if nr_filled_args == 0:
         return ['allow', 'reject']
@@ -115,6 +115,7 @@ def report_access_candidates(words, cword):
                 'recency-sz-hist', 'cold-memory-tail', 'recency-percentiles',
                 'idle-time-percentiles', 'temperature-percentiles', 'cold',
                 'hot']
+    return damos_filter_candidates(words[3:], cword - 3)
     return []
 
 def report_damon_candidates(words, cword):
