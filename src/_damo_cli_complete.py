@@ -32,12 +32,20 @@ def report_access_candidates(words, cword):
                 'hot']
     return []
 
+def report_damon_candidates(words, cword):
+    if cword == 3 or words[cword].startswith('-'):
+        return ['--format', '--show_cpu_usage', '--kdamonds_summary',
+                '--damos_stats']
+    return []
+
 def report_candidates(words, cword):
     if cword == 2:
         return ['access', 'damon holistic', 'heatmap', 'sysinfo']
     report_type = words[2]
     if report_type == 'access':
         return report_access_candidates(words, cword)
+    if report_type == 'damon':
+        return report_damon_candidates(words, cword)
     return []
 
 def help_candidtes(words, cword):
