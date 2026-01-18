@@ -9,6 +9,13 @@ def log(msg):
         f.write('%s\n' % msg)
 
 def handle_cli_complete():
+    '''
+    Print command line auto-completion suggestions.  Read
+    scripts/damo-completion.sh and src/damo.py to see how this is called.
+
+    Note that this is not supporting full options.  Only commands and options
+    that expected to be frequently used are supported.
+    '''
     if len(sys.argv) < 4:
         return False
     if sys.argv[1] != '--cli_complete':
