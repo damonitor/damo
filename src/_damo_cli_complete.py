@@ -113,8 +113,12 @@ def record_candidates(words, cword):
     return []
 
 def report_access_candidates(words, cword):
-    if cword == 3 or words[cword].startswith('-'):
-        return ['--input', '--snapshot_damos_filter', '--style']
+    if cword < 3:
+        return []
+    candidates = option_candidates(words[3:], cword - 3, {
+        '--input': 1, '--snapshot_damos_filter': -1, '--style': 1})
+    if candidates:
+        return candidates
     # cword is larger than 3.
     prev = words[cword - 1]
     if prev == '--input':
