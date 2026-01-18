@@ -41,8 +41,6 @@ def damon_param_should_show_options(words, cword):
             }
     if not prev_option in option_nr_args:
         return False
-    log('words %s, cword %s' % (words, cword))
-    log('%d' % nr_filled_args)
     return option_nr_args[prev_option] == nr_filled_args
 
 def damos_quota_goal_candidates(words, cword):
