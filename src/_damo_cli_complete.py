@@ -85,8 +85,10 @@ def handle_cli_complete():
     words = sys.argv[3:]
     if cword == 0:
         return True
+    candidates = []
     if cword == 1:
-        print('start stop tune record report help version --help')
+        candidates = ['start', 'stop', 'tune', 'record', 'report', 'help',
+                      'version']
     cmd = words[1]
     if cmd == 'record':
         handle_record(words, cword)
@@ -94,6 +96,8 @@ def handle_cli_complete():
         handle_report(words, cword)
     elif cmd == 'help':
         handle_help(words, cword)
-    elif cword == 2:
-        print('--help')
+
+    if not '--help' in candidates:
+        candidates.append('--help')
+    print(' '.join(candidates))
     return True
