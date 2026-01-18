@@ -18,6 +18,13 @@ def damon_param_candidates(words, cword):
                 '--damos_action', '--damos_apply_interval', '--damos_quotas',
                 '--damos_quota_goal', '--damos_filter',
                 ]
+    prev = words[cword - 1]
+    if prev == '--ops':
+        return ['vaddr', 'paddr', 'fvaddr']
+    if prev == '--damos_action':
+        return ['willneed', 'cold', 'pageout', 'hugepage', 'nohugepage',
+                'lru_prio', 'lru_deprio', 'migrate_hot', 'migrate_cold',
+                'stat']
     return []
 
 def start_candidates(words, cword):
