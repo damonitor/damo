@@ -1,5 +1,11 @@
 # SPDX-License-Identifier: GPL-2.0
-# bash completion support for damo
+
+# bash completion support for damo.
+# To use this, 'source' this script.  For example,
+#
+#     $ source ./scripts/damo-completion.sh
+#     $ ./damo [TAB][TAB]
+#     help	record	report	start	stop	tune	version
 
 _damo_complete()
 {
