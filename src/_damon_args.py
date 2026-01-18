@@ -1103,8 +1103,7 @@ def set_damos_argparser(parser, hide_help):
                             'single target node id or',
                             'multiple destination nodes input',
                             'should also be given.'
-                            ])
-                        if not hide_help else argparse.SUPPRESS)
+                            ]))
     parser.add_argument('--damos_sz_region', metavar=('<min>', '<max>'),
                         nargs=2, default=[], action='append',
                         help='min/max size of damos target regions (bytes)'
