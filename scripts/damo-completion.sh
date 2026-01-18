@@ -21,13 +21,7 @@ _damo_complete()
 		echo >> .damo_completion_log
 	fi
 
-	# support only first command for now
-	if [ "$cword" -ne 1 ]
-	then
-		return 1
-	fi
-
-	candidates="start stop tune record report help version"
+	candidates=$("${words[0]}" --cli_complete "$cword" "${words[@]}")
 
 	COMPREPLY=($(compgen -W "${candidates}" -- "$cur"))
 	return 0
