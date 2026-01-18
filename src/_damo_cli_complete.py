@@ -23,6 +23,7 @@ def should_show_options(words, cword, option_nr_args):
     '''
     words and cword should start from the options part (no command)
     option_nr_args is option name to their required number of arguments map.
+    For variable number of options, -1 is given.
     '''
     if cword == 0 or words[cword].startswith('-'):
         return True
@@ -36,6 +37,16 @@ def should_show_options(words, cword, option_nr_args):
     if not prev_option in option_nr_args:
         return False
     return option_nr_args[prev_option] == nr_filled_args
+
+def option_candidates(words, cword, option_nr_args):
+    '''
+    words and cword should start from the options part (no command)
+    option_nr_args is option name to their required number of arguments map.
+    For variable number of options, -1 is given.
+    '''
+    if should_show_options(words, cword, option_nr_args):
+        return list(option_nr_args.keys())
+    return []
 
 def damos_quota_goal_candidates(words, cword):
     prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
@@ -60,23 +71,23 @@ def damos_filter_candidates(words, cword):
     return []
 
 def damon_param_candidates(words, cword):
-    if should_show_options(
+    candidates = option_candidates(
             words, cword, {
                 '--ops': 1,
                 '--monitoring_intervals_autotune': 0,
+                '--numa_node': -1,
                 '--monitoring_intervals': 3,
                 '--monitoring_intervals_goal': 4,
                 '--monitoring_nr_regions_range': 2,
                 '--damos_action': 1,
                 '--damos_apply_interval': 1,
-                }):
-        return ['--ops',
-                '--monitoring_intervals_autotune',
-                '--numa_node', '--monitoring_intervals',
-                '--monitoring_intervals_goal', '--monitoring_nr_regions_range',
-                '--damos_action', '--damos_apply_interval', '--damos_quotas',
-                '--damos_quota_goal', '--damos_filter',
-                ]
+                '--damos_quotas': -1,
+                '--damos_quota_goal': -1,
+                '--damos_filter': -1,
+                })
+    if candidates:
+        return candidates
+
     prev = words[cword - 1]
     if prev == '--ops':
         return ['vaddr', 'paddr', 'fvaddr']
