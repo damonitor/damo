@@ -38,6 +38,22 @@ def handle_report(words, cword):
         handle_report_access(words, cword)
         return
 
+def handle_help(words, cword):
+    if cword == 2:
+        print(' '.join([
+            'damon_param_options', 'access_filter_options',
+            'access_format_options']))
+        return
+    if cword == 3:
+        topic = words[2]
+        if topic == 'damon_param_options':
+            print('all monitoring damos')
+            return
+        if topic == 'access_format_options':
+            print(' '.join([
+                'options', 'record_format_keywords',
+                'snapshot_format_keywords', 'region_format_keywords']))
+
 def handle_cli_complete():
     '''
     Print command line auto-completion suggestions.  Read
@@ -59,4 +75,6 @@ def handle_cli_complete():
     cmd = words[1]
     if cmd == 'report':
         handle_report(words, cword)
+    if cmd == 'help':
+        handle_help(words, cword)
     return True
