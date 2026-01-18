@@ -15,6 +15,7 @@ if not os.path.isfile(os.path.join(damo_dir, 'damo_version.py')):
 
 import sys
 
+import _damo_cli_complete
 import _damo_subcmds
 import damo_adjust
 import damo_args
@@ -114,20 +115,11 @@ class SubCmdHelpFormatter(argparse.RawDescriptionHelpFormatter):
             parts = '\n'.join(parts.split('\n')[1:])
         return parts
 
-def handle_cli_complete():
-    if len(sys.argv) < 4:
-        return False
-    if sys.argv[1] != '--cli_complete':
-        return False
-    cword = int(sys.argv[2])
-    words = sys.argv[3]
-    if cword == 1:
-        print('start stop tune record report help version')
-    return True
-
 def main():
-    if handle_cli_complete():
+    invoked_for_cli_complete = _damo_cli_complete.handle_cli_complete()
+    if invoked_for_cli_complete:
         return
+
     parser = argparse.ArgumentParser(formatter_class=SubCmdHelpFormatter)
     parser.description = 'Control DAMON and show its results'
 
