@@ -2018,7 +2018,9 @@ def set_argparser(parser):
                 '"tried_regions_of <kdamond idx> <context idx> <scheme idx>"'
                 ]))
     parser.add_argument('--input_file', metavar='<file>', nargs='+',
-            help='source of the access pattern to show')
+                        # source of the access pattern to show
+                        # suppress in favor of --input.
+                        help=argparse.SUPPRESS)
     parser.add_argument('--tried_regions_of', nargs=3, type=int,
             action='append',
             metavar=('<kdamond idx>', '<context idx>', '<scheme idx>'),
