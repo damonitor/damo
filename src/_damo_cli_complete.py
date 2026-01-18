@@ -43,6 +43,20 @@ def damon_param_should_show_options(words, cword):
     log('%d' % nr_filled_args)
     return option_nr_args[prev_option] == nr_filled_args
 
+def damos_filter_candidates(words, cword):
+    prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
+    if prev_option != '--damos_filter':
+        return []
+    if nr_filled_args == 0:
+        return ['allow', 'reject']
+    damos_filter_types = ['active', 'memcg', 'young', 'hugepage_size',
+                          'unmapped', 'addr', 'target']
+    if nr_filled_args == 1:
+        return ['none'] + damos_filter_types
+    if nr_filled_args == 2:
+        return damos_filter_types
+    return []
+
 def damon_param_candidates(words, cword):
     if damon_param_should_show_options(words, cword):
         return ['--ops',
@@ -59,7 +73,7 @@ def damon_param_candidates(words, cword):
         return ['willneed', 'cold', 'pageout', 'hugepage', 'nohugepage',
                 'lru_prio', 'lru_deprio', 'migrate_hot', 'migrate_cold',
                 'stat']
-    return []
+    return damos_filter_candidates(words, cword)
 
 def start_candidates(words, cword):
     return damon_param_candidates(words[2:], cword - 2)
