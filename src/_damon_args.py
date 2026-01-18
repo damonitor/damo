@@ -1130,7 +1130,7 @@ def set_damos_argparser(parser, hide_help):
     parser.add_argument(
             '--damos_quotas', default=[],
             metavar='<quota parameter>', nargs='+', action='append',
-            help=argparse.SUPPRESS)
+            help=damos_quotas_help if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--damos_quota_interval', default=[],
                         metavar='<milliseconds>', action='append',
                         help='quota reset interval'
