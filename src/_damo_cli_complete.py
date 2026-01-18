@@ -9,8 +9,42 @@ def log(msg):
     with open('.damo_cli_complete_log', 'a') as f:
         f.write('%s\n' % msg)
 
-def damon_param_candidates(words, cword):
+def prev_option_nr_filed_args(words, cword):
+    for i in range(cword -1, -1, -1):
+        if words[i].startswith('-'):
+            prev_option = words[i]
+            nr_filled_args = cword - 1 - i
+            return prev_option, nr_filled_args
+    return None, None
+
+def damon_param_should_show_options(words, cword):
     if cword == 0 or words[cword].startswith('-'):
+        return True
+
+    if words[cword - 1] == '--monitoring_intervals_autotune':
+        return True
+
+    prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
+    if prev_option is None:
+        return False
+    # option name to their required number of arguments.
+    option_nr_args = {
+            '--ops': 1,
+            '--monitoring_intervals_autotune': 0,
+            '--monitoring_intervals': 3,
+            '--monitoring_intervals_goal': 4,
+            '--monitoring_nr_regions_range': 2,
+            '--damos_action': 1,
+            '--damos_apply_interval': 1,
+            }
+    if not prev_option in option_nr_args:
+        return False
+    log('words %s, cword %s' % (words, cword))
+    log('%d' % nr_filled_args)
+    return option_nr_args[prev_option] == nr_filled_args
+
+def damon_param_candidates(words, cword):
+    if damon_param_should_show_options(words, cword):
         return ['--ops',
                 '--monitoring_intervals_autotune',
                 '--numa_node', '--monitoring_intervals',
