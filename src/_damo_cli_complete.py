@@ -9,30 +9,34 @@ def log(msg):
     with open('.damo_cli_complete_log', 'a') as f:
         f.write('%s\n' % msg)
 
+def handle_report_access(words, cword):
+    if cword == 3:
+        print('--input --snapshot_damos_filter --style')
+        return
+    option = words[3]
+    if cword == 4:
+        if option == '--input':
+            candidates = ['tried_regions_of', './', '../']
+            for f in os.listdir('./'):
+                candidates.append('./%s' % f)
+            print(' '.join(candidates))
+            return
+        if option == '--style':
+            print(' '.join([
+                'detailed', 'simple-boxes', 'temperature-sz-hist',
+                'recency-sz-hist', 'cold-memory-tail',
+                'recency-percentiles', 'idle-time-percentiles',
+                'temperature-percentiles', 'cold', 'hot']))
+            return
+
 def handle_report(words, cword):
     if cword == 2:
         print('access damon holistic heatmap sysinfo')
         return
     report_type = words[2]
     if report_type == 'access':
-        if cword == 3:
-            print('--input --snapshot_damos_filter --style')
-            return
-        if cword == 4:
-            option = words[3]
-            if option == '--input':
-                candidates = ['tried_regions_of', './', '../']
-                for f in os.listdir('./'):
-                    candidates.append('./%s' % f)
-                print(' '.join(candidates))
-                return
-            if option == '--style':
-                print(' '.join([
-                    'detailed', 'simple-boxes', 'temperature-sz-hist',
-                    'recency-sz-hist', 'cold-memory-tail',
-                    'recency-percentiles', 'idle-time-percentiles',
-                    'temperature-percentiles', 'cold', 'hot']))
-                return
+        handle_report_access(words, cword)
+        return
 
 def handle_cli_complete():
     '''
