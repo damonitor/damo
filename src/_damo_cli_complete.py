@@ -11,7 +11,13 @@ def log(msg):
 
 def damon_param_candidates(words, cword):
     if cword == 0 or words[cword].startswith('-'):
-        return ['--monitoring_intervals_autotune', '--damos_action']
+        return ['--ops',
+                '--monitoring_intervals_autotune',
+                '--numa_node', '--monitoring_intervals',
+                '--monitoring_intervals_goal', '--monitoring_nr_regions_range',
+                '--damos_action', '--damos_apply_interval', '--damos_quotas',
+                '--damos_quota_goal', '--damos_filter',
+                ]
     return []
 
 def start_candidates(words, cword):
