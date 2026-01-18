@@ -26,6 +26,13 @@ def handle_report(words, cword):
                     candidates.append('./%s' % f)
                 print(' '.join(candidates))
                 return
+            if option == '--style':
+                print(' '.join([
+                    'detailed', 'simple-boxes', 'temperature-sz-hist',
+                    'recency-sz-hist', 'cold-memory-tail',
+                    'recency-percentiles', 'idle-time-percentiles',
+                    'temperature-percentiles', 'cold', 'hot']))
+                return
 
 def handle_cli_complete():
     '''
