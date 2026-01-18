@@ -9,6 +9,15 @@ def log(msg):
     with open('.damo_cli_complete_log', 'a') as f:
         f.write('%s\n' % msg)
 
+def handle_record(words, cword):
+    if cword == 2 or words[cword].startswith('-'):
+        print(' '.join([
+            '--out', '--help', '--snapshot', '--timeout',
+            '--snapshot_damos_filter']))
+        return
+    if words[cword - 1] != '--help':
+        print('--help')
+
 def handle_report_access(words, cword):
     if cword == 3 or words[cword].startswith('-'):
         print('--input --snapshot_damos_filter --style --help')
@@ -77,7 +86,9 @@ def handle_cli_complete():
     if cword == 1:
         print('start stop tune record report help version --help')
     cmd = words[1]
-    if cmd == 'report':
+    if cmd == 'record':
+        handle_record(words, cword)
+    elif cmd == 'report':
         handle_report(words, cword)
     elif cmd == 'help':
         handle_help(words, cword)
