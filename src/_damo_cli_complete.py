@@ -1,6 +1,12 @@
 # SPDX-License-Identifier: GPL-2.0
 
+import datetime
 import sys
+
+def log(msg):
+    msg = '%s: %s' % (datetime.datetime.now(), msg)
+    with open('.damo_cli_complete_log', 'a') as f:
+        f.write('%s\n' % msg)
 
 def handle_cli_complete():
     if len(sys.argv) < 4:
