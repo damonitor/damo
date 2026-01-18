@@ -14,7 +14,14 @@ def handle_cli_complete():
     if sys.argv[1] != '--cli_complete':
         return False
     cword = int(sys.argv[2])
+    words = sys.argv[3:]
+    if cword == 0:
+        return True
     if cword == 1:
         print('start stop tune record report help version')
+    cmd = words[1]
+    if cmd == 'report':
+        if cword == 2:
+            print('access damon holistic heatmap sysinfo')
 
     return True
