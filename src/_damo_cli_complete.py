@@ -9,6 +9,17 @@ def log(msg):
     with open('.damo_cli_complete_log', 'a') as f:
         f.write('%s\n' % msg)
 
+def damon_param_candidates(words, cword):
+    if cword == 0 or words[cword].startswith('-'):
+        return ['--monitoring_intervals_autotune', '--damos_action']
+    return []
+
+def start_candidates(words, cword):
+    return damon_param_candidates(words[2:], cword - 2)
+
+def tune_candidates(words, cword):
+    return damon_param_candidates(words[2:], cword - 2)
+
 def record_candidates(words, cword):
     if cword == 2 or words[cword].startswith('-'):
         return ['--out', '--help', '--snapshot', '--timeout',
@@ -94,7 +105,11 @@ def handle_cli_complete():
         candidates = ['start', 'stop', 'tune', 'record', 'report', 'help',
                       'version']
     cmd = words[1]
-    if cmd == 'record':
+    if cmd == 'start':
+        candidates = start_candidates(words, cword)
+    elif cmd == 'tune':
+        candidates = tune_candidates(words, cword)
+    elif cmd == 'record':
         candidates = record_candidates(words, cword)
     elif cmd == 'report':
         candidates = report_candidates(words, cword)
