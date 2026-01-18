@@ -89,12 +89,14 @@ def override_vals(to_override, new_vals):
             to_override[idx] = new_val
 
 def damon_intervals_for(args_intervals, args_sample, args_aggr, args_updr,
-                        args_intervals_goal):
+                        args_intervals_goal, use_default_autotune=False):
     intervals = ['5ms', '100ms', '1s']
     override_vals(intervals, args_intervals)
     override_vals(intervals, [args_sample, args_aggr, args_updr])
 
-    if args_intervals_goal is None:
+    if use_default_autotune is True:
+        args_intervals_goal = ['4%', '3', '5ms', '10s']
+    elif args_intervals_goal is None:
         args_intervals_goal = ['0%', '0', '0us', '0us']
 
     intervals_goal = _damon.DamonIntervalsGoal(*args_intervals_goal)
@@ -597,7 +599,8 @@ def damon_ctx_for(args, idx):
         intervals = damon_intervals_for(
                 args.monitoring_intervals[idx], args.sample[idx],
                 args.aggr[idx], args.updr[idx],
-                args.monitoring_intervals_goal[idx])
+                args.monitoring_intervals_goal[idx],
+                args.monitoring_intervals_autotune)
     except Exception as e:
         return None, 'invalid intervals arguments (%s)' % e
     try:
@@ -1017,6 +1020,9 @@ def set_monitoring_attrs_pinpoint_argparser(parser, hide_help=False):
 
 def set_monitoring_attrs_argparser(parser, hide_help=False):
     # for easier total setup
+    parser.add_argument('--monitoring_intervals_autotune', action='store_true',
+                        help='use default monitoring intervals goal '
+                        '(4%% 3 5ms 10s)')
     parser.add_argument('--monitoring_intervals', nargs=3, action='append',
                         metavar=('<sample>', '<aggr>', '<update>'),
                         help='monitoring intervals (us)'
