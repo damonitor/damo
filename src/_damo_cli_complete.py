@@ -8,6 +8,16 @@ def log(msg):
     with open('.damo_cli_complete_log', 'a') as f:
         f.write('%s\n' % msg)
 
+def handle_report(words, cword):
+    if cword == 2:
+        print('access damon holistic heatmap sysinfo')
+        return
+    if cword == 3:
+        report_type = words[2]
+        if report_type == 'access':
+            print('--input --snapshot_damos_filter --style')
+            return
+
 def handle_cli_complete():
     '''
     Print command line auto-completion suggestions.  Read
@@ -28,13 +38,5 @@ def handle_cli_complete():
         print('start stop tune record report help version')
     cmd = words[1]
     if cmd == 'report':
-        if cword == 2:
-            print('access damon holistic heatmap sysinfo')
-            return True
-        if cword == 3:
-            report_type = words[2]
-            if report_type == 'access':
-                print('--input --snapshot_damos_filter --style')
-                return True
-
+        handle_report(words, cword)
     return True
