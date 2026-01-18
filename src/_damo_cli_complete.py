@@ -4,6 +4,8 @@ import datetime
 import os
 import sys
 
+import _damon
+
 def log(msg):
     msg = '%s: %s' % (datetime.datetime.now(), msg)
     with open('.damo_cli_complete_log', 'a') as f:
@@ -43,6 +45,14 @@ def damon_param_should_show_options(words, cword):
     log('%d' % nr_filled_args)
     return option_nr_args[prev_option] == nr_filled_args
 
+def damos_quota_goal_candidates(words, cword):
+    prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
+    if prev_option != '--damos_quota_goal':
+        return []
+    if nr_filled_args == 0:
+        return _damon.qgoal_metrics
+    return []
+
 def damos_filter_candidates(words, cword):
     prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
     if prev_option != '--damos_filter':
@@ -73,6 +83,9 @@ def damon_param_candidates(words, cword):
         return ['willneed', 'cold', 'pageout', 'hugepage', 'nohugepage',
                 'lru_prio', 'lru_deprio', 'migrate_hot', 'migrate_cold',
                 'stat']
+    candidates = damos_quota_goal_candidates(words, cword)
+    if candidates:
+        return candidates
     return damos_filter_candidates(words, cword)
 
 def start_candidates(words, cword):
