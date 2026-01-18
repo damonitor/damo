@@ -80,6 +80,7 @@ def handle_cli_complete():
         candidates = report_candidates(words, cword)
     elif cmd == 'help':
         candidates = help_candidtes(words, cword)
-    candidates.append('--help')
+    if words[cword - 1] != '--help':
+        candidates.append('--help')
     print(' '.join(candidates))
     return True
