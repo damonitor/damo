@@ -9,65 +9,49 @@ def log(msg):
     with open('.damo_cli_complete_log', 'a') as f:
         f.write('%s\n' % msg)
 
-def handle_record(words, cword):
+def record_candidates(words, cword):
     if cword == 2 or words[cword].startswith('-'):
-        print(' '.join([
-            '--out', '--help', '--snapshot', '--timeout',
-            '--snapshot_damos_filter']))
-        return
-    if words[cword - 1] != '--help':
-        print('--help')
+        return ['--out', '--help', '--snapshot', '--timeout',
+                '--snapshot_damos_filter']
+    return []
 
-def handle_report_access(words, cword):
+def report_access_candidates(words, cword):
     if cword == 3 or words[cword].startswith('-'):
-        print('--input --snapshot_damos_filter --style --help')
-        return
+        return ['--input', '--snapshot_damos_filter', '--style']
     # cword is larger than 3.
     prev = words[cword - 1]
     if prev == '--input':
         candidates = ['tried_regions_of', './', '../']
         for f in os.listdir('./'):
             candidates.append('./%s' % f)
-        print(' '.join(candidates))
-        return
+        return candidates
     if prev == '--style':
-        print(' '.join([
-            'detailed', 'simple-boxes', 'temperature-sz-hist',
-            'recency-sz-hist', 'cold-memory-tail',
-            'recency-percentiles', 'idle-time-percentiles',
-            'temperature-percentiles', 'cold', 'hot']))
-        return
+        return ['detailed', 'simple-boxes', 'temperature-sz-hist',
+                'recency-sz-hist', 'cold-memory-tail', 'recency-percentiles',
+                'idle-time-percentiles', 'temperature-percentiles', 'cold',
+                'hot']
+    return []
 
-def handle_report(words, cword):
+def report_candidates(words, cword):
     if cword == 2:
-        print('access damon holistic heatmap sysinfo --help')
-        return
+        return ['access', 'damon holistic', 'heatmap', 'sysinfo']
     report_type = words[2]
     if report_type == 'access':
-        handle_report_access(words, cword)
-        return
-    if words[cword - 1] != '--help':
-        print('--help')
+        return report_access_candidates(words, cword)
+    return []
 
-def handle_help(words, cword):
+def help_candidtes(words, cword):
     if cword == 2:
-        print(' '.join([
-            'damon_param_options', 'access_filter_options',
-            'access_format_options', '--help']))
-        return
+        return ['damon_param_options', 'access_filter_options',
+                'access_format_options']
     if cword == 3:
         topic = words[2]
         if topic == 'damon_param_options':
-            print('all monitoring damos --help')
-            return
+            return ['all', 'monitoring', 'damos']
         if topic == 'access_format_options':
-            print(' '.join([
-                'options', 'record_format_keywords',
-                'snapshot_format_keywords', 'region_format_keywords',
-                '--help']))
-            return
-        if topic == 'access_filter_options':
-            print('--help')
+            return ['options', 'record_format_keywords',
+                    'snapshot_format_keywords', 'region_format_keywords']
+    return []
 
 def handle_cli_complete():
     '''
@@ -91,13 +75,11 @@ def handle_cli_complete():
                       'version']
     cmd = words[1]
     if cmd == 'record':
-        handle_record(words, cword)
+        candidates = record_candidates(words, cword)
     elif cmd == 'report':
-        handle_report(words, cword)
+        candidates = report_candidates(words, cword)
     elif cmd == 'help':
-        handle_help(words, cword)
-
-    if not '--help' in candidates:
-        candidates.append('--help')
+        candidates = help_candidtes(words, cword)
+    candidates.append('--help')
     print(' '.join(candidates))
     return True
