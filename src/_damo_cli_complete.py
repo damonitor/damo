@@ -79,6 +79,8 @@ def handle_cli_complete():
     cmd = words[1]
     if cmd == 'report':
         handle_report(words, cword)
-    if cmd == 'help':
+    elif cmd == 'help':
         handle_help(words, cword)
+    elif cword == 2:
+        print('--help')
     return True
