@@ -46,6 +46,8 @@ def handle_report(words, cword):
     if report_type == 'access':
         handle_report_access(words, cword)
         return
+    if words[cword - 1] != '--help':
+        print('--help')
 
 def handle_help(words, cword):
     if cword == 2:
