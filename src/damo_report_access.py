@@ -2021,10 +2021,12 @@ def set_argparser(parser):
                         # source of the access pattern to show
                         # suppress in favor of --input.
                         help=argparse.SUPPRESS)
-    parser.add_argument('--tried_regions_of', nargs=3, type=int,
-            action='append',
+    parser.add_argument(
+            '--tried_regions_of', nargs=3, type=int, action='append',
             metavar=('<kdamond idx>', '<context idx>', '<scheme idx>'),
-            help='show tried regions of given schemes')
+            # show tried regions of given schemes
+            # suppress in favor of --input.
+            help=argparse.SUPPRESS)
     _damo_records.set_snapshot_damos_filters_option(parser)
     add_fmt_args(parser, hide_help=True)
 
