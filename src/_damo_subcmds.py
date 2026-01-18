@@ -1,15 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0
 
-class DamoSubCmdModule:
-    set_argparser = lambda self, args: args
-    main = lambda self, args: args
-
-    def __init__(self, set_argparser, main):
-        if set_argparser != None:
-            self.set_argparser = set_argparser
-        if main != None:
-            self.main = main
-
 class DamoSubCmd:
     name = None
     msg = None
