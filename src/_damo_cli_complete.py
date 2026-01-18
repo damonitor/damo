@@ -30,5 +30,11 @@ def handle_cli_complete():
     if cmd == 'report':
         if cword == 2:
             print('access damon holistic heatmap sysinfo')
+            return True
+        if cword == 3:
+            report_type = words[2]
+            if report_type == 'access':
+                print('--input --snapshot_damos_filter --style')
+                return True
 
     return True
