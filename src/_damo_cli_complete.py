@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0
 
 import datetime
+import os
 import sys
 
 def log(msg):
@@ -12,11 +13,19 @@ def handle_report(words, cword):
     if cword == 2:
         print('access damon holistic heatmap sysinfo')
         return
-    if cword == 3:
-        report_type = words[2]
-        if report_type == 'access':
+    report_type = words[2]
+    if report_type == 'access':
+        if cword == 3:
             print('--input --snapshot_damos_filter --style')
             return
+        if cword == 4:
+            option = words[3]
+            if option == '--input':
+                candidates = ['tried_regions_of', './', '../']
+                for f in os.listdir('./'):
+                    candidates.append('./%s' % f)
+                print(' '.join(candidates))
+                return
 
 def handle_cli_complete():
     '''
