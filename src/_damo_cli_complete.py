@@ -19,7 +19,11 @@ def prev_option_nr_filed_args(words, cword):
             return prev_option, nr_filled_args
     return None, None
 
-def damon_param_should_show_options(words, cword):
+def should_show_options(words, cword, option_nr_args):
+    '''
+    words and cword should start from the options part (no command)
+    option_nr_args is option name to their required number of arguments map.
+    '''
     if cword == 0 or words[cword].startswith('-'):
         return True
 
@@ -29,16 +33,6 @@ def damon_param_should_show_options(words, cword):
     prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
     if prev_option is None:
         return False
-    # option name to their required number of arguments.
-    option_nr_args = {
-            '--ops': 1,
-            '--monitoring_intervals_autotune': 0,
-            '--monitoring_intervals': 3,
-            '--monitoring_intervals_goal': 4,
-            '--monitoring_nr_regions_range': 2,
-            '--damos_action': 1,
-            '--damos_apply_interval': 1,
-            }
     if not prev_option in option_nr_args:
         return False
     return option_nr_args[prev_option] == nr_filled_args
@@ -66,7 +60,16 @@ def damos_filter_candidates(words, cword):
     return []
 
 def damon_param_candidates(words, cword):
-    if damon_param_should_show_options(words, cword):
+    if should_show_options(
+            words, cword, {
+                '--ops': 1,
+                '--monitoring_intervals_autotune': 0,
+                '--monitoring_intervals': 3,
+                '--monitoring_intervals_goal': 4,
+                '--monitoring_nr_regions_range': 2,
+                '--damos_action': 1,
+                '--damos_apply_interval': 1,
+                }):
         return ['--ops',
                 '--monitoring_intervals_autotune',
                 '--numa_node', '--monitoring_intervals',
