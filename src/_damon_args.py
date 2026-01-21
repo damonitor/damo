@@ -1133,15 +1133,15 @@ def set_damos_argparser(parser, hide_help):
             help=damos_quotas_help if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--damos_quota_interval', default=[],
                         metavar='<milliseconds>', action='append',
-                        # quota reset interval
-                        help=argparse.SUPPRESS)
+                        help='quota reset interval'
+                        if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--damos_quota_time', default=[],
                         metavar='<milliseconds>', action='append',
-                        # time quota
-                        help=argparse.SUPPRESS)
+                        help='time quota'
+                        if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--damos_quota_space', default=[], metavar='<bytes>',
-                        action='append', # pace quota
-                        help=argparse.SUPPRESS)
+                        action='append', help='space quota'
+                        if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--damos_quota_weights', default=[],
                         metavar='<permil>', nargs=3, action='append',
                         help='quota\'s prioritization weights'
