@@ -81,7 +81,8 @@ def damon_param_candidates(words, cword):
                 '--monitoring_nr_regions_range': 2,
                 '--damos_action': 1,
                 '--damos_apply_interval': 1,
-                '--damos_quotas': -1,
+                '--damos_quota_interval': 1,
+                '--damos_quota_space': 1,
                 '--damos_quota_goal': -1,
                 '--damos_filter': -1,
                 })
