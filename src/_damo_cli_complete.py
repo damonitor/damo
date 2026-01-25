@@ -194,8 +194,8 @@ def handle_cli_complete():
         return True
     candidates = []
     if cword == 1:
-        candidates = ['start', 'stop', 'tune', 'record', 'report', 'help',
-                      'version']
+        candidates = ['start', 'stop', 'tune', 'record', 'report', 'monitor',
+                      'help', 'version']
     cmd = words[1]
     if cmd == 'start':
         candidates = start_candidates(words, cword)
