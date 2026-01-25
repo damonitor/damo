@@ -10,7 +10,7 @@ import sys
 import _damon
 import _damon_args
 
-def cleanup():
+def cleanup(exit_code=0):
     if target_type == _damon_args.target_type_cmd and cmd_pipe.poll() == None:
         cmd_pipe.kill()
     damo = sys.argv[0]
@@ -19,6 +19,7 @@ def cleanup():
             # DAMON may already stopped, but that's fine.  Ignore error
             # message.
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    exit(exit_code)
 
 def sighandler(signum, frame):
     print('\nsignal %s received' % signum)
