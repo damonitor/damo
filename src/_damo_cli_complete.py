@@ -128,7 +128,12 @@ def report_access_candidates(words, cword):
                 Option('--input', 1, True),
                 Option('--snapshot_damos_filter', -1, True,
                        damos_filter_positional_candids),
-                Option('--style', 1, False),
+                Option('--style', 1, False,
+                       [['detailed', 'simple-boxes', 'temperature-sz-hist',
+                         'recency-sz-hist', 'cold-memory-tail',
+                         'recency-percentiles', 'idle-time-percentiles',
+                         'temperature-percentiles', 'cold', 'hot']]
+                       ),
                 ])
     if candidates:
         return candidates
@@ -139,11 +144,6 @@ def report_access_candidates(words, cword):
         for f in os.listdir('./'):
             candidates.append('./%s' % f)
         return candidates
-    if prev == '--style':
-        return ['detailed', 'simple-boxes', 'temperature-sz-hist',
-                'recency-sz-hist', 'cold-memory-tail', 'recency-percentiles',
-                'idle-time-percentiles', 'temperature-percentiles', 'cold',
-                'hot']
     return []
 
 def report_damon_candidates(words, cword):
