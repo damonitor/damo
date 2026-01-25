@@ -53,7 +53,7 @@ def main(args):
         print('starting DAMON fail')
         exit(1)
 
-    record_cmd = '%s record --timeout %s ongoing' % (damo, args.delay)
+    record_cmd = [damo, 'record', '--timeout', '%f' % args.delay, 'ongoing']
 
     report_cmd = [damo]
     if args.report_type == 'heats':
@@ -71,8 +71,7 @@ def main(args):
                 cmd_pipe.poll() != None):
             break
         try:
-            subprocess.check_output(record_cmd, shell=True,
-                    stderr=subprocess.STDOUT, executable='/bin/bash')
+            subprocess.check_output(record_cmd, stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             pass
         try:
