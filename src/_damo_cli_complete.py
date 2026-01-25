@@ -155,8 +155,14 @@ def report_damon_candidates(words, cword):
              ])
 
 def report_sysinfo_candidates(words, cword):
-    if cword == 3 or words[cword].startswith('-'):
-        return ['--print', '--invalidate_cache']
+    candidates = get_candidates(
+            words[3:], cword - 3,
+            [Option('--print', -1, False, None),
+             Option('--invalidate_cache', 0, False, None),
+             ])
+    if candidates:
+        return candidates
+
     for idx in range(cword, 2, -1):
         if words[idx] == '--print':
             return ['versions', 'fs_info', 'trace_cmd_info', 'perf_info',
