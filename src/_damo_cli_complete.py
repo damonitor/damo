@@ -96,21 +96,22 @@ def damos_filter_candidates(words, cword):
     return []
 
 def damon_param_candidates(words, cword):
-    candidates = option_candidates(
-            words, cword, {
-                '--ops': 1,
-                '--monitoring_intervals_autotune': 0,
-                '--numa_node': -1,
-                '--monitoring_intervals': 3,
-                '--monitoring_intervals_goal': 4,
-                '--monitoring_nr_regions_range': 2,
-                '--damos_action': 1,
-                '--damos_apply_interval': 1,
-                '--damos_quota_interval': 1,
-                '--damos_quota_space': 1,
-                '--damos_quota_goal': -1,
-                '--damos_filter': -1,
-                })
+    candidates = get_candidates(
+            words, cword,
+            [
+                Option('--ops', 1),
+                Option('--monitoring_intervals_autotune', 0),
+                Option('--numa_node', -1),
+                Option('--monitoring_intervals', 3),
+                Option('--monitoring_intervals_goal', 4),
+                Option('--monitoring_nr_regions_range', 2),
+                Option('--damos_action', 1),
+                Option('--damos_apply_interval', 1),
+                Option('--damos_quota_interval', 1),
+                Option('--damos_quota_space', 1),
+                Option('--damos_quota_goal', -1),
+                Option('--damos_filter', -1),
+                ])
     if candidates:
         return candidates
 
@@ -141,8 +142,12 @@ def record_candidates(words, cword):
 def report_access_candidates(words, cword):
     if cword < 3:
         return []
-    candidates = option_candidates(words[3:], cword - 3, {
-        '--input': 1, '--snapshot_damos_filter': -1, '--style': 1})
+    candidates = get_candidates(
+            words[3:], cword - 3, [
+                Option('--input', 1),
+                Option('--snapshot_damos_filter', -1),
+                Option('--style', 1),
+                ])
     if candidates:
         return candidates
     # cword is larger than 3.
@@ -189,12 +194,12 @@ def report_candidates(words, cword):
     return []
 
 def monitor_candidates(words, cword):
-    candidates = option_candidates(
-            words[2:], cword - 2, {
-                '--report_type': 1,
-                '--delay': 1,
-                '--count': 1,
-                })
+    candidates = get_candidates(
+            words[2:], cword - 2, [
+                Option('--report_type', 1),
+                Option('--delay', 1),
+                Option('--count', 1),
+                ])
     if words[cword - 1] == '--report_type':
         candidates = ['heats', 'wss', 'holistic']
     return candidates
