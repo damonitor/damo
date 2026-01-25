@@ -14,10 +14,12 @@ def log(msg):
 class Option:
     name = None
     nr_args = None  # -1 for variable number of arguments
+    repeatable = None
 
-    def __init__(self, name, nr_args):
+    def __init__(self, name, nr_args, repeatable=True):
         self.name = name
         self.nr_args = nr_args
+        self.repeatable = repeatable
 
 def prev_option_nr_filed_args(words, cword):
     for i in range(cword -1, -1, -1):
@@ -43,9 +45,14 @@ def get_candidates(words, cword, options):
     words and cword should start from the options part (no command).
     options should be a list of Option objects.
     '''
-    if can_suggest_options(words, cword, options):
-        return [o.name for o in options]
-    return []
+    candidates = []
+    if can_suggest_options(words, cword, options) is False:
+        return candidates
+    for option in options:
+        if option.repeatable is False and option.name in words[:cword]:
+            continue
+        candidates.append(option.name)
+    return candidates
 
 def damos_quota_goal_candidates(words, cword):
     prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
