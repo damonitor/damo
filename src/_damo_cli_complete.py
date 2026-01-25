@@ -163,6 +163,18 @@ def report_candidates(words, cword):
         return report_sysinfo_candidates(words, cword)
     return []
 
+def monitor_candidates(words, cword):
+    candidates = option_candidates(
+            words[2:], cword - 2, {
+                '--report_type': 1,
+                '--delay': 1,
+                '--count': 1,
+                })
+    if words[cword - 1] == '--report_type':
+        candidates = ['heats', 'wss', 'holistic']
+    return candidates
+
+
 def help_candidtes(words, cword):
     if cword == 2:
         return ['damon_param_options', 'access_filter_options',
@@ -205,6 +217,8 @@ def handle_cli_complete():
         candidates = record_candidates(words, cword)
     elif cmd == 'report':
         candidates = report_candidates(words, cword)
+    elif cmd == 'monitor':
+        candidates = monitor_candidates(words, cword)
     elif cmd == 'help':
         candidates = help_candidtes(words, cword)
     if words[cword - 1] != '--help':
