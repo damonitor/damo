@@ -45,7 +45,7 @@ def main(args):
     bindir = os.path.dirname(sys.argv[0])
     damo = os.path.join(bindir, 'damo')
 
-    record_cmd = 'timeout %s %s record \"%s\"' % (args.delay, damo, target)
+    record_cmd = '%s record --timeout %s \"%s\"' % (damo, args.delay, target)
 
     report_cmd = [damo]
     if args.report_type == 'heats':
