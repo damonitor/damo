@@ -66,8 +66,20 @@ development community for discussions.
 How can I ensure DAMON is enabled on my kernel?
 -----------------------------------------------
 
-Please refer to 'Install'
-[section](https://damonitor.github.io/#install) of the project webpage.
+If `damo report sysinfo --print modules` output shows non-empty list like
+below, it means your kernel is enabling DAMON.
+
+```
+$ sudo damo report sysinfo --print modules
+Avail DAMON modules
+- module/damon_sysfs (merged in v5.18-rc1 (c951cd3b8901))
+- module/damon_reclaim (merged in v5.16-rc1 (43b0536cb471))
+- module/damon_lru_sort (merged in v6.0-rc1 (40e983cca927))
+- module/damon_stat (merged in v6.17-rc1 (369c415e6073))
+```
+
+If you unsure if your kernel enables DAMON, please reach out to your kernel
+provider, or DAMON community.
 
 
 Where can I get more detailed usage?
