@@ -74,22 +74,15 @@ def get_candidates(words, cword, options):
         candidates.append(option.name)
     return candidates
 
-def damos_filter_candidates(words, cword):
-    prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
-    if not prev_option in ['--damos_filter', '--snapshot_damos_filter']:
-        return []
-    if nr_filled_args == 0:
-        return ['allow', 'reject']
-    damos_filter_types = ['active', 'memcg', 'young', 'hugepage_size',
-                          'unmapped', 'addr', 'target']
-    if nr_filled_args == 1:
-        return ['none'] + damos_filter_types
-    if nr_filled_args == 2:
-        return damos_filter_types
-    return []
+damos_filter_types = ['active', 'memcg', 'young', 'hugepage_size', 'unmapped',
+                      'addr', 'target']
+damos_filter_positional_candids = [
+        ['allow', 'reject'], ['none'] + damos_filter_types,
+        # todo: do not suggest unless 'none' was entered
+        damos_filter_types]
 
 def damon_param_candidates(words, cword):
-    candidates = get_candidates(
+    return get_candidates(
             words, cword,
             [
                 Option('--ops', 1, True, [['vaddr', 'paddr', 'fvaddr']]),
@@ -107,12 +100,9 @@ def damon_param_candidates(words, cword):
                 Option('--damos_quota_interval', 1, True),
                 Option('--damos_quota_space', 1, True),
                 Option('--damos_quota_goal', -1, True, [_damon.qgoal_metrics]),
-                Option('--damos_filter', -1, True),
+                Option('--damos_filter', -1, True,
+                       damos_filter_positional_candids),
                 ])
-    if candidates:
-        return candidates
-
-    return damos_filter_candidates(words, cword)
 
 def start_candidates(words, cword):
     return damon_param_candidates(words[2:], cword - 2)
@@ -132,7 +122,8 @@ def report_access_candidates(words, cword):
     candidates = get_candidates(
             words[3:], cword - 3, [
                 Option('--input', 1, True),
-                Option('--snapshot_damos_filter', -1, True),
+                Option('--snapshot_damos_filter', -1, True,
+                       damos_filter_positional_candids),
                 Option('--style', 1, False),
                 ])
     if candidates:
@@ -149,7 +140,6 @@ def report_access_candidates(words, cword):
                 'recency-sz-hist', 'cold-memory-tail', 'recency-percentiles',
                 'idle-time-percentiles', 'temperature-percentiles', 'cold',
                 'hot']
-    return damos_filter_candidates(words[3:], cword - 3)
     return []
 
 def report_damon_candidates(words, cword):
