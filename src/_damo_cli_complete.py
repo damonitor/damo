@@ -28,9 +28,6 @@ def should_show_options(words, cword, option_nr_args):
     if cword == 0 or words[cword].startswith('-'):
         return True
 
-    if words[cword - 1] == '--monitoring_intervals_autotune':
-        return True
-
     prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
     if prev_option is None:
         return False
