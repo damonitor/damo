@@ -55,13 +55,13 @@ def main(args):
 
     record_cmd = [damo, 'record', '--timeout', '%f' % args.delay, 'ongoing']
 
-    report_cmd = [damo]
+    report_cmd = [damo, 'report']
     if args.report_type == 'heats':
-        report_cmd += ['report', 'heatmap', '--resol', '10', '80',
-                       '--time_range', '%s s' % (args.delay * -1), '0 s',
+        report_cmd += ['heatmap', '--resol', '10', '80',
+                       '--time_range', '%f s' % (args.delay * -1), '0 s',
                        'guided_end']
     else:
-        report_cmd += ['report', args.report_type]
+        report_cmd += [args.report_type]
         if args.report_type == 'holistic':
             report_cmd += ['--heatmap_time_last_n_sec', '%f' % args.delay]
 
