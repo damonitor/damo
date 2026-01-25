@@ -303,6 +303,8 @@ def complete_time_range(user_input, guide):
     base_input = user_input[2]
     if base_input == 'guided':
         base_time = guide[0]
+    elif base_input == 'guided_end':
+        base_time = guide[1]
     else:
         base_time = _damo_fmt_str.text_to_ns(user_input[2])
     return [base_time + x for x in time_range], None
@@ -689,7 +691,8 @@ def set_argparser(parser):
             help='resolutions for time and address axes')
     parser.add_argument('--time_range', metavar='<nanoseconds>', nargs='+',
             help='"<start> <end> [base]" of time ranges for the heamap.' \
-                    '[base] can be "guided" for the guided start time.'
+                    '[base] can be "guided" or "guided_end" for the ' \
+                    'guided start or end time.'
                     )
     parser.add_argument('--draw_range', choices=['hottest', 'all'],
                         default='hottest',
