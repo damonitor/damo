@@ -47,32 +47,6 @@ def get_candidates(words, cword, options):
         return [o.name for o in options]
     return []
 
-def should_show_options(words, cword, option_nr_args):
-    '''
-    words and cword should start from the options part (no command)
-    option_nr_args is option name to their required number of arguments map.
-    For variable number of options, -1 is given.
-    '''
-    if cword == 0 or words[cword].startswith('-'):
-        return True
-
-    prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
-    if prev_option is None:
-        return False
-    if not prev_option in option_nr_args:
-        return False
-    return option_nr_args[prev_option] == nr_filled_args
-
-def option_candidates(words, cword, option_nr_args):
-    '''
-    words and cword should start from the options part (no command)
-    option_nr_args is option name to their required number of arguments map.
-    For variable number of options, -1 is given.
-    '''
-    if should_show_options(words, cword, option_nr_args):
-        return list(option_nr_args.keys())
-    return []
-
 def damos_quota_goal_candidates(words, cword):
     prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
     if prev_option != '--damos_quota_goal':
