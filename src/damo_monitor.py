@@ -13,12 +13,13 @@ import _damon_args
 def cleanup(exit_code=0):
     if target_type == _damon_args.target_type_cmd and cmd_pipe.poll() == None:
         cmd_pipe.kill()
-    damo = sys.argv[0]
-    subprocess.call(
-            [damo, 'stop'],
-            # DAMON may already stopped, but that's fine.  Ignore error
-            # message.
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if target_type != 'ongoing':
+        damo = sys.argv[0]
+        subprocess.call(
+                [damo, 'stop'],
+                # DAMON may already stopped, but that's fine.  Ignore error
+                # message.
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     exit(exit_code)
 
 def sighandler(signum, frame):
@@ -34,23 +35,27 @@ def main(args):
     signal.signal(signal.SIGINT, sighandler)
     signal.signal(signal.SIGTERM, sighandler)
 
-    target = args.target
-    target_type = _damon_args.deduced_target_type(target)
-    if target_type == None:
-        print('invalid target \'%s\'' % target)
-        exit(1)
-    if target_type == _damon_args.target_type_explicit and target == 'paddr':
-        pass
-    elif target_type == _damon_args.target_type_cmd:
-        cmd_pipe = subprocess.Popen(target, shell=True, executable='/bin/bash',
-                stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-        target = cmd_pipe.pid
-
     damo = sys.argv[0]
+    target = args.target
+    if target != 'ongoing':
+        target_type = _damon_args.deduced_target_type(target)
+        if target_type is None:
+            print('invalid target \'%s\'' % target)
+            exit(1)
+        if target_type == _damon_args.target_type_explicit and \
+                target == 'paddr':
+            pass
+        elif target_type == _damon_args.target_type_cmd:
+            cmd_pipe = subprocess.Popen(
+                    target, shell=True, executable='/bin/bash',
+                    stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+            target = cmd_pipe.pid
 
-    if subprocess.call([damo, 'start', '%s' % target]) != 0:
-        print('starting DAMON fail')
-        exit(1)
+        if subprocess.call([damo, 'start', '%s' % target]) != 0:
+            print('starting DAMON fail')
+            exit(1)
+    else:
+        target_type = 'ongoing'
 
     record_cmd = [damo, 'record', '--timeout', '%f' % args.delay, 'ongoing']
 
@@ -73,6 +78,8 @@ def main(args):
             subprocess.check_output(record_cmd, stderr=subprocess.STDOUT)
         except Exception as e:
             print('Recording fail (%s)' % e)
+            if target_type == 'ongoing':
+                print('Maybe you stopped DAMON?')
             break
         try:
             output = subprocess.check_output(report_cmd).decode()
@@ -84,6 +91,8 @@ def main(args):
                 print(output)
         except Exception as e:
             print('Report generating fail (%s)' % e)
+            if target_type == 'ongoing':
+                print('Maybe you stopped DAMON?')
             break
         nr_reports += 1
 
@@ -91,7 +100,7 @@ def main(args):
 
 def set_argparser(parser):
     parser.add_argument('target', type=str, metavar='<target>',
-            help='monitoring target (command, pid or \'paddr\')')
+            help='monitoring target (command, pid, \'paddr\' or \'ongoing\')')
     parser.add_argument(
             '--report_type', type=str, choices=['heats', 'wss', 'holistic'],
             default='heats', help='report type')
