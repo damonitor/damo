@@ -185,14 +185,12 @@ def report_candidates(words, cword):
 def monitor_candidates(words, cword):
     candidates = get_candidates(
             words[2:], cword - 2, [
-                Option('--report_type', 1, False),
+                Option('--report_type', 1, False,
+                       [['heats', 'wss', 'holistic']]),
                 Option('--delay', 1, False),
                 Option('--count', 1, False),
                 ])
-    if words[cword - 1] == '--report_type':
-        candidates = ['heats', 'wss', 'holistic']
     return candidates
-
 
 def help_candidtes(words, cword):
     if cword == 2:
