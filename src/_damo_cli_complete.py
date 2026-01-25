@@ -147,10 +147,12 @@ def report_access_candidates(words, cword):
     return []
 
 def report_damon_candidates(words, cword):
-    if cword == 3 or words[cword].startswith('-'):
-        return ['--format', '--show_cpu_usage', '--kdamonds_summary',
-                '--damos_stats']
-    return []
+    return get_candidates(
+            words[3:], cword - 3,
+            [Option('--format', 1, False, [['json', 'yaml', 'report']]),
+             Option('--show_cpu_usage', 0, False, None),
+             Option('--kdamonds_summary', 0, False, None),
+             ])
 
 def report_sysinfo_candidates(words, cword):
     if cword == 3 or words[cword].startswith('-'):
