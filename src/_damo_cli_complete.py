@@ -100,13 +100,17 @@ def damon_param_candidates(words, cword):
     candidates = get_candidates(
             words, cword,
             [
-                Option('--ops', 1, True),
+                Option('--ops', 1, True, [['vaddr', 'paddr', 'fvaddr']]),
                 Option('--monitoring_intervals_autotune', 0, False),
                 Option('--numa_node', -1, True),
                 Option('--monitoring_intervals', 3, True),
                 Option('--monitoring_intervals_goal', 4, True),
                 Option('--monitoring_nr_regions_range', 2, True),
-                Option('--damos_action', 1, True),
+                Option('--damos_action', 1, True,
+                       [['willneed', 'cold', 'pageout', 'hugepage',
+                         'nohugepage', 'lru_prio', 'lru_deprio', 'migrate_hot',
+                         'migrate_cold', 'stat']]
+                       ),
                 Option('--damos_apply_interval', 1, True),
                 Option('--damos_quota_interval', 1, True),
                 Option('--damos_quota_space', 1, True),
@@ -116,13 +120,6 @@ def damon_param_candidates(words, cword):
     if candidates:
         return candidates
 
-    prev = words[cword - 1]
-    if prev == '--ops':
-        return ['vaddr', 'paddr', 'fvaddr']
-    if prev == '--damos_action':
-        return ['willneed', 'cold', 'pageout', 'hugepage', 'nohugepage',
-                'lru_prio', 'lru_deprio', 'migrate_hot', 'migrate_cold',
-                'stat']
     candidates = damos_quota_goal_candidates(words, cword)
     if candidates:
         return candidates
