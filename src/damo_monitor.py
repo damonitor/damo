@@ -73,7 +73,7 @@ def main(args):
         try:
             subprocess.check_output(record_cmd, stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
-            pass
+            print('Recording fail (%s)' % e)
         try:
             output = subprocess.check_output(report_cmd).decode()
             if args.report_type == 'heats':
@@ -83,7 +83,7 @@ def main(args):
             else:
                 print(output)
         except subprocess.CalledProcessError as e:
-            pass
+            print('Report generating fail (%s)' % e)
         nr_reports += 1
 
     cleanup()
