@@ -5,6 +5,8 @@ v3.1.3
 - Fix 'damo monitor --report_type heats'.
 - Improve 'damo monitor' monitoring quality.
 - Support 'damo monitor' for ongoing DAMON.
+- Support 'damo monitor' command line completion.
+  - 'source scripts/damo-completion.sh' is required.
 
 v3.1.2
 - Support command line auto-completion.
