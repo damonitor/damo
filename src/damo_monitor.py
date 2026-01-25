@@ -41,8 +41,7 @@ def main(args):
     else:
         pid = int(target)
 
-    bindir = os.path.dirname(sys.argv[0])
-    damo = os.path.join(bindir, 'damo')
+    damo = sys.argv[0]
 
     record_cmd = '%s record --timeout %s \"%s\"' % (damo, args.delay, target)
 
