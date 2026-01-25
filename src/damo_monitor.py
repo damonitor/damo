@@ -45,8 +45,6 @@ def main(args):
         cmd_pipe = subprocess.Popen(target, shell=True, executable='/bin/bash',
                 stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         target = cmd_pipe.pid
-    else:
-        pid = int(target)
 
     damo = sys.argv[0]
 
