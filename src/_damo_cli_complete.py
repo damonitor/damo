@@ -11,6 +11,14 @@ def log(msg):
     with open('.damo_cli_complete_log', 'a') as f:
         f.write('%s\n' % msg)
 
+class Option:
+    name = None
+    nr_args = None  # -1 for variable number of arguments
+
+    def __init__(slef, name, nr_args):
+        self.name = name
+        self.nr_args = nr_args
+
 def prev_option_nr_filed_args(words, cword):
     for i in range(cword -1, -1, -1):
         if words[i].startswith('-'):
