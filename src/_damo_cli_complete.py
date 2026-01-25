@@ -74,14 +74,6 @@ def get_candidates(words, cword, options):
         candidates.append(option.name)
     return candidates
 
-def damos_quota_goal_candidates(words, cword):
-    prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
-    if prev_option != '--damos_quota_goal':
-        return []
-    if nr_filled_args == 0:
-        return _damon.qgoal_metrics
-    return []
-
 def damos_filter_candidates(words, cword):
     prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
     if not prev_option in ['--damos_filter', '--snapshot_damos_filter']:
@@ -114,15 +106,12 @@ def damon_param_candidates(words, cword):
                 Option('--damos_apply_interval', 1, True),
                 Option('--damos_quota_interval', 1, True),
                 Option('--damos_quota_space', 1, True),
-                Option('--damos_quota_goal', -1, True),
+                Option('--damos_quota_goal', -1, True, [_damon.qgoal_metrics]),
                 Option('--damos_filter', -1, True),
                 ])
     if candidates:
         return candidates
 
-    candidates = damos_quota_goal_candidates(words, cword)
-    if candidates:
-        return candidates
     return damos_filter_candidates(words, cword)
 
 def start_candidates(words, cword):
