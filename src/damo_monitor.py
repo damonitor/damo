@@ -13,6 +13,12 @@ import _damon_args
 def cleanup():
     if target_type == _damon_args.target_type_cmd and cmd_pipe.poll() == None:
         cmd_pipe.kill()
+    damo = sys.argv[0]
+    subprocess.call(
+            [damo, 'stop'],
+            # DAMON may already stopped, but that's fine.  Ignore error
+            # message.
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def sighandler(signum, frame):
     print('\nsignal %s received' % signum)
@@ -43,13 +49,21 @@ def main(args):
 
     damo = sys.argv[0]
 
-    record_cmd = '%s record --timeout %s \"%s\"' % (damo, args.delay, target)
+    if subprocess.call([damo, 'start', '%s' % target]) != 0:
+        print('starting DAMON fail')
+        exit(1)
+
+    record_cmd = '%s record --timeout %s ongoing' % (damo, args.delay)
 
     report_cmd = [damo]
     if args.report_type == 'heats':
-        report_cmd += 'report heatmap --resol 10 80'.split()
+        report_cmd += ['report', 'heatmap', '--resol', '10', '80',
+                       '--time_range', '%s s' % (args.delay * -1), '0 s',
+                       'guided_end']
     else:
         report_cmd += ['report', args.report_type]
+        if args.report_type == 'holistic':
+            report_cmd += ['--heatmap_time_last_n_sec', '%f' % args.delay]
 
     nr_reports = 0
     while not args.count or nr_reports < args.count:
