@@ -28,7 +28,6 @@ def main(args):
     signal.signal(signal.SIGTERM, sighandler)
 
     target = args.target
-    target_fields = target.split()
     target_type = _damon_args.deduced_target_type(target)
     if target_type == None:
         print('invalid target \'%s\'' % target)
