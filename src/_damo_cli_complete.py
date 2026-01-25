@@ -80,18 +80,18 @@ def damon_param_candidates(words, cword):
     candidates = get_candidates(
             words, cword,
             [
-                Option('--ops', 1),
-                Option('--monitoring_intervals_autotune', 0),
-                Option('--numa_node', -1),
-                Option('--monitoring_intervals', 3),
-                Option('--monitoring_intervals_goal', 4),
-                Option('--monitoring_nr_regions_range', 2),
-                Option('--damos_action', 1),
-                Option('--damos_apply_interval', 1),
-                Option('--damos_quota_interval', 1),
-                Option('--damos_quota_space', 1),
-                Option('--damos_quota_goal', -1),
-                Option('--damos_filter', -1),
+                Option('--ops', 1, True),
+                Option('--monitoring_intervals_autotune', 0, False),
+                Option('--numa_node', -1, True),
+                Option('--monitoring_intervals', 3, True),
+                Option('--monitoring_intervals_goal', 4, True),
+                Option('--monitoring_nr_regions_range', 2, True),
+                Option('--damos_action', 1, True),
+                Option('--damos_apply_interval', 1, True),
+                Option('--damos_quota_interval', 1, True),
+                Option('--damos_quota_space', 1, True),
+                Option('--damos_quota_goal', -1, True),
+                Option('--damos_filter', -1, True),
                 ])
     if candidates:
         return candidates
@@ -125,9 +125,9 @@ def report_access_candidates(words, cword):
         return []
     candidates = get_candidates(
             words[3:], cword - 3, [
-                Option('--input', 1),
-                Option('--snapshot_damos_filter', -1),
-                Option('--style', 1),
+                Option('--input', 1, True),
+                Option('--snapshot_damos_filter', -1, True),
+                Option('--style', 1, False),
                 ])
     if candidates:
         return candidates
@@ -177,9 +177,9 @@ def report_candidates(words, cword):
 def monitor_candidates(words, cword):
     candidates = get_candidates(
             words[2:], cword - 2, [
-                Option('--report_type', 1),
-                Option('--delay', 1),
-                Option('--count', 1),
+                Option('--report_type', 1, False),
+                Option('--delay', 1, False),
+                Option('--count', 1, False),
                 ])
     if words[cword - 1] == '--report_type':
         candidates = ['heats', 'wss', 'holistic']
