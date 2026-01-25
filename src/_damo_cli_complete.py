@@ -15,7 +15,7 @@ class Option:
     name = None
     nr_args = None  # -1 for variable number of arguments
 
-    def __init__(slef, name, nr_args):
+    def __init__(self, name, nr_args):
         self.name = name
         self.nr_args = nr_args
 
@@ -26,6 +26,26 @@ def prev_option_nr_filed_args(words, cword):
             nr_filled_args = cword - 1 - i
             return prev_option, nr_filled_args
     return None, None
+
+def can_suggest_options(words, cword, options):
+    if cword == 0 or words[cword].startswith('-'):
+        return True
+    prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
+    if prev_option is None:
+        return False
+    for option in options:
+        if option.name == prev_option and option.nr_args == nr_filled_args:
+            return True
+    return False
+
+def get_candidates(words, cword, options):
+    '''
+    words and cword should start from the options part (no command).
+    options should be a list of Option objects.
+    '''
+    if can_suggest_options(words, cword, options):
+        return [o.name for o in options]
+    return []
 
 def should_show_options(words, cword, option_nr_args):
     '''
