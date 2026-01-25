@@ -16,10 +16,18 @@ class Option:
     nr_args = None  # -1 for variable number of arguments
     repeatable = None
 
-    def __init__(self, name, nr_args, repeatable=True):
+    # List of positional candidates for this option's arguments.
+    # e.g., [['foo', 'bar'], None, ['baz', 'bow']] means for the first
+    # argument, 'foo' or 'bar' can be entered.  No suggestion for the second
+    # argument.  For third argument, 'baz' and 'bow' can be entered.
+    positional_candidates = None
+
+    def __init__(self, name, nr_args, repeatable=True,
+                 positional_candidates=None):
         self.name = name
         self.nr_args = nr_args
         self.repeatable = repeatable
+        self.positional_candidates = positional_candidates
 
 def prev_option_nr_filed_args(words, cword):
     for i in range(cword -1, -1, -1):
@@ -40,14 +48,26 @@ def can_suggest_options(words, cword, options):
             return True
     return False
 
+def option_arg_candidates(words, cword, options):
+    prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
+    for option in options:
+        if option.name != prev_option:
+            continue
+        if option.positional_candidates is None:
+            continue
+        if len(option.positional_candidates) > nr_filled_args:
+            if option.positional_candidates[nr_filled_args] is not None:
+                return option.positional_candidates[nr_filled_args]
+    return []
+
 def get_candidates(words, cword, options):
     '''
     words and cword should start from the options part (no command).
     options should be a list of Option objects.
     '''
-    candidates = []
     if can_suggest_options(words, cword, options) is False:
-        return candidates
+        return option_arg_candidates(words, cword, options)
+    candidates = []
     for option in options:
         if option.repeatable is False and option.name in words[:cword]:
             continue
