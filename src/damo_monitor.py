@@ -49,7 +49,7 @@ def main(args):
 
     report_cmd = [damo]
     if args.report_type == 'heats':
-        report_cmd += 'report heats --heatmap stdout --resol 10 80'.split()
+        report_cmd += 'report heatmap --resol 10 80'.split()
     else:
         report_cmd += ['report', args.report_type]
 
