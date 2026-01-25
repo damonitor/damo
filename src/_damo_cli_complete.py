@@ -111,10 +111,14 @@ def tune_candidates(words, cword):
     return damon_param_candidates(words[2:], cword - 2)
 
 def record_candidates(words, cword):
-    if cword == 2 or words[cword].startswith('-'):
-        return ['--out', '--help', '--snapshot', '--timeout',
-                '--snapshot_damos_filter']
-    return []
+    return get_candidates(
+            words[2:], cword - 2,
+            [Option('--out', 1, False, None),
+             Option('--snapshot', 2, False, None),
+             Option('--timeout', 1, False, None),
+             Option('--snapshot_damos_filter', -1, False,
+                    damos_filter_positional_candids),
+             ])
 
 def report_access_candidates(words, cword):
     if cword < 3:
