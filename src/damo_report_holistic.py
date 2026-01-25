@@ -24,6 +24,11 @@ def fmt_report_short(args):
     guides = damo_record_info.get_guide_info(records)
     lines.append('# Heatmap')
     for guide in guides:
+        if args.heatmap_time_last_n_sec is not None:
+            last_n_ns = args.heatmap_time_last_n_sec * 1000000000
+            time_range = [guide.end_time - last_n_ns, guide.end_time]
+        else:
+            time_range=[guide.start_time, guide.end_time]
         regions = guide.regions()
         for idx, region in enumerate(regions):
             lines.append('# target %d, address range %d-%d' % (
@@ -35,7 +40,7 @@ def fmt_report_short(args):
                         scheme_idx=None,
                         df_passed=False,
                         tid=guide.tid, resol=[5, 80],
-                        time_range=[guide.start_time, guide.end_time],
+                        time_range=time_range,
                         address_range=regions,
                         output='stdout',
                         stdout_colorset='gray',
@@ -219,4 +224,7 @@ def set_argparser(parser):
             '--long', action='store_true', help='make long report')
     parser.add_argument('--perf_path', type=str, default='perf',
                         help='path of perf tool')
+    # special hidden option for 'damo monitor'
+    parser.add_argument('--heatmap_time_last_n_sec', type=float,
+                        help=argparse.SUPPRESS)
     parser.description = 'Show a holistic access pattern report'
