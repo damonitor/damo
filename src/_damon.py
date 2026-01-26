@@ -546,7 +546,7 @@ class DamonTarget:
         if self.pid is not None:
             lines.append('pid: %s' % self.pid)
         if self.obsolete is True:
-            line.sappend('(obsolete)')
+            lines.append('(obsolete)')
         for region in self.regions:
             lines.append('region %s' % region.to_str(raw))
         return '\n'.join(lines)
