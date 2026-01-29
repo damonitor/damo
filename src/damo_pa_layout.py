@@ -156,7 +156,7 @@ def default_paddr_region():
             if len(addrs) != 2:
                 continue
             start = int(addrs[0], 16)
-            end = int(addrs[1], 16)
+            end = int(addrs[1], 16) + 1
 
             sz_region = end - start
             if not ret or sz_region > (ret[1] - ret[0]):
