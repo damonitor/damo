@@ -39,8 +39,12 @@ class DamonFeature:
                 self.upstreamed_version == other.upstreamed_version and \
                 self.comments == other.comments
 
-# naming convention: <interface>/<feature>
+# naming convention: interface/<interface> and <interface>/<feature>
 # e.g.,
+# - interface/sysfs
+# - interface/debugfs
+# - interface/stat
+#
 # - debugfs/vaddr
 # - sysfs/vaddr
 # - trace/damon_aggregated
@@ -59,7 +63,7 @@ features_list = [
         DamonFeature(name='trace/damon_aggregated',
                       upstream_status='merged in v5.15 (2fcb93629ad8)',
                       upstreamed_version='5.15'),
-        DamonFeature(name='module/damon_debugfs',
+        DamonFeature(name='interface/damon_debugfs',
                      upstream_status='merged in v5.15-rc1 (4bc05954d007)',
                      upstreamed_version='5.15'),
         DamonFeature(name='debugfs/schemes', upstream_status='merged in v5.16',
@@ -82,7 +86,7 @@ features_list = [
         DamonFeature(name='debugfs/schemes_wmarks',
                      upstream_status='merged in v5.16 (ee801b7dd782)',
                      upstreamed_version='5.16'),
-        DamonFeature(name='module/damon_reclaim',
+        DamonFeature(name='interface/damon_reclaim',
                      upstream_status='merged in v5.16-rc1 (43b0536cb471)',
                      upstreamed_version='5.16'),
         DamonFeature(name='debugfs/schemes_stat_succ',
@@ -94,7 +98,7 @@ features_list = [
         DamonFeature(name='debugfs/init_regions_target_idx',
                      upstream_status='merged in v5.18 (144760f8e0c3)',
                      upstreamed_version='5.18'),
-        DamonFeature(name='module/damon_sysfs',
+        DamonFeature(name='interface/damon_sysfs',
                      upstream_status='merged in v5.18-rc1 (c951cd3b8901)',
                      upstreamed_version='5.18'),
         DamonFeature(name='sysfs/vaddr',
@@ -130,7 +134,7 @@ features_list = [
         DamonFeature(name='sysfs/fvaddr',
                      upstream_status='merged in v5.19 (b82434471cd2)',
                      upstreamed_version='5.19'),
-        DamonFeature(name='module/damon_lru_sort',
+        DamonFeature(name='interface/damon_lru_sort',
                      upstream_status='merged in v6.0-rc1 (40e983cca927)',
                      upstreamed_version='6.0'),
         DamonFeature(name='sysfs/schemes_tried_regions',
@@ -214,7 +218,7 @@ features_list = [
         DamonFeature(name='trace/damos_esz',
                      upstream_status='merged in v6.17-rc1 (a86d695193bf)',
                      upstreamed_version='6.17'),
-        DamonFeature(name='module/damon_stat',
+        DamonFeature(name='interface/damon_stat',
                      upstream_status='merged in v6.17-rc1 (369c415e6073)',
                      upstreamed_version='6.17'),
         DamonFeature(name='sysfs/addr_unit',

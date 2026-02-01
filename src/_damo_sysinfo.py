@@ -220,24 +220,24 @@ def get_avail_damon_modules():
     features = []
 
     if _damon_dbgfs.supported():
-        features.append(damon_feature_of_name('module/damon_debugfs'))
+        features.append(damon_feature_of_name('interface/damon_debugfs'))
 
     sysfs_path = _damo_fs.dev_mount_point('sysfs')
     if sysfs_path is None:
         return features
 
     if _damon_sysfs.supported():
-        features.append(damon_feature_of_name('module/damon_sysfs'))
+        features.append(damon_feature_of_name('interface/damon_sysfs'))
 
     mod_path = os.path.join(sysfs_path, 'module')
     if not os.path.isdir(mod_path):
         return features
     if os.path.isdir(os.path.join(mod_path, 'damon_reclaim')):
-        features.append(damon_feature_of_name('module/damon_reclaim'))
+        features.append(damon_feature_of_name('interface/damon_reclaim'))
     if os.path.isdir(os.path.join(mod_path, 'damon_lru_sort')):
-        features.append(damon_feature_of_name('module/damon_lru_sort'))
+        features.append(damon_feature_of_name('interface/damon_lru_sort'))
     if os.path.isdir(os.path.join(mod_path, 'damon_stat')):
-        features.append(damon_feature_of_name('module/damon_stat'))
+        features.append(damon_feature_of_name('interface/damon_stat'))
     if os.path.isfile(os.path.join(mod_path, 'damon_stat', 'parameters',
                                    'aggr_interval_us')):
         features.append(damon_feature_of_name('stat/aggr_interval'))
@@ -340,7 +340,7 @@ def update_cached_info(cached_info):
 
         avail_damon_features = []
         for f in cached_info.avail_damon_features:
-            if f.name.startswith('sysfs/') or f.name.startswith('module/'):
+            if f.name.startswith('sysfs/') or f.name.startswith('interface/'):
                 continue
             avail_damon_features.append(f)
         avail_damon_features += avail_damon_sysfs_feastures
