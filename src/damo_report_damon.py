@@ -7,6 +7,7 @@ Show status of DAMON.
 import argparse
 import collections
 import json
+import os
 import random
 import time
 
@@ -120,21 +121,49 @@ def pr_kdamonds_summary(input_file, format, raw_nr, show_cpu):
         print('%d\t%s' % (idx, line))
 
 def pr_kdamonds(kdamonds, format, raw_nr, show_cpu, params_only=False,
-                omit_damos_tried_regions=False):
+                omit_damos_tried_regions=False, show_nonsysfs_modules=False):
     if format == 'json':
         print(json.dumps([k.to_kvpairs(raw_nr) for k in kdamonds], indent=4))
+        return
     elif format == 'yaml':
         text, err = _damo_yaml.dump([k.to_kvpairs(raw_nr) for k in kdamonds])
         if err is not None:
             print('yaml dump fail (%s)' % err)
             exit(1)
         print(text)
+        return
     else:
         for idx, k in enumerate(kdamonds):
             print('kdamond %d' % idx)
             print(_damo_fmt_str.indent_lines(
                 k.to_str(raw_nr, show_cpu, params_only,
                          omit_damos_tried_regions), 4))
+
+    if not show_nonsysfs_modules:
+        return
+
+    modules_dir = '/sys/module'
+    if not os.path.isdir(modules_dir):
+        return
+    module_state = {}
+    for module in os.listdir(modules_dir):
+        if not module.startswith('damon_'):
+            continue
+        params_dir = os.path.join(modules_dir, module, 'parameters')
+        if not os.path.isdir(params_dir):
+            continue
+        for param in os.listdir(params_dir):
+            if not param in ['enabled', 'enable']:
+                continue
+            with open(os.path.join(params_dir, param), 'r') as f:
+                val = f.read().strip()
+            if val == 'Y':
+                state = 'on'
+            else:
+                state = 'off'
+            module_state[module] = state
+    for module in sorted(module_state.keys()):
+        print('%s: %s' % (module, module_state[module]))
 
 def main(args):
     _damon.ensure_root_and_initialized(args)
@@ -181,7 +210,7 @@ def main(args):
             print(err)
             exit(1)
     pr_kdamonds(kdamonds, args.format, args.raw, args.show_cpu_usage,
-                args.omit_damos_tried_regions)
+                args.omit_damos_tried_regions, show_nonsysfs_modules=True)
 
 def set_argparser(parser):
     parser.add_argument(
