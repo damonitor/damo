@@ -16,6 +16,7 @@ import _damo_records
 import _damo_subproc
 import _damon
 import _damon_args
+import damo_pa_layout
 
 class DataForCleanup:
     kdamonds_idxs = None
@@ -68,12 +69,53 @@ def handle_args(args):
         if os.path.isfile(footprint_file_path):
             os.rename(footprint_file_path, footprint_file_path + '.old')
 
-def get_ongoing_kdamonds(kdamonds):
-    if not _damon.any_kdamond_running():
-        print('DAMON is not turned on')
-        exit(1)
+def damon_stat_available():
+    param_dir = '/sys/module/damon_stat/parameters'
+    if not os.path.isdir(param_dir):
+        return False
+    with open(os.path.join(param_dir, 'enabled'), 'r') as f:
+        if f.read().strip() != 'Y':
+            return False
+    # TODO: use stat/aggr_interval damon feature
+    return os.path.isfile(os.path.join(param_dir, 'aggr_interval_us'))
 
-    return kdamonds
+def damon_stat_kdamonds():
+    param_dir = '/sys/module/damon_stat/parameters'
+    if not os.path.isdir(param_dir):
+        return None, 'param dir (%s) not found' % param_dir
+    with open(os.path.join(param_dir, 'enabled'), 'r') as f:
+        if f.read().strip() != 'Y':
+            return None, 'not running'
+    try:
+        kdamond_pid = subprocess.check_output(
+                ['pidof', 'kdamond.0']).decode().strip()
+    except Exception as e:
+        return None, 'pidof kdamond.0 fail (%s)' % e
+    intervals = _damon.DamonIntervals()
+    intervals.intervals_goal = _damon.DamonIntervalsGoal(
+            access_bp=400, aggrs=3, min_sample_us=5000, max_sample_us=10000000)
+    target_regions = [
+            _damon.DamonRegion(r[0], r[1])
+            for r in [damo_pa_layout.default_paddr_region()]]
+    target = _damon.DamonTarget(
+            pid=None, regions=target_regions)
+    context = _damon.DamonCtx(intervals=intervals, targets=[target])
+    kdamond = _damon.Kdamond(state='on', pid=kdamond_pid, contexts=[context])
+    kdamond.interface = 'damon_stat'
+    return [kdamond], None
+
+def get_ongoing_kdamonds(sysfs_kdamonds):
+    if _damon.any_kdamond_running():
+        return sysfs_kdamonds
+
+    kdamonds, err = damon_stat_kdamonds()
+    if err is None:
+        return kdamonds
+
+    print('DAMON is not turned on via sysfs.')
+    print('DAMON_STAT is also unavailable (%s).' % err)
+    print('No way to proceed for ongoing kdamonds recording.')
+    exit(1)
 
 def tracepoints_from_args(args):
     if not 'access' in args.do_record or args.snapshot is not None:
@@ -197,7 +239,7 @@ def main(args):
 
     # Now the real works
     if _damon_args.is_ongoing_target(args):
-        kdamonds = get_ongoing_kdamonds()
+        kdamonds = get_ongoing_kdamonds(data_for_cleanup.orig_kdamonds)
         # TODO: Support multiple kdamonds, multiple contexts
         monitoring_intervals = kdamonds[0].contexts[0].intervals
     elif for_damon_stat_snapshot(args):
