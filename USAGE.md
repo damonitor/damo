@@ -26,16 +26,17 @@ deprecated.  Please use sysfs.  If you depend on DAMON debugfs interface and
 cannot use sysfs interface, [report](REPORTING.md) your usecase to the
 community.
 
-Perf
-----
+Perf or Trace-cmd
+-----------------
 
-`damo` uses `perf`[1] for recording DAMON's access monitoring results.  Please
-ensure your system is having it if you will need to do record full monitoring
-results of DAMON (`damo` supports recording partial snapshots of DAMON
-monitoring results).  If you will not do the full-recording, you don't need to
-install `perf` on your system, though.
+`damo` uses [`perf`](https://perf.wiki.kernel.org/index.php/Main_Page) for
+recording DAMON's access monitoring results.  If it is unavailable, `damo` uses
+[`trace-cmd`](https://www.trace-cmd.org/) instead.  Please ensure your system
+is having `perf` or `trace-cmd` if you will need to record full monitoring
+results of DAMON.  `damo` supports recording only partial snapshots of DAMON
+monitoring results, too.  If you will do the partial recording instead of the
+full recording, you don't need to install `perf` or `trace-cmd` on your system.
 
-[1] https://perf.wiki.kernel.org/index.php/Main_Page
 
 Basic Concepts of DAMON
 -----------------------
@@ -56,8 +57,8 @@ and ['Age
 Tracking'](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#age-tracking)
 sections of the kernel documentation should be helpful for that.
 
-You should also understand DAMOS if you want to use `damo` for simple
-access-aware system operations.  ['Operation
+You should also understand DAMOS if you want to use `damo` for access-aware
+system operations.  ['Operation
 Schemes'](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#operation-schemes)
 section of the kernel documentation should be helpful for that.
 
