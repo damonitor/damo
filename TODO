@@ -58,6 +58,8 @@
   - 'damo record' works for module kdamonds
   - 'damo tune' works for module kdamonds
   - 'damo monitor' works for module kdamonds
+- Support lru_sort/autotune feature check
+- Support stat/negative_idle_time feature check
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
