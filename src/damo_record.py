@@ -48,9 +48,20 @@ def sighandler(signum, frame):
     print('\nsignal %s received' % signum)
     cleanup_exit(signum)
 
+def damon_stat_available():
+    param_dir = '/sys/module/damon_stat/parameters'
+    if not os.path.isdir(param_dir):
+        return False
+    with open(os.path.join(param_dir, 'enabled'), 'r') as f:
+        if f.read().strip() != 'Y':
+            return False
+    # TODO: use stat/aggr_interval damon feature
+    return os.path.isfile(os.path.join(param_dir, 'aggr_interval_us'))
+
 def handle_args(args):
-    if _damon.any_kdamond_running() and not args.deducible_target:
-        args.deducible_target = 'ongoing'
+    if not args.deducible_target:
+        if _damon.any_kdamond_running() or damon_stat_available():
+            args.deducible_target = 'ongoing'
 
     args.output_permission, err = _damo_records.parse_file_permission_str(
             args.output_permission)
@@ -68,16 +79,6 @@ def handle_args(args):
         footprint_file_path = '%s.mem_footprint' % args.out
         if os.path.isfile(footprint_file_path):
             os.rename(footprint_file_path, footprint_file_path + '.old')
-
-def damon_stat_available():
-    param_dir = '/sys/module/damon_stat/parameters'
-    if not os.path.isdir(param_dir):
-        return False
-    with open(os.path.join(param_dir, 'enabled'), 'r') as f:
-        if f.read().strip() != 'Y':
-            return False
-    # TODO: use stat/aggr_interval damon feature
-    return os.path.isfile(os.path.join(param_dir, 'aggr_interval_us'))
 
 def damon_stat_kdamonds():
     param_dir = '/sys/module/damon_stat/parameters'
