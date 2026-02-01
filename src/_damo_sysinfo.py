@@ -238,6 +238,11 @@ def get_avail_damon_modules():
         features.append(damon_feature_of_name('module/damon_lru_sort'))
     if os.path.isdir(os.path.join(mod_path, 'damon_stat')):
         features.append(damon_feature_of_name('module/damon_stat'))
+    if os.path.isfile(os.path.join(mod_path, 'damon_stat', 'parameters',
+                                   'aggr_interval_us')):
+        features.append(damon_feature_of_name('stat/aggr_interval'))
+        features.append(damon_feature_of_name('stat/negative_idle_time'))
+
     return features
 
 def get_trace_cmd_version():
