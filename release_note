@@ -1,6 +1,10 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v3.1.4
+- damo report damon: Show non-sysfs DAMON module on/off state by default.
+- damo report sysinfo: Show available DAMON modules by default.
+
 v3.1.3
 - Support 'damo monitor' for ongoing DAMON.
 - Improve 'damo monitor' monitoring quality.
