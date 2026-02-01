@@ -22,12 +22,19 @@ class Option:
     # argument.  For third argument, 'baz' and 'bow' can be entered.
     positional_candidates = None
 
+    # List of non-positional candidastes for this option's arguments.
+    # e.g., ['foo', 'bar'] means for any argument for this option, 'foo' and
+    # 'bar' can be suggested.
+    non_positional_candidates = None
+
     def __init__(self, name, nr_args, repeatable=True,
-                 positional_candidates=None):
+                 positional_candidates=None,
+                 non_positional_candidates=None):
         self.name = name
         self.nr_args = nr_args
         self.repeatable = repeatable
         self.positional_candidates = positional_candidates
+        self.non_positional_candidates = non_positional_candidates
 
 def prev_option_nr_filed_args(words, cword):
     for i in range(cword -1, -1, -1):
@@ -50,15 +57,18 @@ def can_suggest_options(words, cword, options):
 
 def option_arg_candidates(words, cword, options):
     prev_option, nr_filled_args = prev_option_nr_filed_args(words, cword)
+    candidates = []
     for option in options:
         if option.name != prev_option:
             continue
+        if option.non_positional_candidates is not None:
+            candidates += option.non_positional_candidates
         if option.positional_candidates is None:
             continue
         if len(option.positional_candidates) > nr_filled_args:
             if option.positional_candidates[nr_filled_args] is not None:
-                return option.positional_candidates[nr_filled_args]
-    return []
+                candidates += option.positional_candidates[nr_filled_args]
+    return candidates
 
 def get_candidates(words, cword, options):
     '''
