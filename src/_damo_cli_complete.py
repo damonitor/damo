@@ -170,8 +170,8 @@ def report_sysinfo_candidates(words, cword):
             [Option('--print', -1, False, None,
                     non_positional_candidates= [
                         'versions', 'fs_info', 'trace_cmd_info', 'perf_info',
-                        'sysfs_features', 'debugfs_features', 'trace_features',
-                        'modules', 'all']
+                        'interfaces', 'sysfs_features', 'debugfs_features',
+                        'trace_features', 'all']
                     ),
              Option('--invalidate_cache', 0, False, None),
              ])
