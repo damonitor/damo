@@ -3,6 +3,7 @@
 import datetime
 import os
 import sys
+import tempfile
 
 import _damon
 
@@ -10,6 +11,55 @@ def log(msg):
     msg = '%s: %s' % (datetime.datetime.now(), msg)
     with open('.damo_cli_complete_log', 'a') as f:
         f.write('%s\n' % msg)
+
+completion_script = '''# SPDX-License-Identifier: GPL-2.0
+
+# bash completion support for damo.
+# To use this, 'source' this script.  For example,
+#
+#     $ source ./scripts/damo-completion.sh
+#     $ ./damo [TAB][TAB]
+#     help	record	report	start	stop	tune	version
+
+_damo_complete()
+{
+	local cur prev words cword
+	_init_completion || return
+
+	if [ "$cword" -lt 1 ]
+	then
+		return 1
+	fi
+
+	_damo_complete_debug="false"
+	if [ "${_damo_complete_debug}" = "true" ]
+	then
+		echo "cur '$cur'" >> .damo_completion_log
+		echo "prev '$prev'" >> .damo_completion_log
+		echo "words '${words[@]}'" >> .damo_completion_log
+		echo "cword '$cword'" >> .damo_completion_log
+		echo >> .damo_completion_log
+	fi
+
+	candidates=$("${words[0]}" --cli_complete "$cword" "${words[@]}")
+
+	COMPREPLY=($(compgen -W "${candidates}" -- "$cur"))
+	return 0
+}
+
+complete -F _damo_complete damo'''
+
+def instruct_cli_completion_setup():
+    fd, tmp_path = tempfile.mkstemp(prefix='damo_completion_script-')
+    with open(tmp_path, 'w') as f:
+        f.write(completion_script)
+    print('It is nearly done, and need one more step.')
+    print('Please execute "source %s" on your shell.' % tmp_path)
+    print()
+    print('Note that this works only for the current shell session.')
+    print('For permanent completion setup, save "%s" somewhere,')
+    print('and modify your .bashrc like things to execute the ')
+    print('"source" of the saved file for every session.')
 
 class Option:
     name = None
@@ -243,6 +293,10 @@ def handle_cli_complete():
     Note that this is not supporting full options.  Only commands and options
     that expected to be frequently used are supported.
     '''
+    if len(sys.argv) == 2 and sys.argv[1] == 'setup_cli_completion':
+        instruct_cli_completion_setup()
+        return True
+
     if len(sys.argv) < 4:
         return False
     if sys.argv[1] != '--cli_complete':
