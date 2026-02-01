@@ -110,8 +110,9 @@ Overview
 ========
 
 `damo` provides a subcommands-based interface.  You can show the list of the
-available commands and brief description of those via `damo --help`.  The major
-commands can be categorized as below:
+available commands and brief description of those via `damo --help`.  It's
+command line [auto-completion](#command-line-auto-completion) should also be
+helpful.  The major commands can be categorized as below:
 
 - For controlling DAMON (monitoring and monitoring-based system optimization)
   - `start`, `tune`, and `stop` are included
