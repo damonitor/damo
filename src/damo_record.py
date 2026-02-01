@@ -68,6 +68,13 @@ def handle_args(args):
         if os.path.isfile(footprint_file_path):
             os.rename(footprint_file_path, footprint_file_path + '.old')
 
+def get_ongoing_kdamonds(kdamonds):
+    if not _damon.any_kdamond_running():
+        print('DAMON is not turned on')
+        exit(1)
+
+    return kdamonds
+
 def tracepoints_from_args(args):
     if not 'access' in args.do_record or args.snapshot is not None:
         return None
@@ -190,14 +197,9 @@ def main(args):
 
     # Now the real works
     if _damon_args.is_ongoing_target(args):
-        if not _damon.any_kdamond_running():
-            print('DAMON is not turned on')
-            exit(1)
-
+        kdamonds = get_ongoing_kdamonds()
         # TODO: Support multiple kdamonds, multiple contexts
-        monitoring_intervals = data_for_cleanup.orig_kdamonds[
-                0].contexts[0].intervals
-        kdamonds = data_for_cleanup.orig_kdamonds
+        monitoring_intervals = kdamonds[0].contexts[0].intervals
     elif for_damon_stat_snapshot(args):
         monitoring_intervals = _damon.DamonIntervals(
                 sample=5000, aggr=100000, ops_update=60000000,
