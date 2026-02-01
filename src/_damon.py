@@ -1377,7 +1377,7 @@ class DamonCtx:
         if sample_control is None:
             sample_control = DamonSampleControl()
         self.sample_control = sample_control
-        self.schemes = schemes if schemes is not None else Damos()
+        self.schemes = schemes if schemes is not None else []
         for scheme in self.schemes:
             scheme.context = self
 
