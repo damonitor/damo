@@ -31,6 +31,11 @@ def main(args):
     if 'perf_info' in args.print or 'all' in args.print:
         print('perf path: %s' % sysinfo.perf_path)
         print('perf version: %s' % sysinfo.perf_version)
+    if 'interfaces' in args.print or 'all' in args.print:
+        print('Avail DAMON user interfaces')
+        for feature in sysinfo.avail_damon_features:
+            if feature.name.startswith('interface/'):
+                pr_feature(feature)
     if 'sysfs_features' in args.print or 'all' in args.print:
         print('Sysfs avail DAMON features')
         for feature in sysinfo.avail_damon_features:
@@ -45,11 +50,6 @@ def main(args):
         print('Avail DAMON trace features')
         for feature in sysinfo.avail_damon_features:
             if feature.name.startswith('trace/'):
-                pr_feature(feature)
-    if 'interfaces' in args.print or 'all' in args.print:
-        print('Avail DAMON user interfaces')
-        for feature in sysinfo.avail_damon_features:
-            if feature.name.startswith('interface/'):
                 pr_feature(feature)
     if 'stat_features' in args.print or 'all' in args.print:
         print('Avail damon_stat features')
