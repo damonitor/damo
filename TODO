@@ -53,8 +53,11 @@
 - Add more trace-cmd/perf output parsing test in test_damo_records.py
   - Test damos_before_apply trace
   - Test non-damon trace events
-- Refactor 'damo monitor'
 - Make modules better controlled with main commands
+  - 'damo report damon' show module kdamonds
+  - 'damo record' works for module kdamonds
+  - 'damo tune' works for module kdamonds
+  - 'damo monitor' works for module kdamonds
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
