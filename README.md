@@ -114,7 +114,8 @@ deprecated.  Some features will have longer support more than others.
 In short, features that documented on [USAGE.md](USAGE.md) and not explicitly
 marked as experimental will be better supported, and provides at least three
 months of deprecation grace period.  Within the grace period, users can ask
-extension of the support.
+extension of the support.  Even after the grace period, please reach out to
+`damo` developers if that makes problem to your usage.
 
 Detailed features deprecation process is documented at
 [FEATURES_DEPRECATION_PROCESS.md](FEATURES_DEPRECATION_PROCESS.md).  Schedules
