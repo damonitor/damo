@@ -59,7 +59,7 @@
   - 'damo tune' works for module kdamonds
   - 'damo monitor' works for module kdamonds
 - Support lru_sort/autotune feature check
-- Support stat/negative_idle_time feature check
+- Support addr_unit feature check on reclaim and lru_sort
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
