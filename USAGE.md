@@ -89,6 +89,23 @@ would be particularly preferred if you want to participate in `damo`
 development.  In the case, you could add the path to the source tree to your
 `$PATH` for convenience.
 
+Command Line Auto-completion
+----------------------------
+
+`damo` supports the tab key based command line auto-completion, like other CLI
+tools.  When it is enabled, `damo` will suggest useful inputs for partially
+completed command line inputs.  Run `damo setup_cli_completion` to get help on
+enabling it.  For example:
+
+    $ damo setup_cli_completion
+    It is nearly done, and need one more step.
+    Please execute "source /tmp/damo_completion_script-l49gye46" on your shell.
+
+    Note that this works only for the current shell session.
+    For permanent completion setup, save "%s" somewhere,
+    and modify your .bashrc like things to execute the
+    "source" of the saved file for every session.
+
 Overview
 ========
 
