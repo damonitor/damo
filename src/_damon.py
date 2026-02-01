@@ -1461,6 +1461,7 @@ class Kdamond:
     pid = None
     refresh_ms = None
     contexts = None
+    interface = None    # interface that was used for creating this kdamond
 
     def __init__(self, state, pid, contexts, refresh_ms=0):
         self.state = state
