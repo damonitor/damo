@@ -211,23 +211,10 @@ def help_candidtes(words, cword):
                     'snapshot_format_keywords', 'region_format_keywords']
     return []
 
-def handle_cli_complete():
-    '''
-    Print command line auto-completion suggestions.  Read
-    scripts/damo-completion.sh and src/damo.py to see how this is called.
-
-    Note that this is not supporting full options.  Only commands and options
-    that expected to be frequently used are supported.
-    '''
-    if len(sys.argv) < 4:
-        return False
-    if sys.argv[1] != '--cli_complete':
-        return False
-    cword = int(sys.argv[2])
-    words = sys.argv[3:]
-    if cword == 0:
-        return True
+def print_suggestions(words, cword):
     candidates = []
+    if cword == 0:
+        return
     if cword == 1:
         candidates = ['start', 'stop', 'tune', 'record', 'report', 'monitor',
                       'help', 'version']
@@ -247,4 +234,20 @@ def handle_cli_complete():
     if words[cword - 1] != '--help':
         candidates.append('--help')
     print(' '.join(candidates))
+
+def handle_cli_complete():
+    '''
+    Print command line auto-completion suggestions.  Read
+    scripts/damo-completion.sh and src/damo.py to see how this is called.
+
+    Note that this is not supporting full options.  Only commands and options
+    that expected to be frequently used are supported.
+    '''
+    if len(sys.argv) < 4:
+        return False
+    if sys.argv[1] != '--cli_complete':
+        return False
+    cword = int(sys.argv[2])
+    words = sys.argv[3:]
+    print_suggestions(words, cword)
     return True
