@@ -165,20 +165,16 @@ def report_damon_candidates(words, cword):
              ])
 
 def report_sysinfo_candidates(words, cword):
-    candidates = get_candidates(
+    return get_candidates(
             words[3:], cword - 3,
-            [Option('--print', -1, False, None),
+            [Option('--print', -1, False, None,
+                    non_positional_candidates= [
+                        'versions', 'fs_info', 'trace_cmd_info', 'perf_info',
+                        'sysfs_features', 'debugfs_features', 'trace_features',
+                        'modules', 'all']
+                    ),
              Option('--invalidate_cache', 0, False, None),
              ])
-    if candidates:
-        return candidates
-
-    for idx in range(cword, 2, -1):
-        if words[idx] == '--print':
-            return ['versions', 'fs_info', 'trace_cmd_info', 'perf_info',
-                    'sysfs_features', 'debugfs_features', 'trace_features',
-                    'modules', 'all']
-    return []
 
 def report_candidates(words, cword):
     if cword == 2:
