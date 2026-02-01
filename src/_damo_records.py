@@ -1248,8 +1248,22 @@ def start_damon_tracing(handle):
         cmd = [perf_cmd, 'record', '-o', '%s.profile' % handle.file_path]
         handle.perf_profile_pipe = subprocess.Popen(cmd)
 
+def is_for_damon_stat(record_handle):
+    kdamonds = record_handle.kdamonds
+    return len(kdamonds) == 1 and kdamonds[0].interface == 'damon_stat'
+
+def damon_stat_running():
+    enabled_file = '/sys/module/damon_stat/parameters/enabled'
+    try:
+        with open(enabled_file, 'r') as f:
+            return f.read().strip() == 'Y'
+    except:
+        return False
+
 def record_source_is_running(record_handle):
     if record_handle.snapshot_request is not None and damon_stat_avail():
+        return True
+    if is_for_damon_stat(record_handle) and damon_stat_running():
         return True
     return poll_target_pids(record_handle.kdamonds) or \
             _damon.any_kdamond_running()
