@@ -58,7 +58,7 @@ def set_argparser(parser):
             choices=['versions', 'fs_info', 'trace_cmd_info', 'perf_info',
                      'sysfs_features', 'debugfs_features', 'trace_features',
                      'modules', 'all'],
-            default=['versions'], help='info to print')
+            default=['versions', 'modules'], help='info to print')
     parser.add_argument('--invalidate_cache', action='store_true',
                         help='invalidate cached sysinfo')
     return parser
