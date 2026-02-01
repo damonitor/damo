@@ -149,6 +149,8 @@ def pr_kdamonds(kdamonds, format, raw_nr, show_cpu, params_only=False,
     for module in os.listdir(modules_dir):
         if not module.startswith('damon_'):
             continue
+        if module.startswith('damon_sample_'):
+            continue
         params_dir = os.path.join(modules_dir, module, 'parameters')
         if not os.path.isdir(params_dir):
             continue
