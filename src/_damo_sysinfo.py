@@ -119,6 +119,7 @@ class SystemInfo:
         avail_features = {f.name for f in self.avail_damon_features}
         if len(avail_features) == 0:
             return '<5.15', None
+        append_plus = False
         for feature in reversed(_damon_features.features_list):
             if feature.name in avail_features:
                 if feature.upstreamed_version in ['none', 'unknown']:
