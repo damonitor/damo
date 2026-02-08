@@ -12,16 +12,6 @@ import _damo_sysinfo
 import _damon
 import damo_pa_layout
 
-def damon_stat_available():
-    param_dir = '/sys/module/damon_stat/parameters'
-    if not os.path.isdir(param_dir):
-        return False
-    with open(os.path.join(param_dir, 'enabled'), 'r') as f:
-        if f.read().strip() != 'Y':
-            return False
-    # TODO: use stat/aggr_interval damon feature
-    return os.path.isfile(os.path.join(param_dir, 'aggr_interval_us'))
-
 def damon_stat_kdamonds():
     param_dir = '/sys/module/damon_stat/parameters'
     if not os.path.isdir(param_dir):
