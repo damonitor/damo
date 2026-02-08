@@ -155,18 +155,6 @@ def valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
         return False
     return True
 
-def set_sysinfo_from_cache():
-    sysinfo, err = read_sysinfo_file()
-    if err is not None:
-        return 'reading saved sysinfo fail (%s)' % err
-    damo_version_ = damo_version.get_real_version()
-    kernel_version = subprocess.check_output(['uname', '-r']).decode().strip()
-    if not valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
-        return 'cached sysinfo cannot be used'
-    global system_info
-    system_info = sysinfo
-    return None
-
 def avail_features_on(damon_fs):
     if not damon_fs.supported():
         return [], None
