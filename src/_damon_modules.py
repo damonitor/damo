@@ -12,6 +12,18 @@ import _damo_sysinfo
 import _damon
 import damo_pa_layout
 
+def get_param_dir(module_name):
+    sysinfo, err = get_sysinfo()
+    if err is not None:
+        # what can we do other than panic?
+        print('[PANIC] get_sysinfo() fail (%s)' % err)
+        exit(1)
+    return os.path.join(sysinfo.sysfs_path, 'module', module_name,
+                        'parameters')
+
+def get_param_file(module_name, parameter):
+    return os.path.join(get_param_dir(module), parameter)
+
 def damon_stat_kdamonds():
     param_dir = '/sys/module/damon_stat/parameters'
     if not os.path.isdir(param_dir):
