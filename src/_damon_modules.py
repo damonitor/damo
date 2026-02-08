@@ -53,3 +53,14 @@ def damon_stat_running():
             return f.read().strip() == 'Y'
     except:
         return False
+
+def damon_stat_avail():
+    param_dir = '/sys/module/damon_stat/parameters/'
+    aggr_interval_us_file = os.path.join(param_dir, 'aggr_interval_us')
+    if not os.path.isfile(aggr_interval_us_file):
+        return False
+    enabled_file = os.path.join(param_dir, 'enabled')
+    with open(enabled_file, 'r') as f:
+        if f.read().strip().lower() == 'n':
+            return False
+    return True

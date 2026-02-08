@@ -1223,7 +1223,8 @@ def is_for_damon_stat(record_handle):
     return len(kdamonds) == 1 and kdamonds[0].interface == 'damon_stat'
 
 def record_source_is_running(record_handle):
-    if record_handle.snapshot_request is not None and damon_stat_avail():
+    if record_handle.snapshot_request is not None and \
+            _damon_modules.damon_stat_avail():
         return True
     if is_for_damon_stat(record_handle) and \
             _damon_modules.damon_stat_running():
@@ -1696,17 +1697,6 @@ class SnapshotRequest:
         self.total_sz_only = total_sz_only
         self.dont_merge_regions = dont_merge_regions
 
-def damon_stat_avail():
-    param_dir = '/sys/module/damon_stat/parameters/'
-    aggr_interval_us_file = os.path.join(param_dir, 'aggr_interval_us')
-    if not os.path.isfile(aggr_interval_us_file):
-        return False
-    enabled_file = os.path.join(param_dir, 'enabled')
-    with open(enabled_file, 'r') as f:
-        if f.read().strip().lower() == 'n':
-            return False
-    return True
-
 def should_get_snapshot_from_damon_stat(request):
     if request.tried_regions_of is not None:
         return False
@@ -1716,7 +1706,7 @@ def should_get_snapshot_from_damon_stat(request):
     if _damon.any_kdamond_running():
         return False
 
-    return damon_stat_avail()
+    return _damon_modules.damon_stat_avail()
 
 def read_damon_stat_param(param_name):
     file_path = os.path.join('/sys/module/damon_stat/parameters', param_name)
