@@ -1231,7 +1231,7 @@ def is_for_damon_stat(record_handle):
 
 def record_source_is_running(record_handle):
     if record_handle.snapshot_request is not None and \
-            _damon_modules.damon_stat_avail():
+            can_record_from_damon_stat():
         return True
     if is_for_damon_stat(record_handle) and \
             _damon_modules.damon_stat_running():
@@ -1713,7 +1713,7 @@ def should_get_snapshot_from_damon_stat(request):
     if _damon.any_kdamond_running():
         return False
 
-    return _damon_modules.damon_stat_avail()
+    return can_record_from_damon_stat()
 
 def get_snapshot_records_of_damon_stat(request):
     aggr_interval_us = int(
