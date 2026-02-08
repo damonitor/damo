@@ -1776,6 +1776,9 @@ def read_and_show(args):
             exit(1)
         if signal_received is True:
             break
+        if len(records) == 0 and args.input_file is not None and \
+                repeat_count == 1:
+            print('No record in %s' % args.input_file)
 
         if args.exec:
             err = handle_exec(args.exec, records)
