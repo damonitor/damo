@@ -1269,6 +1269,8 @@ def mk_feature_supports_map():
             os.path.join(scheme_dir_of(0, 0, 0),
                          'stats', 'max_nr_snapshots')):
         supports_map['sysfs/damos_max_nr_snapshots'] = True
+        # will be upstreamed together with max_nr_snapshots
+        supports_map['sysfs/damos_quota_goal_in_active_mem_bp'] = True
 
     if os.path.isdir(
             os.path.join(ctx_dir_of(0, 0),
