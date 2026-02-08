@@ -1,10 +1,15 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v3.1.5
+- damo: Show 'setup_cli_completion' command on the help message.
+
 v3.1.4
 - damo record: Support ongoing record of DAMON_STAT kdamond.
 - damo report damon: Show DAMON module kdamonds on/off state.
 - damo report sysinfo: Show available DAMON user interfaces by default.
+- damo: Help cli auto-completion setup with a hidden command,
+  'setup_cli_completion'.
 
 v3.1.3
 - Support 'damo monitor' for ongoing DAMON.
