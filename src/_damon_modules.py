@@ -7,6 +7,8 @@ Contains core functions for DAMON modules.
 import os
 import subprocess
 
+import _damo_fs
+import _damo_sysinfo
 import _damon
 import damo_pa_layout
 
@@ -69,3 +71,39 @@ def read_damon_stat_param(param_name):
     file_path = os.path.join('/sys/module/damon_stat/parameters', param_name)
     with open(file_path, 'r') as f:
         return f.read().strip()
+
+def get_avail_features():
+    features = []
+    sysfs_path = _damo_fs.dev_mount_point('sysfs')
+    if sysfs_path is None:
+        return features
+
+    mod_path = os.path.join(sysfs_path, 'module')
+    if os.path.isfile(os.path.join(mod_path, 'damon_stat', 'parameters',
+                                   'aggr_interval_us')):
+        features.append(
+                _damo_sysinfo.damon_feature_of_name('stat/aggr_interval'))
+        features.append(
+                _damo_sysinfo.damon_feature_of_name('stat/negative_idle_time'))
+    return features
+
+def get_avail_interface_features():
+    features = []
+    sysfs_path = _damo_fs.dev_mount_point('sysfs')
+    if sysfs_path is None:
+        return features
+
+    mod_path = os.path.join(sysfs_path, 'module')
+    if not os.path.isdir(mod_path):
+        return features
+    if os.path.isdir(os.path.join(mod_path, 'damon_reclaim')):
+        features.append(
+                _damo_sysinfo.damon_feature_of_name('interface/damon_reclaim'))
+    if os.path.isdir(os.path.join(mod_path, 'damon_lru_sort')):
+        features.append(
+                _damo_sysinfo.damon_feature_of_name(
+                    'interface/damon_lru_sort'))
+    if os.path.isdir(os.path.join(mod_path, 'damon_stat')):
+        features.append(
+                _damo_sysinfo.damon_feature_of_name('interface/damon_stat'))
+    return features

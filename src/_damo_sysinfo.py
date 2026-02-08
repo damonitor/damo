@@ -14,6 +14,7 @@ import _damo_fs
 import _damo_subproc
 import _damon_dbgfs
 import _damon_features
+import _damon_modules
 import _damon_sysfs
 import damo_version
 
@@ -216,28 +217,6 @@ def get_avail_damon_trace_features():
             features.append(damon_feature_of_name(feature_name))
     return features, err
 
-def get_avail_damon_module_features():
-    features = []
-    mod_path = os.path.join(sysfs_path, 'module')
-    if os.path.isfile(os.path.join(mod_path, 'damon_stat', 'parameters',
-                                   'aggr_interval_us')):
-        features.append(damon_feature_of_name('stat/aggr_interval'))
-        features.append(damon_feature_of_name('stat/negative_idle_time'))
-    return features
-
-def get_avail_damon_module_interface_features():
-    features = []
-    mod_path = os.path.join(sysfs_path, 'module')
-    if not os.path.isdir(mod_path):
-        return features
-    if os.path.isdir(os.path.join(mod_path, 'damon_reclaim')):
-        features.append(damon_feature_of_name('interface/damon_reclaim'))
-    if os.path.isdir(os.path.join(mod_path, 'damon_lru_sort')):
-        features.append(damon_feature_of_name('interface/damon_lru_sort'))
-    if os.path.isdir(os.path.join(mod_path, 'damon_stat')):
-        features.append(damon_feature_of_name('interface/damon_stat'))
-    return features
-
 def get_avail_damon_interface_features():
     features = []
 
@@ -251,7 +230,7 @@ def get_avail_damon_interface_features():
     if _damon_sysfs.supported():
         features.append(damon_feature_of_name('interface/damon_sysfs'))
 
-    features += get_avail_damon_module_interface_features()
+    features += _damon_modules.get_avail_interface_features()
 
     return features
 
@@ -309,7 +288,7 @@ def get_sysinfo_from_scratch():
     avail_damon_features += avail_damon_trace_features
 
     avail_damon_features += get_avail_damon_interface_features()
-    avail_damon_features += get_avail_damon_module_features()
+    avail_damon_features += _damon_modules.get_avail_features()
 
     sysinfo = SystemInfo(
             damo_version=damo_version_,
@@ -355,7 +334,7 @@ def update_cached_info(cached_info):
             avail_damon_features.append(f)
         avail_damon_features += avail_damon_sysfs_feastures
         avail_damon_features += avail_damon_interfaces_features
-        avail_damon_features += get_avail_damon_module_features()
+        avail_damon_features += _damon_modules.get_avail_features()
         cached_info.avail_damon_features = avail_damon_features
 
     tracefs_path = _damo_fs.dev_mount_point('tracefs')
