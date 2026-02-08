@@ -106,6 +106,11 @@ enabling it.  For example:
     and modify your .bashrc like things to execute the
     "source" of the saved file for every session.
 
+Note that the suggestions are only for common and recommended choices.  That's
+because there are quite many options that might make users confused.  It may
+therefore not give you full available choices always.  To know full available
+choices, use [`damo help`](#damo-help).
+
 Overview
 ========
 
