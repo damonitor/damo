@@ -15,7 +15,6 @@ if not os.path.isfile(os.path.join(damo_dir, 'damo_version.py')):
 
 import sys
 
-import _damo_cli_complete
 import _damo_subcmds
 import damo_adjust
 import damo_args
@@ -32,6 +31,7 @@ import damo_record
 import damo_record_info
 import damo_replay
 import damo_report
+import damo_setup_cli_completion
 import damo_schemes
 import damo_start
 import damo_stop
@@ -65,6 +65,9 @@ subcmds = [
             msg='control DAMON_LRU_SORT'),
 
         # For convenient use of damo and DAMON
+        _damo_subcmds.DamoSubCmd(
+            name='setup_cli_completion', module=damo_setup_cli_completion,
+            msg='setup command line auto-completion'),
         _damo_subcmds.DamoSubCmd(
             name='help', module=damo_help,
             msg='provide help for given topics'),
@@ -116,7 +119,7 @@ class SubCmdHelpFormatter(argparse.RawDescriptionHelpFormatter):
         return parts
 
 def main():
-    invoked_for_cli_complete = _damo_cli_complete.handle_cli_complete()
+    invoked_for_cli_complete = damo_setup_cli_completion.handle_cli_complete()
     if invoked_for_cli_complete:
         return
 

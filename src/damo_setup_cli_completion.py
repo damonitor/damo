@@ -49,18 +49,6 @@ _damo_complete()
 
 complete -F _damo_complete damo'''
 
-def instruct_cli_completion_setup():
-    fd, tmp_path = tempfile.mkstemp(prefix='damo_completion_script-')
-    with open(tmp_path, 'w') as f:
-        f.write(completion_script)
-    print('It is nearly done, and need one more step.')
-    print('Please execute "source %s" on your shell.' % tmp_path)
-    print()
-    print('Note that this works only for the current shell session.')
-    print('For permanent completion setup, save "%s" somewhere,')
-    print('and modify your .bashrc like things to execute the ')
-    print('"source" of the saved file for every session.')
-
 class Option:
     name = None
     nr_args = None  # -1 for variable number of arguments
@@ -293,10 +281,6 @@ def handle_cli_complete():
     Note that this is not supporting full options.  Only commands and options
     that expected to be frequently used are supported.
     '''
-    if len(sys.argv) == 2 and sys.argv[1] == 'setup_cli_completion':
-        instruct_cli_completion_setup()
-        return True
-
     if len(sys.argv) < 4:
         return False
     if sys.argv[1] != '--cli_complete':
@@ -305,3 +289,18 @@ def handle_cli_complete():
     words = sys.argv[3:]
     print_suggestions(words, cword)
     return True
+
+def main(args):
+    fd, tmp_path = tempfile.mkstemp(prefix='damo_completion_script-')
+    with open(tmp_path, 'w') as f:
+        f.write(completion_script)
+    print('It is nearly done, and need one more step.')
+    print('Please execute "source %s" on your shell.' % tmp_path)
+    print()
+    print('Note that this works only for the current shell session.')
+    print('For permanent completion setup, save "%s" somewhere,')
+    print('and modify your .bashrc like things to execute the ')
+    print('"source" of the saved file for every session.')
+
+def set_argparser(parser):
+    return
