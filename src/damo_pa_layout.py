@@ -142,8 +142,8 @@ def pr_ranges(ranges, raw):
 
 def default_paddr_region():
     '''
-    Returns start and end of address range that covering all System RAM
-    regions.
+    Returns start and end of address range (open-ended) that covering all
+    System RAM regions.
     '''
     ret = [None, None]
     with open('/proc/iomem', 'r') as f:
@@ -159,6 +159,7 @@ def default_paddr_region():
             if len(addrs) != 2:
                 continue
             start = int(addrs[0], 16)
+            # iomem uses fully closed range.
             end = int(addrs[1], 16) + 1
 
             if ret[0] is None:
