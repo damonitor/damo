@@ -141,8 +141,11 @@ def pr_ranges(ranges, raw):
             _damo_fmt_str.format_sz(r.end - r.start, raw)))
 
 def default_paddr_region():
-    "Largest System RAM region becomes the default"
-    ret = []
+    '''
+    Returns start and end of address range that covering all System RAM
+    regions.
+    '''
+    ret = [None, None]
     with open('/proc/iomem', 'r') as f:
         # example of the line: '100000000-42b201fff : System RAM'
         for line in f:
@@ -158,9 +161,9 @@ def default_paddr_region():
             start = int(addrs[0], 16)
             end = int(addrs[1], 16) + 1
 
-            sz_region = end - start
-            if not ret or sz_region > (ret[1] - ret[0]):
-                ret = [start, end]
+            if ret[0] is None:
+                ret[0] = start
+            ret[1] = end
     return ret
 
 def paddr_region_of(numa_node):
@@ -221,7 +224,7 @@ def main(args):
     pr_ranges(ranges, args.raw_number)
 
     start, end = default_paddr_region()
-    print('largest system RAM region: [%s, %s) (size %s)' % (
+    print('Default paddr monitoring range: [%s, %s) (size %s)' % (
         _damo_fmt_str.format_sz(start, args.raw_number),
         _damo_fmt_str.format_sz(end, args.raw_number),
         _damo_fmt_str.format_sz(end - start, args.raw_number)))
