@@ -51,7 +51,7 @@ def damon_stat_kdamonds():
 
 
 def damon_stat_running():
-    enabled_file = '/sys/module/damon_stat/parameters/enabled'
+    enabled_file = get_param_file('damon_stat', 'enabled')
     try:
         with open(enabled_file, 'r') as f:
             return f.read().strip() == 'Y'
