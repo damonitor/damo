@@ -313,15 +313,20 @@ def update_cached_info(cached_info):
         if err is not None:
             return None, 'damon sysfs features update fail (%s)' % err
 
-        avail_damon_interfaces_features = get_avail_damon_interface_features()
-
         avail_damon_features = []
         for f in cached_info.avail_damon_features:
-            if f.name.startswith('sysfs/') or f.name.startswith('interface/'):
+            interfaces_to_recheck = ['sysfs', 'interface', 'reclaim',
+                                     'lru_sort', 'stat']
+            skip = False
+            for interface in interfaces_to_recheck:
+                if f.name.startswith('%s/' % interface):
+                    skip = True
+                    break
+            if skip:
                 continue
             avail_damon_features.append(f)
         avail_damon_features += avail_damon_sysfs_feastures
-        avail_damon_features += avail_damon_interfaces_features
+        avail_damon_features += get_avail_damon_interface_features()
         avail_damon_features += _damon_modules.get_avail_features()
         cached_info.avail_damon_features = avail_damon_features
 
