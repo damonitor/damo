@@ -217,7 +217,7 @@ def get_avail_damon_trace_features():
             features.append(damon_feature_of_name(feature_name))
     return features, err
 
-def get_avail_damon_modules():
+def get_avail_damon_interface_features():
     features = []
 
     if _damon_dbgfs.supported():
@@ -299,8 +299,7 @@ def get_sysinfo_from_scratch():
         return None, 'trace feature check fail (%s)' % err
     avail_damon_features += avail_damon_trace_features
 
-    avail_damon_modules = get_avail_damon_modules()
-    avail_damon_features += avail_damon_modules
+    avail_damon_features += get_avail_damon_interface_features()
 
     sysinfo = SystemInfo(
             damo_version=damo_version_,
@@ -337,7 +336,7 @@ def update_cached_info(cached_info):
         if err is not None:
             return None, 'damon sysfs features update fail (%s)' % err
 
-        avail_damon_modules = get_avail_damon_modules()
+        avail_damon_interfaces_features = get_avail_damon_interface_features()
 
         avail_damon_features = []
         for f in cached_info.avail_damon_features:
@@ -345,7 +344,7 @@ def update_cached_info(cached_info):
                 continue
             avail_damon_features.append(f)
         avail_damon_features += avail_damon_sysfs_feastures
-        avail_damon_features += avail_damon_modules
+        avail_damon_features += avail_damon_interfaces_features
         cached_info.avail_damon_features = avail_damon_features
 
     tracefs_path = _damo_fs.dev_mount_point('tracefs')
