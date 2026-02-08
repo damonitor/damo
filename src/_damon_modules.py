@@ -64,6 +64,13 @@ def get_avail_features():
                 _damo_sysinfo.damon_feature_of_name('stat/aggr_interval'))
         features.append(
                 _damo_sysinfo.damon_feature_of_name('stat/negative_idle_time'))
+    if os.path.isfile(os.path.join(mod_path, 'damon_lru_sort', 'parameters',
+                                   'autotune_monitoring_intervals')):
+        for name in ['lru_sort/young_page_filter', 'lru_sort/active_mem_bp',
+                     'lru_sort/autotune_monitoring_intervals']:
+            features.append(
+                    _damo_sysinfo.damon_feature_of_name(name))
+
     return features
 
 def get_avail_interface_features():
