@@ -1708,13 +1708,9 @@ def should_get_snapshot_from_damon_stat(request):
 
     return _damon_modules.damon_stat_avail()
 
-def read_damon_stat_param(param_name):
-    file_path = os.path.join('/sys/module/damon_stat/parameters', param_name)
-    with open(file_path, 'r') as f:
-        return f.read().strip()
-
 def get_snapshot_records_of_damon_stat(request):
-    aggr_interval_us = int(read_damon_stat_param('aggr_interval_us'))
+    aggr_interval_us = int(
+            _damon_modules.read_damon_stat_param('aggr_interval_us'))
     sample_interval_us = aggr_interval_us / 20
     snapshot_intervals = _damon.DamonIntervals(
             sample=sample_interval_us, aggr=aggr_interval_us,
@@ -1729,7 +1725,8 @@ def get_snapshot_records_of_damon_stat(request):
 
     snapshot_end_time_ns = time.time() * 1000000000
     snapshot_start_time_ns = snapshot_end_time_ns - aggr_interval_us * 1000
-    idle_ms_percentiles = read_damon_stat_param('memory_idle_ms_percentiles')
+    idle_ms_percentiles = _damon_modules.read_damon_stat_param(
+            'memory_idle_ms_percentiles')
     idle_ms_percentiles = [int(x) for x in idle_ms_percentiles.split(',')]
 
     mem_total_bytes = None

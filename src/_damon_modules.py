@@ -64,3 +64,8 @@ def damon_stat_avail():
         if f.read().strip().lower() == 'n':
             return False
     return True
+
+def read_damon_stat_param(param_name):
+    file_path = os.path.join('/sys/module/damon_stat/parameters', param_name)
+    with open(file_path, 'r') as f:
+        return f.read().strip()
