@@ -44,3 +44,12 @@ def damon_stat_kdamonds():
     kdamond = _damon.Kdamond(state='on', pid=kdamond_pid, contexts=[context])
     kdamond.interface = 'damon_stat'
     return [kdamond], None
+
+
+def damon_stat_running():
+    enabled_file = '/sys/module/damon_stat/parameters/enabled'
+    try:
+        with open(enabled_file, 'r') as f:
+            return f.read().strip() == 'Y'
+    except:
+        return False
