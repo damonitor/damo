@@ -209,7 +209,8 @@ def report_sysinfo_candidates(words, cword):
                     non_positional_candidates= [
                         'versions', 'fs_info', 'trace_cmd_info', 'perf_info',
                         'interfaces', 'sysfs_features', 'debugfs_features',
-                        'trace_features', 'all']
+                        'trace_features', 'stat_features', 'lru_sort_features',
+                        'all']
                     ),
              Option('--invalidate_cache', 0, False, None),
              ])
