@@ -24,13 +24,22 @@ def get_param_dir(module_name):
 def get_param_file(module_name, parameter):
     return os.path.join(get_param_dir(module), parameter)
 
+def damon_stat_running():
+    enabled_file = get_param_file('damon_stat', 'enabled')
+    # this function could be called without damon_stat availability.
+    # catch open error for the case.
+    try:
+        with open(enabled_file, 'r') as f:
+            return f.read().strip() == 'Y'
+    except:
+        return False
+
 def damon_stat_kdamonds():
     param_dir = get_param_dir('damon_stat')
     if not os.path.isdir(param_dir):
         return None, 'param dir (%s) not found' % param_dir
-    with open(os.path.join(param_dir, 'enabled'), 'r') as f:
-        if f.read().strip() != 'Y':
-            return None, 'not running'
+    if not damon_stat_running():
+        return None, 'not running'
     try:
         kdamond_pid = subprocess.check_output(
                 ['pidof', 'kdamond.0']).decode().strip()
@@ -48,15 +57,6 @@ def damon_stat_kdamonds():
     kdamond = _damon.Kdamond(state='on', pid=kdamond_pid, contexts=[context])
     kdamond.interface = 'damon_stat'
     return [kdamond], None
-
-
-def damon_stat_running():
-    enabled_file = get_param_file('damon_stat', 'enabled')
-    try:
-        with open(enabled_file, 'r') as f:
-            return f.read().strip() == 'Y'
-    except:
-        return False
 
 def read_damon_stat_param(param_name):
     file_path = os.path.join('/sys/module/damon_stat/parameters', param_name)
