@@ -3,6 +3,8 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.1.5
 - damo: Show 'setup_cli_completion' command on the help message.
+- damo report sysinfo: Handle more ready-to-upstream feature checks.
+- Internal code refactoring.
 
 v3.1.4
 - damo record: Support ongoing record of DAMON_STAT kdamond.
