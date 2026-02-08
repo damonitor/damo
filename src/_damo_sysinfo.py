@@ -77,7 +77,6 @@ class SystemInfo:
         avail_damon_features = []
         if 'avail_damon_features' in kvpairs:
             avail_damon_features = kvpairs['avail_damon_features']
-        damon_modules = []
         sysfs_path = None
         if 'sysfs_path' in kvpairs:
             sysfs_path = kvpairs['sysfs_path']
