@@ -121,7 +121,7 @@ def pr_kdamonds_summary(input_file, format, raw_nr, show_cpu):
         print('%d\t%s' % (idx, line))
 
 def pr_kdamonds(kdamonds, format, raw_nr, show_cpu, params_only=False,
-                omit_damos_tried_regions=False, show_nonsysfs_modules=False):
+                omit_damos_tried_regions=False, show_modules=False):
     if format == 'json':
         print(json.dumps([k.to_kvpairs(raw_nr) for k in kdamonds], indent=4))
         return
@@ -139,7 +139,7 @@ def pr_kdamonds(kdamonds, format, raw_nr, show_cpu, params_only=False,
                 k.to_str(raw_nr, show_cpu, params_only,
                          omit_damos_tried_regions), 4))
 
-    if not show_nonsysfs_modules:
+    if not show_modules:
         return
 
     modules_dir = '/sys/module'
@@ -212,7 +212,7 @@ def main(args):
             print(err)
             exit(1)
     pr_kdamonds(kdamonds, args.format, args.raw, args.show_cpu_usage,
-                args.omit_damos_tried_regions, show_nonsysfs_modules=True)
+                args.omit_damos_tried_regions, show_modules=True)
 
 def set_argparser(parser):
     parser.add_argument(
