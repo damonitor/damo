@@ -2,6 +2,8 @@
 
 '''
 Contains core functions for DAMON modules.
+
+Note that this is not for sample modules.
 '''
 
 import os
