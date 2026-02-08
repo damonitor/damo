@@ -59,7 +59,7 @@ def damon_stat_kdamonds():
     return [kdamond], None
 
 def read_damon_stat_param(param_name):
-    file_path = os.path.join('/sys/module/damon_stat/parameters', param_name)
+    file_path = get_param_file('damon_stat', param_name)
     with open(file_path, 'r') as f:
         return f.read().strip()
 
