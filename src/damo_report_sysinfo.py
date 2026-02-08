@@ -31,36 +31,29 @@ def main(args):
     if 'perf_info' in args.print or 'all' in args.print:
         print('perf path: %s' % sysinfo.perf_path)
         print('perf version: %s' % sysinfo.perf_version)
-    if 'interfaces' in args.print or 'all' in args.print:
-        print('Avail DAMON user interfaces')
-        for feature in sysinfo.avail_damon_features:
-            if feature.name.startswith('interface/'):
-                pr_feature(feature)
-    if 'sysfs_features' in args.print or 'all' in args.print:
-        print('Sysfs avail DAMON features')
-        for feature in sysinfo.avail_damon_features:
-            if feature.name.startswith('sysfs/'):
-                pr_feature(feature)
-    if 'debugfs_features' in args.print or 'all' in args.print:
-        print('Debugfs avail DAMON features')
-        for feature in sysinfo.avail_damon_features:
-            if feature.name.startswith('debugfs/'):
-                pr_feature(feature)
-    if 'trace_features' in args.print or 'all' in args.print:
-        print('Avail DAMON trace features')
-        for feature in sysinfo.avail_damon_features:
-            if feature.name.startswith('trace/'):
-                pr_feature(feature)
-    if 'stat_features' in args.print or 'all' in args.print:
-        print('Avail damon_stat features')
-        for feature in sysinfo.avail_damon_features:
-            if feature.name.startswith('stat/'):
-                pr_feature(feature)
-    if 'lru_sort_features' in args.print or 'all' in args.print:
-        print('Avail damon_lru_sort features')
-        for feature in sysinfo.avail_damon_features:
-            if feature.name.startswith('lru_sort/'):
-                pr_feature(feature)
+
+    for feature in sysinfo.avail_damon_features:
+        if feature.name.startswith('interface/'):
+            if 'all' not in args.print and 'interfaces' not in args.print:
+                continue
+        if feature.name.startswith('sysfs/'):
+            if 'all' not in args.print and 'sysfs_features' not in args.print:
+                continue
+        if feature.name.startswith('debugfs/'):
+            if 'all' not in args.print and \
+                    'debugfs_features' not in args.print:
+                continue
+        if feature.name.startswith('trace/'):
+            if 'all' not in args.print and 'trace_features' not in args.print:
+                continue
+        if feature.name.startswith('stat/'):
+            if 'all' not in args.print and 'stat_features' not in args.print:
+                continue
+        if feature.name.startswith('lru_sort/'):
+            if 'all' not in args.print and \
+                    'lru_sort_features' not in args.print:
+                continue
+        pr_feature(feature)
 
 def set_argparser(parser):
     parser.add_argument(
