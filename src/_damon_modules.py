@@ -53,6 +53,7 @@ def read_damon_stat_param(param_name):
 
 def get_avail_features():
     features = []
+    # this is called while sysinfo setup, so cannot use sysinfo.sysfs_path
     sysfs_path = _damo_fs.dev_mount_point('sysfs')
     if sysfs_path is None:
         return features
@@ -75,6 +76,7 @@ def get_avail_features():
 
 def get_avail_interface_features():
     features = []
+    # this is called while sysinfo setup, so cannot use sysinfo.sysfs_path
     sysfs_path = _damo_fs.dev_mount_point('sysfs')
     if sysfs_path is None:
         return features
