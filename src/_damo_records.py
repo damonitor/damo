@@ -1218,6 +1218,13 @@ def start_damon_tracing(handle):
         cmd = [perf_cmd, 'record', '-o', '%s.profile' % handle.file_path]
         handle.perf_profile_pipe = subprocess.Popen(cmd)
 
+def can_record_from_damon_stat():
+    if not _damo_sysinfo.damon_feature_available('interface/damon_stat'):
+        return False
+    if not _damo_sysinfo.damon_feature_available('stat/aggr_interval'):
+        return False
+    return _damon_modules.damon_stat_running()
+
 def is_for_damon_stat(record_handle):
     kdamonds = record_handle.kdamonds
     return len(kdamonds) == 1 and kdamonds[0].interface == 'damon_stat'

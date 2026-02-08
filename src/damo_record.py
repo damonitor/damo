@@ -14,7 +14,6 @@ import time
 import _damo_fmt_str
 import _damo_records
 import _damo_subproc
-import _damo_sysinfo
 import _damon
 import _damon_args
 import _damon_modules
@@ -50,17 +49,10 @@ def sighandler(signum, frame):
     print('\nsignal %s received' % signum)
     cleanup_exit(signum)
 
-def can_record_from_damon_stat():
-    if not _damo_sysinfo.damon_feature_available('interface/damon_stat'):
-        return False
-    if not _damo_sysinfo.damon_feature_available('stat/aggr_interval'):
-        return False
-    return _damon_modules.damon_stat_running()
-
 def handle_args(args):
     if not args.deducible_target:
         if _damon.any_kdamond_running() or \
-                can_record_from_damon_stat():
+                _damo_records.can_record_from_damon_stat():
             args.deducible_target = 'ongoing'
 
     args.output_permission, err = _damo_records.parse_file_permission_str(
