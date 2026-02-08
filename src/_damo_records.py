@@ -98,37 +98,6 @@ class DamonStatSnapshot:
             ('aggr_interval_us', aggr_interval_us),
             ])
 
-    @classmethod
-    def capture(cls, live_only=False):
-        damon_stat_parm_dir = '/sys/module/damon_stat/parameters'
-        if not os.path.isdir(damon_stat_parm_dir):
-            return None, 'damon_stat unsupported'
-        if live_only:
-            with open(os.path.join(damon_stat_parm_dir, 'enabled'), 'r') as f:
-                if f.read().strip().lower() == 'n':
-                    return None, 'damon_stat is not enabled'
-        with open(os.path.join(damon_stat_parm_dir,
-                               'memory_idle_ms_percentiles'), 'r') as f:
-            idletime_ms_percentiles = DamonIdleMsPercentiles(
-                    percentile_ms_list=[
-                        DamonIdleMsPercentile(percentile, idle_ms)
-                        for percentile, idle_ms in
-                        enumerate(f.read().strip().split(','))])
-        with open(os.path.join(damon_stat_parm_dir,
-                               'estimated_memory_bandwidth'), 'r') as f:
-            memory_bw_bytes_per_sec = int(f.read())
-        aggr_interval_file = os.path.join(damon_stat_parm_dir,
-                                          'aggr_interval_us')
-        if not os.path.isfile(aggr_interval_file):
-            aggr_interval_us = None
-        else:
-            with open(aggr_interval_file, 'r') as f:
-                aggr_interval_us = int(f.read())
-        return DamonStatSnapshot(
-                idletime_ms_percentiles=idletime_ms_percentiles,
-                memory_bw_bytes_per_sec=memory_bw_bytes_per_sec,
-                aggr_interval_us=aggr_interval_us), None
-
 class DamonSnapshot:
     '''
     Contains a snapshot of data access monitoring results
