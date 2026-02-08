@@ -25,7 +25,7 @@ def get_param_file(module_name, parameter):
     return os.path.join(get_param_dir(module), parameter)
 
 def damon_stat_kdamonds():
-    param_dir = '/sys/module/damon_stat/parameters'
+    param_dir = get_param_dir('damon_stat')
     if not os.path.isdir(param_dir):
         return None, 'param dir (%s) not found' % param_dir
     with open(os.path.join(param_dir, 'enabled'), 'r') as f:
