@@ -31,8 +31,8 @@ import damo_record
 import damo_record_info
 import damo_replay
 import damo_report
-import damo_setup_cli_completion
 import damo_schemes
+import damo_setup_cli_completion
 import damo_start
 import damo_stop
 import damo_tune
