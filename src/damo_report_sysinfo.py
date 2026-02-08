@@ -56,13 +56,19 @@ def main(args):
         for feature in sysinfo.avail_damon_features:
             if feature.name.startswith('stat/'):
                 pr_feature(feature)
+    if 'lru_sort_features' in args.print or 'all' in args.print:
+        print('Avail damon_lru_sort features')
+        for feature in sysinfo.avail_damon_features:
+            if feature.name.startswith('lru_sort/'):
+                pr_feature(feature)
 
 def set_argparser(parser):
     parser.add_argument(
             '--print', nargs='+',
             choices=['versions', 'fs_info', 'trace_cmd_info', 'perf_info',
                      'sysfs_features', 'debugfs_features', 'trace_features',
-                     'stat_features', 'interfaces', 'all'],
+                     'stat_features', 'lru_sort_features', 'interfaces',
+                     'all'],
             default=['versions', 'interfaces'], help='info to print')
     parser.add_argument('--invalidate_cache', action='store_true',
                         help='invalidate cached sysinfo')
