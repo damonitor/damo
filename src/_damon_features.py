@@ -137,6 +137,10 @@ features_list = [
         DamonFeature(name='sysfs/fvaddr',
                      upstream_status='merged in v5.19 (b82434471cd2)',
                      upstreamed_version='5.19'),
+        DamonFeature(name='reclaim/commit_inputs',
+                     upstream_status='merged in v5.19 (81a84182c3430)',
+                     upstreamed_version='5.19'),
+
         DamonFeature(name='interface/damon_lru_sort',
                      upstream_status='merged in v6.0-rc1 (40e983cca927)',
                      upstreamed_version='6.0'),
