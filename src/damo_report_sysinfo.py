@@ -60,6 +60,10 @@ def main(args):
         if feature.name.startswith('lru_sort/'):
             if not should_print_feature(args.print, 'lru_sort_features'):
                 continue
+        if feature.name.startswith('reclaim/'):
+            if not should_print_feature(args.print, 'reclaim_features'):
+                continue
+
         features_to_print.append(feature)
     if len(features_to_print) > 0:
         print('available DAMON features:')
@@ -83,8 +87,8 @@ def set_argparser(parser):
             '--print', nargs='+',
             choices=['versions', 'fs_info', 'trace_cmd_info', 'perf_info',
                      'sysfs_features', 'debugfs_features', 'trace_features',
-                     'stat_features', 'lru_sort_features', 'interfaces',
-                     'unavailable_features',
+                     'stat_features', 'lru_sort_features', 'reclaim_features',
+                     'interfaces', 'unavailable_features',
                      'all'],
             default=['versions', 'interfaces'], help='info to print')
     parser.add_argument('--invalidate_cache', action='store_true',
