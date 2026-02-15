@@ -62,6 +62,7 @@ features_list = [
         DamonFeature(name='interface/damon_debugfs',
                      upstream_status='merged in v5.15-rc1 (4bc05954d007)',
                      upstreamed_version='5.15'),
+
         DamonFeature(name='debugfs/schemes', upstream_status='merged in v5.16',
                      upstreamed_version='5.16'),
         DamonFeature(name='debugfs/init_regions',
@@ -85,6 +86,7 @@ features_list = [
         DamonFeature(name='interface/damon_reclaim',
                      upstream_status='merged in v5.16-rc1 (43b0536cb471)',
                      upstreamed_version='5.16'),
+
         DamonFeature(name='debugfs/schemes_stat_succ',
                      upstream_status='merged in v5.17 (0e92c2ee9f45)',
                      upstreamed_version='5.17'),
@@ -94,6 +96,7 @@ features_list = [
         DamonFeature(name='reclaim/stats',
                      upstream_status='merged in v5.17-rc1 (0e92c2ee9f45)',
                      upstreamed_version='5.17'),
+
         DamonFeature(name='debugfs/init_regions_target_idx',
                      upstream_status='merged in v5.18 (144760f8e0c3)',
                      upstreamed_version='5.18'),
@@ -130,6 +133,7 @@ features_list = [
         DamonFeature(name='sysfs/schemes_prioritization',
                      upstream_status='merged in v5.18-rc1 (c951cd3b8901)',
                      upstreamed_version='5.18'),
+
         DamonFeature(name='sysfs/fvaddr',
                      upstream_status='merged in v5.19 (b82434471cd2)',
                      upstreamed_version='5.19'),
@@ -140,9 +144,11 @@ features_list = [
         DamonFeature(name='interface/damon_lru_sort',
                      upstream_status='merged in v6.0-rc1 (40e983cca927)',
                      upstreamed_version='6.0'),
+
         DamonFeature(name='sysfs/schemes_tried_regions',
                      upstream_status='merged in v6.2-rc1',
                      upstreamed_version='6.2'),
+
         DamonFeature(name='sysfs/schemes_filters',
                      upstream_status='merged in v6.3-rc1',
                      upstreamed_version='6.3'),
@@ -165,15 +171,18 @@ features_list = [
         DamonFeature(name='sysfs/schemes_filters_target',
                      upstream_status='merged in v6.6-rc1',
                      upstreamed_version='6.6'),
+
         DamonFeature(name='sysfs/schemes_apply_interval',
                      upstream_status='merged in v6.7-rc1',
                      upstreamed_version='6.7'),
         DamonFeature(name='trace/damos_before_apply',
                      upstream_status='merged in v6.7-rc1 (c603c630b509)',
                      upstreamed_version='6.7'),
+
         DamonFeature(name='sysfs/schemes_quota_goals',
                      upstream_status='merged in v6.8-rc1',
                      upstreamed_version='6.8'),
+
         DamonFeature(name='sysfs/schemes_quota_effective_bytes',
                      upstream_status='merged in v6.9-rc1',
                      upstreamed_version='6.9'),
@@ -193,15 +202,18 @@ features_list = [
         DamonFeature(name='sysfs/schemes_filters_young',
                      upstream_status='merged in v6.10-rc1',
                      upstreamed_version='6.10'),
+
         DamonFeature(name='sysfs/schemes_migrate',
                      upstream_status='merged in v6.11-rc1',
                      upstreamed_version='6.11'),
+
         DamonFeature(name='sysfs/sz_ops_filter_passed',
                      upstream_status='merged in v6.14-rc1',
                      upstreamed_version='6.14'),
         DamonFeature(name='sysfs/allow_filter',
                      upstream_status='merged in v6.14-rc1',
                      upstreamed_version='6.14'),
+
         DamonFeature(name='sysfs/schemes_filters_hugepage_size',
                      upstream_status='merged in v6.15-rc1',
                      upstreamed_version='6.15'),
@@ -217,9 +229,11 @@ features_list = [
         DamonFeature(name='sysfs/schemes_filters_active',
                      upstream_status='merged in v6.15-rc1',
                      upstreamed_version='6.15'),
+
         DamonFeature(name='sysfs/schemes_quota_goal_node_mem_used_free',
                      upstream_status='merged in v6.16-rc1',
                      upstreamed_version='6.16'),
+
         DamonFeature(name='sysfs/schemes_dests',
                      upstream_status='merged in v6.17-rc1',
                      upstreamed_version='6.17'),
@@ -235,6 +249,7 @@ features_list = [
         DamonFeature(name='interface/damon_stat',
                      upstream_status='merged in v6.17-rc1 (369c415e6073)',
                      upstreamed_version='6.17'),
+
         DamonFeature(name='sysfs/addr_unit',
                      upstream_status='merged in v6.18-rc1',
                      upstreamed_version='6.18'),
@@ -250,12 +265,14 @@ features_list = [
         DamonFeature(name='stat/negative_idle_time',
                      upstream_status='merged in v6.18-rc1 (a983a26d5298)',
                      upstreamed_version='6.18'),
+
         DamonFeature(name='sysfs/schemes_quota_goal_node_memcg_used_free',
                      upstream_status='merged in v6.19-rc1',
                      upstreamed_version='none'),
         DamonFeature(name='sysfs/obsolete_target',
                      upstream_status='merged in v6.19-rc1',
                      upstreamed_version='none'),
+
         DamonFeature(name='sysfs/damos_stat_nr_snapshots',
                      upstream_status='merged in mm, expected for 6.20/7.0-rc1',
                      upstreamed_version='none'),
@@ -277,6 +294,7 @@ features_list = [
         DamonFeature(name='lru_sort/autotune_monitoring_intervals',
                      upstream_status='merged in mm, expected for 6.20/7.0-rc1',
                      upstreamed_version='none'),
+
         DamonFeature(name='sysfs/damon_sample_control',
                      upstream_status='hacking on damon/next',
                      upstreamed_version='none',
