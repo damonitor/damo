@@ -24,8 +24,6 @@
 - heatmap: Support interactive zoom in/out/scrolling
 - Provide virtual memory mapping information
   - shows when what virtual address has mappend and unmapped
-- Implement an official feature to check if 'damo' supports the system
-  - 'damo diagnose --kernel_support'?  Or, 'damo report damon --kernel_support'?
 - Update tuned intervals when getting snapshot, for only intervals auto-tuning
   enabled contexts
 - Warn or error recording when intervals auto-tuning enabled.
