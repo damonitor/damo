@@ -28,8 +28,9 @@ def main(args):
         print('damo version: %s' % sysinfo.damo_version)
         print('kernel version: %s' % sysinfo.kernel_version)
         version, err = sysinfo.infer_damon_version()
-        if err is None:
-            print('DAMON version: %s' % version)
+        if err is not None:
+            version ='unknown (%s)' % err
+        print('DAMON version: %s' % version)
     if 'fs_info' in args.print or 'all' in args.print:
         print('sysfs: %s' % sysinfo.sysfs_path)
         print('tracefs: %s' % sysinfo.tracefs_path)
