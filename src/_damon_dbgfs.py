@@ -445,7 +445,7 @@ def mk_feature_supports_map():
             feature_supports['debugfs/schemes_wmarks'] = True
             feature_supports['debugfs/schemes_time_quota'] = True
             feature_supports['debugfs/schemes_stat_succ'] = True
-            feature_supports['schemes_stat_qt_exceed'] = True
+            feature_supports['debugfs/schemes_stat_qt_exceed'] = True
 
     if _damon.any_kdamond_running():
         return None, \
