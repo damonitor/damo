@@ -1563,16 +1563,30 @@ def set_damon_interface(damon_interface):
         return 'DAMON interface (%s) not supported' % damon_interface
     return None
 
+damon_unavail_msg = '''
+DAMON is not available on this system.  Ask help to your sysadmin or DAMON
+community.
+
+To ask help to DAMON community, you can
+- send a mail to the mailing list (damon@lists.linux.dev),
+- open a damo GitHub issue (https://github.com/damonitor/damo/issues), or
+- send a mail to DAMON maintainer: sj@kernel.org
+'''
+
 def initialize(damon_interface, debug_damon, load_sysinfo):
-    err = set_damon_interface(damon_interface)
-    if err is not None:
-        return err
     if debug_damon:
         _damo_fs.debug_print_ops(True)
     if load_sysinfo:
-        err = _damo_sysinfo.load_sysinfo()
+        sysinfo, err = _damo_sysinfo.get_sysinfo()
         if err is not None:
             return err
+        version, err = sysinfo.infer_damon_version()
+        if version == '<5.15':
+            return damon_unavail_msg
+    err = set_damon_interface(damon_interface)
+    if err is not None:
+        return err
+
     return None
 
 initialized = False
