@@ -16,11 +16,7 @@ import _damon_features
 import damo_pa_layout
 
 def get_param_dir(module_name):
-    sysinfo, err = _damo_sysinfo.get_sysinfo()
-    if err is not None:
-        # what can we do other than panic?
-        print('[PANIC] get_sysinfo() fail (%s)' % err)
-        exit(1)
+    sysinfo = _damo_sysinfo.get_sysinfo_or_panic()
     return os.path.join(sysinfo.sysfs_path, 'module', module_name,
                         'parameters')
 
