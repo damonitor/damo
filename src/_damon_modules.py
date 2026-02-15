@@ -80,11 +80,21 @@ def get_avail_features():
         features.append(
                 _damo_sysinfo.damon_feature_of_name('stat/negative_idle_time'))
     if os.path.isfile(os.path.join(mod_path, 'damon_lru_sort', 'parameters',
+                                   'addr_unit')):
+        features.append(
+                _damo_sysinfo.damon_feature_of_name('lru_sort/addr_unit'))
+
+    if os.path.isfile(os.path.join(mod_path, 'damon_lru_sort', 'parameters',
                                    'autotune_monitoring_intervals')):
         for name in ['lru_sort/young_page_filter', 'lru_sort/active_mem_bp',
                      'lru_sort/autotune_monitoring_intervals']:
             features.append(
                     _damo_sysinfo.damon_feature_of_name(name))
+
+    if os.path.isfile(os.path.join(mod_path, 'damon_reclaim', 'parameters',
+                                   'addr_unit')):
+        features.append(_damo_sysinfo.damon_feature_of_name(
+            'reclaim/addr_unit'))
 
     return features
 
