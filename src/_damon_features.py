@@ -299,10 +299,10 @@ features_list = [
         # v6.19-rc1 release: Sun Dec 14 16:05:07 2025 +1200
         DamonFeature(name='sysfs/schemes_quota_goal_node_memcg_used_free',
                      upstream_status='merged in v6.19-rc1',
-                     upstreamed_version='none'),
+                     upstreamed_version='6.19'),
         DamonFeature(name='sysfs/obsolete_target',
                      upstream_status='merged in v6.19-rc1',
-                     upstreamed_version='none'),
+                     upstreamed_version='6.19'),
 
         DamonFeature(name='sysfs/damos_stat_nr_snapshots',
                      upstream_status='merged in mm, expected for 6.20/7.0-rc1',
