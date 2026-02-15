@@ -2,6 +2,7 @@
 
 import _damo_sysinfo
 import _damon
+import _damon_features
 
 def pr_feature(feature):
     print('- %s (%s)' % (feature.name, feature.upstream_status))
@@ -65,12 +66,25 @@ def main(args):
         for f in features_to_print:
             pr_feature(f)
 
+    if not should_print_feature(args.print, 'unavailable_features'):
+        return
+
+    unavail_features_to_print = []
+    for feature in _damon_features.features_list:
+        if not feature in sysinfo.avail_damon_features:
+            unavail_features_to_print.append(feature)
+    if len(unavail_features_to_print) > 0:
+        print('unavailable DAMON features:')
+        for f in unavail_features_to_print:
+            pr_feature(f)
+
 def set_argparser(parser):
     parser.add_argument(
             '--print', nargs='+',
             choices=['versions', 'fs_info', 'trace_cmd_info', 'perf_info',
                      'sysfs_features', 'debugfs_features', 'trace_features',
                      'stat_features', 'lru_sort_features', 'interfaces',
+                     'unavailable_features',
                      'all'],
             default=['versions', 'interfaces'], help='info to print')
     parser.add_argument('--invalidate_cache', action='store_true',
