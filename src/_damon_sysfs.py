@@ -1280,6 +1280,12 @@ def mk_feature_supports_map():
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
 
+    avail_operations_filepath = os.path.join(ctx_dir_of(0, 0),
+            'avail_operations')
+    if os.path.isfile(avail_operations_filepath):
+        supports_map['sysfs/avail_ops'] = True
+        supports_map['sysfs/online_params_commit'] = True
+
     avail_ops, err = _avail_ops()
     if err == None:
         for ops in ['vaddr', 'paddr', 'fvaddr']:
