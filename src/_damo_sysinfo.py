@@ -410,6 +410,13 @@ def get_sysinfo():
             return None, err
     return system_info, None
 
+def get_sysinfo_or_panic():
+    sysinfo, err = get_sysinfo()
+    if err is not None:
+        raise Exception('[PANIC] get_sysinfo() fail (%s)' % err)
+        exit(1)
+    return sysinfo
+
 def damon_tracepoint_available(tracepoint):
     sysinfo, err = get_sysinfo()
     if err is not None:
