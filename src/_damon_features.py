@@ -156,6 +156,10 @@ features_list = [
         DamonFeature(name='sysfs/schemes_filters_memcg',
                      upstream_status='merged in v6.3-rc1',
                      upstreamed_version='6.3'),
+        DamonFeature(name='reclaim/skip_anon',
+                     upstream_status='merged in v6.3-rc1 (d56fe24237c3d)',
+                     upstreamed_version='6.3'),
+
         DamonFeature(name='sysfs/schemes_tried_regions_sz',
                      upstream_status='merged in v6.6-rc1',
                      upstreamed_version='6.6'),

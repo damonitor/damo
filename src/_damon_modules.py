@@ -97,6 +97,9 @@ def get_avail_features():
     if os.path.isfile(os.path.join(reclaim_dir, 'commit_inputs')):
         features.append(
                 _damo_sysinfo.damon_feature_of_name('reclaim/commit_inputs'))
+    if os.path.isfile(os.path.join(reclaim_dir, 'skip_anon')):
+        features.append(
+                _damo_sysinfo.damon_feature_of_name('reclaim/skip_anon'))
     if os.path.isfile(os.path.join(mod_path, 'damon_reclaim', 'parameters',
                                    'addr_unit')):
         features.append(_damo_sysinfo.damon_feature_of_name(
