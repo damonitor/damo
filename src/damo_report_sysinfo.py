@@ -8,6 +8,13 @@ def pr_feature(feature):
     if feature.comments:
         print('  - %s' % feature.comments)
 
+def should_print_feature(args_print, category):
+    if 'all' in args_print:
+        return True
+    if category in args_print:
+        return True
+    return False
+
 def main(args):
     _damon.ensure_root_permission()
     if args.invalidate_cache:
@@ -34,24 +41,22 @@ def main(args):
 
     for feature in sysinfo.avail_damon_features:
         if feature.name.startswith('interface/'):
-            if 'all' not in args.print and 'interfaces' not in args.print:
+            if not should_print_feature(args.print, 'interfaces'):
                 continue
         if feature.name.startswith('sysfs/'):
-            if 'all' not in args.print and 'sysfs_features' not in args.print:
+            if not should_print_feature(args.print, 'sysfs_features'):
                 continue
         if feature.name.startswith('debugfs/'):
-            if 'all' not in args.print and \
-                    'debugfs_features' not in args.print:
+            if not should_print_feature(args.print, 'debugfs_features'):
                 continue
         if feature.name.startswith('trace/'):
-            if 'all' not in args.print and 'trace_features' not in args.print:
+            if not should_print_feature(args.print, 'trace_features'):
                 continue
         if feature.name.startswith('stat/'):
-            if 'all' not in args.print and 'stat_features' not in args.print:
+            if not should_print_feature(args.print, 'stat_features'):
                 continue
         if feature.name.startswith('lru_sort/'):
-            if 'all' not in args.print and \
-                    'lru_sort_features' not in args.print:
+            if not should_print_feature(args.print, 'lru_sort_features'):
                 continue
         pr_feature(feature)
 
