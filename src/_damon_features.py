@@ -40,19 +40,15 @@ class DamonFeature:
                 self.comments == other.comments
 
 # naming convention: interface/<interface> and <interface>/<feature>
-# e.g.,
-# - interface/sysfs
-# - interface/debugfs
-# - interface/stat
+# <interface>:
+# - damon_debugfs
+# - damon_reclaim
+# - damon_sysfs
+# - damon_lru_sort
+# - damon_stat
+# - damon_sysfs
 #
-# - debugfs/vaddr
-# - sysfs/vaddr
-# - trace/damon_aggregated
-# - reclaim/mem_pressure_goal
-# - lru_sort/autotune
-# - stat/negative_idle_time
-#
-# old feature names are incrementally being updated.
+# features should be sorted by upstreamed time
 features_list = [
         DamonFeature(
             name='debugfs/record', upstream_status='withdrawn',
