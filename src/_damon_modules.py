@@ -66,6 +66,24 @@ def read_damon_stat_param(param_name):
     with open(file_path, 'r') as f:
         return f.read().strip()
 
+def module_running(module_name):
+    param_dir = os.path.join('/sys/module', module_name, 'parameters')
+    for param_name in ['enabled', 'enable']:
+        param_file = os.path.join(param_dir, param_name)
+        if os.path.isfile(param_file):
+            with open(param_file, 'r') as f:
+                return f.read().strip() == 'Y'
+    return False
+
+def module_disable(module_name):
+    param_dir = os.path.join('/sys/module', module_name, 'parameters')
+    for param_name in ['enabled', 'enable']:
+        param_file = os.path.join(param_dir, param_name)
+        if os.path.isfile(param_file):
+            with open(param_file, 'w') as f:
+                f.write('N')
+                return
+
 def get_avail_features():
     features = []
     # this is called while sysinfo setup, so cannot use sysinfo.sysfs_path

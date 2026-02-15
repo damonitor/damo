@@ -11,30 +11,13 @@ import time
 import _damo_records
 import _damon
 import _damon_args
-
-def module_running(module_name):
-    param_dir = os.path.join('/sys/module', module_name, 'parameters')
-    for param_name in ['enabled', 'enable']:
-        param_file = os.path.join(param_dir, param_name)
-        if os.path.isfile(param_file):
-            with open(param_file, 'r') as f:
-                return f.read().strip() == 'Y'
-    return False
-
-def module_disable(module_name):
-    param_dir = os.path.join('/sys/module', module_name, 'parameters')
-    for param_name in ['enabled', 'enable']:
-        param_file = os.path.join(param_dir, param_name)
-        if os.path.isfile(param_file):
-            with open(param_file, 'w') as f:
-                f.write('N')
-                return
+import _damon_modules
 
 def handle_modules():
     for module in os.listdir('/sys/module'):
         if not module.startswith('damon_'):
             continue
-        if not module_running(module):
+        if not _damon_modules.module_running(module):
             continue
         print('Cannot turn on damon since %s is running.  '
               'You should disable it first.' % module)
@@ -43,7 +26,7 @@ def handle_modules():
             print('Ok, see you later')
             exit(1)
         print('Ok, disabling it')
-        module_disable(module)
+        _damon_modules.module_disable(module)
         print('Disabled it.  Continue starting DAMON')
 
 def sighandler(signum, frame):
