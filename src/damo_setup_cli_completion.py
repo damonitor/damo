@@ -210,6 +210,7 @@ def report_sysinfo_candidates(words, cword):
                         'versions', 'fs_info', 'trace_cmd_info', 'perf_info',
                         'interfaces', 'sysfs_features', 'debugfs_features',
                         'trace_features', 'stat_features', 'lru_sort_features',
+                        'unavailable_features',
                         'all']
                     ),
              Option('--invalidate_cache', 0, False, None),
