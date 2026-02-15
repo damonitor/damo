@@ -100,6 +100,14 @@ def get_avail_features():
     if os.path.isfile(os.path.join(reclaim_dir, 'skip_anon')):
         features.append(
                 _damo_sysinfo.damon_feature_of_name('reclaim/skip_anon'))
+    if os.path.isfile(os.path.join(reclaim_dir, 'quota_autotune_feedback')):
+        features.append(
+                _damo_sysinfo.damon_feature_of_name(
+                    'reclaim/quota_mem_pressure_us'))
+        features.append(
+                _damo_sysinfo.damon_feature_of_name(
+                    'reclaim/quota_user_feedback'))
+
     if os.path.isfile(os.path.join(mod_path, 'damon_reclaim', 'parameters',
                                    'addr_unit')):
         features.append(_damo_sysinfo.damon_feature_of_name(

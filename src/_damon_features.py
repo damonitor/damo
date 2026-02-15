@@ -187,6 +187,13 @@ features_list = [
         DamonFeature(name='sysfs/schemes_quota_goal_some_psi',
                      upstream_status='merged in v6.9-rc1',
                      upstreamed_version='6.9'),
+        DamonFeature(name='reclaim/quota_mem_pressure_us',
+                     upstream_status='merged in v6.9-rc1 (75c40c2509e79)',
+                     upstreamed_version='6.9'),
+        DamonFeature(name='reclaim/quota_user_feedback',
+                     upstream_status='merged in v6.9-rc1 (75c40c2509e79)',
+                     upstreamed_version='6.9'),
+
         DamonFeature(name='sysfs/schemes_filters_young',
                      upstream_status='merged in v6.10-rc1',
                      upstreamed_version='6.10'),
