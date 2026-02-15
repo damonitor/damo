@@ -94,6 +94,9 @@ def get_avail_features():
     reclaim_dir = os.path.join(mod_path, 'damon_reclaim', 'parameters')
     if os.path.isfile(os.path.join(reclaim_dir, 'nr_quota_exceeds')):
         features.append(_damo_sysinfo.damon_feature_of_name('reclaim/stats'))
+    if os.path.isfile(os.path.join(reclaim_dir, 'commit_inputs')):
+        features.append(
+                _damo_sysinfo.damon_feature_of_name('reclaim/commit_inputs'))
     if os.path.isfile(os.path.join(mod_path, 'damon_reclaim', 'parameters',
                                    'addr_unit')):
         features.append(_damo_sysinfo.damon_feature_of_name(
