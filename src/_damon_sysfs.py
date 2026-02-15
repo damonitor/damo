@@ -1263,7 +1263,7 @@ def mk_feature_supports_map():
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0),
                          'stats', 'nr_snapshots')):
-        supports_map['syfs/damos_stat_nr_snapshots'] = True
+        supports_map['sysfs/damos_stat_nr_snapshots'] = True
 
     if os.path.isfile(
             os.path.join(scheme_dir_of(0, 0, 0),
