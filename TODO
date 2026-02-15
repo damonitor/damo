@@ -57,6 +57,7 @@
   - 'damo tune' works for module kdamonds
   - 'damo monitor' works for module kdamonds
 - Do more explicit feature check and early failures
+- Document 'damo report sysinfo'
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
