@@ -3,7 +3,7 @@ DAMO: Data Access Monitoring Operator
 
 `damo` is a user space tool for [DAMON](https://damonitor.github.io).  Using
 this, you can monitor the data access patterns of your system or workloads and
-make data access-aware memory management optimizations.
+do data access-aware memory management operations.
 
 ![damo monitor demo for water_nsquared](images/damo_monitor_water_nsquared.gif)
 
@@ -20,7 +20,8 @@ Official git repos for `damo` are hosted on kernel.org and GitHub:
 Demo Video
 ==========
 
-Please click the below thumbnail to show the short demo video.
+Please click the below thumbnail to show the short demo video.  Note that the
+video is recorded in 2020, and hence not showing features added after the demo.
 
 [![DAMON: a demo for the Kernel Summit 2020](
 http://img.youtube.com/vi/l63eqbVBZRY/0.jpg)](
@@ -66,20 +67,19 @@ development community for discussions.
 How can I ensure DAMON is enabled on my kernel?
 -----------------------------------------------
 
-If `damo report sysinfo --print interfaces` output shows non-empty list like
-below, it means your kernel is enabling DAMON.
+One easy way is using `damo report sysinfo --print versions`.  If the output of
+the command shows `DAMON version` equal to or higher than 5.15, it means your
+kernel is enabling DAMON.
 
 ```
-$ sudo damo report sysinfo --print interfaces
-Avail DAMON user interfaces
-- interface/damon_sysfs (merged in v5.18-rc1 (c951cd3b8901))
-- interface/damon_reclaim (merged in v5.16-rc1 (43b0536cb471))
-- interface/damon_lru_sort (merged in v6.0-rc1 (40e983cca927))
-- interface/damon_stat (merged in v6.17-rc1 (369c415e6073))
+$ sudo ./damo report sysinfo --print versions
+damo version: v3.1.5-24-gfc8c0e51
+kernel version: 6.19.0-rc6-mm-new-damon+
+DAMON version: 6.19+
 ```
 
-If you unsure if your kernel enables DAMON, please reach out to your kernel
-provider, or DAMON community.
+If you unsure if your kernel enables DAMON or how to enable DAMON on your
+kernel, please reach out to your kernel provider, or DAMON community.
 
 
 Where can I get more detailed usage?
