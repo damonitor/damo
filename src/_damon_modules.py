@@ -27,6 +27,24 @@ def get_param_dir(module_name):
 def get_param_file(module_name, parameter):
     return os.path.join(get_param_dir(module), parameter)
 
+def module_running(module_name):
+    param_dir = get_param_dir(module_name)
+    for param_name in ['enabled', 'enable']:
+        param_file = os.path.join(param_dir, param_name)
+        if os.path.isfile(param_file):
+            with open(param_file, 'r') as f:
+                return f.read().strip() == 'Y'
+    return False
+
+def module_disable(module_name):
+    param_dir = get_param_dir(module_name)
+    for param_name in ['enabled', 'enable']:
+        param_file = os.path.join(param_dir, param_name)
+        if os.path.isfile(param_file):
+            with open(param_file, 'w') as f:
+                f.write('N')
+                return
+
 def damon_stat_running():
     enabled_file = get_param_file('damon_stat', 'enabled')
     # this function could be called without damon_stat availability.
@@ -65,24 +83,6 @@ def read_damon_stat_param(param_name):
     file_path = get_param_file('damon_stat', param_name)
     with open(file_path, 'r') as f:
         return f.read().strip()
-
-def module_running(module_name):
-    param_dir = os.path.join('/sys/module', module_name, 'parameters')
-    for param_name in ['enabled', 'enable']:
-        param_file = os.path.join(param_dir, param_name)
-        if os.path.isfile(param_file):
-            with open(param_file, 'r') as f:
-                return f.read().strip() == 'Y'
-    return False
-
-def module_disable(module_name):
-    param_dir = os.path.join('/sys/module', module_name, 'parameters')
-    for param_name in ['enabled', 'enable']:
-        param_file = os.path.join(param_dir, param_name)
-        if os.path.isfile(param_file):
-            with open(param_file, 'w') as f:
-                f.write('N')
-                return
 
 def get_avail_features():
     features = []
