@@ -285,3 +285,6 @@ features_list = [
                      upstream_status='hacking on damon/next',
                      upstreamed_version='none'),
         ]
+
+def feature_of_name(name):
+    return [f for f in features_list if f.name == name][0]

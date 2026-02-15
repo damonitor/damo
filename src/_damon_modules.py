@@ -12,6 +12,7 @@ import subprocess
 import _damo_fs
 import _damo_sysinfo
 import _damon
+import _damon_features
 import damo_pa_layout
 
 def get_param_dir(module_name):
@@ -76,41 +77,41 @@ def get_avail_features():
     if os.path.isfile(os.path.join(mod_path, 'damon_stat', 'parameters',
                                    'aggr_interval_us')):
         features.append(
-                _damo_sysinfo.damon_feature_of_name('stat/aggr_interval'))
+                _damon_features.feature_of_name('stat/aggr_interval'))
         features.append(
-                _damo_sysinfo.damon_feature_of_name('stat/negative_idle_time'))
+                _damon_features.feature_of_name('stat/negative_idle_time'))
     if os.path.isfile(os.path.join(mod_path, 'damon_lru_sort', 'parameters',
                                    'addr_unit')):
         features.append(
-                _damo_sysinfo.damon_feature_of_name('lru_sort/addr_unit'))
+                _damon_features.feature_of_name('lru_sort/addr_unit'))
 
     if os.path.isfile(os.path.join(mod_path, 'damon_lru_sort', 'parameters',
                                    'autotune_monitoring_intervals')):
         for name in ['lru_sort/young_page_filter', 'lru_sort/active_mem_bp',
                      'lru_sort/autotune_monitoring_intervals']:
             features.append(
-                    _damo_sysinfo.damon_feature_of_name(name))
+                    _damon_features.feature_of_name(name))
 
     reclaim_dir = os.path.join(mod_path, 'damon_reclaim', 'parameters')
     if os.path.isfile(os.path.join(reclaim_dir, 'nr_quota_exceeds')):
-        features.append(_damo_sysinfo.damon_feature_of_name('reclaim/stats'))
+        features.append(_damon_features.feature_of_name('reclaim/stats'))
     if os.path.isfile(os.path.join(reclaim_dir, 'commit_inputs')):
         features.append(
-                _damo_sysinfo.damon_feature_of_name('reclaim/commit_inputs'))
+                _damon_features.feature_of_name('reclaim/commit_inputs'))
     if os.path.isfile(os.path.join(reclaim_dir, 'skip_anon')):
         features.append(
-                _damo_sysinfo.damon_feature_of_name('reclaim/skip_anon'))
+                _damon_features.feature_of_name('reclaim/skip_anon'))
     if os.path.isfile(os.path.join(reclaim_dir, 'quota_autotune_feedback')):
         features.append(
-                _damo_sysinfo.damon_feature_of_name(
+                _damon_features.feature_of_name(
                     'reclaim/quota_mem_pressure_us'))
         features.append(
-                _damo_sysinfo.damon_feature_of_name(
+                _damon_features.feature_of_name(
                     'reclaim/quota_user_feedback'))
 
     if os.path.isfile(os.path.join(mod_path, 'damon_reclaim', 'parameters',
                                    'addr_unit')):
-        features.append(_damo_sysinfo.damon_feature_of_name(
+        features.append(_damon_features.feature_of_name(
             'reclaim/addr_unit'))
 
     return features
@@ -127,12 +128,12 @@ def get_avail_interface_features():
         return features
     if os.path.isdir(os.path.join(mod_path, 'damon_reclaim')):
         features.append(
-                _damo_sysinfo.damon_feature_of_name('interface/damon_reclaim'))
+                _damon_features.feature_of_name('interface/damon_reclaim'))
     if os.path.isdir(os.path.join(mod_path, 'damon_lru_sort')):
         features.append(
-                _damo_sysinfo.damon_feature_of_name(
+                _damon_features.feature_of_name(
                     'interface/damon_lru_sort'))
     if os.path.isdir(os.path.join(mod_path, 'damon_stat')):
         features.append(
-                _damo_sysinfo.damon_feature_of_name('interface/damon_stat'))
+                _damon_features.feature_of_name('interface/damon_stat'))
     return features

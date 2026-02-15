@@ -182,9 +182,6 @@ def get_damon_tracepoints():
         return None, 'available tracepoints reading fail'
     return points, None
 
-def damon_feature_of_name(name):
-    return [f for f in _damon_features.features_list if f.name == name][0]
-
 tracepoint_to_feature_name_map = {
         'damon:damon_aggregated': 'trace/damon_aggregated',
         'damon:damos_before_apply': 'trace/damos_before_apply',
@@ -202,21 +199,23 @@ def get_avail_damon_trace_features():
         return None, err
     for tracepoint, feature_name in tracepoint_to_feature_name_map.items():
         if tracepoint in tracepoints:
-            features.append(damon_feature_of_name(feature_name))
+            features.append(_damon_features.feature_of_name(feature_name))
     return features, err
 
 def get_avail_damon_interface_features():
     features = []
 
     if _damon_dbgfs.supported():
-        features.append(damon_feature_of_name('interface/damon_debugfs'))
+        features.append(_damon_features.feature_of_name(
+            'interface/damon_debugfs'))
 
     sysfs_path = _damo_fs.dev_mount_point('sysfs')
     if sysfs_path is None:
         return features
 
     if _damon_sysfs.supported():
-        features.append(damon_feature_of_name('interface/damon_sysfs'))
+        features.append(_damon_features.feature_of_name(
+            'interface/damon_sysfs'))
 
     features += _damon_modules.get_avail_interface_features()
 
