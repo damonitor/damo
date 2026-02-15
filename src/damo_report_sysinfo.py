@@ -39,6 +39,7 @@ def main(args):
         print('perf path: %s' % sysinfo.perf_path)
         print('perf version: %s' % sysinfo.perf_version)
 
+    features_to_print = []
     for feature in sysinfo.avail_damon_features:
         if feature.name.startswith('interface/'):
             if not should_print_feature(args.print, 'interfaces'):
@@ -58,7 +59,11 @@ def main(args):
         if feature.name.startswith('lru_sort/'):
             if not should_print_feature(args.print, 'lru_sort_features'):
                 continue
-        pr_feature(feature)
+        features_to_print.append(feature)
+    if len(features_to_print) > 0:
+        print('available DAMON features:')
+        for f in features_to_print:
+            pr_feature(f)
 
 def set_argparser(parser):
     parser.add_argument(
