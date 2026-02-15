@@ -56,6 +56,7 @@
   - 'damo record' works for module kdamonds
   - 'damo tune' works for module kdamonds
   - 'damo monitor' works for module kdamonds
+- Do more explicit feature check and early failures
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
