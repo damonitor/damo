@@ -1827,7 +1827,7 @@ def add_commit_vaddr_child_targets(kdamonds):
         idx = 0
         for kd in kdamonds:
             for ctx in kd.contexts:
-                ctx.targets = old_targets[idx]
+                ctx.targets = old_targets_list[idx]
                 idx += 1
         return 'commit failed (%s)' % err
 
