@@ -234,7 +234,7 @@ features_list = [
         # v6.13-rc1 release: Sun Dec 1 14:28:56 2024 -0800
         # v6.14-rc1 release: Sun Feb 2 15:39:26 2025 -0800
         DamonFeature(name='sysfs/sz_ops_filter_passed',
-                     upstream_status='merged in v6.14-rc1',
+                     upstream_status='merged in v6.14-rc1 (626ffabe67c2)',
                      upstreamed_version='6.14'),
         DamonFeature(name='sysfs/allow_filter',
                      upstream_status='merged in v6.14-rc1',
@@ -242,29 +242,29 @@ features_list = [
 
         # v6.15-rc1 release: Sun Apr 6 13:11:33 2025 -0700
         DamonFeature(name='sysfs/schemes_filters_hugepage_size',
-                     upstream_status='merged in v6.15-rc1',
+                     upstream_status='merged in v6.15-rc1 (0431c4262261)',
                      upstreamed_version='6.15'),
         DamonFeature(name='sysfs/schemes_filters_unmapped',
                      upstream_status='merged in v6.15-rc1',
                      upstreamed_version='6.15'),
         DamonFeature(name='sysfs/intervals_goal',
-                     upstream_status='merged in v6.15-rc1',
+                     upstream_status='merged in v6.15-rc1 (1eb3471bf574)',
                      upstreamed_version='6.15'),
         DamonFeature(name='sysfs/schemes_filters_core_ops_dirs',
                      upstream_status='merged in v6.15-rc1',
                      upstreamed_version='6.15'),
         DamonFeature(name='sysfs/schemes_filters_active',
-                     upstream_status='merged in v6.15-rc1',
+                     upstream_status='merged in v6.15-rc1 (3b23a44f1f19)',
                      upstreamed_version='6.15'),
 
         # v6.16-rc1 release: Sun Jun 8 13:44:43 2025 -0700
         DamonFeature(name='sysfs/schemes_quota_goal_node_mem_used_free',
-                     upstream_status='merged in v6.16-rc1',
+                     upstream_status='merged in v6.16-rc1 (0e1c773b501f)',
                      upstreamed_version='6.16'),
 
         # v6.17-rc1 release: Sun Aug 10 19:41:16 2025 +0300
         DamonFeature(name='sysfs/schemes_dests',
-                     upstream_status='merged in v6.17-rc1',
+                     upstream_status='merged in v6.17-rc1 (a2c24eae5a15)',
                      upstreamed_version='6.17'),
         DamonFeature(name='sysfs/refresh_ms',
                      upstream_status='merged in v6.17-rc1',
@@ -281,7 +281,7 @@ features_list = [
 
         # v6.18-rc1 release: Sun Oct 12 13:42:36 2025 -0700
         DamonFeature(name='sysfs/addr_unit',
-                     upstream_status='merged in v6.18-rc1',
+                     upstream_status='merged in v6.18-rc1 (09a616cbb371)',
                      upstreamed_version='6.18'),
         DamonFeature(name='reclaim/addr_unit',
                      upstream_status='merged in v6.18-rc1 (7db551fcfb2a)',
@@ -298,7 +298,7 @@ features_list = [
 
         # v6.19-rc1 release: Sun Dec 14 16:05:07 2025 +1200
         DamonFeature(name='sysfs/schemes_quota_goal_node_memcg_used_free',
-                     upstream_status='merged in v6.19-rc1',
+                     upstream_status='merged in v6.19-rc1 (6a18bbe48361)',
                      upstreamed_version='6.19'),
         DamonFeature(name='sysfs/obsolete_target',
                      upstream_status='merged in v6.19-rc1',
