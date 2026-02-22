@@ -46,18 +46,13 @@
 - Make --perf_path of 'damo record' aligned with _damo_sysinfo.
 - Use max_nr_snapshot for snapshot DAMOS uninstall
 - Support DAMON tracepoints other than those for regions in easy way.
-  - adding --repeat and --use_tracepoint to 'damo report damon'?
-  - adding 'damo trace'?
-- Add more trace-cmd/perf output parsing test in test_damo_records.py
-  - Test damos_before_apply trace
-  - Test non-damon trace events
+  - damo report trace
 - Make modules better controlled with main commands
   - 'damo report damon' show module kdamonds
   - 'damo record' works for module kdamonds
   - 'damo tune' works for module kdamonds
   - 'damo monitor' works for module kdamonds
 - Do more explicit feature check and early failures
-- Document 'damo report sysinfo'
 - damo report record_info: print address in bytes level
   - And update 'heatmap scoping' usage section
 
