@@ -1112,15 +1112,15 @@ access monitoring results into a human-readable text.  For example:
     7fff66b0a000-7fff66bb2000( 672.000 KiB):        5
 
 The first line shows the recording started timestamp (`base_time_absolute`).
-Records of data access patterns follow.  Each record is separated by a blank
-line.  Each record first specifies when the record started (`monitoring_start`)
-and ended (`monitoring_end`) relative to the start time, the duration for the
-recording (`monitoring_duration`).  Recorded data access patterns of each
-target follow.  Each data access pattern for each task shows the target's id
-(``target_id``) and a number of monitored address regions in this access
-pattern (``nr_regions``) first.  After that, each line shows the start/end
-address, size, and the number of observed accesses of each region.
-
+Snapshots of data access patterns follow.  Each snapshot is separated by a
+blank line.  Each snapshot first specifies when the monitoring for the snapshot
+is started (`monitoring_start`) and ended (`monitoring_end`) relative to the
+start time, and the duration for the snapshot (`monitoring_duration`).
+Captured data access patterns of each target follow.  Each data access pattern
+for each task shows the target's id (``target_id``) and a number of monitored
+address regions in this access pattern (``nr_regions``) first.  After that,
+each line shows the start/end address, size, and the number of observed
+accesses of each region.
 
 ### `damo report heatmap`
 
