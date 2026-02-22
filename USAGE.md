@@ -12,14 +12,13 @@ Prerequisites
 Basic Concepts of DAMON
 -----------------------
 
-`damo` is a user space tool for `DAMON`.  Hence, for advanced and optimized use
-of `damo` rather than simple "Getting Started" tutorial, you should first
-understand the concepts of DAMON.  There are a number of links to resources
-including DAMON introduction talks and publications at the project
-[site](https://damonitor.github.io).  The official design
-[document](https://docs.kernel.org/mm/damon/design.html) is recommended among
-those, since we will try to keep it up to date always, and appropriate for
-DAMON users.
+`damo` is a user space tool for [`DAMON`](https://docs.kernel.org/mm/damon/).
+If you finished "Getting Started" tutorial and want to use `damo` in more
+advanced and optimized way, you may need to understand the concepts of DAMON.
+There are a number of links to resources including DAMON introduction talks and
+publications at the project [site](https://damonitor.github.io).  The official
+design [document](https://docs.kernel.org/mm/damon/design.html) is recommended
+among those.
 
 Specifically, if you want to use `damo` for profiling purpose, please ensure
 you understand what `nr_accesses` and `age` mean.  ['Region Based
