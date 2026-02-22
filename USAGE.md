@@ -136,6 +136,15 @@ could be deprecated and removed without any notice and grace periods.  Refer to
 [FEATURES_DEPRECATION_PROCESS.md](FEATURES_DEPRECATION_PROCESS.md) for more
 details.
 
+DAMON Availablity Check
+-----------------------
+
+The first category commands require some system setups.  That is, the system
+should be configured in a way that DAMON can be used.  To check the
+availablity, please use [`damo report sysinfo`](#damo-report-sysinfo) command.
+Please read the document [section](#damo-report-sysinfo) for more details about
+the command.
+
 DAMON Control (Access Monitoring and Monitoring-based System Optimization)
 ==========================================================================
 
@@ -589,6 +598,42 @@ report` to retrieve the data on its own, and directly do visualization of the
 self-retrieved data.  Input data, command line options, and usages are
 different for specific report formats.  Following sections describe some of the
 report formats.
+
+### `damo report sysinfo`
+
+`damo report sysinfo` shows the system information including versions of
+software and DAMON features that available on the system.  By default, it shows
+versions of software and available DAMON user interface features, like below.
+
+```
+$ sudo damo report sysinfo
+damo version: v3.1.6-1-g3946ed6d
+kernel version: 6.19.0-mm-new-damon+
+DAMON version: 6.19+
+available DAMON features:
+- interface/damon_sysfs (merged in v5.18-rc1 (c951cd3b8901))
+- interface/damon_reclaim (merged in v5.16-rc1 (43b0536cb471))
+- interface/damon_lru_sort (merged in v6.0-rc1 (40e983cca927))
+- interface/damon_stat (merged in v6.17-rc1 (369c415e6073))
+```
+
+The first two lines of the output is straightforwardly shows the versions of
+`damo` and `kernel`.  The third line shows an inferred version of DAMON.  This
+inferrence is required because the kernel might have DAMON features that
+backported from the mainline.  For the inferrence, `damo` checks all DAMON
+features that available on the current system, and infer the feature that
+landed in the mainline most recently as the version of DAMON on the system.
+
+Fourth and later lines of the output shows the available DAMON user interface
+features.  If it shows nothing, the system may not ready to run DAMON control
+cateogry commands of `damo`.  Note that other categories of commands are
+independent to the system setup, and therefore still available.  If you need to
+do DAMON control on a given system but `damo report sysinfo` says it is
+unavailable, ask help to the system administrator, the kernel provider, or
+DAMON community.
+
+The command can show more detailed information including availability of each
+DAMON features, when `--print all` option is given.
 
 ### `damo report damon`
 
