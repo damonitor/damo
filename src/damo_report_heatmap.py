@@ -219,8 +219,8 @@ class HeatMap:
         addr_len = self.addr_unit * self.addr_resol
         addr_end = addr_start + addr_len
         lines.append('# x-axis: space [%s, %s) (%s)' % (
-            _damo_fmt_str.format_sz(addr_start, False),
-            _damo_fmt_str.format_sz(addr_end, False),
+            _damo_fmt_str.format_sz_accurate(addr_start, False),
+            _damo_fmt_str.format_sz_accurate(addr_end, False),
             _damo_fmt_str.format_sz(addr_len, False)))
 
         time_start = self.time_start
