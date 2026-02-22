@@ -79,8 +79,8 @@ class GuideInfo:
         for idx, region in enumerate(self.contig_regions):
             lines.append('region\t%2d: [%s, %s) (%s)' % (
                 idx,
-                _damo_fmt_str.format_sz(region.start_addr, raw),
-                _damo_fmt_str.format_sz(region.end_addr, raw),
+                _damo_fmt_str.format_sz_accurate(region.start_addr, raw),
+                _damo_fmt_str.format_sz_accurate(region.end_addr, raw),
                 _damo_fmt_str.format_sz(
                     region.end_addr - region.start_addr, raw)))
         return '\n'.join(lines)
