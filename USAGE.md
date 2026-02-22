@@ -9,35 +9,6 @@ improvements of this document via GitHub
 Prerequisites
 =============
 
-Kernel
-------
-
-You should first ensure your system is running on a kernel built with at least
-``CONFIG_DAMON``, ``CONFIG_DAMON_VADDR``, ``CONFIG_DAMON_PADDR``, and
-``CONFIG_DAMON_SYSFS``.  Depending on the kernel version, you may need to
-enable ``CONFIG_DAMON_DBGFS`` instead of ``CONFIG_DAMON_SYSFS``.
-
-Sysfs or Debugfs
-----------------
-
-Because `damo` is using the sysfs or debugfs interface of DAMON, you should
-ensure at least one of those is mounted.  Note that DAMON debugfs interface is
-deprecated.  Please use sysfs.  If you depend on DAMON debugfs interface and
-cannot use sysfs interface, [report](REPORTING.md) your usecase to the
-community.
-
-Perf or Trace-cmd
------------------
-
-`damo` uses [`perf`](https://perf.wiki.kernel.org/index.php/Main_Page) for
-recording DAMON's access monitoring results.  If it is unavailable, `damo` uses
-[`trace-cmd`](https://www.trace-cmd.org/) instead.  Please ensure your system
-is having `perf` or `trace-cmd` if you will need to record full monitoring
-results of DAMON.  `damo` supports recording only partial snapshots of DAMON
-monitoring results, too.  If you will do the partial recording instead of the
-full recording, you don't need to install `perf` or `trace-cmd` on your system.
-
-
 Basic Concepts of DAMON
 -----------------------
 
@@ -529,6 +500,22 @@ example, below command can be used.
 or, for already running process, like below:
 
     # damo record $(pidof my_workload)
+
+
+### Pre-requisites: `perf` and/or `trace-cmd`
+
+`damo` uses [`perf`](https://perf.wiki.kernel.org/index.php/Main_Page) for
+recording DAMON's access monitoring results.  If it is unavailable, `damo` uses
+[`trace-cmd`](https://www.trace-cmd.org/) instead.  Please ensure your system
+is having `perf` or `trace-cmd` if you will need to record full monitoring
+results of DAMON.  Note that `damo` supports not only full recording but
+retrieving partial snapshots of DAMON monitoring results.  If you will do the
+partial snapshots recording instead of the full recording, you don't need to
+install `perf` or `trace-cmd` on your system.
+
+`perf` is also internally used for
+[recording cpu usages](#recording-cpu-usages).  If it is unavailable, the cpu
+usages recording will do nothing.
 
 ### Recording Profile Information
 
