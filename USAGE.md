@@ -390,9 +390,9 @@ multiple kdamonds usage.
 
 ### Full DAMOS Parameters Update
 
-The Partial DAMOS parameters update options support multiple schemes as abovely
-mentioned.  However, it could be still too manual in some cases and users may
-want to provide all inputs at once.  For such cases, `--schemes` option
+Same to [Full DAMON Parameters Update](full-damon-parameters-update), some
+users might prefer specifying the full DAMOS parameters in other structured
+formats like `json` or `yaml`.  For such cases, `--schemes` option
 receives a json-format specification of DAMOS schemes.  The format is same to
 schemes part of the `--kdamonds` input.
 
