@@ -285,11 +285,11 @@ action](https://docs.kernel.org/mm/damon/design.html#operation-action).
 
 Access rate is the ratio of
 [`nr_accesses`](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#region-based-sampling)
-of the region to maximum `nr_accesses` that possible on given DAMON parameters.
-For example, if the sampling interval is 5 milliseconds and the aggregation
-interval is 100 milliseconds, the "maximum nr_accesses" is 20 (100 milliseconds
-divided by 5 milliseconds).  And if a region has `nr_accesses` value 4, it's
-access rate is 20% (`4 / 20 * 100`).
+of the region to maximum `nr_accesses` that is possible on given DAMON
+parameters.  For example, if the sampling interval is 5 milliseconds and the
+aggregation interval is 100 milliseconds, the "maximum nr_accesses" is 20 (100
+milliseconds divided by 5 milliseconds).  And if a region has `nr_accesses`
+value 4, it's access rate is 20% (`4 / 20 * 100`).
 
 #### Access hz
 
@@ -301,7 +301,11 @@ second.
 
 #### `--damos_filter` Option Format
 
-`--damos_filter` option's format is as below:
+`--damos_filter` option is for specifying each [DAMOS
+filter](https://docs.kernel.org/mm/damon/design.html#filters) that need to be
+installed for the access-aware system operations.
+
+The option format is as below:
 
 ```
 <allow|reject> [none] <type> [<additional type options>...] [<damos filter>....]
@@ -309,23 +313,15 @@ second.
 
 The first argument (`allow` or `reject`) specifies if the filter should `allow`
 or `reject` the memory.  If it is not given, it applies `reject` by default.
-Note that kernel support of `allow` behavior is not yet mainlined as of
-2025-01-19.  It is expected to be supported from Linux v6.14.
 
 `<type>` is the type of the memory that the filter should work for.  Depending
 on the `<type>`, `<additional type options>` need to be given.  For example, if
 `<type>` is `memcg`, the memory cgroup's mount point should be passed as
 `<additional type options>`.  Supported types and required additional options
-are as below.
+are same to what the [kernel
+documentation](https://docs.kernel.org/mm/damon/design.html#filters) lists.
 
-- anon: no additional options are required.
-- memcg: the path to the memory cgroup should be provided.
-- young: no additional options are required.
-- hugeapge_size: minimum and maximum size of hugepages should be provided.
-- addr: start and end addresses of the address range should be provided.
-- target: the DAMON target index should be provided.
-
-If the filter is for memory exclude the given type, `none` keyword can be given
+If the filter is for memory except the given type, `none` keyword can be given
 before the `<type>` part.  For example,
 
 - `reject young`: Reject applying the DAMOS action to young pages.  In other
@@ -336,24 +332,14 @@ before the `<type>` part.  For example,
   ranges except 1234-5678.  In other words, apply the action to only 1234-5678
   address range.
 
-To use multiple filters, users can put the options in single
-`--[snapshot_]damos_filter` option, or do that with another
-`--[snapshot_]damos_filter` flag.  For example,
+To use multiple filters, users can use multiple `--snapshot_damos_filter`.  For
+example,
 
 ```
---damos_filter allow anon reject memcg foo
-```
-
-and
-
-```
---damos_filter allow anon --damos_filter reject memcg foo
+--damos_filter allow anon --damos_filter reject memcg user.slice/workloads/foo
 ```
 
 Will install two DAMOS filters in same way.
-
-Read DAMON design documentation for more details including [how filters
-work](https://origin.kernel.org/doc/html/latest/mm/damon/design.html#filters).
 
 ##### Old `--damos_filter` Format
 
