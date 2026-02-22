@@ -573,13 +573,13 @@ the default name of the CPU usage information.
 `damo report`
 -------------
 
-`damo report` visualizes the `damo record`-retrieved data in specific report
-format.  Users can specify `damo record`-generated record files as the source
-of the data to visualize.  For some report formats, users can also ask `damo
-report` to retrieve the data on its own, and directly do visualization of the
-self-retrieved data.  Input data, command line options, and usages are
-different for specific report formats.  Following sections describe some of the
-report formats.
+`damo report` visualizes the `damo record`-retrieved data and/or system
+information in specific report format.  Users can specify `damo
+record`-generated record files as the source of the data to visualize.  For
+some report formats, users can also ask `damo report` to retrieve the data on
+its own, and directly do visualization of the self-retrieved data.  Input data,
+command line options, and usages are different for each report format.
+Following sections describe some of the report formats.
 
 ### `damo report sysinfo`
 
