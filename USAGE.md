@@ -748,7 +748,7 @@ temperature](#access-temperature) in percentiles.  For example,
     total size: 59.868 GiB
 
 `recency-sz-hist` style shows the distribution of per-byte idle time in
-histogram.  For example,
+histogram.  Anoter name of it is `cold-memory-tail`.  For example,
 
     $ sudo damo report access --style recency-sz-hist
     <idle time (us)> <total size>
