@@ -3,6 +3,8 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.1.7
 - Wordsmith and update USAGE.
+- Add 'damo report record_info'.
+- Use accurate address information on 'damo report heatmap' x-axis range.
 
 v3.1.6
 - damo report sysinfo: support check of more DAMON features.
