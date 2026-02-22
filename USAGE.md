@@ -503,9 +503,10 @@ recording DAMON's access monitoring results.  If it is unavailable, `damo` uses
 [`trace-cmd`](https://www.trace-cmd.org/) instead.  Please ensure your system
 is having `perf` or `trace-cmd` if you will need to record full monitoring
 results of DAMON.  Note that `damo` supports not only full recording but
-retrieving partial snapshots of DAMON monitoring results.  If you will do the
-partial snapshots recording instead of the full recording, you don't need to
-install `perf` or `trace-cmd` on your system.
+also partial snapshots (`damo record --snpashot` option or [`damo report
+access`](#damo-report-access)).  If you will do the partial snapshots recording
+instead of the full recording, you don't need to install `perf` or `trace-cmd`
+on your system.
 
 `perf` is also internally used for
 [recording cpu usages](#recording-cpu-usages).  If it is unavailable, the cpu
