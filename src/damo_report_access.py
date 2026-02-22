@@ -1514,11 +1514,6 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
                 '\n# damos filters (df): <filters passed type>'
         fmt.format_snapshot_head += '\ndf-pass: <filters passed heatmap>'
 
-    if args.region_box:
-        if fmt.format_snapshot_tail.find('<region box description>') == -1:
-            fmt.format_snapshot_tail = ('%s\n<region box description>' %
-                    fmt.format_record_tail)
-
     if fmt.format_snapshot_tail is None:
         fmt.format_snapshot_tail = \
                 'memory bw estimate: <estimated memory bandwidth>\n' \
@@ -1532,6 +1527,11 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
         # further check if scheme action is not stat
         if args.tried_regions_of is not None:
             fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
+
+    if args.region_box:
+        if fmt.format_snapshot_tail.find('<region box description>') == -1:
+            fmt.format_snapshot_tail = ('%s\n<region box description>' %
+                    fmt.format_record_tail)
 
 def set_formats_region_default(fmt, records, args):
     default_region_format = \
