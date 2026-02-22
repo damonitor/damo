@@ -182,10 +182,11 @@ Below example shows a pid target usage:
 
 ### Partial DAMON Parameters Update
 
-`damo` sets DAMON parameters such as monitoring intervals with its default
-values.  Users can continue using the default values but set specific
-parameters as they want, via command line options.  For the list and brief
-explanation of the options for those options, use `damo help
+`damo` sets DAMON parameters such as [monitoring
+intervals](https://docs.kernel.org/mm/damon/design.html#access-frequency-monitoring)
+with its default values.  Users can continue using the default values but set
+specific parameters as they want, via command line options.  For the list and
+brief explanation of the options for those options, use `damo help
 damon_param_options monitoring`.
 
 To understand what each of the command line options really mean, you may need
