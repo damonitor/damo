@@ -117,6 +117,12 @@ availablity, please use [`damo report sysinfo`](#damo-report-sysinfo) command.
 Please read the document [section](#damo-report-sysinfo) for more details about
 the command.
 
+Note that the visualization part of the second category commands and the thrid
+category (misc helers) are independent to DAMON, and therefore can be used on
+nearly every setup.  It is common and fully supported to run DAMON and collect
+outputs of it on a machine, and do visualizations of the outputs on another
+machines.
+
 DAMON Control (Access Monitoring and Monitoring-based System Optimization)
 ==========================================================================
 
