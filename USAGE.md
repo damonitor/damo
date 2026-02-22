@@ -1174,9 +1174,9 @@ below:
     $ sudo damo report record_info
     target_id: 0
     time: [24 h 18 m 44.639 s, 24 h 19 m 10.276 s) (25.637 s)
-    region   0: [85.599 TiB, 85.600 TiB) (429.754 MiB)
-    region   1: [127.519 TiB, 127.519 TiB) (100.840 MiB)
-    region   2: [127.997 TiB, 127.997 TiB) (132.000 KiB)
+    region   0: [85.599282 TiB, 85.599692 TiB) (429.754 MiB)
+    region   1: [127.519339 TiB, 127.519435 TiB) (100.840 MiB)
+    region   2: [127.997318 TiB, 127.997318 TiB) (132.000 KiB)
 
 The output shows unions of monitored regions and the union of monitored time
 duration of each target task.  On this example output, we can show huge address
@@ -1184,20 +1184,9 @@ gap between the regions.  ~40 TiB gap between regions 0 and 1.  ~400 GiB gap
 between regions 1 and 2.  Therefore, it would be wise to plot the data
 points in each region.
 
-In this example, it is difficult to see accurate start and end address of each
-region.  `--raw` option can make the output to show the numbers in nanoseconds
-and bytes granularity.
-
-    $ sudo damo report record_info -i ./damon.data --raw
-    target_id: 0
-    time: [87524638943228, 87550276342000) (25637398772)
-    region   0: [94117405921280, 94117856550912) (450629632)
-    region   1: [140208996204544, 140209101942784) (105738240)
-    region   2: [140734539780096, 140734539915264) (135168)
-
 Based on this output, users can plot the heatmap for only region 1 like below:
 
-    $ sudo damo report heatmap --address_range 140208996204544 140209101942784
+    $ sudo damo report heatmap --address_range "127.519339 TiB" "127.519435 TiB"
 
 If no axis boundary option is given, it will automatically find the union
 having most heats per size in `report record_info` output and set the boundary
