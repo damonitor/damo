@@ -716,7 +716,7 @@ style for commonly useful cases.  The default style is 'detailed', which shown
 on example of the previous [section](#damo-report-access).
 
 `recency-percentiles` style shows the distribution of per-byte idle time in
-percentiles.  For example,
+percentiles.  Another name of it is `idle-time-percentiles`.  For example,
 
     $ sudo damo report access --style recency-percentiles
     # total recency percentiles
@@ -805,9 +805,6 @@ Below sections provide more details about the background and usages of the
 features.
 
 ### `damo report access`: Page Level Properties Based Access Monitoring
-
-Note: This is an experimental feature at the moment.  Some changes could be
-made, or the support can be dropped in future.
 
 `damo` supports DAMON's page level properties based access monitoring feature,
 which has been merged into the mainline Linux kernel starting from v6.14.
