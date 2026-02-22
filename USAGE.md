@@ -945,10 +945,10 @@ snapshot visualization, each record will contain only one single snapshot.
 
 Each 'snapshot' contains multiple 'regions' information.  Each region
 information contains the monitoring results for the region including the start
-and end addresses of the memory region, `nr_accesses`, and `age`.  The number
-of regions per snapshot depends on the `min_nr_regions` and `max_nr_regions`
-DAMON parameters, and actual data access pattern of the monitoring target
-address space.
+and te end addresses of the memory region, `nr_accesses`, and `age`.  The
+number of regions per snapshot depends on the `min_nr_regions` and
+`max_nr_regions` DAMON parameters, and actual data access pattern of the
+monitoring target address space.
 
 ### `damo`'s way of showing DAMON Monitoring Results
 
