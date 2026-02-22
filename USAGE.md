@@ -380,9 +380,11 @@ For the full DAMON parameters input format, please refer to `damo args damon`
 parameters input can be used as is for the `deducible target` (refer to "Simple
 Target Argument" [section](#simple-target-argument) above).
 
+(Historical fun facts)
 In the past, the partial DAMON parameters update command line options supported
 only single kdamond and single DAMON context.  That was the main reason of
 `--kdamonds` option.  The restriction is gone on the current version of `damo`.
+Nowadays, partial DAMON parameters command line option is more recommended.
 Refer to [`scripts/mem_tier.sh`](./scripts/mem_tier.sh) for example of such
 multiple kdamonds usage.
 
