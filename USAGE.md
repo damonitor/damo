@@ -533,16 +533,16 @@ record` output compatible tools.
 Note: This is an experimental feature at the moment.  Some changes could be
 made, or the support can be dropped in future.
 
-`damo record` command records memory usage information of the record target
-processes and the system together with the access pattern.  Internally, it
-parses `/proc/meminfo` and `/proc/<pid>/statm` files for the monitoring target
-processes, and save the results as a json file of the name same to the access
-pattern record file (specified by `--out` option of `damo record`) except
-having `.mem_footprint` suffix.  Hence, `damon.data.mem_footprint` is the
-default name of the profile information.
+`damo record` command records memory footprint information of the record target
+processes and the system in addition to the DAMON outputs.  Internally, it
+parses `/proc/meminfo` and `/proc/<pid>/statm` files (`<pid>` is that of the
+monitoring target process) and save the results as a json file of the name same
+to the access pattern record file (specified by `--out` option of `damo
+record`) except having `.mem_footprint` suffix.  Hence,
+`damon.data.mem_footprint` is the default name of the profile information.
 
-Users could use the files for vaious purpose.  For an example, users could find
-when how much memory is allocated by the process and really accessed, by
+Users could use the files for various purposes.  For an example, users could
+find when how much memory is allocated by the process and really accessed, by
 comparing the recorded residential set size and DAMON-based working set size.
 [`damo report footprints`](#footprints) and [`damo report wss`](#wss) could be
 used for the purpose.
