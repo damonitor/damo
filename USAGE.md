@@ -1023,7 +1023,7 @@ somewhat similar to an access heatmap of the target address space.
 
 For convenient use of it with a default format, `damo report access` provides
 `--region_box` option.  Output of the command with the option would help users
-better to understand.
+better understanding.
 
 Users can further customize the box using `damo report access` options that
 having `--region_box_` prefix.  For example, users can set what access
@@ -1034,8 +1034,8 @@ values should be represented in logscale or linearscale.
 
 By default, `damo report access` shows all regions that sorted by their start
 address.  Different users would have different interest to regions having
-specific access pattern.  Someone would be interested in hot and small regions,
-while some others are interested in cold and big regions.
+specific access patterns.  Someone would be interested in hot and small
+regions, while some others are interested in cold and big regions.
 
 For such cases, users can make it to sort regions with specific access pattern
 values as keys including `access_rate`, `age`, and `size` via
