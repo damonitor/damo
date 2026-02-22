@@ -154,10 +154,14 @@ The command receives one positional argument called deducible target.  It could
 be used for specifying monitoring target, or full DAMON parameters.  The
 command will try to deduce the type of the argument value and use it.
 
-With the argument, users can specify the monitoring target with 1) the command
-for execution of the monitoring target process, 2) pid of running target
-process, or 3) the special keyword, `paddr`, if you want to monitor the
-system's physical memory address space.
+If the user wants to monitor the entire physical address space of the system, a
+special keyword, `paddr` can be passed.  For example:
+
+    # damo start paddr
+
+If the user wants to monitor a virtual address space of a process, the command
+for starting the monitoring target process, or the pid of running target
+process can be passed.
 
 Below example shows a command target usage:
 
@@ -175,15 +179,6 @@ Below example shows a pid target usage:
 
     # sleep 5 &
     # damo start $(pidof sleep)
-
-Finally, below example shows the use of the special keyword, `paddr`:
-
-    # damo start paddr
-
-In this case, the monitoring target regions defaults to the largest 'System
-RAM' region specified in `/proc/iomem` file.  Note that the initial monitoring
-target region is maintained rather than dynamically updated like the virtual
-memory address spaces monitoring case.
 
 ### Partial DAMON Parameters Update
 
