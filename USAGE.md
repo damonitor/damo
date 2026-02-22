@@ -67,19 +67,21 @@ tools.  When it is enabled, `damo` will suggest useful inputs for partially
 completed command line inputs.  Run `damo setup_cli_completion` to get help on
 enabling it.  For example:
 
-    $ damo setup_cli_completion
-    It is nearly done, and need one more step.
-    Please execute "source /tmp/damo_completion_script-l49gye46" on your shell.
+```
+$ ./damo setup_cli_completion
+It is nearly done, and need one more step.
+Please execute "source /tmp/damo_completion_script-pqbiyvpu" on your shell.
 
-    Note that this works only for the current shell session.
-    For permanent completion setup, save "%s" somewhere,
-    and modify your .bashrc like things to execute the
-    "source" of the saved file for every session.
+Note that this works only for the current shell session.
+For permanent completion setup, save "/tmp/damo_completion_script-pqbiyvpu" somewhere,
+and modify your .bashrc like things to execute the
+"source" of the saved file for every session.
+```
 
 Note that the suggestions are only for common and recommended choices.  That's
-because there are quite many options that might make users confused.  It may
-therefore not give you full available choices always.  To know full available
-choices, use [`damo help`](#damo-help).
+because there are quite many options that might make users only confused.  It
+may therefore not give you full available choices always.  If you really need
+to know full available choices, use [`damo help`](#damo-help).
 
 Overview
 ========
