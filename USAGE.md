@@ -365,25 +365,26 @@ Unlike the new format, this format doesn't support specifying multiple filter
 options with single `--[snapshot]_damos_filter` flag.  For multiple filters,
 multiple `--[snapshot]_damos_filter` flags should be provided.
 
-
 ### Full DAMON Parameters Update
 
-As mentioned above, the partial DAMON parameters update command line options
-support only single kdamond and single DAMON context.  That should be enough
-for many use cases, but for system-wide dynamic DAMON usages, that could be
-restrictive.  Also, specifying each parameter that different from their default
-values could be not convenient.  Users may want to specify full parameters at
-once in such cases.  For such users, the command supports `--kdamonds` option.
-It receives a specification of kdamonds that would contains all DAMON
-parameters in `json` or `yaml` format.  Either a string of the format, or a
-path to a file containing the string can be passed to the option.  Then, `damo`
-starts DAMON with the specification.
+In some use cases, users might prefer specifying the full DAMON parameters in
+other structured formats like `json` or `yaml`.  For such users, DAMON-control
+`damo` commands support `--kdamonds` option.  It receives a specification of
+kdamonds that would contains all DAMON parameters in `json` or `yaml` format.
+Either a string of the format, or a path to a file containing the string can be
+passed to the option.  Then, `damo` starts DAMON with the specification.
 
 For the full DAMON parameters input format, please refer to `damo args damon`
 [documentation](#damo-args-damon) below, or simply try the command.  The
 `--kdamonds` option keyword can also simply omitted because the full DAMON
 parameters input can be used as is for the `deducible target` (refer to "Simple
 Target Argument" [section](#simple-target-argument) above).
+
+In the past, the partial DAMON parameters update command line options supported
+only single kdamond and single DAMON context.  That was the main reason of
+`--kdamonds` option.  The restriction is gone on the current version of `damo`.
+Refer to [`scripts/mem_tier.sh`](./scripts/mem_tier.sh) for example of such
+multiple kdamonds usage.
 
 ### Full DAMOS Parameters Update
 
