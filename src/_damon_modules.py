@@ -21,7 +21,7 @@ def get_param_dir(module_name):
                         'parameters')
 
 def get_param_file(module_name, parameter):
-    return os.path.join(get_param_dir(module), parameter)
+    return os.path.join(get_param_dir(module_name), parameter)
 
 def module_running(module_name):
     param_dir = get_param_dir(module_name)
