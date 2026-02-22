@@ -39,6 +39,27 @@ def format_sz(sz_bytes, machine_friendly):
         return '%.3f KiB' % (sz_bytes / (1<<10))
     return '%d B' % sz_bytes
 
+def format_sz_accurate(sz_bytes, machine_friendly):
+    if machine_friendly:
+        return '%d' % sz_bytes
+
+    sz_bytes = float(sz_bytes)
+    if sz_bytes == float(ulong_max):
+        return 'max'
+    if sz_bytes > 1<<60:
+        return '%f EiB' % (sz_bytes / (1<<60))
+    if sz_bytes > 1<<50:
+        return '%f PiB' % (sz_bytes / (1<<50))
+    if sz_bytes > 1<<40:
+        return '%f TiB' % (sz_bytes / (1<<40))
+    if sz_bytes > 1<<30:
+        return '%f GiB' % (sz_bytes / (1<<30))
+    if sz_bytes > 1<<20:
+        return '%f MiB' % (sz_bytes / (1<<20))
+    if sz_bytes > 1<<10:
+        return '%f KiB' % (sz_bytes / (1<<10))
+    return '%d B' % sz_bytes
+
 def format_addr_range(start, end, machine_friendly):
     return '[%s, %s) (%s)' % (
             format_nr(start, machine_friendly),
