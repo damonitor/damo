@@ -599,20 +599,22 @@ available DAMON features:
 - interface/damon_stat (merged in v6.17-rc1 (369c415e6073))
 ```
 
-The first two lines of the output is straightforwardly shows the versions of
+The first two lines of the output are straightforwardly showing the versions of
 `damo` and `kernel`.  The third line shows an inferred version of DAMON.  This
-inferrence is required because the kernel might have DAMON features that
-backported from the mainline.  For the inferrence, `damo` checks all DAMON
-features that available on the current system, and infer the feature that
-landed in the mainline most recently as the version of DAMON on the system.
+inferrence can be useful if the kernel have DAMON features that backported from
+the mainline.  For the inferrence, `damo` checks all DAMON features that
+available on the current system.  And it finds the available feature that
+landed on the mainline most recently.  And conclude the version of the mainline
+Linux release as the version of DAMON on the system.
 
 Fourth and later lines of the output shows the available DAMON user interface
-features.  If it shows nothing, the system may not ready to run DAMON control
-cateogry commands of `damo`.  Note that other categories of commands are
-independent to the system setup, and therefore still available.  If you need to
-do DAMON control on a given system but `damo report sysinfo` says it is
-unavailable, ask help to the system administrator, the kernel provider, or
-DAMON community.
+features.  If it shows nothing, the system may not ready to run `damo` commands
+for controlling DAMON (`start` and `tune`)  and recording its outputs (`damo
+record`).  Note that other categories of commands such as visualization of the
+retrieved DAMON outputs (`damo report`) are independent to the system setup,
+and therefore still available.  If you need to do DAMON control on a given
+system but `damo report sysinfo` says it is unavailable, ask help to the system
+administrator, the kernel provider, or DAMON community.
 
 The command can show more detailed information including availability of each
 DAMON features, when `--print all` option is given.
