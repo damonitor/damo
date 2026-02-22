@@ -126,9 +126,9 @@ machines.
 DAMON Control (Access Monitoring and Monitoring-based System Optimization)
 ==========================================================================
 
-The main purposes of `damo` is operating DAMON, as the name says (DAMO: Data
-Access Monitor Operator).  In other words, `damo` is for helping control of
-DAMON and retrieval/interpretation of the results.
+The main purposes of `damo` is operating DAMON, as the name says (DAMO: DAMon
+Operator).  In other words, `damo` is for helping control of DAMON and
+retrieval/interpretation of the results.
 
 `damo start`
 ------------
