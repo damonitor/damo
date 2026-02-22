@@ -2,6 +2,7 @@
 
 import _damo_subcmds
 import damo_nr_regions
+import damo_record_info
 import damo_report_access
 import damo_report_damon
 import damo_report_footprint
@@ -34,6 +35,8 @@ subcmds = [
             msg='times of record having specific access pattern'),
         _damo_subcmds.DamoSubCmd(name='nr_regions', module=damo_nr_regions,
             msg='number of DAMON-regions'),
+        _damo_subcmds.DamoSubCmd(name='record_info', module=damo_record_info,
+                                 msg='show record information'),
         _damo_subcmds.DamoSubCmd(
             name='sysinfo', module=damo_report_sysinfo,
             msg='system information'),
