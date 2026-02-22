@@ -517,10 +517,10 @@ usages recording will do nothing.
 Note: This feature is an experimental one.  Some changes could be made, or the
 support can be dropped in future.
 
-`damo record` commands records record profiling information of the system
-together with the access pattern.  Internally, it runs `perf record` while
-`damo record` is running, and store the `perf` output as a file of name same to
-the access pattern record file (specified by `--out` option of `damo record`)
+`damo record` commands records CPU usage profile information together in
+addtion to the DAMON outputs.  Internally, it runs `perf record` while `damo
+record` is running, and store the `perf` output as a file of a name same to the
+access pattern record file (specified by `--out` option of `damo record`)
 except having `.profile` suffix.  Hence, `damon.data.profile` is the default
 name of the profile information.
 
