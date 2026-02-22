@@ -637,7 +637,7 @@ for retrieving status of specific parts.
 customizable formats.  From where the data to visualize is retrieved is decided
 based on the given command line options and system status.
 
-- If `--input_file` option is given with `damo record`-generated monitoring
+- If `--input` option is given with `damo record`-generated monitoring
   results record, the record is used.
 - If no data source specification command line option is given, the source of
   data is decided based on the system status.
@@ -650,13 +650,6 @@ based on the given command line options and system status.
     `memory_idle_ms_percentiles` provides only a subset of the access pattern,
     and hence re-constructed access pattern information lacks many details and
     accuracy.
-
-Users can set it to use `damo record`-generated
-monitoring results record as the source using `--input_file` option.  If
-`--input_file` is not provided and DAMON is running, it captures snapshot from
-the running DAMON and uses it as the source.  If `--input_file` is not provided,
-DAMON is not running, but `./damon.data` file does exist, use `./damon.data` as
-`--input_file`.
 
 For example:
 
@@ -702,8 +695,8 @@ space.  The region was accessed about 10 times per second, and the frequency
 was kept for last 800 milliseconds.
 
 Final three lines show the memory bandwidth usage that is estimated from the
-snapshot, and the total size of the regions that are listed on the output,
-respectively.
+snapshot, the total size of the regions that are listed on the output, and the
+monitoring intervals that used for the snapshot, respectively.
 
 #### Access temperature
 
