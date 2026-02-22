@@ -108,16 +108,16 @@ could be deprecated and removed without any notice and grace periods.  Refer to
 [FEATURES_DEPRECATION_PROCESS.md](FEATURES_DEPRECATION_PROCESS.md) for more
 details.
 
-DAMON Availablity Check
------------------------
+DAMON Availability Check
+------------------------
 
 The first category commands require some system setups.  That is, the system
 should be configured in a way that DAMON can be used.  To check the
-availablity, please use [`damo report sysinfo`](#damo-report-sysinfo) command.
+availability, please use [`damo report sysinfo`](#damo-report-sysinfo) command.
 Please read the document [section](#damo-report-sysinfo) for more details about
 the command.
 
-Note that the visualization part of the second category commands and the thrid
+Note that the visualization part of the second category commands and the third
 category (misc helers) are independent to DAMON, and therefore can be used on
 nearly every setup.  It is common and fully supported to run DAMON and collect
 outputs of it on a machine, and do visualizations of the outputs on another
@@ -518,7 +518,7 @@ Note: This feature is an experimental one.  Some changes could be made, or the
 support can be dropped in future.
 
 `damo record` commands records CPU usage profile information together in
-addtion to the DAMON outputs.  Internally, it runs `perf record` while `damo
+addition to the DAMON outputs.  Internally, it runs `perf record` while `damo
 record` is running, and store the `perf` output as a file of a name same to the
 access pattern record file (specified by `--out` option of `damo record`)
 except having `.profile` suffix.  Hence, `damon.data.profile` is the default
@@ -601,8 +601,8 @@ available DAMON features:
 
 The first two lines of the output are straightforwardly showing the versions of
 `damo` and `kernel`.  The third line shows an inferred version of DAMON.  This
-inferrence can be useful if the kernel have DAMON features that backported from
-the mainline.  For the inferrence, `damo` checks all DAMON features that
+inference can be useful if the kernel have DAMON features that backported from
+the mainline.  For the inference, `damo` checks all DAMON features that
 available on the current system.  And it finds the available feature that
 landed on the mainline most recently.  And conclude the version of the mainline
 Linux release as the version of DAMON on the system.
@@ -748,7 +748,7 @@ temperature](#access-temperature) in percentiles.  For example,
     total size: 59.868 GiB
 
 `recency-sz-hist` style shows the distribution of per-byte idle time in
-histogram.  Anoter name of it is `cold-memory-tail`.  For example,
+histogram.  Another name of it is `cold-memory-tail`.  For example,
 
     $ sudo damo report access --style recency-sz-hist
     <idle time (us)> <total size>
@@ -945,7 +945,7 @@ snapshot visualization, each record will contain only one single snapshot.
 
 Each 'snapshot' contains multiple 'regions' information.  Each region
 information contains the monitoring results for the region including the start
-and te end addresses of the memory region, `nr_accesses`, and `age`.  The
+and the end addresses of the memory region, `nr_accesses`, and `age`.  The
 number of regions per snapshot depends on the `min_nr_regions` and
 `max_nr_regions` DAMON parameters, and actual data access pattern of the
 monitoring target address space.
