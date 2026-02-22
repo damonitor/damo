@@ -300,7 +300,7 @@ def main(args):
     print('Please execute "source %s" on your shell.' % tmp_path)
     print()
     print('Note that this works only for the current shell session.')
-    print('For permanent completion setup, save "%s" somewhere,')
+    print('For permanent completion setup, save "%s" somewhere,' % tmp_path)
     print('and modify your .bashrc like things to execute the ')
     print('"source" of the saved file for every session.')
 
