@@ -868,9 +868,9 @@ Note: This is an experimental feature at the moment.  Some changes could be
 made, or the support can be dropped in future.
 
 `damo report access` provides a highly customizable visualization formats.  It
-cannot fits all, though.  Users can implement and use their own visualization
-of the given access monitoring results in Python code using `--exec` option of
-`damo report access` be below two ways.
+still cannot fits all, though.  Users can implement and use their own
+visualization of the given access monitoring results in Python code using
+`--exec` option of `damo report access` be below two ways.
 
 Users can implement the visualization in a Python script and pass the path to
 the script with optional arguments via `--exec`.  The `--exec` parameter value
@@ -918,14 +918,15 @@ passing `interpreter` as `--exec` value.  For example:
      |      Initialize self.  See help(type(self)) for accurate signature.
     [...]
 
-`records` is a list of `DamonRecord` class that defined on
+`records` is a list of `DamonRecord` class objects that defined on
 `src/_damo_records.py` of `damo` repo.  The methods and fields could be changed
 in future, so no strict script backward compatibility is guaranteed.  Instead,
 we provide a compatibility strategy that is similar to that of Linux kernel's
 in-tree modules only API compatibility guarantee.  We will keep some `--exec`
-scripts on `report_access_exec_scripts` directory of `damo` repo, and do our
-best to keep those not broken.  Hence, if you need backward compatibility of
-your `--exec` script, please consider upstreaming it into `damo` repo.
+scripts on [`report_access_exec_scripts`](./report_access_exec_scripts/)
+directory of `damo` repo, and do our best to keep those not broken.  Hence, if
+you need backward compatibility of your `--exec` script, please consider
+upstreaming it into `damo` repo.
 
 ### DAMON Monitoring Results Structure
 
