@@ -57,60 +57,10 @@ FAQs
 What kernels are supported by `damo`?
 -------------------------------------
 
-`damo` provides three categories of commands,
-- for controlling [DAMON](https://damonitor.github.io) in kernel,
-- for processing DAMON-generated outputs such as access monitoring output, and
-- for misc helpers.
-
-Commands not in the first category are independent to the kernel.
-
-Commands of the first category depends on if DAMON features for the given
-command is available on the running kernel.  Essential DAMON features are
-available on kernels that built with `CONFIG_DAMON=y`.
-
-If the system is configured in a way that necessary DAMON features are not
-available, the `damo` commands will fail with messages informing the reason and
-how you can get help, like below.
-
-```
-$ sudo damo start
-
-DAMON is not available on this system.  Ask help to your sysadmin or DAMON
-community.
-
-To ask help to DAMON community, you can
-- send a mail to the mailing list (damon@lists.linux.dev),
-- open a damo GitHub issue (https://github.com/damonitor/damo/issues), or
-- send a mail to DAMON maintainer: sj@kernel.org
-```
-
-Follow the recommendation in the message for help.  Again, note that only
-commands in the first category depend on the kernel.
-
-To see if DAMON is available on your system without running such commands,
-`damo report sysinfo` can be used.  If the output of the command shows `DAMON
-version` as `<5.15`, DAMON is not available on the system.
-
-For example, on a system that DAMON is not available:
-
-```
-$ sudo damo report sysinfo
-damo version: v3.1.5-29-gad48ac5b
-kernel version: 6.19.0-rc6-mm-new-damon+
-DAMON version: <5.15
-```
-
-On a system that DAMON is available:
-
-```
-$ sudo damo report sysinfo --print versions
-damo version: v3.1.5-24-gfc8c0e51
-kernel version: 6.19.0-rc6-mm-new-damon+
-DAMON version: 6.19+
-```
-
-If you unsure if your kernel enables DAMON or how to enable DAMON on your
-kernel, please ask help to your kernel provider, or DAMON community.
+`damo` tries its best to support as many kernels as it can.  Some of its
+features are fully independent to the kernel, while some of the features are.
+Refer to "DAMON availability check" [usage
+section](USAGE.md#damon-availability-check) for more details.
 
 
 Where can I get more detailed usage?
