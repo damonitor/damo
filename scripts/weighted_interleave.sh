@@ -18,6 +18,12 @@ bindir=$(realpath $(dirname "$0"))
 damo_bin="$bindir/../damo"
 target_proc=$1
 
+if [ $# -ne 1 ]
+then
+	echo "Usage: $0 <target pid>"
+	exit 1
+fi
+
 if [ ! -f "$damo_bin" ]
 then
 	echo "damo not found at $damo_bin"
