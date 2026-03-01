@@ -344,7 +344,13 @@ def write_quotas_dir(dir_path, quotas):
     if err is not None:
         return err
 
-    return write_quota_goals_dir(os.path.join(dir_path, 'goals'), quotas.goals)
+    err = write_quota_goals_dir(os.path.join(dir_path, 'goals'), quotas.goals)
+    if err is not None:
+        return err
+
+    goal_tuner_file = os.path.join(dir_path, 'goal_tuner')
+    if os.path.isfile(goal_tuner_file):
+        return _damo_fs.write_file(goal_tuner_file, quotas.goal_tuner)
 
 def write_scheme_dests_dir(dir_path, dests):
     if len(dests) == 0:
@@ -815,7 +821,7 @@ def files_content_to_quotas(files_content):
                 int(files_content['weights']['age_permil'])],
             files_content_to_quota_goals(files_content['goals'])
             if 'goals' in files_content else [],
-            goal_tuner=None,
+            goal_tuner=files_content.get('goal_tuner', None),
             effective_sz_bytes=int(files_content['effective_bytes'])
             if 'effective_bytes' in files_content else 0)
 
