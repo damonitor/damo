@@ -1,6 +1,12 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v3.1.8
+- 'damo record_info': mark as will be deprecated by 2026-06-01.
+  - users can use 'damo report record_info' instead.
+- 'damo pa_layout': mark as will be deprecated by 2026-06-01.
+  - users can use 'damo report pa_layout' instead.
+
 v3.1.7
 - Wordsmith and update USAGE.
 - Add 'damo report record_info'.
