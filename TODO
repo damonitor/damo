@@ -55,6 +55,9 @@
 - Do more explicit feature check and early failures
 
 - Deprecate old features
+  - Deprecate 'damo record_info'
+  - Deprecate 'damo pa_layout'
+    - Move to 'damo report pa_layout'
   - Deprecate 'damo report raw' (done.)
   - Deprecate 'damo status' (done.)
   - Deprecate 'damo show' (done.)
