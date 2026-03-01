@@ -865,6 +865,18 @@ def warn_unsupported_damon_features_for(args):
             warn_for('--damos_quota_goal %s' % metric,
                      'sysfs/schemes_quota_goal_node_memcg_used_free')
 
+    # 6.18
+    # addr_unit is not supported
+
+    # 6.17
+    if args.refresh_stat is not None:
+        warn_for('--refresh_stat', 'sysfs/refresh_ms')
+    for damos_action in args.damos_action:
+        action = damos_action[0]
+        if not _damon.is_damos_migrate_action(action):
+            continue
+        if len(damos_action) > 2:
+            warn_for('--damos_action %s' % damos_action, 'sysfs/schemes_dests')
 
 def evaluate_args(args):
     warn_unsupported_damon_features_for(args)
