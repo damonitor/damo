@@ -1277,6 +1277,10 @@ def mk_feature_supports_map():
                          'monitoring_attrs', 'sample')):
                 supports_map['sysfs/damon_sample_control'] = True
 
+    if os.path.isfile(
+            os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goal_tuner')):
+        supports_map['sysfs/damos_quota_goal_tuner'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
 
