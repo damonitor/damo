@@ -2,13 +2,13 @@
 
 import _damo_subcmds
 import damo_nr_regions
-import damo_record_info
 import damo_report_access
 import damo_report_damon
 import damo_report_footprint
 import damo_report_heatmap
 import damo_report_holistic
 import damo_report_profile
+import damo_report_record_info
 import damo_report_sysinfo
 import damo_report_times
 import damo_wss
@@ -22,7 +22,8 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(
             name='sysinfo', module=damo_report_sysinfo,
             msg='system information'),
-        _damo_subcmds.DamoSubCmd(name='record_info', module=damo_record_info,
+        _damo_subcmds.DamoSubCmd(name='record_info',
+                                 module=damo_report_record_info,
                                  msg='show record information'),
 
         _damo_subcmds.DamoSubCmd(name='heatmap', module=damo_report_heatmap,
