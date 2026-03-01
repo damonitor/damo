@@ -815,7 +815,8 @@ def files_content_to_quotas(files_content):
                 int(files_content['weights']['age_permil'])],
             files_content_to_quota_goals(files_content['goals'])
             if 'goals' in files_content else [],
-            int(files_content['effective_bytes'])
+            goal_tuner=None,
+            effective_sz_bytes=int(files_content['effective_bytes'])
             if 'effective_bytes' in files_content else 0)
 
 def files_content_to_watermarks(files_content):

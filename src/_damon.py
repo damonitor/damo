@@ -826,6 +826,9 @@ class DamosQuotaGoal:
             ('current_value', _damo_fmt_str.format_nr(self.current_value,
                 raw))])
 
+damos_qgtuner_consist = 'consist'
+damos_qgtuner_temporal = 'temporal'
+
 class DamosQuotas:
     time_ms = None
     sz_bytes = None
@@ -834,11 +837,13 @@ class DamosQuotas:
     weight_nr_accesses_permil = None
     weight_age_permil = None
     goals = None
+    goal_tuner = None
     effective_sz_bytes = None
     scheme = None
 
     def __init__(self, time_ms=0, sz_bytes=0, reset_interval_ms='max',
-            weights=['0 %', '0 %', '0 %'], goals=[], effective_sz_bytes=0):
+            weights=['0 %', '0 %', '0 %'], goals=[], goal_tuner=None,
+                 effective_sz_bytes=0):
         self.time_ms = _damo_fmt_str.text_to_ms(time_ms)
         self.sz_bytes = _damo_fmt_str.text_to_bytes(sz_bytes)
         self.reset_interval_ms = _damo_fmt_str.text_to_ms(reset_interval_ms)
@@ -847,6 +852,10 @@ class DamosQuotas:
                 weights[1])
         self.weight_age_permil = _damo_fmt_str.text_to_permil(weights[2])
         self.goals = goals
+        if goal_tuner is None:
+            self.goal_tuner = damos_qgtuner_consist
+        else:
+            self.goal_tuner = goal_tuner
         self.effective_sz_bytes = _damo_fmt_str.text_to_bytes(
                 effective_sz_bytes)
         for goal in self.goals:
@@ -861,7 +870,8 @@ class DamosQuotas:
                 other.reset_interval_ms and self.weight_sz_permil ==
                 other.weight_sz_permil and self.weight_nr_accesses_permil ==
                 other.weight_nr_accesses_permil and self.weight_age_permil ==
-                other.weight_age_permil and self.goals == other.goals)
+                other.weight_age_permil and self.goals == other.goals and
+                self.goal_tuner == other.goal_tuner)
 
     @classmethod
     def from_kvpairs(cls, kv):
@@ -869,12 +879,13 @@ class DamosQuotas:
             goals = [DamosQuotaGoal.from_kvpairs(goal) for goal in kv['goals']]
         else:
             goals = []
+        goal_tuner = kv.get('goal_tuner', damos_qgtuner_consist)
         return DamosQuotas(kv['time_ms'], kv['sz_bytes'],
                 kv['reset_interval_ms'],
                 [kv['weights']['sz_permil'],
                     kv['weights']['nr_accesses_permil'],
                     kv['weights']['age_permil'],],
-                goals,
+                goals, goal_tuner,
                 kv['effective_sz_bytes'] if 'effective_sz_bytes' in kv else 0)
 
     def to_str(self, raw, params_only=False):
@@ -894,6 +905,8 @@ class DamosQuotas:
 
         for idx, goal in enumerate(self.goals):
             lines.append('goal %d: %s' % (idx, goal.to_str(raw)))
+        if len(self.goals) > 0:
+            lines.append('goal tuner: %s' % self.goal_tuner)
         lines.append(
             'priority: sz %s, nr_accesses %s, age %s' % (
                 _damo_fmt_str.format_permil(self.weight_sz_permil, raw),
@@ -909,6 +922,7 @@ class DamosQuotas:
             ('reset_interval_ms', _damo_fmt_str.format_time_ms_exact(
                 self.reset_interval_ms, raw)),
             ('goals', [goal.to_kvpairs(raw) for goal in self.goals]),
+            ('goal_tuner', self.goal_tuner),
             ('effective_sz_bytes',
              _damo_fmt_str.format_sz(self.effective_sz_bytes, raw)),
             ('weights', (collections.OrderedDict([
