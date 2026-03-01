@@ -327,6 +327,10 @@ features_list = [
                      upstream_status='merged in v7.0-rc1 (4835e2871321f)',
                      upstreamed_version='7.0'),
 
+        DamonFeature(name='sysfs/damos_quota_goal_tuner',
+                     upstream_status='wip on damon/next',
+                     upstreamed_version='none'),
+
         DamonFeature(name='sysfs/damon_sample_control',
                      upstream_status='hacking on damon/next',
                      upstreamed_version='none',
