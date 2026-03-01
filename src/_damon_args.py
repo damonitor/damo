@@ -877,6 +877,32 @@ def warn_unsupported_damon_features_for(args):
             continue
         if len(damos_action) > 2:
             warn_for('--damos_action %s' % damos_action, 'sysfs/schemes_dests')
+    # 6.16
+    for quota_goal in args.damos_quota_goal:
+        metric = quota_goal[0]
+        if metric in [_damon.qgoal_node_mem_used_bp,
+                      _damon.qgoal_node_mem_free_bp]:
+            warn_for('--damos_quota_goal %s' % metric,
+                     'sysfs/schemes_quota_goal_node_mem_used_free')
+
+    # 6.15
+    if args.damos_filter != []:
+        filters, err = damos_options_to_filters(args.damos_filter)
+        if err is None:
+            for filter in filters:
+                if filter.filter_type == 'active':
+                    warn_for('--damos_filter with active type',
+                             'sysfs/schemes_filters_active')
+                if filter.filter_type == 'unmapped':
+                    warn_for('--damos_filter with unmapped type',
+                             'sysfs/schemes_filters_unmapped')
+                if filter.filter_type == 'hugepage_size':
+                    warn_for('--damos_filter with hugepage_size type',
+                             'sysfs/schemes_filters_hugepage_size')
+    if args.monitoring_intervals_goal is not None:
+        warn_for('--monitoring_intervals_goal', 'sysfs/intervals_goal')
+    if args.monitoring_intervals_autotune is True:
+        warn_for('--monitoring_intervals_autotune', 'sysfs/intervals_goal')
 
 def evaluate_args(args):
     warn_unsupported_damon_features_for(args)
