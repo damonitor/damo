@@ -4,6 +4,16 @@ Deprecated, or Will be Deprecated Features
 Below are features that deprecated, or will be deprecated.  If you depend on
 any of those, please [report](REPORTING.md).
 
+`damo pa_layout`
+---------------
+
+Will be deprecated by 2026-06-01.  Use `damo report pa_layout` instead.
+
+`damo record_info`
+------------------
+
+Will be deprecated by 2026-06-01.  Use `damo report record_info` instead.
+
 `damo report raw`
 -----------------
 
