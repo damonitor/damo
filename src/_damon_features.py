@@ -304,6 +304,7 @@ features_list = [
                      upstream_status='merged in v6.19-rc1',
                      upstreamed_version='6.19'),
 
+        # v7.0-rc1 release: Sun Feb 22 13:18:59 2026 -0800
         DamonFeature(name='sysfs/damos_stat_nr_snapshots',
                      upstream_status='merged in v7.0-rc1 (4a6ceb7c9744)',
                      upstreamed_version='7.0'),
