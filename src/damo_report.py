@@ -20,12 +20,20 @@ subcmds = [
             name='damon', module=damo_report_damon,
             msg='current or recorded DAMON status'),
         _damo_subcmds.DamoSubCmd(
-            name='holistic', module=damo_report_holistic,
-            msg='holistic report'),
+            name='sysinfo', module=damo_report_sysinfo,
+            msg='system information'),
+        _damo_subcmds.DamoSubCmd(name='record_info', module=damo_record_info,
+                                 msg='show record information'),
+
         _damo_subcmds.DamoSubCmd(name='heatmap', module=damo_report_heatmap,
             msg='heatmap of access patterns'),
+        _damo_subcmds.DamoSubCmd(
+            name='holistic', module=damo_report_holistic,
+            msg='holistic report'),
+
         _damo_subcmds.DamoSubCmd(name='wss', module=damo_wss,
             msg='working set size'),
+
         _damo_subcmds.DamoSubCmd(
             name='footprints', module=damo_report_footprint,
             msg='memory footprints'),
@@ -35,11 +43,6 @@ subcmds = [
             msg='times of record having specific access pattern'),
         _damo_subcmds.DamoSubCmd(name='nr_regions', module=damo_nr_regions,
             msg='number of DAMON-regions'),
-        _damo_subcmds.DamoSubCmd(name='record_info', module=damo_record_info,
-                                 msg='show record information'),
-        _damo_subcmds.DamoSubCmd(
-            name='sysinfo', module=damo_report_sysinfo,
-            msg='system information'),
         ]
 
 def main(args):
