@@ -299,7 +299,7 @@ def damos_options_to_quota_goal(garg):
     except Exception as e:
         return None, 'DamosQuotaGoal creation fail (%s, %s)' % (garg, e)
 
-def damos_options_to_quotas(quotas, goals):
+def damos_options_to_quotas(quotas, goals, goal_tuner):
     gargs = goals
     goals = []
     for garg in gargs:
@@ -313,17 +313,17 @@ def damos_options_to_quotas(quotas, goals):
         return None, 'Wrong --damos_quotas (%s, >6 parameters)' % qargs
     try:
         quotas = _damon.DamosQuotas(*damos_quotas_cons_arg(qargs),
-                                    goals=goals)
+                                    goals=goals, goal_tuner=goal_tuner)
     except Exception as e:
         return None, 'Wrong --damos_quotas (%s, %s)' % (qargs, e)
     return quotas, None
 
 def damos_options_to_scheme(
         sz_region, access_rate, age, action,
-        apply_interval, quotas, goals, wmarks, target_nid, filters, dests,
-        max_nr_snapshots):
+        apply_interval, quotas, goals, goal_tuner, wmarks, target_nid, filters,
+        dests, max_nr_snapshots):
     if quotas != None:
-        quotas, err = damos_options_to_quotas(quotas, goals)
+        quotas, err = damos_options_to_quotas(quotas, goals, goal_tuner)
         if err is not None:
             return None, err
 
@@ -426,6 +426,8 @@ def fillup_default_damos_args(args):
     args.damos_apply_interval += [0] * (
             nr_schemes - len(args.damos_apply_interval))
     args.damos_quotas += [None] * (nr_schemes - len(args.damos_quotas))
+    args.damos_quota_goal_tuner += [None] * (
+            nr_schemes - len(args.damos_quota_goal_tuner))
     args.damos_wmarks += [None] * (nr_schemes - len(args.damos_wmarks))
     args.damos_max_nr_snapshots += [None] * (
             nr_schemes - len(args.damos_max_nr_snapshots))
@@ -477,8 +479,9 @@ def damos_options_to_schemes(args):
                 args.damos_sz_region[i],
                 args.damos_access_rate[i], args.damos_age[i],
                 args.damos_action[i], args.damos_apply_interval[i],
-                args.damos_quotas[i], qgoals, args.damos_wmarks[i],
-                target_nid, filters, dests, args.damos_max_nr_snapshots[i])
+                args.damos_quotas[i], qgoals, args.damos_quota_goal_tuner[i],
+                args.damos_wmarks[i], target_nid, filters, dests,
+                args.damos_max_nr_snapshots[i])
         if err != None:
             return [], err
         schemes.append(scheme)
@@ -852,6 +855,9 @@ def warn_unsupported_damon_features_for(args):
     # damon/next
     if args.sample_primitives is not None:
         warn_for('--sample_primitives', 'sysfs/damon_sample_control')
+
+    if args.damos_quota_goal_tuner != []:
+        warn_for('--damos_quota_goal_tuner', 'sysfs/damos_quota_goal_tuner')
 
     # 7.0
     for quota_goal in args.damos_quota_goal:
@@ -1341,6 +1347,9 @@ def set_damos_argparser(parser, hide_help):
                 '<metric> should be {%s}.' %
                 ','.join(_damon.qgoal_metrics)])
             if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--damos_quota_goal_tuner', action='append', default=[],
+            help='quota\'s goal-based tuner')
     parser.add_argument(
             '--damos_nr_quota_goals', type=int, nargs='+',
             default=[], metavar='<integer>',
