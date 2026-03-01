@@ -53,8 +53,6 @@
   - 'damo tune' works for module kdamonds
   - 'damo monitor' works for module kdamonds
 - Do more explicit feature check and early failures
-- damo report record_info: print address in bytes level
-  - And update 'heatmap scoping' usage section
 
 - Deprecate old features
   - Deprecate 'damo report raw' (done.)
