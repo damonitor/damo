@@ -9,12 +9,14 @@ import signal
 import time
 
 import _damo_records
+import _damo_sysinfo
 import _damon
 import _damon_args
 import _damon_modules
 
 def handle_modules():
-    for module in os.listdir('/sys/module'):
+    sysinfo = _damo_sysinfo.get_sysinfo_or_panic()
+    for module in os.listdir(os.path.join(sysinfo.sysfs_path, 'module')):
         if not module.startswith('damon_'):
             continue
         if not _damon_modules.module_running(module):
