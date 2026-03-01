@@ -8,6 +8,7 @@ import argparse
 import json
 import os
 import subprocess
+import sys
 
 # for non-python-default modules
 try:
@@ -833,7 +834,41 @@ def deduce_target_update_args(args):
             print('warning: override --ops by <deducible target> and --regions')
         args.ops = ['fvaddr']
 
+def warn_for(arg, feature):
+    if _damo_sysinfo.damon_feature_available(feature):
+        return
+    sys.stderr.write('%s is passed but %s DAMON feature is not available' %
+                     (arg, feature))
+
+def warn_unsupported_damon_features_for(args):
+    # damon/next
+    if args.sample_primitives is not None:
+        warn_for('--sample_primitives', 'sysfs/damon_sample_control')
+
+    # 7.0
+    for quota_goal in args.damos_quota_goal:
+        metric = quota_goal[0]
+        if metric in [_damon.qgoal_inactive_mem_bp,
+                      _damon.qgoal_active_mem_bp]:
+            warn_for('--damos_quota_goal %s' % metric,
+                     'sysfs/damos_quota_goal_in_active_mem_bp')
+    if args.damos_max_nr_snapshots != []:
+        warn_for('--damos_max_nr_snapshots', 'sysfs/damos_max_nr_snapshots')
+
+    # 6.19
+    if args.obsolete_targets is not None:
+        warn_for('--obsolete_targets', 'sysfs/obsolete_target')
+    for quota_goal in args.damos_quota_goal:
+        metric = quota_goal[0]
+        if metric in [_damon.qgoal_node_memcg_used_bp,
+                      _damon.qgoal_node_memcg_free_bp]:
+            warn_for('--damos_quota_goal %s' % metric,
+                     'sysfs/schemes_quota_goal_node_memcg_used_free')
+
+
 def evaluate_args(args):
+    warn_unsupported_damon_features_for(args)
+
     '''
     Verify if 'damons_action' is present when any 'damos_*' is specified
     '''
