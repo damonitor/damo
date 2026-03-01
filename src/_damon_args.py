@@ -840,6 +840,14 @@ def warn_for(arg, feature):
     sys.stderr.write('%s is passed but %s DAMON feature is not available' %
                      (arg, feature))
 
+def warn_for_features(arg, features):
+    for feature in features:
+        if _damo_sysinfo.damon_feature_available(feature):
+            return
+    sys.stderr.write(
+            '%s is passed but any of %s DAMON features is not available' %
+            (arg, ', '.join(features)))
+
 def warn_unsupported_damon_features_for(args):
     # damon/next
     if args.sample_primitives is not None:
@@ -981,8 +989,33 @@ def warn_unsupported_damon_features_for(args):
     if args.deducible_target == 'fvaddr':
         warn_for('fvaddr', 'sysfs/fvaddr')
 
+    # 5.16-5.18
+    if args.damos_wmarks != []:
+        warn_for_features('--damos_wmarks',
+                          ['sysfs/schemes_wmarks', 'debugfs/schemes_wmarks'])
+    if args.damos_quota_space != []:
+        warn_for_features(
+                '--damos_quota_space',
+                ['sysfs/schemes_size_quota', 'debugfs/schemes_size_quota'])
+    if args.damos_quota_time != []:
+        warn_for_features(
+                '--damos_quota_time',
+                ['sysfs/schemes_time_quota', 'debugfs/schemes_time_quota'])
+    if args.regions is not None:
+        warn_for_features(
+                '--regions', ['sysfs/init_regions', 'debugfs/init_regions'])
+    if args.ops is not None and 'paddr' in args.ops:
+        warn_for_features('--ops paddr', ['sysfs/paddr', 'debugfs/paddr'])
+    if args.deducible_target == 'paddr':
+        warn_for_features('ops paddr', ['sysfs/paddr', 'debugfs/paddr'])
+    if args.damos_action is not None:
+        warn_for_features(
+                '--damos_action', ['sysfs/schemes', 'debugfs/schemes'])
 
-
+    # 5.15-5.18
+    # TODO: in future, we might support modules with 'damo start'...
+    warn_for_features('damon control request',
+                      ['interface/damon_debugfs', 'interface/damon_sysfs'])
 
 def evaluate_args(args):
     warn_unsupported_damon_features_for(args)
