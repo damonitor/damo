@@ -216,9 +216,18 @@ def report_sysinfo_candidates(words, cword):
              Option('--invalidate_cache', 0, False, None),
              ])
 
+def report_record_info_candidates(words, cword):
+    return get_candidates(
+            words[3:], cword - 3,
+            [Option(name='--raw_numbers', nr_args=0, repeatable=False,
+                    positional_candidates=None,
+                    non_positional_candidates=None),
+             ])
+
 def report_candidates(words, cword):
     if cword == 2:
-        return ['access', 'damon holistic', 'heatmap', 'sysinfo']
+        return ['access', 'damon holistic', 'heatmap', 'sysinfo',
+                'record_info']
     report_type = words[2]
     if report_type == 'access':
         return report_access_candidates(words, cword)
@@ -226,6 +235,8 @@ def report_candidates(words, cword):
         return report_damon_candidates(words, cword)
     if report_type == 'sysinfo':
         return report_sysinfo_candidates(words, cword)
+    if report_type == 'record_info':
+        return report_record_info_candidates(words, cword)
     return []
 
 def monitor_candidates(words, cword):
