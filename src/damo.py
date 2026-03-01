@@ -99,7 +99,11 @@ subcmds = [
             msg='generate a report on if DAMON is malfunctioning'),
         _damo_subcmds.DamoSubCmd(name='pa_layout',
             module=damo_pa_layout,
-            msg='show physical address layout'),
+            msg=''.join([
+                'show physical address layout ',
+                '(WILL BE DEPRECATED by 2026-06-01; ',
+                'use "damo report pa_layout" instead)',
+            ])),
         ]
 
 class SubCmdHelpFormatter(argparse.RawDescriptionHelpFormatter):
