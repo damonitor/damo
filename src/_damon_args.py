@@ -904,6 +904,28 @@ def warn_unsupported_damon_features_for(args):
     if args.monitoring_intervals_autotune is True:
         warn_for('--monitoring_intervals_autotune', 'sysfs/intervals_goal')
 
+    # 6.14
+    # allow_filter is supported in damo itself if the DAMON feature is
+    # unavailable.
+    # sz_ops_filter_passed should be checked on other place.
+
+    # 6.11
+    for damos_action in args.damos_action:
+        action = damos_action[0]
+        if _damon.is_damos_migrate_action(action):
+            warn_for('--damos_action %s' % damos_action,
+                     'sysfs/schemes_migrate')
+
+    # 6.10
+    if args.damos_filter != []:
+        filters, err = damos_options_to_filters(args.damos_filter)
+        if err is None:
+            for filter in filters:
+                if filter.filter_type == 'young':
+                    warn_for('--damos_filter with young type',
+                             'sysfs/scheme_filters_young')
+
+
 def evaluate_args(args):
     warn_unsupported_damon_features_for(args)
 
