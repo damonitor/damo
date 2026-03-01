@@ -3,6 +3,8 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.1.8
 - 'damo start', 'damo tune': Warn DAMON feature-command arguments mismatches.
+- Support DAMOS quota goal tuner via --damos_quota_goal_tuner
+  (https://lore.kernel.org/20260212062314.69961-1-sj@kernel.org)
 - 'damo record_info': mark as will be deprecated by 2026-06-01.
   - 'damo report record_info' can be used instead.
 - 'damo pa_layout': mark as will be deprecated by 2026-06-01.
