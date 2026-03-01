@@ -56,8 +56,15 @@
 
 - Deprecate old features
   - Deprecate 'damo record_info'
+    - show warning on stderr by 2026-04-01
+    - mark as deprecated by 2026-06-01
+    - break feature by 2026-07-01
+    - remove by 2026-08-01
   - Deprecate 'damo pa_layout'
-    - Move to 'damo report pa_layout'
+    - Show warning on stderr by 2026-04-01
+    - mark as deprecated by 2026-06-01
+    - break feature by 2026-07-01
+    - remove by 2026-08-01
   - Deprecate 'damo report raw' (done.)
   - Deprecate 'damo status' (done.)
   - Deprecate 'damo show' (done.)
