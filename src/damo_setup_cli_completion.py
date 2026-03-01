@@ -148,6 +148,11 @@ def damon_param_candidates(words, cword):
                 Option('--damos_quota_interval', 1, True),
                 Option('--damos_quota_space', 1, True),
                 Option('--damos_quota_goal', -1, True, [_damon.qgoal_metrics]),
+                Option(name='--damos_quota_goal_tuner', nr_args=1,
+                       repeatable=True,
+                       positional_candidates=[
+                           [_damon.damos_qgtuner_consist,
+                            _damon.damos_qgtuner_temporal]]),
                 Option('--damos_filter', -1, True,
                        damos_filter_positional_candids),
                 ])
