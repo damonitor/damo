@@ -7,6 +7,7 @@ import damo_report_damon
 import damo_report_footprint
 import damo_report_heatmap
 import damo_report_holistic
+import damo_report_pa_layout
 import damo_report_profile
 import damo_report_record_info
 import damo_report_sysinfo
@@ -31,6 +32,10 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(
             name='holistic', module=damo_report_holistic,
             msg='holistic report'),
+
+        _damo_subcmds.DamoSubCmd(
+            name='pa_layout', module=damo_report_pa_layout,
+            msg='physical address layout'),
 
         _damo_subcmds.DamoSubCmd(name='wss', module=damo_wss,
             msg='working set size'),
