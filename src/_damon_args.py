@@ -923,8 +923,27 @@ def warn_unsupported_damon_features_for(args):
             for filter in filters:
                 if filter.filter_type == 'young':
                     warn_for('--damos_filter with young type',
-                             'sysfs/scheme_filters_young')
+                             'sysfs/schemes_filters_young')
 
+    # 6.9
+    for quota_goal in args.damos_quota_goal:
+        metric = quota_goal[0]
+        if metric == _damon.qgoal_some_mem_psi_us:
+            warn_for('--damos_quota_goal %s' % metric,
+                     'sysfs/schemes_quota_goal_some_psi')
+    if args.damos_quota_goal != []:
+        if metric != 'user_input':
+            warn_for('--damos_quota_goal with non-user_input',
+                     'sysfs/schemes_quota_goal_metric')
+    # quota_effective_bytes should be checked in different places.
+
+    # 6.8
+    if args.damos_quota_goal != []:
+        warn_for('--damos_quota_goal', 'sysfs/schemes_quota_goals')
+
+    # 6.7
+    if args.damos_apply_interval != []:
+        warn_for('--damos_apply_interval', 'sysfs/schemes_apply_interval')
 
 def evaluate_args(args):
     warn_unsupported_damon_features_for(args)
