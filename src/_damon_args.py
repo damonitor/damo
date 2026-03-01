@@ -945,6 +945,45 @@ def warn_unsupported_damon_features_for(args):
     if args.damos_apply_interval != []:
         warn_for('--damos_apply_interval', 'sysfs/schemes_apply_interval')
 
+    # 6.6
+    if args.damos_filter != []:
+        filters, err = damos_options_to_filters(args.damos_filter)
+        if err is None:
+            for filter in filters:
+                if filter.filter_type == 'target':
+                    warn_for('--damos_filter with target type',
+                             'sysfs/schemes_filters_target')
+                if filter.filter_type == 'addr':
+                    warn_for('--damos_filter with addr type',
+                             'sysfs/schemes_filters_addr')
+    # schemes_tried_regions_sz should be checked in different places.
+
+    # 6.3
+    if args.damos_filter != []:
+        filters, err = damos_options_to_filters(args.damos_filter)
+        if err is None:
+            for filter in filters:
+                if filter.filter_type == 'memcg':
+                    warn_for('--damos_filter with memcg type',
+                             'sysfs/schemes_filters_memcg')
+                if filter.filter_type == 'anon':
+                    warn_for('--damos_filter with anon type',
+                             'sysfs/schemes_filters_anon')
+    if args.damos_filter != []:
+        warn_for('--damos_filter', 'sysfs/schemes_filters')
+
+    # 6.2
+    # schemes_tried_regions should be checked in different places.
+
+    # 5.19
+    if args.ops is not None and 'fvaddr' in args.ops:
+        warn_for('--ops fvaddr', 'sysfs/fvaddr')
+    if args.deducible_target == 'fvaddr':
+        warn_for('fvaddr', 'sysfs/fvaddr')
+
+
+
+
 def evaluate_args(args):
     warn_unsupported_damon_features_for(args)
 
