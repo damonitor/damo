@@ -1369,6 +1369,7 @@ class Damos:
 class DamonCtx:
     ops = None
     ops_attrs = None
+    addr_unit = None
     targets = None
     intervals = None
     nr_regions = None
@@ -1378,9 +1379,13 @@ class DamonCtx:
 
     def __init__(self, ops='paddr', targets=None, intervals=None,
                  nr_regions=None, schemes=None, ops_attrs=None,
-                 sample_control=None):
+                 sample_control=None, addr_unit=None):
         self.ops = ops
         self.ops_attrs = ops_attrs if ops_attrs is not None else OpsAttrs()
+        if addr_unit is None:
+            self.addr_unit = 1
+        else:
+            self.addr_unit = _damo_fmt_str.text_to_bytes(addr_unit)
         self.targets = targets if targets is not None else []
         for target in self.targets:
             target.context = self
@@ -1403,6 +1408,10 @@ class DamonCtx:
             ops_line_tokens.append('threads %s' % self.ops_attrs.tids)
         if self.ops_attrs.write_only:
             ops_line_tokens.append('write-only')
+        if self.addr_unit != 1:
+            ops_line_tokens.append(
+                    'addr_unit %s' % _damo_fmt_str.format_sz_accurate(
+                        self.addr_unit, raw))
         lines = [' '.join(ops_line_tokens)]
         for idx, target in enumerate(self.targets):
             lines.append('target %d' % idx)
@@ -1439,6 +1448,7 @@ class DamonCtx:
                     kv['sample_control'])
         else:
             sample_control = DamonSampleControl()
+        addr_unit = kv.get('addr_unit', 1)
         ctx = DamonCtx(
                 kv['ops'],
                 [DamonTarget.from_kvpairs(t) for t in kv['targets']],
@@ -1448,12 +1458,14 @@ class DamonCtx:
                     if 'nr_regions' in kv else DamonNrRegionsRange(),
                 [Damos.from_kvpairs(s) for s in kv['schemes']]
                     if 'schemes' in kv else [],
-                sample_control=sample_control)
+                sample_control=sample_control,
+                addr_unit=addr_unit)
         return ctx
 
     def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
         kv = collections.OrderedDict({})
         kv['ops'] = self.ops
+        kv['addr_unit'] = _damo_fmt_str.format_sz_accurate(self.addr_unit, raw)
         kv['targets'] = [t.to_kvpairs(raw) for t in self.targets]
         if not omit_defaults or self.intervals != DamonIntervals():
             kv['intervals'] = self.intervals.to_kvpairs(raw)
