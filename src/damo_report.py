@@ -12,6 +12,7 @@ import damo_report_profile
 import damo_report_record_info
 import damo_report_sysinfo
 import damo_report_times
+import damo_report_trace
 import damo_wss
 
 subcmds = [
@@ -49,6 +50,9 @@ subcmds = [
             msg='times of record having specific access pattern'),
         _damo_subcmds.DamoSubCmd(name='nr_regions', module=damo_nr_regions,
             msg='number of DAMON-regions'),
+        _damo_subcmds.DamoSubCmd(name='trace', module=damo_report_trace,
+            msg='trace events'),
+
         ]
 
 def main(args):
