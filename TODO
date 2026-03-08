@@ -52,7 +52,6 @@
   - 'damo record' works for module kdamonds
   - 'damo tune' works for module kdamonds
   - 'damo monitor' works for module kdamonds
-- Support sysfs/addr_unit setup
 
 - Deprecate old features
   - Deprecate 'damo record_info'
