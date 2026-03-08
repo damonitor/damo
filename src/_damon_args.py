@@ -617,11 +617,15 @@ def damon_ctx_for(args, idx):
     sample_control, ops_attrs, err = build_sample_control_ops_attrs(args, idx)
     if err is not None:
         return None, 'exp_ops_* handling fail (%s)' % err
+    addr_unit = args.damon_addr_unit[idx]
+    if addr_unit is None:
+        addr_unit = 1
 
     try:
         ctx = _damon.DamonCtx(
                 ops, None, intervals, nr_regions, schemes=[],
-                sample_control=sample_control, ops_attrs=ops_attrs)
+                sample_control=sample_control, ops_attrs=ops_attrs,
+                addr_unit=addr_unit)
         return ctx, None
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
@@ -656,7 +660,8 @@ def fillup_none_ctx_args(args):
             'ops', 'exp_ops_use_reports', 'exp_ops_write_only', 'exp_ops_cpus',
             'exp_ops_tids', 'sample', 'aggr', 'updr', 'minr', 'maxr',
             'monitoring_intervals', 'monitoring_intervals_goal',
-            'monitoring_nr_regions_range', 'sample_primitives']:
+            'monitoring_nr_regions_range', 'sample_primitives',
+            'damon_addr_unit']:
         attr_val = getattr(args, attr_name)
         if attr_val is None:
             setattr(args, attr_name, [None] * nr_ctxs)
@@ -880,7 +885,11 @@ def warn_unsupported_damon_features_for(args):
                      'sysfs/schemes_quota_goal_node_memcg_used_free')
 
     # 6.18
-    # addr_unit is not supported
+    if args.damon_addr_unit is not None:
+        for addr_unit in args.damon_addr_unit:
+            if addr_unit != 1:
+                warn_for('--damon_addr_unit', 'sysfs/addr_unit')
+                break
 
     # 6.17
     if args.refresh_stat is not None:
@@ -1054,6 +1063,13 @@ def evaluate_args(args):
 
     return True, None
 
+def verify_kdamonds(kdamonds):
+    for kd in kdamonds:
+        for ctx in kd.contexts:
+            if ctx.ops != 'paddr' and ctx.addr_unit != 1:
+                return 'only paddr supports non-one --damon_addr_unit'
+    return None
+
 def kdamonds_for(args):
     correct, err = evaluate_args(args)
     if err is not None:
@@ -1098,6 +1114,10 @@ def kdamonds_for(args):
         except Exception as e:
             return None, 'kdamond creation fail (%s)' % e
         ctx_idx += nr
+
+    err = verify_kdamonds(kdamonds)
+    if err is not None:
+        return None, err
     return kdamonds, None
 
 def self_started_target(args):
@@ -1256,6 +1276,9 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
     parser.add_argument(
             '--refresh_stat', metavar='<milliseconds>', action='append',
             help='automatic kdamond internal stat refresh interval')
+    parser.add_argument(
+            '--damon_addr_unit', metavar='<bytes>', action='append',
+            help='DAMON address unit')
 
 def set_monitoring_argparser(parser, hide_help=False):
     parser.add_argument('--target_pid', type=int, metavar='<pid>',
