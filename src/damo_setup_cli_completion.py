@@ -244,10 +244,23 @@ def report_pa_layout_candidates(words, cword):
                        non_positional_candidates=None),
                 ])
 
+def report_trace_candidates(words, cword):
+    return get_candidates(
+            words[3:], cword - 3,
+            [
+                Option(name='--event', nr_args=-1, repeatable=False,
+                       non_positional_candidates=[
+                           'damon:damon_aggregated',
+                           'damon:damos_before_apply',
+                           'damon:damon_monitor_intervals_tune',
+                           'damon:damos_esz',
+                           'damon:damos_stat_after_apply_interval']),
+                ])
+
 def report_candidates(words, cword):
     if cword == 2:
         return ['access', 'damon holistic', 'heatmap', 'sysinfo',
-                'record_info', 'pa_layout']
+                'record_info', 'pa_layout', 'trace']
     report_type = words[2]
     if report_type == 'access':
         return report_access_candidates(words, cword)
@@ -259,6 +272,8 @@ def report_candidates(words, cword):
         return report_record_info_candidates(words, cword)
     if report_type == 'pa_layout':
         return report_pa_layout_candidates(words, cword)
+    if report_type == 'trace':
+        return report_trace_candidates(words, cword)
     return []
 
 def monitor_candidates(words, cword):
