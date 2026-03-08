@@ -3,6 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.1.9
 - Support 'addr_unit' DAMON parameter (--damon_addr_unit).
+- Introducee 'damo report trace'.
 
 v3.1.8
 - 'damo start', 'damo tune': Warn DAMON feature-command arguments mismatches.
