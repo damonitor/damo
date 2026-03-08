@@ -19,6 +19,8 @@ def signalhandler(signum, frame):
             pass
     exit(0)
 
+damon_trace_events = _damo_sysinfo.tracepoint_to_feature_name_map.keys()
+
 def main(args):
     global tracer_pipe
 
@@ -27,6 +29,9 @@ def main(args):
     if args.event is None:
         print('--event is required')
         exit(1)
+
+    if 'all' in args.event:
+        args.event = damon_trace_events
 
     if _damo_subproc.avail_cmd('perf'):
         cmd = ['perf', 'trace']
@@ -48,8 +53,6 @@ def main(args):
         print(output.decode(), end='')
 
 def set_argparser(parser):
-    damon_tracepoints = list(
-            _damo_sysinfo.tracepoint_to_feature_name_map.keys())
     parser.add_argument(
-            '--event', choices=damon_tracepoints + ['all'], nargs='+',
+            '--event', choices=list(damon_trace_events) + ['all'], nargs='+',
             help='events to trace')
