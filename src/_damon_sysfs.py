@@ -660,6 +660,11 @@ def write_monitoring_attrs_dir(dir_path, context):
     return write_sample_control_dir(
             os.path.join(dir_path, 'sample'), context.sample_control)
 
+def write_pause(pause_file, pause_val):
+    if not os.path.isfile(pause_file):
+        return None
+    return _damo_fs.write_file(pause_file, 'Y' if pause_val else 'N')
+
 def write_addr_unit(addr_unit_file, addr_unit_val):
     if not os.path.isfile(addr_unit_file):
         return None
@@ -678,6 +683,10 @@ def write_context_dir(dir_path, context):
 
     err = write_monitoring_attrs_dir(
             os.path.join(dir_path, 'monitoring_attrs'), context)
+    if err is not None:
+        return err
+
+    err = write_pause(os.path.join(dir_path, 'pause'), context.pause)
     if err is not None:
         return err
 
@@ -1020,6 +1029,10 @@ def files_content_to_context(files_content):
                 files_content['operations_attrs'])
     else:
         ops_attrs = _damon.OpsAttrs()
+    if 'pause' in files_content:
+        pause = files_content['pause'].strip()
+    else:
+        pause = False
     addr_unit = files_content.get('addr_unit', 1)
 
     targets_content = files_content['targets']
@@ -1034,7 +1047,7 @@ def files_content_to_context(files_content):
 
     return _damon.DamonCtx(ops, targets, intervals, nr_regions, schemes,
                            ops_attrs=ops_attrs, sample_control=sample_control,
-                           addr_unit=addr_unit)
+                           pause=pause, addr_unit=addr_unit)
 
 def files_content_to_kdamond(files_content):
     contexts_content = files_content['contexts']
