@@ -324,6 +324,17 @@ def write_quota_weights_dir(dir_path, quotas):
     return _damo_fs.write_file(os.path.join(dir_path, 'age_permil'),
                               '%d' % quotas.weight_age_permil)
 
+def write_quota_fail_charge_ratio_files(dir_path, quotas):
+    num_file = os.path.join(dir_path, 'fail_charge_num')
+    if not os.path.isfile(num_file):
+        return None
+    err = _damo_fs.write_file(num_file, '%d' % quotas.fail_charge_num)
+    if err is not None:
+        return err
+
+    denom_file = os.path.join(dir_path, 'fail_charge_denom')
+    return _damo_fs.write_file(denom_file, '%d' % quotas.fail_charge_denom)
+
 def write_quotas_dir(dir_path, quotas):
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'ms'), '%d' % quotas.time_ms)
@@ -341,6 +352,10 @@ def write_quotas_dir(dir_path, quotas):
         return err
 
     err = write_quota_weights_dir(os.path.join(dir_path, 'weights'), quotas)
+    if err is not None:
+        return err
+
+    err = write_quota_fail_charge_ratio_files(dir_path, quotas)
     if err is not None:
         return err
 
