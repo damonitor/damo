@@ -1259,6 +1259,9 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
                         action='append',
                         help='monitoring operations set'
                         if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--pause_ctx', type=int, nargs='+', metavar='<context index>',
+            help='contexts to pause')
     parser.add_argument('--exp_ops_use_reports', action='append',
                         metavar='<Y|N>',
                         help='use access reports (experimental)'
