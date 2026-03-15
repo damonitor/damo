@@ -836,6 +836,8 @@ class DamosQuotas:
     weight_sz_permil = None
     weight_nr_accesses_permil = None
     weight_age_permil = None
+    fail_charge_num = None
+    fail_charge_denom = None
     goals = None
     goal_tuner = None
     effective_sz_bytes = None
@@ -843,7 +845,8 @@ class DamosQuotas:
 
     def __init__(self, time_ms=0, sz_bytes=0, reset_interval_ms='max',
             weights=['0 %', '0 %', '0 %'], goals=[], goal_tuner=None,
-                 effective_sz_bytes=0):
+                 effective_sz_bytes=0,
+                 fail_charge_num=0, fail_charge_denom=0):
         self.time_ms = _damo_fmt_str.text_to_ms(time_ms)
         self.sz_bytes = _damo_fmt_str.text_to_bytes(sz_bytes)
         self.reset_interval_ms = _damo_fmt_str.text_to_ms(reset_interval_ms)
@@ -851,6 +854,8 @@ class DamosQuotas:
         self.weight_nr_accesses_permil = _damo_fmt_str.text_to_permil(
                 weights[1])
         self.weight_age_permil = _damo_fmt_str.text_to_permil(weights[2])
+        self.fail_charge_num = _damo_fmt_str.text_to_nr(fail_charge_num)
+        self.fail_charge_denom = _damo_fmt_str.text_to_nr(fail_charge_denom)
         self.goals = goals
         if goal_tuner is None:
             self.goal_tuner = damos_qgtuner_consist
@@ -870,7 +875,10 @@ class DamosQuotas:
                 other.reset_interval_ms and self.weight_sz_permil ==
                 other.weight_sz_permil and self.weight_nr_accesses_permil ==
                 other.weight_nr_accesses_permil and self.weight_age_permil ==
-                other.weight_age_permil and self.goals == other.goals and
+                other.weight_age_permil and
+                self.fail_charge_num == other.fail_charge_num and
+                self.fail_charge_denom == other.fail_charge_denom and
+                self.goals == other.goals and
                 self.goal_tuner == other.goal_tuner)
 
     @classmethod
@@ -880,13 +888,17 @@ class DamosQuotas:
         else:
             goals = []
         goal_tuner = kv.get('goal_tuner', damos_qgtuner_consist)
+        fail_charge_num = kv.get('fail_charge_num', 0)
+        fail_charge_denom = kv.get('fail_charge_denom', 0)
         return DamosQuotas(kv['time_ms'], kv['sz_bytes'],
                 kv['reset_interval_ms'],
                 [kv['weights']['sz_permil'],
                     kv['weights']['nr_accesses_permil'],
                     kv['weights']['age_permil'],],
                 goals, goal_tuner,
-                kv['effective_sz_bytes'] if 'effective_sz_bytes' in kv else 0)
+                kv['effective_sz_bytes'] if 'effective_sz_bytes' in kv else 0,
+                fail_charge_num=fail_charge_num,
+                fail_charge_denom=fail_charge_denom)
 
     def to_str(self, raw, params_only=False):
         if params_only is False:
@@ -902,6 +914,9 @@ class DamosQuotas:
                     _damo_fmt_str.format_time_ns(self.time_ms * 1000000, raw),
                     _damo_fmt_str.format_sz(self.sz_bytes, raw),
                     _damo_fmt_str.format_time_ms(self.reset_interval_ms, raw))]
+        if self.fail_charge_denom != 0:
+            lines.append('fail charge ratio: %d/%d/' %
+                         (self.fail_charge_num, self.fail_charge_denom))
 
         for idx, goal in enumerate(self.goals):
             lines.append('goal %d: %s' % (idx, goal.to_str(raw)))
@@ -921,6 +936,10 @@ class DamosQuotas:
             ('sz_bytes', _damo_fmt_str.format_sz(self.sz_bytes, raw)),
             ('reset_interval_ms', _damo_fmt_str.format_time_ms_exact(
                 self.reset_interval_ms, raw)),
+            ('fail_charge_num',
+             _damo_fmt_str.format_nr(self.fail_charge_num, raw)),
+            ('fail_charge_denom',
+             _damo_fmt_str.format_nr(self.fail_charge_denom, raw)),
             ('goals', [goal.to_kvpairs(raw) for goal in self.goals]),
             ('goal_tuner', self.goal_tuner),
             ('effective_sz_bytes',
