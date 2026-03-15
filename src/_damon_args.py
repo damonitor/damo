@@ -617,6 +617,9 @@ def damon_ctx_for(args, idx):
     sample_control, ops_attrs, err = build_sample_control_ops_attrs(args, idx)
     if err is not None:
         return None, 'exp_ops_* handling fail (%s)' % err
+    pause = False
+    if args.pause_ctx is not None and idx in args.pause_ctx:
+        pause = True
     addr_unit = args.damon_addr_unit[idx]
     if addr_unit is None:
         addr_unit = 1
@@ -625,7 +628,7 @@ def damon_ctx_for(args, idx):
         ctx = _damon.DamonCtx(
                 ops, None, intervals, nr_regions, schemes=[],
                 sample_control=sample_control, ops_attrs=ops_attrs,
-                addr_unit=addr_unit)
+                pause=pause, addr_unit=addr_unit)
         return ctx, None
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
