@@ -328,7 +328,7 @@ features_list = [
                      upstreamed_version='7.0'),
 
         DamonFeature(name='sysfs/damos_quota_goal_tuner',
-                     upstream_status='wip on damon/next',
+                     upstream_status='merged in mm.git',
                      upstreamed_version='none'),
 
         DamonFeature(name='sysfs/damon_sample_control',
