@@ -1374,12 +1374,13 @@ class DamonCtx:
     intervals = None
     nr_regions = None
     sample_control = None
+    pause = None
     schemes = None
     kdamond = None
 
     def __init__(self, ops='paddr', targets=None, intervals=None,
                  nr_regions=None, schemes=None, ops_attrs=None,
-                 sample_control=None, addr_unit=None):
+                 sample_control=None, addr_unit=None, pause=None):
         self.ops = ops
         self.ops_attrs = ops_attrs if ops_attrs is not None else OpsAttrs()
         if addr_unit is None:
@@ -1396,6 +1397,9 @@ class DamonCtx:
         if sample_control is None:
             sample_control = DamonSampleControl()
         self.sample_control = sample_control
+        if pause is None:
+            pause = False
+        self.pause = _damo_fmt_str.text_to_bool(pause)
         self.schemes = schemes if schemes is not None else []
         for scheme in self.schemes:
             scheme.context = self
@@ -1413,6 +1417,8 @@ class DamonCtx:
                     'addr_unit %s' % _damo_fmt_str.format_sz_accurate(
                         self.addr_unit, raw))
         lines = [' '.join(ops_line_tokens)]
+        if self.pause is True:
+            lines.append('pause: True')
         for idx, target in enumerate(self.targets):
             lines.append('target %d' % idx)
             lines.append(_damo_fmt_str.indent_lines(target.to_str(raw), 4))
@@ -1449,6 +1455,7 @@ class DamonCtx:
         else:
             sample_control = DamonSampleControl()
         addr_unit = kv.get('addr_unit', 1)
+        pause = _damo_fmt_str.text_to_bool(kv.get('pause', False))
         ctx = DamonCtx(
                 kv['ops'],
                 [DamonTarget.from_kvpairs(t) for t in kv['targets']],
@@ -1459,7 +1466,8 @@ class DamonCtx:
                 [Damos.from_kvpairs(s) for s in kv['schemes']]
                     if 'schemes' in kv else [],
                 sample_control=sample_control,
-                addr_unit=addr_unit)
+                addr_unit=addr_unit,
+                pause=pause)
         return ctx
 
     def to_kvpairs(self, raw=False, omit_defaults=False, params_only=False):
@@ -1472,6 +1480,7 @@ class DamonCtx:
         if not omit_defaults or self.nr_regions != DamonNrRegionsRange():
             kv['nr_regions'] = self.nr_regions.to_kvpairs(raw)
         kv['sample_control'] = self.sample_control.to_kvpairs(raw)
+        kv['pause'] = self.pause
         kv['schemes'] = [s.to_kvpairs(raw, omit_defaults, params_only)
                          for s in self.schemes]
         return kv

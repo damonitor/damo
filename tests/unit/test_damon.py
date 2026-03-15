@@ -52,7 +52,7 @@ class TestDamon(unittest.TestCase):
         self.assertEqual(type(ctx_kvpairs), collections.OrderedDict)
         self.assertEqual(list(ctx_kvpairs.keys()),
                 ['ops', 'addr_unit', 'targets', 'intervals', 'nr_regions',
-                 'sample_control', 'schemes'])
+                 'sample_control', 'pause', 'schemes'])
         self.assertEqual(ctx, _damon.DamonCtx.from_kvpairs(ctx_kvpairs))
 
         kdamond = _damon.Kdamond('off', 123, [ctx])
