@@ -154,6 +154,8 @@ def damon_param_candidates(words, cword):
                        positional_candidates=[
                            [_damon.damos_qgtuner_consist,
                             _damon.damos_qgtuner_temporal]]),
+                Option('--damos_quota_fail_charge_ratio', nr_args=2,
+                       repeatable=True)
                 Option('--damos_filter', -1, True,
                        damos_filter_positional_candids),
                 ])
