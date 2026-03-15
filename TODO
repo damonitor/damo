@@ -49,7 +49,6 @@
 - improve 'damo report trace'
   - Concise output
 - Support 'damo record' works with DAMON_RECLAIM
-- Support pause/resume
 - Support fail quota charge ratio
 
 - Deprecate old features
