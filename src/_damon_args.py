@@ -863,6 +863,8 @@ def warn_unsupported_damon_features_for(args):
 
     if args.damos_quota_goal_tuner != []:
         warn_for('--damos_quota_goal_tuner', 'sysfs/damos_quota_goal_tuner')
+    if args.pause_ctx is not None:
+        warn_for('--pause_ctx', 'sysfs/ctx_pause')
 
     # 7.0
     for quota_goal in args.damos_quota_goal:
