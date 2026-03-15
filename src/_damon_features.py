@@ -334,6 +334,9 @@ features_list = [
         DamonFeature(name='sysfs/ctx_pause',
                      upstream_status='wip on damon/next',
                      upstreamed_version='none'),
+        DamonFeature(name='sysfs/damos_quota_fail_charge_ratio',
+                     upstream_status='wip on damon/next',
+                     upstreamed_version='none'),
 
         DamonFeature(name='sysfs/damon_sample_control',
                      upstream_status='hacking on damon/next',
