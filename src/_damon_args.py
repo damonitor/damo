@@ -299,7 +299,7 @@ def damos_options_to_quota_goal(garg):
     except Exception as e:
         return None, 'DamosQuotaGoal creation fail (%s, %s)' % (garg, e)
 
-def damos_options_to_quotas(quotas, goals, goal_tuner):
+def damos_options_to_quotas(quotas, fail_charge_ratio, goals, goal_tuner):
     gargs = goals
     goals = []
     for garg in gargs:
@@ -311,19 +311,23 @@ def damos_options_to_quotas(quotas, goals, goal_tuner):
     qargs = quotas
     if len(qargs) > 6:
         return None, 'Wrong --damos_quotas (%s, >6 parameters)' % qargs
+    num, denom = fail_charge_ratio
     try:
-        quotas = _damon.DamosQuotas(*damos_quotas_cons_arg(qargs),
-                                    goals=goals, goal_tuner=goal_tuner)
+        quotas = _damon.DamosQuotas(
+                *damos_quotas_cons_arg(qargs),
+                fail_charge_num=num, fail_charge_denom=denom,
+                goals=goals, goal_tuner=goal_tuner)
     except Exception as e:
         return None, 'Wrong --damos_quotas (%s, %s)' % (qargs, e)
     return quotas, None
 
 def damos_options_to_scheme(
         sz_region, access_rate, age, action,
-        apply_interval, quotas, goals, goal_tuner, wmarks, target_nid, filters,
-        dests, max_nr_snapshots):
+        apply_interval, quotas, quota_fail_charge_ratio, goals, goal_tuner,
+        wmarks, target_nid, filters, dests, max_nr_snapshots):
     if quotas != None:
-        quotas, err = damos_options_to_quotas(quotas, goals, goal_tuner)
+        quotas, err = damos_options_to_quotas(
+                quotas, quota_fail_charge_ratio, goals, goal_tuner)
         if err is not None:
             return None, err
 
@@ -428,6 +432,8 @@ def fillup_default_damos_args(args):
     args.damos_quotas += [None] * (nr_schemes - len(args.damos_quotas))
     args.damos_quota_goal_tuner += [None] * (
             nr_schemes - len(args.damos_quota_goal_tuner))
+    args.damos_quota_fail_charge_ratio += [[0, 0]] * (
+            nr_schemes - len(args.damos_quota_fail_charge_ratio))
     args.damos_wmarks += [None] * (nr_schemes - len(args.damos_wmarks))
     args.damos_max_nr_snapshots += [None] * (
             nr_schemes - len(args.damos_max_nr_snapshots))
@@ -479,9 +485,9 @@ def damos_options_to_schemes(args):
                 args.damos_sz_region[i],
                 args.damos_access_rate[i], args.damos_age[i],
                 args.damos_action[i], args.damos_apply_interval[i],
-                args.damos_quotas[i], qgoals, args.damos_quota_goal_tuner[i],
-                args.damos_wmarks[i], target_nid, filters, dests,
-                args.damos_max_nr_snapshots[i])
+                args.damos_quotas[i], args.damos_quota_fail_charge_ratio[i],
+                qgoals, args.damos_quota_goal_tuner[i], args.damos_wmarks[i],
+                target_nid, filters, dests, args.damos_max_nr_snapshots[i])
         if err != None:
             return [], err
         schemes.append(scheme)
