@@ -1316,6 +1316,11 @@ def mk_feature_supports_map():
     if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'pause')):
         supports_map['sysfs/ctx_pause'] = True
 
+    if os.path.isfile(
+            os.path.join(scheme_dir_of(0, 0, 0), 'quotas',
+                         'fail_charge_denom')):
+        supports_map['sysfs/damos_quota_fail_charge_ratio'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
 
