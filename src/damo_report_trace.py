@@ -64,6 +64,7 @@ def main(args):
 def set_argparser(parser):
     parser.add_argument(
             '--event', choices=list(damon_trace_events) + ['all'], nargs='+',
+            default='all',
             help='events to trace')
     parser.add_argument('--tracer', choices=['perf', 'trace-cmd'],
                         help='tracer command to use')
