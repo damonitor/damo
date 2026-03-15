@@ -30,8 +30,15 @@ def main(args):
         print('--event is required')
         exit(1)
 
+    events = []
+
     if 'all' in args.event:
-        args.event = damon_trace_events
+        events = list(damon_trace_events)
+    else:
+        events = args.event
+    if args.no_event is not None:
+        for event in args.no_event:
+            events.remove(event)
 
     if args.tracer is None:
         if _damo_subproc.avail_cmd('perf'):
@@ -46,7 +53,7 @@ def main(args):
     else:
         cmd = [tracer, 'stream']
 
-    for trace_event in args.event:
+    for trace_event in events:
         cmd.append('-e')
         cmd.append(trace_event)
 
@@ -66,5 +73,8 @@ def set_argparser(parser):
             '--event', choices=list(damon_trace_events) + ['all'], nargs='+',
             default='all',
             help='events to trace')
+    parser.add_argument(
+            '--no_event', choices=list(damon_trace_events), nargs='+',
+            help='events to skip tracing')
     parser.add_argument('--tracer', choices=['perf', 'trace-cmd'],
                         help='tracer command to use')
