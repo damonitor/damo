@@ -14,7 +14,7 @@ then
 	restart_damon_stat="true"
 fi
 
-for test_dir in unit pre-commit record report schemes \
+for test_dir in unit pre-commit args_damon record report schemes \
 	damon_reclaim damon_lru_sort start_stop
 do
 	if ! "./$test_dir/test.sh"
