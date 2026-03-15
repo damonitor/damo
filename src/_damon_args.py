@@ -1369,6 +1369,11 @@ def set_damos_argparser(parser, hide_help):
                         metavar='<permil>', nargs=3, action='append',
                         help='quota\'s prioritization weights'
                         if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--damos_quota_fail_charge_ratio', default=[],
+                        metavar=('<numerator>', '<denominator>'),
+                        action='append', nargs=2, type=int,
+                        help='quota failed regions charge ratio'
+                        if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--damos_quota_goal', nargs='+', action='append',
             default=[],
