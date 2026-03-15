@@ -50,6 +50,8 @@
   - Concise output
 - Support 'damo record' works with DAMON_RECLAIM
 - Document full DAMON parameter options
+- Support recording DAMON tracepoints
+- Support showing DAMON tracepoints record in easy way
 
 - Deprecate old features
   - Deprecate 'damo record_info'
