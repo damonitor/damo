@@ -846,6 +846,8 @@ def files_content_to_quota_goals(files_content):
     return goals
 
 def files_content_to_quotas(files_content):
+    fail_charge_num = files_content.get('fail_charge_num', 0)
+    fail_charge_denom = files_content.get('fail_charge_denom', 0)
     return _damon.DamosQuotas(
             int(files_content['ms']),
             int(files_content['bytes']),
@@ -857,7 +859,9 @@ def files_content_to_quotas(files_content):
             if 'goals' in files_content else [],
             goal_tuner=files_content.get('goal_tuner', None),
             effective_sz_bytes=int(files_content['effective_bytes'])
-            if 'effective_bytes' in files_content else 0)
+            if 'effective_bytes' in files_content else 0,
+            fail_charge_num=fail_charge_num,
+            fail_charge_denom=fail_charge_denom)
 
 def files_content_to_watermarks(files_content):
     return _damon.DamosWatermarks(
