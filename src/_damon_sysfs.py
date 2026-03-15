@@ -1300,6 +1300,9 @@ def mk_feature_supports_map():
             os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goal_tuner')):
         supports_map['sysfs/damos_quota_goal_tuner'] = True
 
+    if os.path.isfile(os.path.join(ctx_dir_of(0, 0), 'pause')):
+        supports_map['sysfs/ctx_pause'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
 
