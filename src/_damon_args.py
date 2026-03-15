@@ -1380,7 +1380,7 @@ def set_damos_argparser(parser, hide_help):
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--damos_quota_fail_charge_ratio', default=[],
                         metavar=('<numerator>', '<denominator>'),
-                        action='append', nargs=2, type=int,
+                        action='append', nargs=2,
                         help='quota failed regions charge ratio'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
