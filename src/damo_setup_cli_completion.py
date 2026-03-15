@@ -134,6 +134,7 @@ def damon_param_candidates(words, cword):
             words, cword,
             [
                 Option('--ops', 1, True, [['vaddr', 'paddr', 'fvaddr']]),
+                Option('--pause_ctx', nr_args=-1, repeatable=False),
                 Option('--monitoring_intervals_autotune', 0, False),
                 Option('--numa_node', -1, True),
                 Option('--monitoring_intervals', 3, True),
