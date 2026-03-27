@@ -760,7 +760,8 @@ class DamosQuotaGoal:
 
     @classmethod
     def metric_require_nid(cls, metric):
-        return metric in [qgoal_node_mem_used_bp, qgoal_node_mem_free_bp]
+        return metric in [qgoal_node_mem_used_bp, qgoal_node_mem_free_bp,
+                          qgoal_node_memcg_used_bp, qgoal_node_memcg_free_bp]
 
     def has_nid(self):
         return DamosQuotaGoal.metric_require_nid(self.metric)
