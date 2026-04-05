@@ -1111,7 +1111,7 @@ class RecordingHandle:
     # for custom perf
     perf_path = None
 
-    # for access patterns tracing
+    # for damon tracepoints recording
     tracepoints = None
     monitoring_intervals = None
     damon_tracer_pipe = None
