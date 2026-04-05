@@ -174,6 +174,11 @@ def record_candidates(words, cword):
              Option('--timeout', 1, False, None),
              Option('--snapshot_damos_filter', -1, False,
                     damos_filter_positional_candids),
+             Option('--do_record', nr_args=-1, repeatable=False,
+                    positional_candidates=None,
+                    non_positional_candidates=[
+                        'access', 'cpu_profile', 'mem_footprint', 'vmas',
+                        'proc_stats', 'damon_trace_events']),
              ])
 
 def report_access_candidates(words, cword):
