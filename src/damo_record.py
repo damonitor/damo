@@ -14,6 +14,7 @@ import time
 import _damo_fmt_str
 import _damo_records
 import _damo_subproc
+import _damo_sysinfo
 import _damon
 import _damon_args
 import _damon_modules
@@ -86,8 +87,14 @@ def get_ongoing_kdamonds(sysfs_kdamonds):
     exit(1)
 
 def tracepoints_from_args(args):
-    if not 'access' in args.do_record or args.snapshot is not None:
+    if args.snapshot is not None:
         return None
+    do_record = args.do_record
+    if not 'access' in do_record and not 'damon_tracepoints' in do_record:
+        return None
+    if 'damon_tracepoints' in args.do_record:
+        return _damo_sysinfo.available_damon_tracepoints()
+
     if args.schemes_target_regions is True:
         return [_damo_records.perf_event_damos_before_apply]
     return [_damo_records.perf_event_damon_aggregated,
@@ -182,6 +189,8 @@ def mk_handle(args, kdamonds, monitoring_intervals):
         if err is not None:
             print('--perf_path handling fail (%s)' % err)
             cleanup_exit(1)
+    if 'damon_tracepoints' in args.do_record:
+        handle.leave_damon_trace_rawfile = True
 
     return handle
 
@@ -265,7 +274,7 @@ def set_argparser(parser):
                         default=['access', 'cpu_profile', 'mem_footprint',
                                  'vmas', 'proc_stats'],
                         choices=['access', 'cpu_profile', 'mem_footprint',
-                                 'vmas', 'proc_stats'],
+                                 'vmas', 'proc_stats', 'damon_tracepoints'],
                         help='what to do record')
     parser.add_argument('--damon_tracer', metavar='cmd',
                         choices=['perf', 'trace-cmd'],
