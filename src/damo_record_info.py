@@ -4,6 +4,7 @@
 Print basic information of the access monitoring results record file.
 """
 
+import _damo_deprecation_notice
 import _damo_fmt_str
 import _damo_records
 
@@ -190,6 +191,9 @@ def pr_guide(records, raw_numbers=True):
         print(guide.to_str(raw_numbers))
 
 def main(args):
+    _damo_deprecation_notice.will_be_deprecated(
+            feature='damo record_info', deadline='2026-06-01',
+            alternative='damo report record_info')
     records, err = _damo_records.get_records(record_file=args.input)
     if err != None:
         print('monitoring result file (%s) parsing failed (%s)' %
