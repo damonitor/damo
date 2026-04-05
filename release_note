@@ -3,6 +3,10 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.2.1
 - Add deprecation plan notices to 'damo pa_layout' and 'damo record_info'.
+- 'damo record': support recording all DAMON trace events
+  (--do_record damon_trace_events).
+- 'damo report trace': support reporting DAMON trace events in 'damo
+  record'-recorded file (--input).
 
 v3.2.0
 - Support DAMON context execution pause/resume (--pause_ctx).
