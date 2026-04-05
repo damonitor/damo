@@ -7,6 +7,7 @@ import datetime
 import json
 import os
 import random
+import shutil
 import signal
 import subprocess
 import time
@@ -1116,6 +1117,7 @@ class RecordingHandle:
     monitoring_intervals = None
     damon_tracer_pipe = None
     damon_tracer = None
+    leave_damon_trace_rawfile = None
 
     # for access patterns snapshot
     snapshot_request = None # SnapshotRequest object.
@@ -1318,6 +1320,9 @@ def save_recording_outputs(handle, file_path):
             # perf might already finished
             pass
         os.rename(handle.file_path, file_path)
+
+        if handle.leave_damon_trace_rawfile is True:
+            shutil.copy(file_path, '%s.trace' % file_path)
 
         if handle.damon_tracer == 'perf':
             perf_cmd = 'perf'
