@@ -22,18 +22,23 @@ def will_be_deprecated(feature, deadline, additional_notice='',
             ]
     sys.stderr.write('\n'.join(lines))
 
-def deprecated(feature, deadline, do_exit=False, exit_code=1,
+def deprecated(feature, deadline, alternative=None, do_exit=False, exit_code=1,
         additional_notice=''):
-    sys.stderr.write('\n'.join([
-'',
-'WARNING: %s is deprecated.' % feature,
-'    The support will be removed by %s.' % deadline,
-'    %s' % additional_notice,
-'    Please report your usecase to Github issues[1], sj@kernel.org,',
-'    damon@lists.linux.dev and/or linux-mm@kvack.org if you depend on those.',
-'',
-'    [1] https://github.com/damonitor/damo/issues',
-'',
-'']))
+    lines = [
+            'WARNING: %s is deprecated.' % feature,
+            '    The support will be removed by %s.' % deadline,
+            ]
+    if alternative:
+        lines.append('    Use "%s" instead.' % alternative)
+    if additional_notice:
+        lines.append(additional_notice)
+    lines += [
+            '    Please report your usecase to Github issues[1], sj@kernel.org,',
+            '    damon@lists.linux.dev and/or linux-mm@kvack.org if you depend on those.',
+            '',
+            '    [1] https://github.com/damonitor/damo/issues',
+            '',
+            '']
+    sys.stderr.write('\n'.join(lines))
     if do_exit:
         exit(exit_code)
