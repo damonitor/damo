@@ -432,3 +432,13 @@ def damon_feature_available(feature_name):
         if f.name == feature_name:
             return True
     return False
+
+def available_damon_tracepoints():
+    sysinfo, err = get_sysinfo()
+    if err is not None:
+        return []
+    tracepoints = []
+    for f in sysinfo.avail_damon_features:
+        if f.name.startswith('trace/'):
+            tracepoints.append('damon:%s' % f.name[6:])
+    return tracepoints
