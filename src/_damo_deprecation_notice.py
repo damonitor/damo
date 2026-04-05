@@ -2,6 +2,14 @@
 
 import sys
 
+contact_message = '''
+    If you depend on those, please report your usecase to GitHub Issues [1],
+    sj@kernel.org, damon@lists.linux.dev and/or linux-mm@kvack.org.
+
+    [1] https://github.com/damonitor/damo/issues
+
+'''
+
 def will_be_deprecated(feature, deadline, additional_notice='',
                        alternative=None):
     lines = [
@@ -12,14 +20,7 @@ def will_be_deprecated(feature, deadline, additional_notice='',
         lines.append('    Use "%s" instead.' % alternative)
     if additional_notice:
         lines.append(additional_notice)
-    lines += [
-            '    Please report your usecase to Github issues[1], sj@kernel.org,',
-            '    damon@lists.linux.dev and/or linux-mm@kvack.org if you depend on those.',
-            '',
-            '    [1] https://github.com/damonitor/damo/issues',
-            '',
-            '',
-            ]
+    lines.append(contact_message)
     sys.stderr.write('\n'.join(lines))
 
 def deprecated(feature, deadline, alternative=None, do_exit=False, exit_code=1,
@@ -32,13 +33,7 @@ def deprecated(feature, deadline, alternative=None, do_exit=False, exit_code=1,
         lines.append('    Use "%s" instead.' % alternative)
     if additional_notice:
         lines.append(additional_notice)
-    lines += [
-            '    Please report your usecase to Github issues[1], sj@kernel.org,',
-            '    damon@lists.linux.dev and/or linux-mm@kvack.org if you depend on those.',
-            '',
-            '    [1] https://github.com/damonitor/damo/issues',
-            '',
-            '']
+    lines.append(contact_message)
     sys.stderr.write('\n'.join(lines))
     if do_exit:
         exit(exit_code)
