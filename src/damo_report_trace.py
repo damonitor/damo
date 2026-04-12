@@ -23,22 +23,29 @@ def signalhandler(signum, frame):
         output_file.close()
     exit(0)
 
+def read_perf_record(record_file):
+    try:
+        trace_text = subprocess.check_output(
+                ['perf', 'script', '--force', '-i', record_file]).decode()
+    except Exception as e:
+        return None, '%s' % e
+    return trace_text, None
+
 damon_trace_events = _damo_sysinfo.tracepoint_to_feature_name_map.keys()
 
 def report_recorded_trace(args):
     trace_text_format = None
-    try:
-        trace_text = subprocess.check_output(
-                ['perf', 'script', '--force', '-i', args.input]).decode()
+    trace_text, perf_err = read_perf_record(args.input)
+    if perf_err is None:
         trace_text_format = 'perf'
-    except Exception as perf_e:
+    else:
         try:
             trace_text = subprocess.check_output(
                     ['trace-cmd', 'report', '-i', args.input]).decode()
             trace_text_format = 'trace-cmd'
         except Exception as trace_cmd_e:
             print('cannot parse %s using neither perf (%s) nor trace-cmd (%s)'
-                  % (args.input, perf_e, trace_cmd_e))
+                  % (args.input, perf_err, trace_cmd_e))
             return -1
 
     if args.event is None:
