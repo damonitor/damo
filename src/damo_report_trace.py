@@ -144,6 +144,51 @@ def pr_damon_aggregated(fields, trace_text_format, max_cols):
         region_idx = 0
     pr_wrapped(' '.join(fields[:3] + [trace_text]), max_cols)
 
+def pr_damos_before_apply(fields, trace_text_format, max_cols):
+    trace_data = {
+            'context_idx': 0,
+            'scheme_idx': 0,
+            'target_idx': 0,
+            'start': 0,
+            'end': 0,
+            'nr_accesses': 0,
+            'age': 0,
+            'nr_regions': 0,
+            }
+    if trace_text_format == 'damo-report-trace-perf':
+        # 166995.058 kthreadd/86797 damos_before_apply(start: 8142561280, end:
+        # 8372879360, age: 52, nr_regions:
+        trace_fields = fields[2:]
+        trace_fields[0] = trace_fields[0][len('damos_before_apply('):]
+        for idx in range(0, len(trace_fields), 2):
+            name = trace_fields[idx][:-1]
+            val = int(trace_fields[idx + 1][:-1])
+            trace_data[name] = val
+        fields[2] = 'damos_before_apply:'
+    else:
+        # <...>-83432 79345.618144: damos_before_apply: ctx_idx=0 scheme_idx=0
+        # target_idx=0 nr_regions=11 1234-5678: 10 45
+        trace_fields = fields[3:]
+        trace_data['context_idx'] = int(fields[3].split('=')[1])
+        trace_data['scheme_idx'] = int(fields[4].split('=')[1])
+        trace_data['target_idx'] = int(fields[5].split('=')[1])
+        trace_data['nr_regions'] = int(fields[6].split('=')[1])
+        trace_data['start'] = int(fields[7].split('-')[0])
+        trace_data['end'] = int(fields[7].split('-')[1][:-1])
+        trace_data['nr_accesses'] = int(fields[8])
+        trace_data['age'] = int(fields[9])
+    trace_text = '%d %d %d %d %s (%s) %d %d' % (
+            trace_data['context_idx'], trace_data['scheme_idx'],
+            trace_data['target_idx'],
+            trace_data['nr_regions'],
+            _damo_fmt_str.format_sz_accurate(
+                trace_data['start'], machine_friendly=False),
+            _damo_fmt_str.format_sz_accurate(
+                trace_data['end'] - trace_data['start'],
+                machine_friendly=False),
+            trace_data['nr_accesses'], trace_data['age'])
+    pr_wrapped(' '.join(fields[:3] + [trace_text]), max_cols)
+
 def pr_trace_line(line, raw, trace_text_format, max_cols):
     if raw is True:
         print(line)
@@ -164,6 +209,9 @@ def pr_trace_line(line, raw, trace_text_format, max_cols):
         fields = [fields[0]] + fields[3:]
     if fields[2].startswith('damon_aggregated'):
         pr_damon_aggregated(fields, trace_text_format, max_cols)
+        return
+    if fields[2].startswith('damos_before_apply'):
+        pr_damos_before_apply(fields, trace_text_format, max_cols)
         return
     pr_wrapped(' '.join(fields), max_cols)
 
