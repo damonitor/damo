@@ -52,6 +52,18 @@ def read_trace_record(record_file):
 
 damon_trace_events = _damo_sysinfo.tracepoint_to_feature_name_map.keys()
 
+def get_events_to_show(to_show, to_hide):
+    events = []
+
+    if 'all' in to_show:
+        events = list(damon_trace_events)
+    else:
+        events = to_show
+    if to_hide is not None:
+        for event in to_hide:
+            events.remove(event)
+    return events
+
 def report_recorded_trace(args):
     trace_text, trace_text_format, err = read_trace_record(args.input)
     if err is not None:
@@ -62,15 +74,7 @@ def report_recorded_trace(args):
         print('--event is required')
         exit(1)
 
-    events = []
-
-    if 'all' in args.event:
-        events = list(damon_trace_events)
-    else:
-        events = args.event
-    if args.no_event is not None:
-        for event in args.no_event:
-            events.remove(event)
+    events = get_events_to_show(args.event, args.no_event)
 
     for line in trace_text.split('\n'):
         fields = line.split()
@@ -98,15 +102,7 @@ def main(args):
         print('--event is required')
         exit(1)
 
-    events = []
-
-    if 'all' in args.event:
-        events = list(damon_trace_events)
-    else:
-        events = args.event
-    if args.no_event is not None:
-        for event in args.no_event:
-            events.remove(event)
+    events = get_events_to_show(args.event, args.no_event)
 
     if args.tracer is None:
         if _damo_subproc.avail_cmd('perf'):
