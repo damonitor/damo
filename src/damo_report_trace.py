@@ -164,7 +164,7 @@ def pr_damos_before_apply(fields, trace_text_format, max_cols):
             name = trace_fields[idx][:-1]
             val = int(trace_fields[idx + 1][:-1])
             trace_data[name] = val
-        fields[2] = 'damos_before_apply:'
+        fields[2] = 'damos_apply:'
     else:
         # <...>-83432 79345.618144: damos_before_apply: ctx_idx=0 scheme_idx=0
         # target_idx=0 nr_regions=11 1234-5678: 10 45
