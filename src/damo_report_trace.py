@@ -4,6 +4,7 @@ import datetime
 import signal
 import subprocess
 
+import _damo_fmt_str
 import _damo_subproc
 import _damo_sysinfo
 import _damon
@@ -100,6 +101,49 @@ def pr_wrapped(line, max_cols):
     if len(line_fields) > 0:
         print(' '.join(line_fields))
 
+region_idx = 0
+def pr_damon_aggregated(fields, trace_text_format, max_cols):
+    trace_data = {
+            'target_id': 0,
+            'nr_regions': 0,
+            'start': 0,
+            'end': 0,
+            'nr_accesses': 0,
+            'age': 0,
+            }
+    if trace_text_format == 'damo-report-trace-perf':
+        # 1039.536 kdamond.0/83432 damon_aggregated(nr_regions: 11, start:
+        # 8336789504, end: 8372879360, age: 1624)
+        trace_fields = fields[2:]
+        trace_fields[0] = trace_fields[0][len('damon_aggregated('):]
+        for idx in range(0, len(trace_fields), 2):
+            name = trace_fields[idx][:-1]
+            val = int(trace_fields[idx + 1][:-1])
+            trace_data[name] = val
+        fields[2] = 'damon_aggregated:'
+    else:
+        # <...>-83432 79345.618144: damon_aggregated: target_id=0 nr_regions=11 5842157568-6676635648: 0 1928
+        trace_fields = fields[3:]
+        trace_data['target_id'] = int(fields[3].split('=')[1])
+        trace_data['nr_regions'] = int(fields[4].split('=')[1])
+        trace_data['start'] = int(fields[5].split('-')[0])
+        trace_data['end'] = int(fields[5].split('-')[1][:-1])
+        trace_data['nr_accesses'] = int(fields[6])
+        trace_data['age'] = int(fields[7])
+    global region_idx
+    trace_text = '%d %d/%d %s (%s) %d %d' % (
+            trace_data['target_id'], region_idx, trace_data['nr_regions'],
+            _damo_fmt_str.format_sz_accurate(
+                trace_data['start'], machine_friendly=False),
+            _damo_fmt_str.format_sz_accurate(
+                trace_data['end'] - trace_data['start'],
+                machine_friendly=False),
+            trace_data['nr_accesses'], trace_data['age'])
+    region_idx += 1
+    if region_idx == trace_data['nr_regions']:
+        region_idx = 0
+    pr_wrapped(' '.join(fields[:3] + [trace_text]), max_cols)
+
 def pr_trace_line(line, raw, trace_text_format, max_cols):
     if raw is True:
         print(line)
@@ -118,6 +162,9 @@ def pr_trace_line(line, raw, trace_text_format, max_cols):
         fields[2] = event
     elif trace_text_format == 'damo-report-trace-trace-cmd':
         fields = [fields[0]] + fields[3:]
+    if fields[2].startswith('damon_aggregated'):
+        pr_damon_aggregated(fields, trace_text_format, max_cols)
+        return
     pr_wrapped(' '.join(fields), max_cols)
 
 def report_recorded_trace(args):
