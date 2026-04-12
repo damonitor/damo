@@ -181,3 +181,5 @@ def set_argparser(parser):
                         help='trace record file')
     parser.add_argument('--output', '-o', metavar='<file>',
                         help='save output to a file')
+    parser.add_argument('--raw', action='store_true',
+                        help='show raw trace output')
