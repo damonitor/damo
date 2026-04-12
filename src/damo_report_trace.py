@@ -81,10 +81,16 @@ def pr_trace_line(line, raw, trace_text_format):
     fields = line.split()
     if trace_text_format == 'perf':
         fields = [fields[0]] + fields[3:]
+        event = fields[2]
+        event = event[len('damon:'):]
+        fields[2] = event
     elif trace_text_format == 'trace-cmd':
         fields = [fields[0]] + fields[3:]
     elif trace_text_format == 'damo-report-trace-perf':
         fields = fields
+        event = fields[2]
+        event = event[len('damon:'):]
+        fields[2] = event
     elif trace_text_format == 'damo-report-trace-trace-cmd':
         fields = [fields[0]] + fields[3:]
     print(' '.join(fields))
