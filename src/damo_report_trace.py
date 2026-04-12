@@ -78,7 +78,16 @@ def get_events_to_show(to_show, to_hide):
 def pr_trace_line(line, raw, trace_text_format):
     if raw is True:
         print(line)
-    print(line)
+    fields = line.split()
+    if trace_text_format == 'perf':
+        fields = [fields[0]] + fields[3:]
+    elif trace_text_format == 'trace-cmd':
+        fields = [fields[0]] + fields[3:]
+    elif trace_text_format == 'damo-report-trace-perf':
+        fields = fields
+    elif trace_text_format == 'damo-report-trace-trace-cmd':
+        fields = [fields[0]] + fields[3:]
+    print(' '.join(fields))
 
 def report_recorded_trace(args):
     trace_text, trace_text_format, err = read_trace_record(args.input)
@@ -168,7 +177,7 @@ def main(args):
         if not output and tracer_pipe.poll() is not None:
             break
         output = output.decode()
-        print(output, end='')
+        pr_trace_line(output, args.raw, 'damo-report-trace-%s' % tracer)
         if output_file is not None:
             output_file.write(output)
 
