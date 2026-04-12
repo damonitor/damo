@@ -46,11 +46,9 @@
   - 'damo record' works for module kdamonds
   - 'damo tune' works for module kdamonds
   - 'damo monitor' works for module kdamonds
-- improve 'damo report trace'
-  - Concise output
-  - Support saving/loading the output
 - Support 'damo record' works with DAMON_RECLAIM
 - Document full DAMON parameter options
+- Document 'damo report trace'
 
 - Deprecate old features
   - Deprecate 'damo record_info'
