@@ -39,6 +39,13 @@ def read_trace_cmd_record(record_file):
         return None, '%s' % e
     return trace_text, None
 
+def read_damo_report_trace_output(output_file):
+    try:
+        with open(output_file, 'r') as f:
+            return f.read(), None
+    except Exception as e:
+        return None, '%s' % e
+
 def read_trace_record(record_file):
     trace_text, perf_err = read_perf_record(record_file)
     if perf_err is None:
@@ -46,8 +53,12 @@ def read_trace_record(record_file):
     trace_text, trace_cmd_err = read_trace_cmd_record(record_file)
     if trace_cmd_err is None:
         return trace_text, 'trace-cmd', None
-    err = 'cannot parse %s using both perf (%s) and trace-cmd (%s)' % (
-            record_file, perf_err, trace_cmd_err)
+    trace_text, text_err = read_damo_report_trace_output(record_file)
+    if text_err is None:
+        tracer = trace_text.split('\n')[2].split()[1]
+        return trace_text, 'damo-report-trace-%s' % tracer, None
+    err = 'cannot parse %s via perf (%s), trace-cmd (%s), file read (%s)' % (
+            record_file, perf_err, trace_cmd_err, text_err)
     return None, None, err
 
 damon_trace_events = _damo_sysinfo.tracepoint_to_feature_name_map.keys()
@@ -78,14 +89,27 @@ def report_recorded_trace(args):
 
     for line in trace_text.split('\n'):
         fields = line.split()
-        # perf script and trace-cmd report puts the event name on fifth field.
-        # perf:
-        #   kdamond.0  4452 [000] 82877.315633: damon:damon_aggregated: ...
-        # trace-cmd:
-        #   kdamond.0-264454 [007] ..... 92627.258073: damon_aggregated: ...
-        if len(fields) < 5:
-            continue
-        event = fields[4][:-1]
+        if trace_text_format in ['perf', 'trace-cmd']:
+            # perf script and trace-cmd report puts the event name on fifth
+            # field.
+            # perf:
+            #   kdamond.0  4452 [000] 82877.315633: damon:damon_aggregated: ...
+            # trace-cmd:
+            #   kdamond.0-264454 [007] ..... 92627.258073: damon_aggregated: ...
+            if len(fields) < 5:
+                continue
+            event = fields[4][:-1]
+        elif trace_text_format == 'damo-report-trace-perf':
+            # 0.000 kdamond.0/83017 damon:damon_aggregated(nr_regions: 11, ...
+            if len(fields) < 3:
+                continue
+            event = fields[2].split('(')[0]
+        elif trace_text_format == 'damo-report-trace-trace-cmd':
+            # <...>-83432 [006] ..... 71629.102757: damon_aggregated: ...
+            if len(fields) < 5:
+                continue
+            event = 'damon:%s' % fields[4][:-1]
+
         if not event in events:
             continue
         print(line)
