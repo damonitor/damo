@@ -39,21 +39,24 @@ def read_trace_cmd_record(record_file):
         return None, '%s' % e
     return trace_text, None
 
+def read_trace_record(record_file):
+    trace_text, perf_err = read_perf_record(record_file)
+    if perf_err is None:
+        return trace_text, 'perf', None
+    trace_text, trace_cmd_err = read_trace_cmd_record(record_file)
+    if trace_cmd_err is None:
+        return trace_text, 'trace-cmd', None
+    err = 'cannot parse %s using both perf (%s) and trace-cmd (%s)' % (
+            record_file, perf_err, trace_cmd_err)
+    return None, None, err
+
 damon_trace_events = _damo_sysinfo.tracepoint_to_feature_name_map.keys()
 
 def report_recorded_trace(args):
-    trace_text_format = None
-    trace_text, perf_err = read_perf_record(args.input)
-    if perf_err is None:
-        trace_text_format = 'perf'
-    else:
-        trace_text, trace_cmd_err = read_trace_cmd_record(args.input)
-        if trace_cmd_err is None:
-            trace_text_format = 'trace-cmd'
-        else:
-            print('cannot parse %s using neither perf (%s) nor trace-cmd (%s)'
-                  % (args.input, perf_err, trace_cmd_e))
-            return -1
+    trace_text, trace_text_format, err = read_trace_record(args.input)
+    if err is not None:
+        print(err)
+        return -1
 
     if args.event is None:
         print('--event is required')
