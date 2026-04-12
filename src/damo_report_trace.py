@@ -260,8 +260,10 @@ def pr_trace_line(line, raw, trace_text_format, max_cols):
         event = fields[2]
         event = event[len('damon:'):]
         fields[2] = event
+        fields[0], fields[1] = fields[1], fields[0]
     elif trace_text_format == 'damo-report-trace-trace-cmd':
         fields = [fields[0]] + fields[3:]
+
     if fields[2].startswith('damon_aggregated'):
         pr_damon_aggregated(fields, trace_text_format, max_cols)
         return
