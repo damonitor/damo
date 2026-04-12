@@ -31,6 +31,14 @@ def read_perf_record(record_file):
         return None, '%s' % e
     return trace_text, None
 
+def read_trace_cmd_record(record_file):
+    try:
+        trace_text = subprocess.check_output(
+                ['trace-cmd', 'report', '-i', record_file]).decode()
+    except Exception as e:
+        return None, '%s' % e
+    return trace_text, None
+
 damon_trace_events = _damo_sysinfo.tracepoint_to_feature_name_map.keys()
 
 def report_recorded_trace(args):
@@ -39,11 +47,10 @@ def report_recorded_trace(args):
     if perf_err is None:
         trace_text_format = 'perf'
     else:
-        try:
-            trace_text = subprocess.check_output(
-                    ['trace-cmd', 'report', '-i', args.input]).decode()
+        trace_text, trace_cmd_err = read_trace_cmd_record(args.input)
+        if trace_cmd_err is None:
             trace_text_format = 'trace-cmd'
-        except Exception as trace_cmd_e:
+        else:
             print('cannot parse %s using neither perf (%s) nor trace-cmd (%s)'
                   % (args.input, perf_err, trace_cmd_e))
             return -1
