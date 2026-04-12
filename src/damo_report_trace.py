@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
+import datetime
 import signal
 import subprocess
 
@@ -8,6 +9,7 @@ import _damo_sysinfo
 import _damon
 
 tracer_pipe = None
+output_file = None
 
 def signalhandler(signum, frame):
     print('signal %s received' % signum)
@@ -17,6 +19,8 @@ def signalhandler(signum, frame):
             tracer_pipe.wait()
         except:
             pass
+    if output_file:
+        output_file.close()
     exit(0)
 
 damon_trace_events = _damo_sysinfo.tracepoint_to_feature_name_map.keys()
@@ -107,13 +111,24 @@ def main(args):
     signal.signal(signal.SIGINT, signalhandler)
     signal.signal(signal.SIGTERM, signalhandler)
 
+    global output_file
+    if args.output is not None:
+        output_file = open(args.output, 'w')
+        output_file.write('damo_report_trace_output_format_version: 0\n')
+        output_file.write('damo_report_trace_output_time: %s\n' %
+                          datetime.datetime.now().timestamp())
+        output_file.write('damo_report_trace_output_tracer: %s\n' % tracer)
+
     tracer_pipe = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT)
     while True:
         output = tracer_pipe.stdout.readline()
         if not output and tracer_pipe.poll() is not None:
             break
-        print(output.decode(), end='')
+        output = output.decode()
+        print(output, end='')
+        if output_file is not None:
+            output_file.write(output)
 
 def set_argparser(parser):
     parser.add_argument(
@@ -127,3 +142,5 @@ def set_argparser(parser):
                         help='tracer command to use')
     parser.add_argument('--input', '-i', metavar='<file>',
                         help='trace record file')
+    parser.add_argument('--output', '-o', metavar='<file>',
+                        help='save output to a file')
