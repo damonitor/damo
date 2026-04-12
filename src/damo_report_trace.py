@@ -189,6 +189,61 @@ def pr_damos_before_apply(fields, trace_text_format, max_cols):
             trace_data['nr_accesses'], trace_data['age'])
     pr_wrapped(' '.join(fields[:3] + [trace_text]), max_cols)
 
+def pr_damos_stat(fields, trace_text_format, max_cols):
+    trace_data = {
+            'context_idx': 0,
+            'scheme_idx': 0,
+            'nr_tried': 0,
+            'sz_tried': 0,
+            'nr_applied': 0,
+            'sz_applied': 0,
+            'sz_ops_filter_passed': 0,
+            'qt_exceeds': 0,
+            'nr_snapshots': 0,
+            }
+    if trace_text_format == 'damo-report-trace-perf':
+        # 15076.443 kthreadd/89226 damos_stat_after_apply_interval(nr_tried:
+        # 63, sz_tried: 33491501056, nr_snapshots: 4)
+        trace_fields = fields[2:]
+        trace_fields[0] = trace_fields[0][len(
+            'damos_stat_after_apply_intervals('):]
+        for idx in range(0, len(trace_fields), 2):
+            name = trace_fields[idx][:-1]
+            val = int(trace_fields[idx + 1][:-1])
+            trace_data[name] = val
+        fields[2] = 'damos_stat:'
+    else:
+        # <...>-83432 79345.618144: damos_before_apply: ctx_idx=0 scheme_idx=0
+        # target_idx=0 nr_regions=11 1234-5678: 10 45
+        trace_fields = fields[3:]
+        trace_data['context_idx'] = int(fields[3].split('=')[1])
+        trace_data['scheme_idx'] = int(fields[4].split('=')[1])
+        trace_data['nr_tried'] = int(fields[5].split('=')[1])
+        trace_data['sz_tried'] = int(fields[6].split('=')[1])
+        trace_data['nr_applied'] = int(fields[7].split('=')[1])
+        trace_data['sz_applied'] = int(fields[8].split('=')[1])
+        trace_data['sz_ops_filter_passed'] = int(fields[9].split('=')[1])
+        trace_data['qt_exceeds'] = int(fields[10].split('=')[1])
+        trace_data['nr_snapshots'] = int(fields[11].split('=')[1])
+    trace_text = '%d %d %s %s %s %s %s %s %s' % (
+            trace_data['context_idx'], trace_data['scheme_idx'],
+            _damo_fmt_str.format_nr(
+                trace_data['nr_tried'], machine_friendly=False),
+            _damo_fmt_str.format_sz_accurate(
+                trace_data['sz_tried'], machine_friendly=False),
+            _damo_fmt_str.format_nr(
+                trace_data['nr_applied'], machine_friendly=False),
+            _damo_fmt_str.format_sz_accurate(
+                trace_data['sz_applied'], machine_friendly=False),
+            _damo_fmt_str.format_sz_accurate(
+                trace_data['sz_ops_filter_passed'], machine_friendly=False),
+            _damo_fmt_str.format_nr(
+                trace_data['qt_exceeds'], machine_friendly=False),
+             _damo_fmt_str.format_nr(
+                trace_data['nr_snapshots'], machine_friendly=False)
+             )
+    pr_wrapped(' '.join(fields[:3] + [trace_text]), max_cols)
+
 def pr_trace_line(line, raw, trace_text_format, max_cols):
     if raw is True:
         print(line)
@@ -212,6 +267,9 @@ def pr_trace_line(line, raw, trace_text_format, max_cols):
         return
     if fields[2].startswith('damos_before_apply'):
         pr_damos_before_apply(fields, trace_text_format, max_cols)
+        return
+    if fields[2].startswith('damos_stat_after_apply_interval'):
+        pr_damos_stat(fields, trace_text_format, max_cols)
         return
     pr_wrapped(' '.join(fields), max_cols)
 
