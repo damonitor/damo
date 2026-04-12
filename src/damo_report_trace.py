@@ -249,20 +249,34 @@ def pr_trace_line(line, raw, trace_text_format, max_cols):
         print(line)
     fields = line.split()
     if trace_text_format == 'perf-script':
-        fields = [fields[0]] + fields[3:]
+        fields = [fields[1]] + fields[3:]
         event = fields[2]
         event = event[len('damon:'):]
         fields[2] = event
+
+        kdamond_pid = fields[0]
+        timestamp = fields[1]
     elif trace_text_format == 'trace-cmd-report':
         fields = [fields[0]] + fields[3:]
+
+        kdamond_pid = fields[0].split('-')[-1]
+        timestamp = fields[1]
     elif trace_text_format == 'damo-report-trace-perf':
         fields = fields
         event = fields[2]
         event = event[len('damon:'):]
         fields[2] = event
-        fields[0], fields[1] = fields[1], fields[0]
+
+        kdamond_pid = fields[1].split('/')[-1]
+        timestamp = fields[0]
     elif trace_text_format == 'damo-report-trace-trace-cmd':
         fields = [fields[0]] + fields[3:]
+
+        kdamond_pid = fields[0].split('-')[-1]
+        timestamp = fields[1]
+
+    fields[0] = timestamp
+    fields[1] = kdamond_pid
 
     if fields[2].startswith('damon_aggregated'):
         pr_damon_aggregated(fields, trace_text_format, max_cols)
