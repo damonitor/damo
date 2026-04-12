@@ -164,7 +164,6 @@ def pr_damos_before_apply(fields, trace_text_format, max_cols):
             name = trace_fields[idx][:-1]
             val = int(trace_fields[idx + 1][:-1])
             trace_data[name] = val
-        fields[2] = 'damos_apply:'
     else:
         # <...>-83432 79345.618144: damos_before_apply: ctx_idx=0 scheme_idx=0
         # target_idx=0 nr_regions=11 1234-5678: 10 45
@@ -177,6 +176,8 @@ def pr_damos_before_apply(fields, trace_text_format, max_cols):
         trace_data['end'] = int(fields[7].split('-')[1][:-1])
         trace_data['nr_accesses'] = int(fields[8])
         trace_data['age'] = int(fields[9])
+
+    fields[2] = 'damos_apply:'
     trace_text = '%d %d %d %d %s (%s) %d %d' % (
             trace_data['context_idx'], trace_data['scheme_idx'],
             trace_data['target_idx'],
@@ -211,7 +212,6 @@ def pr_damos_stat(fields, trace_text_format, max_cols):
             name = trace_fields[idx][:-1]
             val = int(trace_fields[idx + 1][:-1])
             trace_data[name] = val
-        fields[2] = 'damos_stat:'
     else:
         # <...>-83432 79345.618144: damos_before_apply: ctx_idx=0 scheme_idx=0
         # target_idx=0 nr_regions=11 1234-5678: 10 45
@@ -225,6 +225,8 @@ def pr_damos_stat(fields, trace_text_format, max_cols):
         trace_data['sz_ops_filter_passed'] = int(fields[9].split('=')[1])
         trace_data['qt_exceeds'] = int(fields[10].split('=')[1])
         trace_data['nr_snapshots'] = int(fields[11].split('=')[1])
+
+    fields[2] = 'damos_stat:'
     trace_text = '%d %d %s %s %s %s %s %s %s' % (
             trace_data['context_idx'], trace_data['scheme_idx'],
             _damo_fmt_str.format_nr(
