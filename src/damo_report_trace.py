@@ -75,6 +75,11 @@ def get_events_to_show(to_show, to_hide):
             events.remove(event)
     return events
 
+def pr_trace_line(line, raw, trace_text_format):
+    if raw is True:
+        print(line)
+    print(line)
+
 def report_recorded_trace(args):
     trace_text, trace_text_format, err = read_trace_record(args.input)
     if err is not None:
@@ -112,7 +117,7 @@ def report_recorded_trace(args):
 
         if not event in events:
             continue
-        print(line)
+        pr_trace_line(line, args.raw, trace_text_format)
 
 def main(args):
     if args.input is not None:
