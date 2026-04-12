@@ -52,7 +52,7 @@ def read_trace_record(record_file):
         return trace_text, 'perf-script', None
     trace_text, trace_cmd_err = read_trace_cmd_record(record_file)
     if trace_cmd_err is None:
-        return trace_text, 'trace-cmd', None
+        return trace_text, 'trace-cmd-report', None
     trace_text, text_err = read_damo_report_trace_output(record_file)
     if text_err is None:
         tracer = trace_text.split('\n')[2].split()[1]
@@ -84,7 +84,7 @@ def pr_trace_line(line, raw, trace_text_format):
         event = fields[2]
         event = event[len('damon:'):]
         fields[2] = event
-    elif trace_text_format == 'trace-cmd':
+    elif trace_text_format == 'trace-cmd-report':
         fields = [fields[0]] + fields[3:]
     elif trace_text_format == 'damo-report-trace-perf':
         fields = fields
@@ -109,7 +109,7 @@ def report_recorded_trace(args):
 
     for line in trace_text.split('\n'):
         fields = line.split()
-        if trace_text_format in ['perf-script', 'trace-cmd']:
+        if trace_text_format in ['perf-script', 'trace-cmd-report']:
             # perf script and trace-cmd report puts the event name on fifth
             # field.
             # perf:
