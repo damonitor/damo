@@ -48,6 +48,7 @@
   - 'damo monitor' works for module kdamonds
 - improve 'damo report trace'
   - Concise output
+  - Support saving/loading the output
 - Support 'damo record' works with DAMON_RECLAIM
 - Document full DAMON parameter options
 
