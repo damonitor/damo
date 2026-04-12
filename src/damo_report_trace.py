@@ -75,7 +75,32 @@ def get_events_to_show(to_show, to_hide):
             events.remove(event)
     return events
 
-def pr_trace_line(line, raw, trace_text_format):
+def pr_wrapped(line, max_cols):
+    if len(line) <= max_cols:
+        print(line)
+        return
+    fields = line.split()
+    line_fields = []
+    len_line = 0
+    for field in fields:
+        len_field = len(field)
+        if len_line + len_field > max_cols:
+            if len(line_fields) > 0:
+                print(' '.join(line_fields))
+                line_fields = []
+            else:
+                print(field)
+            # indent second and later lines
+            line_fields.append('  ')
+            len_line = 2
+        line_fields.append(field)
+        len_line += len_field
+        if len(line_fields) > 1:
+            len_line += 1
+    if len(line_fields) > 0:
+        print(' '.join(line_fields))
+
+def pr_trace_line(line, raw, trace_text_format, max_cols):
     if raw is True:
         print(line)
     fields = line.split()
@@ -93,7 +118,7 @@ def pr_trace_line(line, raw, trace_text_format):
         fields[2] = event
     elif trace_text_format == 'damo-report-trace-trace-cmd':
         fields = [fields[0]] + fields[3:]
-    print(' '.join(fields))
+    pr_wrapped(' '.join(fields), max_cols)
 
 def report_recorded_trace(args):
     trace_text, trace_text_format, err = read_trace_record(args.input)
@@ -132,7 +157,7 @@ def report_recorded_trace(args):
 
         if not event in events:
             continue
-        pr_trace_line(line, args.raw, trace_text_format)
+        pr_trace_line(line, args.raw, trace_text_format, args.max_cols)
 
 def main(args):
     if args.input is not None:
@@ -183,7 +208,8 @@ def main(args):
         if not output and tracer_pipe.poll() is not None:
             break
         output = output.decode()
-        pr_trace_line(output, args.raw, 'damo-report-trace-%s' % tracer)
+        pr_trace_line(output, args.raw, 'damo-report-trace-%s' % tracer,
+                      args.max_cols)
         if output_file is not None:
             output_file.write(output)
 
@@ -203,3 +229,5 @@ def set_argparser(parser):
                         help='save output to a file')
     parser.add_argument('--raw', action='store_true',
                         help='show raw trace output')
+    parser.add_argument('--max_cols', type=int, default=100,
+                        help='max columns per line')
