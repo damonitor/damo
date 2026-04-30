@@ -332,6 +332,9 @@ features_list = [
                      upstream_status='merged in v7.1-rc1 (8719c59c4b928)',
                      upstreamed_version='7.1'),
 
+        DamonFeature(name='sysfs/damos_action_collapse',
+                     upstream_status='merged in mm.git',
+                     upstreamed_version='none'),
         DamonFeature(name='sysfs/ctx_pause',
                      upstream_status='wip on damon/next',
                      upstreamed_version='none'),
