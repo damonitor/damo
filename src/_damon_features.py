@@ -342,7 +342,7 @@ features_list = [
                      upstream_status='merged in mm.git',
                      upstreamed_version='none'),
         DamonFeature(name='sysfs/damos_quota_fail_charge_ratio',
-                     upstream_status='wip on damon/next',
+                     upstream_status='merged in mm.git',
                      upstreamed_version='none'),
 
         DamonFeature(name='sysfs/damon_sample_control',
