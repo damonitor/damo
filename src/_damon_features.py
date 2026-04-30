@@ -327,9 +327,10 @@ features_list = [
                      upstream_status='merged in v7.0-rc1 (4835e2871321f)',
                      upstreamed_version='7.0'),
 
+        # v7.1-rc1 release: Sun Apr 26 14:19:00 2026 -0700
         DamonFeature(name='sysfs/damos_quota_goal_tuner',
-                     upstream_status='merged in mm.git',
-                     upstreamed_version='none'),
+                     upstream_status='merged in v7.1-rc1 (8719c59c4b928)',
+                     upstreamed_version='7.1'),
 
         DamonFeature(name='sysfs/ctx_pause',
                      upstream_status='wip on damon/next',
