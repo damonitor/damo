@@ -529,12 +529,13 @@ class DamonRegion:
     end = None
     # nr_accesses and age could be None
     nr_accesses = None
+    probe_hits = None   # list of integers
     age = None
     sz_filter_passed = None
     scheme = None # non-None if tried region
 
     def __init__(self, start, end, nr_accesses=None, nr_accesses_unit=None,
-            age=None, age_unit=None, sz_filter_passed=0):
+            age=None, age_unit=None, sz_filter_passed=0, probe_hits=None):
         self.start = _damo_fmt_str.text_to_bytes(start)
         self.end = _damo_fmt_str.text_to_bytes(end)
 
@@ -543,6 +544,9 @@ class DamonRegion:
         self.nr_accesses = DamonNrAccesses(nr_accesses, nr_accesses_unit)
         self.age = DamonAge(age, age_unit)
         self.sz_filter_passed = sz_filter_passed
+        if probe_hits is None:
+            probe_hits = []
+        self.probe_hits = probe_hits
 
     def to_str(self, raw, intervals=None):
         if self.nr_accesses == None:
@@ -562,6 +566,9 @@ class DamonRegion:
                 _damo_fmt_str.format_addr_range(self.start, self.end, raw),
                 self.nr_accesses.to_str(nr_accesses_unit, raw),
                 self.age.to_str(age_unit, raw))
+        if self.probe_hits:
+            str += ', probe_hits: %s' % ' '.join(
+                    ['%d' % h for h in self.probe_hits])
         if self.sz_filter_passed is not None:
             str += ', filter_passed: %s' % _damo_fmt_str.format_sz(
                     self.sz_filter_passed, raw)
@@ -585,6 +592,7 @@ class DamonRegion:
         region = DamonRegion(kvpairs['start'], kvpairs['end'])
         region.nr_accesses = DamonNrAccesses.from_kvpairs(
                 kvpairs['nr_accesses'])
+        region.probe_hits = kvpairs.get('probe_hits', [])
         region.age = DamonAge.from_kvpairs(kvpairs['age'])
         if 'sz_filter_passed' in kvpairs:
             region.sz_filter_passed = _damo_fmt_str.text_to_bytes(
@@ -603,6 +611,7 @@ class DamonRegion:
             ('end', _damo_fmt_str.format_nr(self.end, raw)),
             ('nr_accesses', self.nr_accesses.to_kvpairs(raw)),
             ('age', self.age.to_kvpairs(raw)),
+            ('probe_hits', self.probe_hits),
             ('sz_filter_passed', _damo_fmt_str.format_sz(
                 self.sz_filter_passed, raw)),
             ])
