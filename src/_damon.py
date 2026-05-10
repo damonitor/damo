@@ -26,8 +26,6 @@ class DamonFilter:
         self.filter_type = filter_type
         self.matching = _damo_fmt_str.text_to_bool(matching)
         self.allow = _damo_fmt_str.text_to_bool(allow)
-        if path is not None and self.filter_type != 'memcg':
-            raise Exception('path for non-memcg damon filter')
         self.path = path
 
     def to_str(self, raw):
