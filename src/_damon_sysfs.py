@@ -570,6 +570,52 @@ def write_ops_attrs_dir(dir_path, ops_attrs):
     if err is not None:
         return err
 
+def write_probe_filter_dir(dir_path, filter):
+    err = _damo_fs.write_file(
+            os.path.join(dir_path, 'type'), filter.filter_type)
+    if err is not None:
+        return err
+    err = _damo_fs.write_file(os.path.join(dir_path, 'matching'),
+                              'Y' if filter.matching else 'N')
+    if err is not None:
+        return err
+    err = _damo_fs.write_file(os.path.join(dir_path, 'allow'),
+                              'Y' if filter.allow else 'N')
+    if err is not None:
+        return err
+    if filter.filter_type == 'memcg':
+        err = _damo_fs.write_file(os.path.join(dir_path, 'path'), filter.path)
+        if err is not None:
+            return err
+    return None
+
+def write_probe_dir(dir_path, probe):
+    filters_dir = os.path.join(dir_path, 'filters')
+    err = ensure_nr_file_for(os.path.join(filters_dir, 'nr_filters'),
+                             probe.filters)
+    if err is not None:
+        return err
+
+    for idx, filter in enumerate(probe.filters):
+        err = write_probe_filter_dir(
+                os.path.join(filters_dir, '%d' % idx), filter)
+        if err is not None:
+            return err
+    return None
+
+def write_probes_dir(dir_path, probes):
+    if not os.path.isdir(dir_path):
+        return None
+    err = ensure_nr_file_for(os.path.join(dir_path, 'nr_probes'), probes)
+    if err is not None:
+        return err
+
+    for idx, probe in enumerate(probes):
+        err = write_probe_dir(os.path.join(dir_path, '%d' % idx), probe)
+        if err is not None:
+            return err
+    return None
+
 def write_sample_filter_dir(dir_path, sample_filter):
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'type'), sample_filter.filter_type)
@@ -669,6 +715,11 @@ def write_monitoring_attrs_dir(dir_path, context):
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'nr_regions', 'max'),
             '%d' % context.nr_regions.maximum)
+    if err is not None:
+        return err
+
+    err = write_probes_dir(
+            os.path.join(dir_path, 'probes'), context.probes)
     if err is not None:
         return err
 
