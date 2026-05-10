@@ -930,14 +930,28 @@ def files_content_to_damos_stats(files_content):
             int(files_content['qt_exceeds']),
             nr_snapshots=nr_snapshots, max_nr_snapshots=max_nr_snapshots)
 
+def files_content_to_probe_hits(files_content):
+    hits = []
+    for kv in number_sorted_dirs(files_content):
+        hits.append(int(kv['hits']))
+    return hits
+
 def files_content_to_damos_tried_regions(files_content):
-    return [_damon.DamonRegion(
-            int(kv['start']), int(kv['end']),
-            int(kv['nr_accesses']), _damon.unit_samples,
-            int(kv['age']), _damon.unit_aggr_intervals,
-            int(kv['sz_filter_passed'])
-            if 'sz_filter_passed' in kv else None,
-            ) for kv in number_sorted_dirs(files_content)]
+    regions = []
+    for kv in number_sorted_dirs(files_content):
+        if 'probes' in kv:
+            probe_hits = files_content_to_probe_hits(kv['probes'])
+        else:
+            probe_hits = []
+        regions.append(
+                _damon.DamonRegion(
+                    int(kv['start']), int(kv['end']),
+                    int(kv['nr_accesses']), _damon.unit_samples,
+                    int(kv['age']), _damon.unit_aggr_intervals,
+                    int(kv['sz_filter_passed'])
+                    if 'sz_filter_passed' in kv else None,
+                    probe_hits=probe_hits))
+    return regions
 
 def files_content_to_damos_dest(files_content):
     return _damon.DamosDest(
