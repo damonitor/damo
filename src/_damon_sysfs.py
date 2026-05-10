@@ -999,6 +999,29 @@ def files_content_to_target(files_content):
     regions = files_content_to_regions(files_content['regions'])
     return _damon.DamonTarget(pid, regions, obsolete=obsolete)
 
+def files_content_to_damon_filter(files_content):
+    path = None
+    if 'path' in files_content:
+        files_content.get('path').strip()
+    return _damon.DamonFilter(
+        filter_type=files_content['type'].strip(),
+        matching=files_content['matching'].strip(),
+        allow=files_content['allow'].strip(), path=path)
+
+def files_content_to_probe(files_content):
+    filters_content = files_content['filters']
+    filters = []
+    for kv in number_sorted_dirs(filters_content):
+        filter = files_content_to_damon_filter(kv)
+        filters.append(filter)
+    return _damon.DamonProbe(filters=filters)
+
+def files_content_to_probes(files_content):
+    probes = []
+    for kv in number_sorted_dirs(files_content):
+        probes.append(files_content_to_probe(kv))
+    return probes
+
 def files_content_to_sample_filter(files_content):
     filter_type = files_content['type'].strip()
     matching = files_content['matching'].strip()
@@ -1051,6 +1074,11 @@ def files_content_to_context(files_content):
     nr_regions = _damon.DamonNrRegionsRange(
             int(nr_regions_content['min']),
             int(nr_regions_content['max']))
+    if 'probes' in files_content['monitoring_attrs']:
+        probes = files_content_to_probes(
+                files_content['monitoring_attrs']['probes'])
+    else:
+        probes = []
     if 'sample' in mon_attrs_content:
         sample_control = files_content_to_sample_control(
                 mon_attrs_content['sample'])
@@ -1080,7 +1108,7 @@ def files_content_to_context(files_content):
 
     return _damon.DamonCtx(ops, targets, intervals, nr_regions, schemes,
                            ops_attrs=ops_attrs, sample_control=sample_control,
-                           pause=pause, addr_unit=addr_unit)
+                           pause=pause, addr_unit=addr_unit, probes=probes)
 
 def files_content_to_kdamond(files_content):
     contexts_content = files_content['contexts']
