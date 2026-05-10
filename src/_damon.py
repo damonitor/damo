@@ -16,6 +16,57 @@ import _damo_fmt_str
 
 # Core data structures
 
+class DamonFilter:
+    filter_type = None  # anon, memcg
+    matching = None
+    allow = None
+    path = None
+
+    def __init__(self, filter_type, matching, allow=False, path=None):
+        self.filter_type = filter_type
+        self.matching = _damo_fmt_str.text_to_bool(matching)
+        self.allow = _damo_fmt_str.text_to_bool(allow)
+        if path is not None and self.filter_type != 'memcg':
+            raise Exception('path for non-memcg damon filter')
+        self.path = path
+
+    def to_str(self, raw):
+        words = []
+        if self.allow:
+            words.append('allow')
+        else:
+            words.append('reject')
+        if self.matching is False:
+            words.append('non')
+        words.append(self.filter_type)
+        if self.filter_type in ['anon']:
+            return ' '.join(words)
+        if self.filter_type == 'memcg':
+            return ' '.join(words + [self.path])
+
+    def __str__(self):
+        return self.to_str(False)
+
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+                self.filter_type == other.filter_type and \
+                self.matching == other.matching and \
+                self.allow == other.allow and self.path == other.path
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamonFilter(
+                filter_type=kv['filter_type'], matching=kv['matching'],
+                allow=kv['allow'], path=kv['path'])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('filter_type', self.filter_type),
+            ('matching', self.matching),
+            ('allow', self.allow),
+            ('path', self.path),
+            ])
+
 class OpsAttrs:
     use_reports = None
     write_only = None
