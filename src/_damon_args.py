@@ -641,8 +641,8 @@ def damon_ctx_for(args, idx):
 
 def get_nr_ctxs(args):
     candidates = []
-    for v in [args.ops, args.sample, args.aggr, args.updr, args.minr,
-              args.maxr, args.monitoring_intervals,
+    for v in [args.ops, args.nr_probes, args.sample, args.aggr, args.updr,
+              args.minr, args.maxr, args.monitoring_intervals,
               args.monitoring_intervals_goal,
               args.monitoring_nr_regions_range]:
         if v is not None:
@@ -752,6 +752,90 @@ def gen_assign_schemes(ctxs, args):
         scheme_idx += nr
     return None
 
+def probe_filter_for(filter_arg_fields):
+    fields = filter_arg_fields
+    if len(fields) < 2:
+        return None, 'expected >=2 fields but %d' % len(fields)
+    if not fields[0] in ['allow', 'reject']:
+        return None, 'expected allow|reject but %s' % fields[0]
+    allow = fields[0] == 'allow'
+    fields = fields[1:]
+    matching = True
+    if fields[0] == 'non':
+        matching = False
+        fields = fields[1:]
+    if len(fields) < 1:
+        return None, 'filter type is not given'
+    filter_type = fields[0]
+    fields = fields[1:]
+    path = None
+    if filter_type == 'memcg':
+        if len(fields) < 1:
+            return None, 'memcg path is not given'
+        path = fields[0]
+    try:
+        filter = _damon.DamonFilter(filter_type=filter_type, matching=matching,
+                                    allow=allow, path=path)
+    except Exception as e:
+        return None, 'filter creation fail (%s)' % e
+    return filter, None
+
+def probe_filters_for(filters_args):
+    filters = []
+    for filter_args in filters_args:
+        filter, err = probe_filter_for(filter_args)
+        if err is not None:
+            return None, err
+        filters.append(filter)
+    return filters, None
+
+def probes_for(args):
+    filters, err = probe_filters_for(args.probe_filter)
+    if err is not None:
+        return None, err
+    if len(filters) == 0:
+        return [], None
+    probes = []
+    filter_idx = 0
+    if args.nr_probe_filters is None:
+        args.nr_probe_filters = [len(args.probe_filter)]
+    if sum(args.nr_probe_filters) != len(filters):
+        return None, \
+                '--nr_probe_filters mismatches --probe_filter (%d != %d)' % (
+                        sum(args.nr_probe_filters), len(filters))
+    for nr in args.nr_probe_filters:
+        filters_for_probe = filters[filter_idx:filter_idx + nr]
+        try:
+            probe = _damon.DamonProbe(filters=filters_for_probe)
+        except Exception as e:
+            return None, 'probe creation fail (%s)' % e
+        probes.append(probe)
+        filter_idx += nr
+    return probes, None
+
+def gen_assign_probes(ctxs, args):
+    probes, err = probes_for(args)
+    if err is not None:
+        return err
+    if args.nr_probes is None:
+        if len(ctxs) != 1 and len(probes) > 0:
+            return '--nr_probes is required'
+        args.nr_probes = [len(probes)]
+        args.nr_probes += [0] * (len(ctxs) - 1)
+    if sum(args.nr_probes) != len(probes):
+        return '--nr_probes mismatches number of probes (%d != %d)' % (
+                sum(args.nr_probes), len(probes))
+    if len(args.nr_probes) != len(ctxs):
+        return '--nr_probes mismatches number of contexts (%d != %d)' % (
+                len(args.nr_probes), len(ctxs))
+    ctx_idx = 0
+    probe_idx = 0
+    for nr in args.nr_probes:
+        ctxs[ctx_idx].probes = probes[probe_idx:probe_idx + nr]
+        ctx_idx += 1
+        probe_idx += nr
+    return None
+
 def damon_ctxs_for(args):
     fillup_none_ctx_args(args)
     fillup_none_target_args(args)
@@ -767,6 +851,10 @@ def damon_ctxs_for(args):
         return None, err
 
     err = gen_assign_schemes(ctxs, args)
+    if err is not None:
+        return None, err
+
+    err = gen_assign_probes(ctxs, args)
     if err is not None:
         return None, err
 
