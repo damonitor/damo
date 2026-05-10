@@ -1273,6 +1273,21 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
                         action='append',
                         help='monitoring operations set'
                         if not hide_help else argparse.SUPPRESS)
+
+    parser.add_argument('--probe_filter', nargs='+', action='append',
+                        default=[],
+                        metavar='<<allow|reject> [non] <type> [option]...>',
+                        help='data attribute monitoring probe filter'
+                        if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--nr_probe_filters', type=int, nargs='+', metavar='<integer>',
+            help='number of filters for each probe (in order)'
+            if not hide_help else argparse.SUPPRESS)
+    parser.add_argument(
+            '--nr_probes', type=int, nargs='+', metavar='<integer>',
+            help='number of probes for each context (in order)'
+            if not hide_help else argparse.SUPPRESS)
+
     parser.add_argument(
             '--pause_ctx', type=int, nargs='+', metavar='<context index>',
             help='contexts to pause')
