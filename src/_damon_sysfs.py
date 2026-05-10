@@ -1344,6 +1344,10 @@ def mk_feature_supports_map():
         supports_map['sysfs/damos_action_collapse'] = True
         supports_map['sysfs/damos_quota_goal_node_eligible_mem_bp'] = True
 
+    if os.path.isdir(
+            os.path.join(ctx_dir_of(0, 0), 'monitoring_attrs', 'probes')):
+        supports_map['sysfs/attrs_monitoring'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
 
