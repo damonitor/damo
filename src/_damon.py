@@ -67,6 +67,35 @@ class DamonFilter:
             ('path', self.path),
             ])
 
+class DamonProbe:
+    filters = None
+
+    def __init__(self, filters):
+        if type(filters) is not list:
+            raise Exception('filters for DamonProbe() is not a list')
+        self.filters = filters
+
+    def to_str(self, raw):
+        return ', '.join([f.to_str(raw) for f in self.filters])
+
+    def __str__(self):
+        return self.to_str(False)
+
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+                self.filters == other.filters
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamonProbe(filters=[
+                DamonFilter.from_kvpairs(filter_kv)
+                for filter_kv in kv['filters']])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('filters', [f.to_kvpairs(raw) for f in self.filters]),
+            ])
+
 class OpsAttrs:
     use_reports = None
     write_only = None
