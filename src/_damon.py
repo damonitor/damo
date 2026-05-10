@@ -1285,6 +1285,7 @@ damos_action_willneed = 'willneed'
 damos_action_cold = 'cold'
 damos_action_pageout = 'pageout'
 damos_action_hugepage = 'hugepage'
+damos_action_collapse = 'collapse'
 damos_action_nohugepage = 'nohugepage'
 damos_action_lru_prio = 'lru_prio'
 damos_action_lru_deprio = 'lru_deprio'
@@ -1297,6 +1298,7 @@ damos_actions = [
         damos_action_cold,
         damos_action_pageout,
         damos_action_hugepage,
+        damos_action_collapse,
         damos_action_nohugepage,
         damos_action_lru_prio,
         damos_action_lru_deprio,
