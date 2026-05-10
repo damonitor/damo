@@ -964,6 +964,11 @@ def warn_unsupported_damon_features_for(args):
     # 7.2
     if _damon.damos_action_collapse in args.damos_action:
         warn_for('--damos_action collapse', 'sysfs/damos_action_collapse')
+    for quota_goal in args.damos_quota_goal:
+        metric = quota_goal[0]
+        if metric == _damon.qgoal_node_eligible_mem_bp:
+            warn_for('--damos_quota_goal %s' % metric,
+                     'sysfs/damos_quota_goal_node_eligible_mem_bp')
 
     # 7.1
     if args.damos_quota_goal_tuner != []:
