@@ -870,6 +870,9 @@ def warn_unsupported_damon_features_for(args):
     if args.sample_primitives is not None:
         warn_for('--sample_primitives', 'sysfs/damon_sample_control')
 
+    if args.probe_filter is not None:
+        warn_for('--probe_filter', 'sysfs/attrs_monitoring')
+
     if args.damos_quota_goal_tuner != []:
         warn_for('--damos_quota_goal_tuner', 'sysfs/damos_quota_goal_tuner')
     if args.pause_ctx is not None:
