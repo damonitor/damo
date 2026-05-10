@@ -1473,6 +1473,7 @@ class DamonCtx:
     targets = None
     intervals = None
     nr_regions = None
+    probes = None
     sample_control = None
     pause = None
     schemes = None
@@ -1480,7 +1481,7 @@ class DamonCtx:
 
     def __init__(self, ops='paddr', targets=None, intervals=None,
                  nr_regions=None, schemes=None, ops_attrs=None,
-                 sample_control=None, addr_unit=None, pause=None):
+                 sample_control=None, addr_unit=None, pause=None, probes=None):
         self.ops = ops
         self.ops_attrs = ops_attrs if ops_attrs is not None else OpsAttrs()
         if addr_unit is None:
@@ -1494,6 +1495,9 @@ class DamonCtx:
                           if intervals is not None else DamonIntervals())
         self.nr_regions = (nr_regions if nr_regions is not None
                            else DamonNrRegionsRange())
+        if probes is None:
+            probes = []
+        self.probes = probes
         if sample_control is None:
             sample_control = DamonSampleControl()
         self.sample_control = sample_control
@@ -1503,6 +1507,16 @@ class DamonCtx:
         self.schemes = schemes if schemes is not None else []
         for scheme in self.schemes:
             scheme.context = self
+
+    def add_probes_str(self, lines, raw):
+        if len(self.probes) == 0:
+            return
+        if len(self.probes) == 1:
+            lines.append('probe %s' % self.probes[0].to_str(raw))
+            return
+        lines.append('probes')
+        for idx, probe in enumerate(self.probes):
+            lines.append('- %s' % probe.to_str(raw))
 
     def to_str(self, raw, params_only=False, omit_damos_tried_regions=False):
         ops_line_tokens = ['ops: %s' % self.ops]
@@ -1517,6 +1531,7 @@ class DamonCtx:
                     'addr_unit %s' % _damo_fmt_str.format_sz_accurate(
                         self.addr_unit, raw))
         lines = [' '.join(ops_line_tokens)]
+        self.add_probes_str(lines, raw)
         if self.pause is True:
             lines.append('pause: True')
         for idx, target in enumerate(self.targets):
@@ -1556,6 +1571,8 @@ class DamonCtx:
             sample_control = DamonSampleControl()
         addr_unit = kv.get('addr_unit', 1)
         pause = _damo_fmt_str.text_to_bool(kv.get('pause', False))
+        probes = [DamonProbe.from_kvpairs(probe_kv)
+                  for probe_kv in kv.get('probes', [])]
         ctx = DamonCtx(
                 kv['ops'],
                 [DamonTarget.from_kvpairs(t) for t in kv['targets']],
@@ -1565,6 +1582,7 @@ class DamonCtx:
                     if 'nr_regions' in kv else DamonNrRegionsRange(),
                 [Damos.from_kvpairs(s) for s in kv['schemes']]
                     if 'schemes' in kv else [],
+                probes=probes,
                 sample_control=sample_control,
                 addr_unit=addr_unit,
                 pause=pause)
@@ -1579,6 +1597,7 @@ class DamonCtx:
             kv['intervals'] = self.intervals.to_kvpairs(raw)
         if not omit_defaults or self.nr_regions != DamonNrRegionsRange():
             kv['nr_regions'] = self.nr_regions.to_kvpairs(raw)
+        kv['probes'] = [probe.to_kvpairs(raw) for probe in self.probes]
         kv['sample_control'] = self.sample_control.to_kvpairs(raw)
         kv['pause'] = self.pause
         kv['schemes'] = [s.to_kvpairs(raw, omit_defaults, params_only)
