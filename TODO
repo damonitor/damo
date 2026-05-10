@@ -49,9 +49,9 @@
 - Support 'damo record' works with DAMON_RECLAIM
 - Document full DAMON parameter options
 - Document 'damo report trace'
-- Support damos_action_collapse
-- Support damos_quota_goal_node_eligible_mem_bp
 - Support data attributes monitoring
+  - For damo report access
+  - For damo record
 
 - Deprecate old features
   - Deprecate 'damo record_info'
