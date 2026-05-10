@@ -345,6 +345,10 @@ features_list = [
                      upstream_status='merged in mm.git',
                      upstreamed_version='none'),
 
+        DamonFeature(name='sysfs/attrs_monitoring',
+                     upstream_status='hacking on damon/next',
+                     upstreamed_version='none'),
+
         DamonFeature(name='sysfs/damon_sample_control',
                      upstream_status='hacking on damon/next',
                      upstreamed_version='none',
