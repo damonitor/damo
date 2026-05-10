@@ -247,6 +247,11 @@ region_formatters = [
             temperature_str(region, fmt.raw_number, fmt),
             'access temperature of the region'),
         Formatter(
+            '<probe hits>',
+            lambda index, region, snapshot, record, fmt:
+            ' '.join(['%d' % h for h in region.probe_hits]),
+            'data attributese probe hit counts'),
+        Formatter(
             '<filters passed bytes>',
             lambda index, region, snapshot, record, fmt:
             _damo_fmt_str.format_sz(region.sz_filter_passed, fmt.raw_number)
