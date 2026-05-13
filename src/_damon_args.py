@@ -942,7 +942,7 @@ def deduce_target_update_args(args):
 def warn_for(arg, feature):
     if _damo_sysinfo.damon_feature_available(feature):
         return
-    sys.stderr.write('%s is passed but %s DAMON feature is not available' %
+    sys.stderr.write('%s is passed but %s DAMON feature is not available\n' %
                      (arg, feature))
 
 def warn_for_features(arg, features):
@@ -950,7 +950,7 @@ def warn_for_features(arg, features):
         if _damo_sysinfo.damon_feature_available(feature):
             return
     sys.stderr.write(
-            '%s is passed but any of %s DAMON features is not available' %
+            '%s is passed but any of %s DAMON features is not available\n' %
             (arg, ', '.join(features)))
 
 def warn_unsupported_damon_features_for(args):
