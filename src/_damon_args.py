@@ -958,7 +958,7 @@ def warn_unsupported_damon_features_for(args):
     if args.sample_primitives is not None:
         warn_for('--sample_primitives', 'sysfs/damon_sample_control')
 
-    if args.probe_filter is not None:
+    if args.probe_filter != []:
         warn_for('--probe_filter', 'sysfs/attrs_monitoring')
 
     # 7.2
