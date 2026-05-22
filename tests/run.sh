@@ -3,6 +3,8 @@
 
 bindir=$(dirname "$0")
 cd "$bindir" || exit 1
+# Stop any stale DAMON from previous tests
+sudo ../../damo stop 2>/dev/null
 
 restart_damon_stat="false"
 damon_stat_enabled_file="/sys/module/damon_stat/parameters/enabled"
