@@ -257,7 +257,7 @@ test_filters() {
 	if [ "$rss" -gt 500000 ]
 	then
 		echo "FAIL $testname (prcl doesn't work: $rss)"
-		exit 1
+		kill -9 "$workload_pid" 2> /dev/null; sudo "$damo" stop 2> /dev/null; return 1
 	fi
 	kill -9 "$workload_pid"
 	sudo "$damo" stop 2> /dev/null
@@ -271,7 +271,7 @@ test_filters() {
 	if [ "$rss" -lt 800000 ]
 	then
 		echo "FAIL $testname (prcl_no_anon doesn't work: $rss)"
-		exit 1
+		kill -9 "$workload_pid" 2> /dev/null; sudo "$damo" stop 2> /dev/null; return 1
 	fi
 	kill -9 "$workload_pid"
 	sudo "$damo" stop 2> /dev/null
@@ -304,7 +304,7 @@ test_filters() {
 	if [ "$rss" -lt 800000 ]
 	then
 		echo "FAIL $testname (prcl_no_cgroup doesn't work: $rss)"
-		exit 1
+		kill -9 "$workload_pid" 2> /dev/null; sudo "$damo" stop 2> /dev/null; return 1
 	fi
 	kill -9 "$workload_pid"
 	sudo "$damo" stop 2> /dev/null
@@ -355,7 +355,7 @@ do
 	       2> /dev/null | \
 		grep -w "schemes_filters" > /dev/null
 	then
-		test_filters
+		test_filters || exit 1
 	fi
 done
 
