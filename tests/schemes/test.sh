@@ -249,9 +249,9 @@ test_filters() {
 	fi
 
 	prcl_damos_json="prcl_damos.json"
-	sudo "$damo" start -c "$prcl_damos_json" 2> /dev/null
 	"./$workload" &
 	workload_pid=$!
+	sudo "$damo" start "$workload_pid" -c "$prcl_damos_json" 2> /dev/null
 	sleep 5
 	rss=$(ps -o rss=, --pid "$workload_pid")
 	if [ "$rss" -gt 500000 ]
