@@ -136,6 +136,35 @@ def pr_damon_aggregated(fields, trace_text_format, max_cols):
     pr_wrapped(' '.join(fields[:2] + ['damon_aggregated', trace_text]),
                max_cols)
 
+region_aggregated_idx = 0
+def pr_damon_region_aggregated(fields, trace_text_format, max_cols):
+    trace_fields = get_trace_fields(fields, trace_text_format)
+    # trace_fields: target_id=0 nr_regions=11 8009068544-8372879360: 0 2740 probe_hits=14 00
+    target_id = int(trace_fields[0].split('=')[1])
+    nr_regions = int(trace_fields[1].split('=')[1])
+    start = int(trace_fields[2].split('-')[0])
+    end = int(trace_fields[2].split('-')[1][:-1])
+    nr_accesses = int(trace_fields[3])
+    age = int(trace_fields[4])
+    if trace_fields[5] == 'probe_hits=':
+        probe_hits = []
+    else:
+        probe_hits = [int(hits, 16) for hits in
+                      [trace_fields[5].split('=')[1]] + trace_fields[6:]]
+
+    global region_idx
+    trace_text = '%d %d/%d %s (%s) %d %d %s' % (
+            target_id, region_idx, nr_regions,
+            _damo_fmt_str.format_sz_accurate(start, machine_friendly=False),
+            _damo_fmt_str.format_sz_accurate(
+                end - start, machine_friendly=False),
+            nr_accesses, age, ' '.join(['%d' % h for h in probe_hits]))
+    region_idx += 1
+    if region_idx == nr_regions:
+        region_idx = 0
+    pr_wrapped(' '.join(fields[:2] + ['damon_region_aggregated', trace_text]),
+               max_cols)
+
 def pr_damos_before_apply(fields, trace_text_format, max_cols):
     trace_fields = get_trace_fields(fields, trace_text_format)
     # trace_fields: ctx_idx=0 scheme_idx=0 target_idx=0 nr_regions=11 1234-5678: 10 45
@@ -218,6 +247,9 @@ def pr_trace_line(line, raw, trace_text_format, max_cols):
     fields[0] = timestamp
     fields[1] = kdamond_pid
 
+    if fields[2].startswith('damon_region_aggregated'):
+        pr_damon_region_aggregated(fields, trace_text_format, max_cols)
+        return
     if fields[2].startswith('damon_aggregated'):
         pr_damon_aggregated(fields, trace_text_format, max_cols)
         return
