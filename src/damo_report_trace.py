@@ -197,9 +197,18 @@ def pr_damos_stat(fields, trace_text_format, max_cols):
     sz_tried = int(trace_fields[3].split('=')[1])
     nr_applied = int(trace_fields[4].split('=')[1])
     sz_applied = int(trace_fields[5].split('=')[1])
-    sz_ops_filter_passed = int(trace_fields[6].split('=')[1])
-    qt_exceeds = int(trace_fields[7].split('=')[1])
-    nr_snapshots = int(trace_fields[8].split('=')[1])
+    if len(trace_fields) > 6:
+        sz_ops_filter_passed = int(trace_fields[6].split('=')[1])
+    else:
+        sz_ops_filter_passed = -1
+    if len(trace_fields) > 7:
+        qt_exceeds = int(trace_fields[7].split('=')[1])
+    else:
+        qt_exceeds = -1
+    if len(trace_fields) > 8:
+        nr_snapshots = int(trace_fields[8].split('=')[1])
+    else:
+        nr_snapshots = -1
 
     trace_text = '%d %d %s %s %s %s %s %s %s' % (
             context_idx, scheme_idx,
