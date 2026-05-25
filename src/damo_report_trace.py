@@ -101,11 +101,11 @@ def pr_wrapped(line, max_cols):
     if len(line_fields) > 0:
         print(' '.join(line_fields))
 
-def get_trace_fields(fields, trace_text_format):
+def get_trace_fields(fields, trace_text_format, trace_name):
     if trace_text_format == 'damo-report-trace-perf':
         #   3128.371 kdamond.0/764 damon:damon_aggregated(trace fields)
         trace_fields = fields[2:]
-        trace_fields[0] = trace_fields[0][len('damon_aggregated('):]
+        trace_fields[0] = trace_fields[0][len(trace_name) + 1:]
         trace_fields[-1] = trace_fields[-1][:-1]
     else:
         # <...>-764   [001] .....  1394.412830: damon_region_aggregated: trace fields
@@ -114,7 +114,8 @@ def get_trace_fields(fields, trace_text_format):
 
 region_idx = 0
 def pr_damon_aggregated(fields, trace_text_format, max_cols):
-    trace_fields = get_trace_fields(fields, trace_text_format)
+    trace_fields = get_trace_fields(
+            fields, trace_text_format, 'damon:damon_aggregated')
     # trace_fields: target_id=0 nr_regions=11 8009068544-8372879360: 0 2740
     target_id = int(trace_fields[0].split('=')[1])
     nr_regions = int(trace_fields[1].split('=')[1])
@@ -167,7 +168,8 @@ def fmt_damon_region_aggregated_trace(trace_fields):
     return trace_text
 
 def fmt_damon_region_aggregated(fields, trace_text_format):
-    trace_fields = get_trace_fields(fields, trace_text_format)
+    trace_fields = get_trace_fields(
+            fields, trace_text_format, 'damon:damon_region_aggregated')
     trace_text = fmt_damon_region_aggregated_trace(trace_fields)
     return ' '.join(fields[:2] + ['damon_region_aggregated', trace_text])
 
@@ -176,7 +178,8 @@ def pr_damon_region_aggregated(fields, trace_text_format, max_cols):
             fmt_damon_region_aggregated(fields, trace_text_format), max_cols)
 
 def pr_damos_before_apply(fields, trace_text_format, max_cols):
-    trace_fields = get_trace_fields(fields, trace_text_format)
+    trace_fields = get_trace_fields(
+            fields, trace_text_format, 'damon:damos_before_apply')
     # trace_fields: ctx_idx=0 scheme_idx=0 target_idx=0 nr_regions=11 1234-5678: 10 45
     context_idx = int(trace_fields[0].split('=')[1])
     scheme_idx = int(trace_fields[1].split('=')[1])
@@ -197,7 +200,8 @@ def pr_damos_before_apply(fields, trace_text_format, max_cols):
                max_cols)
 
 def pr_damos_stat(fields, trace_text_format, max_cols):
-    trace_fields = get_trace_fields(fields, trace_text_format)
+    trace_fields = get_trace_fields(
+            fields, trace_text_format, 'damon:damos_stat')
     context_idx = int(trace_fields[0].split('=')[1])
     scheme_idx = int(trace_fields[1].split('=')[1])
     nr_tried = int(trace_fields[2].split('=')[1])
