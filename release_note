@@ -3,6 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.2.5
 - Fix the flaky scheme-filters test.
+- damo report trace: support damon_region_aggregated trace event.
 
 v3.2.4
 - Fix of wrong probe_filters feature support warning.
