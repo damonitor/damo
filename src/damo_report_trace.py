@@ -121,7 +121,10 @@ def pr_damon_aggregated(fields, trace_text_format, max_cols):
     start = int(trace_fields[2].split('-')[0])
     end = int(trace_fields[2].split('-')[1][:-1])
     nr_accesses = int(trace_fields[3])
-    age = int(trace_fields[4])
+    if len(trace_fields) > 4:
+        age = int(trace_fields[4])
+    else:
+        age = -1
 
     global region_idx
     trace_text = '%d %d/%d %s (%s) %d %d' % (
