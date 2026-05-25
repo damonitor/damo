@@ -190,6 +190,7 @@ tracepoint_to_feature_name_map = {
         'damon:damos_esz': 'trace/damos_esz',
         'damon:damos_stat_after_apply_interval':
         'trace/damos_stat_after_apply_interval',
+        'damon:damon_region_aggregated': 'trace/damon_region_aggregated',
         }
 
 def get_avail_damon_trace_features():
