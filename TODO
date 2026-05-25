@@ -52,6 +52,7 @@
 - Support data attributes monitoring
   - For damo report access
   - For damo record
+- Add a test for 'damo report trace'
 
 - Deprecate old features
   - Deprecate 'damo record_info'
