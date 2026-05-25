@@ -155,16 +155,16 @@ def fmt_damon_region_aggregated(fields, trace_text_format):
         probe_hits = [int(hits, 16) for hits in
                       [trace_fields[5].split('=')[1]] + trace_fields[6:]]
 
-    global region_idx
+    global region_aggregated_idx
     trace_text = '%d %d/%d %s (%s) %d %d %s' % (
-            target_id, region_idx, nr_regions,
+            target_id, region_aggregated_idx, nr_regions,
             _damo_fmt_str.format_sz_accurate(start, machine_friendly=False),
             _damo_fmt_str.format_sz_accurate(
                 end - start, machine_friendly=False),
             nr_accesses, age, ' '.join(['%d' % h for h in probe_hits]))
-    region_idx += 1
-    if region_idx == nr_regions:
-        region_idx = 0
+    region_aggregated_idx += 1
+    if region_aggregated_idx == nr_regions:
+        region_aggregated_idx = 0
     return ' '.join(fields[:2] + ['damon_region_aggregated', trace_text])
 
 def pr_damon_region_aggregated(fields, trace_text_format, max_cols):
