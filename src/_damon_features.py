@@ -351,10 +351,12 @@ features_list = [
         DamonFeature(name='sysfs/damon_sample_control',
                      upstream_status='hacking on damon/next',
                      upstreamed_version='none',
-                     comments='a replacement of ops_attrs'),
-        DamonFeature(name='sysfs/ops_attrs',
-                     upstream_status='hacking on damon/next',
-                     upstreamed_version='none'),
+                     comments='a replacement of ops_attrs; ' \
+                             'will be replaced by attrs_monitoring'),
+        DamonFeature(
+                name='sysfs/ops_attrs',
+                upstream_status='hacking on damon/next',
+                upstreamed_version='will be replaced by attrs_monitoring'),
         ]
 
 def feature_of_name(name):
