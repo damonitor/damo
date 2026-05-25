@@ -15,5 +15,11 @@ class TestDamoReportTrace(unittest.TestCase):
             '2452.789 kdamond.0/2149 damon:damon_region_aggregated(target_id=0 nr_regions=11 8354394112-8372879360: 0 600 probe_hits=13 00)'.split(), 'damo-report-trace-perf'),
                          '2452.789 kdamond.0/2149 damon_region_aggregated 0 0/11 7.780636 GiB (17.628906 MiB) 0 600 19 0')
 
+    def test_fmt_damon_region_aggregated_trace(self):
+        damo_report_trace.region_aggregated_idx = 0
+        self.assertEqual(damo_report_trace.fmt_damon_region_aggregated_trace(
+            'target_id=0 nr_regions=11 8354394112-8372879360: 0 600 probe_hits=13 00'.split()),
+            '0 0/11 7.780636 GiB (17.628906 MiB) 0 600 19 0')
+
 if __name__ == '__main__':
     unittest.main()
