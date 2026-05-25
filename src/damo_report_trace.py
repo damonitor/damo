@@ -140,7 +140,7 @@ def pr_damon_aggregated(fields, trace_text_format, max_cols):
                max_cols)
 
 region_aggregated_idx = 0
-def pr_damon_region_aggregated(fields, trace_text_format, max_cols):
+def fmt_damon_region_aggregated(fields, trace_text_format):
     trace_fields = get_trace_fields(fields, trace_text_format)
     # trace_fields: target_id=0 nr_regions=11 8009068544-8372879360: 0 2740 probe_hits=14 00
     target_id = int(trace_fields[0].split('=')[1])
@@ -165,8 +165,11 @@ def pr_damon_region_aggregated(fields, trace_text_format, max_cols):
     region_idx += 1
     if region_idx == nr_regions:
         region_idx = 0
-    pr_wrapped(' '.join(fields[:2] + ['damon_region_aggregated', trace_text]),
-               max_cols)
+    return ' '.join(fields[:2] + ['damon_region_aggregated', trace_text])
+
+def pr_damon_region_aggregated(fields, trace_text_format, max_cols):
+    pr_wrapped(
+            fmt_damon_region_aggregated(fields, trace_text_format), max_cols)
 
 def pr_damos_before_apply(fields, trace_text_format, max_cols):
     trace_fields = get_trace_fields(fields, trace_text_format)
