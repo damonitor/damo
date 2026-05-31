@@ -211,9 +211,7 @@ def pr_damon_region_aggregated(fields, trace_text_format, max_cols):
     pr_wrapped(
             fmt_damon_region_aggregated(fields, trace_text_format), max_cols)
 
-def pr_damos_before_apply(fields, trace_text_format, max_cols):
-    trace_fields = get_trace_fields(
-            fields, trace_text_format, 'damon:damos_before_apply')
+def fmt_damos_before_apply(trace_fields):
     # trace_fields: ctx_idx=0 scheme_idx=0 target_idx=0 nr_regions=11 1234-5678: 10 45
     context_idx = int(trace_fields[0].split('=')[1])
     scheme_idx = int(trace_fields[1].split('=')[1])
@@ -224,12 +222,17 @@ def pr_damos_before_apply(fields, trace_text_format, max_cols):
     nr_accesses = int(trace_fields[5])
     age = int(trace_fields[6])
 
-    trace_text = '%d %d %d %d %s (%s) %d %d' % (
+    return '%d %d %d %d %s (%s) %d %d' % (
             context_idx, scheme_idx, target_idx, nr_regions,
             _damo_fmt_str.format_sz_accurate(start, machine_friendly=False),
             _damo_fmt_str.format_sz_accurate(
                 end - trace_data['start'], machine_friendly=False),
             nr_accesses, age)
+
+def pr_damos_before_apply(fields, trace_text_format, max_cols):
+    trace_fields = get_trace_fields(
+            fields, trace_text_format, 'damon:damos_before_apply')
+    trace_text = fmt_damos_before_apply(trace_fields)
     pr_wrapped(' '.join(fields[:2] + ['damos_before_apply', trace_text]),
                max_cols)
 
