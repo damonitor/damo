@@ -236,9 +236,7 @@ def pr_damos_before_apply(fields, trace_text_format, max_cols):
     pr_wrapped(' '.join(fields[:2] + ['damos_before_apply', trace_text]),
                max_cols)
 
-def pr_damos_stat(fields, trace_text_format, max_cols):
-    trace_fields = get_trace_fields(
-            fields, trace_text_format, 'damon:damos_stat')
+def fmt_damos_stat(trace_fields):
     context_idx = int(trace_fields[0].split('=')[1])
     scheme_idx = int(trace_fields[1].split('=')[1])
     nr_tried = int(trace_fields[2].split('=')[1])
@@ -258,7 +256,7 @@ def pr_damos_stat(fields, trace_text_format, max_cols):
     else:
         nr_snapshots = -1
 
-    trace_text = '%d %d %s %s %s %s %s %s %s' % (
+    return '%d %d %s %s %s %s %s %s %s' % (
             context_idx, scheme_idx,
             _damo_fmt_str.format_nr(nr_tried, machine_friendly=False),
             _damo_fmt_str.format_sz_accurate(
@@ -271,6 +269,11 @@ def pr_damos_stat(fields, trace_text_format, max_cols):
             _damo_fmt_str.format_nr(qt_exceeds, machine_friendly=False),
              _damo_fmt_str.format_nr(nr_snapshots, machine_friendly=False)
              )
+
+def pr_damos_stat(fields, trace_text_format, max_cols):
+    trace_fields = get_trace_fields(
+            fields, trace_text_format, 'damon:damos_stat')
+    trace_text = fmt_damo_stat(trace_fields)
     pr_wrapped(' '.join(fields[:2] + ['damos_stat', trace_text]), max_cols)
 
 def pr_trace_line(line, raw, trace_text_format, max_cols):
