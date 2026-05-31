@@ -349,32 +349,13 @@ def report_recorded_trace(args):
 
     events = get_events_to_show(args.event, args.no_event)
 
-    for line in trace_text.split('\n'):
-        fields = line.split()
-        if trace_text_format in ['perf-script', 'trace-cmd-report']:
-            # perf script and trace-cmd report puts the event name on fifth
-            # field.
-            # perf:
-            #   kdamond.0  4452 [000] 82877.315633: damon:damon_aggregated: ...
-            # trace-cmd:
-            #   kdamond.0-264454 [007] ..... 92627.258073: damon_aggregated: ...
-            if len(fields) < 5:
-                continue
-            event = fields[4][:-1]
-        elif trace_text_format == 'damo-report-trace-perf':
-            # 0.000 kdamond.0/83017 damon:damon_aggregated(nr_regions: 11, ...
-            if len(fields) < 3:
-                continue
-            event = fields[2].split('(')[0]
-        elif trace_text_format == 'damo-report-trace-trace-cmd':
-            # <...>-83432 [006] ..... 71629.102757: damon_aggregated: ...
-            if len(fields) < 5:
-                continue
-            event = 'damon:%s' % fields[4][:-1]
-
+    for line in trace_text.strip().split('\n'):
+        timestamp, proc, event, trace_fields = parse_trace_line(line, tracer)
         if not event in events:
             continue
-        pr_trace_line(line, args.raw, trace_text_format, args.max_cols)
+        if args.raw:
+            print(line)
+        pr_trace(timestamp, proc, event, trace_fields, args.max_cols)
 
 def main(args):
     if args.input is not None:
