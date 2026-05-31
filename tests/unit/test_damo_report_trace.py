@@ -30,6 +30,9 @@ class TestDamoReportTrace(unittest.TestCase):
         self.assertEqual(damo_report_trace.fmt_damon_region_aggregated_trace(
             'target_id=0 nr_regions=11 0-4096: 0 600 probe_hits=13 00'.split()),
             '0 0/11 0 B (4.000000 KiB) 0 600 19 0')
+        self.assertEqual(damo_report_trace.fmt_damon_region_aggregated_trace(
+            'target_id=0 nr_regions=11 4096-12288: 13 27 probe_hits=12 0f'.split()),
+            '0 1/11 4.000000 KiB (8.000000 KiB) 13 27 18 15')
 
 if __name__ == '__main__':
     unittest.main()
