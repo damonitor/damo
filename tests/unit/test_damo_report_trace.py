@@ -28,8 +28,8 @@ class TestDamoReportTrace(unittest.TestCase):
     def test_fmt_damon_region_aggregated_trace(self):
         damo_report_trace.region_aggregated_idx = 0
         self.assertEqual(damo_report_trace.fmt_damon_region_aggregated_trace(
-            'target_id=0 nr_regions=11 8354394112-8372879360: 0 600 probe_hits=13 00'.split()),
-            '0 0/11 7.780636 GiB (17.628906 MiB) 0 600 19 0')
+            'target_id=0 nr_regions=11 0-4096: 0 600 probe_hits=13 00'.split()),
+            '0 0/11 0 B (4.000000 KiB) 0 600 19 0')
 
 if __name__ == '__main__':
     unittest.main()
