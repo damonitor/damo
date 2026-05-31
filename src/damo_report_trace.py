@@ -129,7 +129,7 @@ def parse_trace_line(line, tracer):
         timestamp = fields[3][:-1]
         event = 'damon:%s' % fields[4][:-1]
         trace_fields = fields[5:]
-    return proc, timestamp, event, trace_fields
+    return timestamp, proc, event, trace_fields
 
 def get_trace_fields(fields, trace_text_format, trace_name):
     if trace_text_format == 'damo-report-trace-perf':
