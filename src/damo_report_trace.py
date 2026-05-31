@@ -292,55 +292,6 @@ def pr_trace(timestamp, proc, event, trace_fields, max_cols):
         trace_text = ' '.join(trace_fields)
     pr_wrapped(' '.join([timestamp, proc, event, trace_text]), max_cols)
 
-def pr_trace_line(line, raw, trace_text_format, max_cols):
-    if raw is True:
-        print(line)
-        return
-    fields = line.split()
-    if trace_text_format == 'perf-script':
-        fields = [fields[1]] + fields[3:]
-        event = fields[2]
-        event = event[len('damon:'):]
-        fields[2] = event
-
-        kdamond_pid = fields[0]
-        timestamp = fields[1]
-    elif trace_text_format == 'trace-cmd-report':
-        fields = [fields[0]] + fields[3:]
-
-        kdamond_pid = fields[0].split('-')[-1]
-        timestamp = fields[1]
-    elif trace_text_format == 'damo-report-trace-perf':
-        fields = fields
-        event = fields[2]
-        event = event[len('damon:'):]
-        fields[2] = event
-
-        kdamond_pid = fields[1].split('/')[-1]
-        timestamp = fields[0]
-    elif trace_text_format == 'damo-report-trace-trace-cmd':
-        fields = [fields[0]] + fields[3:]
-
-        kdamond_pid = fields[0].split('-')[-1]
-        timestamp = fields[1]
-
-    fields[0] = timestamp
-    fields[1] = kdamond_pid
-
-    if fields[2].startswith('damon_region_aggregated'):
-        pr_damon_region_aggregated(fields, trace_text_format, max_cols)
-        return
-    if fields[2].startswith('damon_aggregated'):
-        pr_damon_aggregated(fields, trace_text_format, max_cols)
-        return
-    if fields[2].startswith('damos_before_apply'):
-        pr_damos_before_apply(fields, trace_text_format, max_cols)
-        return
-    if fields[2].startswith('damos_stat_after_apply_interval'):
-        pr_damos_stat(fields, trace_text_format, max_cols)
-        return
-    pr_wrapped(' '.join(fields), max_cols)
-
 def report_recorded_trace(args):
     trace_text, trace_text_format, tracer, err = read_trace_record(args.input)
     if err is not None:
