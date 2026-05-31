@@ -62,7 +62,10 @@ def read_trace_record(record_file):
         return trace_text, 'trace-cmd-report', None
     trace_text, text_err = read_damo_report_trace_output(record_file)
     if text_err is None:
-        tracer = trace_text.split('\n')[2].split()[1]
+        lines = trace_text.split('\n')
+        # first three lines are damo-metadata
+        tracer = lines[2].split()[1]
+        trace_text = '\n'.join(lines[3:])
         return trace_text, 'damo-report-trace-%s' % tracer, None
     err = 'cannot parse %s via perf (%s), trace-cmd (%s), file read (%s)' % (
             record_file, perf_err, trace_cmd_err, text_err)
