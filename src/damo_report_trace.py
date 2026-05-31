@@ -245,6 +245,7 @@ def pr_damos_stat(fields, trace_text_format, max_cols):
 def pr_trace_line(line, raw, trace_text_format, max_cols):
     if raw is True:
         print(line)
+        return
     fields = line.split()
     if trace_text_format == 'perf-script':
         fields = [fields[1]] + fields[3:]
