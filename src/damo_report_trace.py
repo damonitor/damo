@@ -406,8 +406,14 @@ def main(args):
         if not output and tracer_pipe.poll() is not None:
             break
         output = output.decode()
-        pr_trace_line(output, args.raw, 'damo-report-trace-%s' % tracer,
-                      args.max_cols)
+
+        timestamp, proc, event, trace_fields = parse_trace_line(output, tracer)
+        if not event in events:
+            continue
+        if args.raw:
+            print(line)
+        pr_trace(timestamp, proc, event, trace_fields, args.max_cols)
+
         if output_file is not None:
             output_file.write(output)
 
