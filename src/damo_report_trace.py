@@ -170,13 +170,6 @@ def fmt_damon_aggregated(trace_fields):
         region_idx = 0
     return trace_text
 
-def pr_damon_aggregated(fields, trace_text_format, max_cols):
-    trace_fields = get_trace_fields(
-            fields, trace_text_format, 'damon:damon_aggregated')
-    trace_text = fmt_damon_aggregated(trace_fields)
-    pr_wrapped(' '.join(fields[:2] + ['damon_aggregated', trace_text]),
-               max_cols)
-
 region_aggregated_idx = 0
 def fmt_damon_region_aggregated_trace(trace_fields):
     # trace_fields: target_id=0 nr_regions=11 8009068544-8372879360: 0 2740 probe_hits=14 00
@@ -210,10 +203,6 @@ def fmt_damon_region_aggregated(fields, trace_text_format):
     trace_text = fmt_damon_region_aggregated_trace(trace_fields)
     return ' '.join(fields[:2] + ['damon_region_aggregated', trace_text])
 
-def pr_damon_region_aggregated(fields, trace_text_format, max_cols):
-    pr_wrapped(
-            fmt_damon_region_aggregated(fields, trace_text_format), max_cols)
-
 def fmt_damos_before_apply(trace_fields):
     # trace_fields: ctx_idx=0 scheme_idx=0 target_idx=0 nr_regions=11 1234-5678: 10 45
     context_idx = int(trace_fields[0].split('=')[1])
@@ -231,13 +220,6 @@ def fmt_damos_before_apply(trace_fields):
             _damo_fmt_str.format_sz_accurate(
                 end - trace_data['start'], machine_friendly=False),
             nr_accesses, age)
-
-def pr_damos_before_apply(fields, trace_text_format, max_cols):
-    trace_fields = get_trace_fields(
-            fields, trace_text_format, 'damon:damos_before_apply')
-    trace_text = fmt_damos_before_apply(trace_fields)
-    pr_wrapped(' '.join(fields[:2] + ['damos_before_apply', trace_text]),
-               max_cols)
 
 def fmt_damos_stat(trace_fields):
     context_idx = int(trace_fields[0].split('=')[1])
@@ -272,12 +254,6 @@ def fmt_damos_stat(trace_fields):
             _damo_fmt_str.format_nr(qt_exceeds, machine_friendly=False),
              _damo_fmt_str.format_nr(nr_snapshots, machine_friendly=False)
              )
-
-def pr_damos_stat(fields, trace_text_format, max_cols):
-    trace_fields = get_trace_fields(
-            fields, trace_text_format, 'damon:damos_stat')
-    trace_text = fmt_damo_stat(trace_fields)
-    pr_wrapped(' '.join(fields[:2] + ['damos_stat', trace_text]), max_cols)
 
 def pr_trace(timestamp, proc, event, trace_fields, max_cols):
     if event == 'damon:damon_region_aggregated':
