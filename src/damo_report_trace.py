@@ -48,6 +48,12 @@ def read_damo_report_trace_output(output_file):
         return None, '%s' % e
 
 def read_trace_record(record_file):
+    '''
+    Supports outputs from
+    - 'perf record',
+    - 'trace-cmd record', and
+    - 'damo report trace --output <file>'.
+    '''
     trace_text, perf_err = read_perf_record(record_file)
     if perf_err is None:
         return trace_text, 'perf-script', None
