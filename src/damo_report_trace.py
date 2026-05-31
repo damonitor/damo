@@ -134,17 +134,6 @@ def parse_trace_line(line, tracer):
         trace_fields = fields[5:]
     return timestamp, proc, event, trace_fields
 
-def get_trace_fields(fields, trace_text_format, trace_name):
-    if trace_text_format == 'damo-report-trace-perf':
-        #   3128.371 kdamond.0/764 damon:damon_aggregated(trace fields)
-        trace_fields = fields[2:]
-        trace_fields[0] = trace_fields[0][len(trace_name) + 1:]
-        trace_fields[-1] = trace_fields[-1][:-1]
-    else:
-        # <...>-764   [001] .....  1394.412830: damon_region_aggregated: trace fields
-        trace_fields = fields[3:]
-    return trace_fields
-
 region_idx = 0
 def fmt_damon_aggregated(trace_fields):
     # trace_fields: target_id=0 nr_regions=11 8009068544-8372879360: 0 2740
