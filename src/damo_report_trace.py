@@ -290,10 +290,6 @@ def report_recorded_trace(args):
         print(err)
         return -1
 
-    if args.event is None:
-        print('--event is required')
-        exit(1)
-
     events = get_events_to_show(args.event, args.no_event)
 
     for line in trace_text.split('\n'):
