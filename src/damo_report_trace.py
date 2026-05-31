@@ -212,7 +212,7 @@ def fmt_damos_before_apply(trace_fields):
             context_idx, scheme_idx, target_idx, nr_regions,
             _damo_fmt_str.format_sz_accurate(start, machine_friendly=False),
             _damo_fmt_str.format_sz_accurate(
-                end - trace_data['start'], machine_friendly=False),
+                end - start, machine_friendly=False),
             nr_accesses, age)
 
 def fmt_damos_stat(trace_fields):
