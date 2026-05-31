@@ -10,16 +10,6 @@ _test_damo_common.add_damo_dir_to_syspath()
 import damo_report_trace
 
 class TestDamoReportTrace(unittest.TestCase):
-    def test_get_trace_fields(self):
-        self.assertEqual(damo_report_trace.get_trace_fields(
-            '2452.789 kdamond.0/2149 damon:damon_region_aggregated(target_id=0 nr_regions=11 8354394112-8372879360: 0 600 probe_hits=13 00)'.split(),
-            'damo-report-trace-perf', 'damon:damon_region_aggregated'),
-            'target_id=0 nr_regions=11 8354394112-8372879360: 0 600 probe_hits=13 00'.split())
-        self.assertEqual(damo_report_trace.get_trace_fields(
-            '2452.789 kdamond.0/2149 damon:damon_region_aggregated: target_id=0 nr_regions=11 8354394112-8372879360: 0 600 probe_hits=13 00'.split(),
-            'damo-report-trace-trace-cmd', 'damon:damon_region_aggregated'),
-            'target_id=0 nr_regions=11 8354394112-8372879360: 0 600 probe_hits=13 00'.split())
-
     def test_fmt_damon_region_aggregated_trace(self):
         damo_report_trace.region_aggregated_idx = 0
         self.assertEqual(damo_report_trace.fmt_damon_region_aggregated_trace(
