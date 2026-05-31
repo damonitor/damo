@@ -197,12 +197,6 @@ def fmt_damon_region_aggregated_trace(trace_fields):
         region_aggregated_idx = 0
     return trace_text
 
-def fmt_damon_region_aggregated(fields, trace_text_format):
-    trace_fields = get_trace_fields(
-            fields, trace_text_format, 'damon:damon_region_aggregated')
-    trace_text = fmt_damon_region_aggregated_trace(trace_fields)
-    return ' '.join(fields[:2] + ['damon_region_aggregated', trace_text])
-
 def fmt_damos_before_apply(trace_fields):
     # trace_fields: ctx_idx=0 scheme_idx=0 target_idx=0 nr_regions=11 1234-5678: 10 45
     context_idx = int(trace_fields[0].split('=')[1])
