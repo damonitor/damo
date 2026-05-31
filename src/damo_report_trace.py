@@ -276,6 +276,19 @@ def pr_damos_stat(fields, trace_text_format, max_cols):
     trace_text = fmt_damo_stat(trace_fields)
     pr_wrapped(' '.join(fields[:2] + ['damos_stat', trace_text]), max_cols)
 
+def pr_trace(timestamp, proc, event, trace_fields, max_cols):
+    if event == 'damon:damon_region_aggregated':
+        trace_text = fmt_damon_region_aggregated_trace(trace_fields)
+    elif event == 'damon:damon_aggregated':
+        trace_text = fmt_damon_aggregated(trace_fields)
+    elif event == 'damon:damos_before_apply':
+        trace_text = fmt_damos_before_apply(trace_fields)
+    elif event == 'damon:damos_stat_after_apply_interval':
+        trace_text = fmt_damos_stat(trace_fields)
+    else:
+        trace_text = ' '.join(trace_fields)
+    pr_wrapped(' '.join([timestamp, proc, event, trace_text]), max_cols)
+
 def pr_trace_line(line, raw, trace_text_format, max_cols):
     if raw is True:
         print(line)
