@@ -56,20 +56,20 @@ def read_trace_record(record_file):
     '''
     trace_text, perf_err = read_perf_record(record_file)
     if perf_err is None:
-        return trace_text, 'perf-script', None
+        return trace_text, 'perf-script', 'perf', None
     trace_text, trace_cmd_err = read_trace_cmd_record(record_file)
     if trace_cmd_err is None:
-        return trace_text, 'trace-cmd-report', None
+        return trace_text, 'trace-cmd-report', 'trace-cmd', None
     trace_text, text_err = read_damo_report_trace_output(record_file)
     if text_err is None:
         lines = trace_text.split('\n')
         # first three lines are damo-metadata
         tracer = lines[2].split()[1]
         trace_text = '\n'.join(lines[3:])
-        return trace_text, 'damo-report-trace-%s' % tracer, None
+        return trace_text, 'damo-report-trace-%s' % tracer, tracer, None
     err = 'cannot parse %s via perf (%s), trace-cmd (%s), file read (%s)' % (
             record_file, perf_err, trace_cmd_err, text_err)
-    return None, None, err
+    return None, None, None, err
 
 damon_trace_events = _damo_sysinfo.tracepoint_to_feature_name_map.keys()
 
@@ -342,7 +342,7 @@ def pr_trace_line(line, raw, trace_text_format, max_cols):
     pr_wrapped(' '.join(fields), max_cols)
 
 def report_recorded_trace(args):
-    trace_text, trace_text_format, err = read_trace_record(args.input)
+    trace_text, trace_text_format, tracer, err = read_trace_record(args.input)
     if err is not None:
         print(err)
         return -1
