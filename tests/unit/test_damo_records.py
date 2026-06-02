@@ -151,6 +151,15 @@ class TestDamon(unittest.TestCase):
             ['92566.021974:', 'damon_aggregated:', 'target_id=0',
              'nr_regions=11', '4294967296-4701806592:', '0'])
 
+        # trace-cmd report output without the flags column (some trace-cmd
+        # versions omit it, so the timestamp is one field earlier)
+        self.assertEqual(_damo_records.damon_trace_fields(
+            '       kdamond.0-12015 [096]  5653.356782: '
+            'damon_aggregated:     target_id=0 nr_regions=52 '
+            '4194304-108617728: 0 10'),
+            ['5653.356782:', 'damon_aggregated:', 'target_id=0',
+             'nr_regions=52', '4194304-108617728:', '0', '10'])
+
         # perf script output
         self.assertEqual(
                 _damo_records.damon_trace_fields(
