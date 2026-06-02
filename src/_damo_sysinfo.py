@@ -242,10 +242,10 @@ def get_perf_path_version():
         perf_path = subprocess.check_output(['which', 'perf']).decode().strip()
     except:
         perf_path = None
-    if perf_path is not None:
+    try:
         perf_version = subprocess.check_output(
                 ['perf', '--version']).decode().strip()
-    else:
+    except:
         perf_version = None
     return perf_path, perf_version
 
