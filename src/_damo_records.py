@@ -963,7 +963,7 @@ class ProcVmasSnapshot:
         self = cls(None)
         self.time = kvpairs['time']
         self.procvmas = [ProcVmas.from_kvpairs(kvp)
-                         for kvp in kvapirs['procvmas']]
+                         for kvp in kvpairs['procvmas']]
 
 def record_proc_vmas(kdamonds, snapshots):
     pids = []
@@ -1051,7 +1051,7 @@ class ProcStatsSnapshot:
         self = cls(None)
         self.time = kvpairs['time']
         self.proc_stats = [ProcStat.from_kvpairs(kvp)
-                         for kvp in kvapirs['proc_stats']]
+                         for kvp in kvpairs['proc_stats']]
 
 def record_proc_stats(kdamonds, snapshots):
     pids = []
