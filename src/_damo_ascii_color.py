@@ -18,7 +18,7 @@ def max_color_level():
 
 def color_mode_start_txt(colorset_name, level):
     if not colorset_name in colorsets:
-        raise Exception('wrong colorset (%s)' % colorset)
+        raise Exception('wrong colorset (%s)' % colorset_name)
 
     colorset = colorsets[colorset_name]
     bg = colorset[0][level]
