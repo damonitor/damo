@@ -705,7 +705,7 @@ def convert_perf_to_damon_data(
         src_file, dst_file, file_format, file_permission=None,
         monitoring_intervals=None, perf_cmd='perf'):
     if file_format == file_type_perf_data:
-        os.chmod(file_path, handle.file_permission)
+        os.chmod(dst_file, file_permission)
         return None
 
     records, err = parse_perf_damon_record(
