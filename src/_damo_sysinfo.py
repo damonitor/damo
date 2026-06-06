@@ -325,7 +325,7 @@ def update_cached_info(cached_info):
             if skip:
                 continue
             avail_damon_features.append(f)
-        avail_damon_features += avail_damon_sysfs_feastures
+        avail_damon_features += avail_damon_sysfs_features
         avail_damon_features += get_avail_damon_interface_features()
         avail_damon_features += _damon_modules.get_avail_features()
         cached_info.avail_damon_features = avail_damon_features
@@ -348,7 +348,7 @@ def update_cached_info(cached_info):
     debugfs_path = _damo_fs.dev_mount_point('debugfs')
     if cached_info.debugfs_path != debugfs_path:
         cached_info.debugfs_path = debugfs_path
-        avail_damon_debugfs_features, err = avail_features_on(_damon_debugfs)
+        avail_damon_debugfs_features, err = avail_features_on(_damon_dbgfs)
         if err is not None:
             return None, 'damon debugfs features update fail (%s)' % err
 
