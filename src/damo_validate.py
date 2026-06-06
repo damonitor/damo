@@ -71,7 +71,8 @@ def main(args):
 
             for region in snapshot.regions:
                 if region.start >= region.end:
-                    print('wrong regiosn [%d, %d)' % (saddr, eaddr))
+                    print('wrong regiosn [%d, %d)' %
+                          (region.start, region.end))
                     exit(1)
 
                 if regions_boundary:
