@@ -124,7 +124,7 @@ class OpsAttrs:
     @classmethod
     def from_kvpairs(cls, kvpairs):
         use_reports = kvpairs['use_reports'] \
-                if 'use_reports' in kvpiars else False
+                if 'use_reports' in kvpairs else False
         write_only = kvpairs['write_only'] \
                 if 'write_only' in kvpairs else False
         cpus = kvpairs['cpus'] if 'cpus' in kvpairs else 'all'
