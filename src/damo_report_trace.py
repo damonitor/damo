@@ -321,7 +321,7 @@ def main(args):
         if not event in events:
             continue
         if args.raw:
-            print(line)
+            print(output.strip())
         pr_trace(timestamp, proc, event, trace_fields, args.max_cols)
 
         if output_file is not None:
