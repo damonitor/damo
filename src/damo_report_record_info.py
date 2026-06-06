@@ -66,7 +66,7 @@ class GuideInfo:
         if self.kdamond_idx is not None:
             lines.append('kdamond_idx: %s' % self.kdamond_idx)
         if self.context_idx is not None:
-            line.sappend('context_idx: %s' % self.context_idx)
+            lines.append('context_idx: %s' % self.context_idx)
         if self.scheme_idx is not None:
             lines.append('scheme_idx: %s' % self.scheme_idx)
         if self.tid is not None:
