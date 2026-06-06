@@ -16,7 +16,7 @@ def pr_infer_version(sysinfo):
 
 def main(args):
     if args.invalidate_cache:
-        err = _damo_sysfs.rm_sysinfo_file()
+        err = _damo_sysinfo.rm_sysinfo_file()
         if err is not None:
             print('invalidating cache fail (%s)' % err)
             exit(1)
