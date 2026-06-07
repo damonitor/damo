@@ -230,14 +230,6 @@ def format_bp(bp, machine_friendly):
 def indent_lines(string, indent_width):
     return '\n'.join([' ' * indent_width + l for l in string.split('\n')])
 
-number_types = [int, float]
-
-try:
-    # for python2
-    number_types.append(long)
-except:
-    pass
-
 uint_max = 2**32 - 1
 ulong_max = 2**64 - 1
 if platform.architecture()[0] != '64bit':
@@ -252,7 +244,7 @@ unit_to_bytes = {'B': 1,
         'E': 1 << 60, 'EB': 1 << 60, 'EiB': 1 << 60}
 
 def text_to_nr(txt):
-    if type(txt) in number_types:
+    if type(txt) in [int, float]:
         return txt
 
     if txt == 'max':
