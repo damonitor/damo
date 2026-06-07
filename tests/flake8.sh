@@ -13,7 +13,7 @@ then
 	exit 0
 fi
 
-if ! python3 -m flake8 "$src_dir" --select=F821,E999 --show-source
+if ! python3 -m flake8 "$src_dir" --select=F,E999 --show-source
 then
 	echo "linter failed"
 	exit 1
