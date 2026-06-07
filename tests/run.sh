@@ -7,8 +7,15 @@ cd "$bindir" || exit 1
 # lint first
 ./flake8.sh || exit 1
 
+# not every test require sudo permission, but let's enforce it here.
+if [ "$EUID" -ne 0 ]
+then
+	echo "Run as root"
+	exit 1
+fi
+
 # Stop any stale DAMON from previous tests
-sudo ../../damo stop 2>/dev/null
+../../damo stop 2>/dev/null
 
 restart_damon_stat="false"
 damon_stat_enabled_file="/sys/module/damon_stat/parameters/enabled"
