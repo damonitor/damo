@@ -1,6 +1,13 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v3.2.7
+- Handle version mismatcing perf.
+- Support trace-cmd versions that omit flags field on 'report' output.
+- Mark 'damo pa_layout' and 'damo record_info' as officially deprecated.
+- Add a linter to tests.
+- Code cleanup.
+
 v3.2.6
 - Cleanup 'damo report trace' code.
 - Add tests for 'damo report trace'
