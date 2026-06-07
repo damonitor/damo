@@ -194,14 +194,6 @@ def mk_handle(args, kdamonds, monitoring_intervals):
 
     return handle
 
-def for_damon_stat_snapshot(args):
-    if args.snapshot is None:
-        return False
-    request, err = snapshot_requests_from_args(args)
-    if err is not None:
-        return False
-    return _damo_records.should_get_snapshot_from_damon_stat(request)
-
 def main(args):
     global data_for_cleanup
 
@@ -219,13 +211,6 @@ def main(args):
         kdamonds = get_ongoing_kdamonds(data_for_cleanup.orig_kdamonds)
         # TODO: Support multiple kdamonds, multiple contexts
         monitoring_intervals = kdamonds[0].contexts[0].intervals
-    elif for_damon_stat_snapshot(args):
-        monitoring_intervals = _damon.DamonIntervals(
-                sample=5000, aggr=100000, ops_update=60000000,
-                intervals_goal= _damon.DamonIntervalsGoal(
-                    access_bp=400, aggrs=3, min_sample_us=5000,
-                    max_sample_us=10000000))
-        kdamonds = []
     else:
         err, kdamonds = _damon_args.turn_damon_on(args)
         if err:
