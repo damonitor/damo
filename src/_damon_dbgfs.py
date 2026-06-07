@@ -145,6 +145,7 @@ def write_schemes(dir_path, schemes, intervals):
         scheme_file_input = '\n'
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'schemes'), scheme_file_input)
+    return err
 
 def write_target(dir_path, target, target_has_pid):
     if target_has_pid:
