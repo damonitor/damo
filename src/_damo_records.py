@@ -465,11 +465,16 @@ def parse_damon_trace_intervals_tune(fields):
 def damon_trace_fields(line):
     '''
     Receives a line from 'trace-cmd report' or 'perf script' outputs and return
-    fields starting from the timestamp (the fourth field).
+    fields starting from the timestamp.
 
     In case of trace-cmd report, the format is like,
 
            kdamond.0-264454 [007] ..... 92627.258073: damon_aggregated: \
+                   target_id=0 nr_regions=10 8255430656-8372879360: 0 1
+
+    In case of some versions of trace-cmd report, the format is like,
+
+           kdamond.0-264454 [007] 92627.258073: damon_aggregated: \
                    target_id=0 nr_regions=10 8255430656-8372879360: 0 1
 
     In case of perf script, the format is like,
@@ -477,8 +482,11 @@ def damon_trace_fields(line):
             kthreadd  264573 [003] 93212.176071: damon:damon_aggregated: \
                     target_id=0 nr_regions=4 6945607680-8372879360: 0 0
 
-    The format from the fourth field is identical for both cases, and hence a
+    The format from the timestamp is identical for both cases, and hence a
     single parsing logic can be used.
+
+    TODO: In long term, we should directly deal with tracefs instead of
+    relying on the unreliable perf and trace-cmd output formats.
     '''
     fields = line.split()
     if len(fields) < 4:
