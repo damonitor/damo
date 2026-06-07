@@ -100,7 +100,7 @@ def tracepoints_from_args(args):
     return [_damo_records.perf_event_damon_aggregated,
             _damo_records.perf_event_damon_monitor_intervals_tune]
 
-def snapshot_requests_from_args(args):
+def snapshot_requests_from_args(args, kdamonds):
     ''' Returns snapshot_request and error '''
     if not 'access' in args.do_record or args.snapshot is None:
         return None, None
@@ -129,7 +129,7 @@ def snapshot_requests_from_args(args):
 
 def mk_handle(args, kdamonds, monitoring_intervals):
     tracepoints = tracepoints_from_args(args)
-    snapshot_request, err = snapshot_requests_from_args(args)
+    snapshot_request, err = snapshot_requests_from_args(args, kdamonds)
     if err is not None:
         print(err)
         cleanup_exit(1)
