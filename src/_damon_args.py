@@ -897,7 +897,7 @@ def deduced_target_type(target):
     else:
         pass
     try:
-        pid = int(target)
+        _ = int(target)
         return target_type_pid
     except:
         pass
