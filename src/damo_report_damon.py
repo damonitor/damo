@@ -8,8 +8,6 @@ import argparse
 import collections
 import json
 import os
-import random
-import time
 
 import _damo_fmt_str
 import _damo_yaml

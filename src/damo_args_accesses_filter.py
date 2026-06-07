@@ -1,11 +1,9 @@
 # SPDX-License-Identifier: GPL-2.0
 
-import collections
 import json
 
 import _damo_records
 import _damo_yaml
-import damo_args_damon
 
 def main(args):
     filter_, err = _damo_records.args_to_filter(args)

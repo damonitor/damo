@@ -8,7 +8,6 @@ import os
 import signal
 import time
 
-import _damo_records
 import _damo_sysinfo
 import _damon
 import _damon_args

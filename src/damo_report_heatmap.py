@@ -26,7 +26,6 @@ generated as the file.
 
 import os
 import subprocess
-import sys
 import tempfile
 
 import _damo_ascii_color

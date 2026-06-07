@@ -13,8 +13,6 @@ os.sys.path.insert(0, damo_dir)
 if not os.path.isfile(os.path.join(damo_dir, 'damo_version.py')):
     os.sys.path.insert(0, os.path.join(damo_dir, 'src'))
 
-import sys
-
 import _damo_subcmds
 import damo_adjust
 import damo_args

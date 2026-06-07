@@ -2,7 +2,6 @@
 
 "Print out the distribution of the working set sizes of the given trace"
 
-import sys
 import tempfile
 
 import _damo_dist

@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0
 
-import collections
 import json
 
 import _damo_yaml

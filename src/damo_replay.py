@@ -1,12 +1,10 @@
 # SPDX-License-Identifier: GPL-2.0
 
 import os
-import random
 import time
 
 import _damo_fmt_str
 import _damo_records
-import damo_record_info
 
 page_map = {}
 

@@ -1,9 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0
 
-import subprocess
-
 import _damo_records
-import _damon
 
 def main(args):
     record_filter, err = _damo_records.args_to_filter(args)

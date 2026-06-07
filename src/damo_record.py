@@ -5,11 +5,8 @@ Record monitored data access patterns.
 """
 
 import argparse
-import json
 import os
 import signal
-import subprocess
-import time
 
 import _damo_fmt_str
 import _damo_records
@@ -18,7 +15,6 @@ import _damo_sysinfo
 import _damon
 import _damon_args
 import _damon_modules
-import damo_pa_layout
 
 class DataForCleanup:
     kdamonds_idxs = None

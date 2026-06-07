@@ -2,8 +2,6 @@
 
 import os
 
-import _damon
-
 def handle_read_write(args):
     module_name = args.module_name
     param_dir = '/sys/module/damon_%s/parameters' % module_name

@@ -17,7 +17,6 @@ import _damo_fmt_str
 import _damo_subproc
 import _damo_sysinfo
 import _damon
-import _damon_args
 import _damon_modules
 import damo_report_access
 

@@ -6,7 +6,6 @@ import _damo_sysinfo
 import _damon
 import _damon_args
 import _damon_features
-import _damon_sysfs
 
 def pr_infer_version(sysinfo):
     version, err = sysinfo.infer_damon_version()

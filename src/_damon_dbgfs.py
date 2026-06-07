@@ -6,7 +6,6 @@ Contains core functions for DAMON debugfs control.
 
 import os
 
-import _damo_deprecation_notice
 import _damo_fs
 import _damo_sysinfo
 import _damon

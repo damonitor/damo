@@ -2,7 +2,6 @@
 
 "Print out the distribution of the memory footprint of the given trace"
 
-import sys
 import tempfile
 
 import _damo_dist

@@ -6,7 +6,6 @@ Contains core functions for DAMON control.
 
 import collections
 import copy
-import json
 import os
 import random
 import subprocess

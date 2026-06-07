@@ -5,7 +5,6 @@ Keep code for deprecated features, which still need to help old users migrate,
 e.g., 'translate_damos' and 'convert_record_format'.
 '''
 
-import json
 import os
 import subprocess
 import sys

@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0
 
-import argparse
 import os
 
 import _damo_fmt_str
