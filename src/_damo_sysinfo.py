@@ -145,7 +145,7 @@ def read_sysinfo_file():
         with open(sysinfo_file_path, 'r') as f:
             kvpairs = json.load(f)
     except Exception as e:
-        return None, 'json load of %s failed' % sysinfo_file_path
+        return None, 'json load of %s failed (%s)' % (sysinfo_file_path, e)
     return SystemInfo.from_kvpairs(kvpairs), None
 
 def valid_cached_sysinfo(sysinfo, damo_version_, kernel_version):
@@ -179,7 +179,7 @@ def get_damon_tracepoints():
                 if line.startswith('damon:'):
                     points.append(line.strip())
     except Exception as e:
-        return None, 'available tracepoints reading fail'
+        return None, 'available tracepoints reading fail (%s)' % e
     return points, None
 
 tracepoint_to_feature_name_map = {
