@@ -57,7 +57,6 @@ def main(args):
             thres_idx = int(percentile / 100.0 * len(nr_regions_dist))
             if thres_idx == len(nr_regions_dist):
                 thres_idx -= 1
-            threshold = nr_regions_dist[thres_idx]
             print('%d\t%d' % (percentile, nr_regions_dist[thres_idx]))
 
     if args.plot:

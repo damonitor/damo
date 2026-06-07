@@ -1081,7 +1081,6 @@ def all_targets_terminated(targets):
 
 def poll_target_pids(kdamonds):
     '''Return True if >=1 target processes are running'''
-    has_running_process = False
     if not kdamonds:
         return False
     for kdamond in kdamonds:

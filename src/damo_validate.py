@@ -54,7 +54,6 @@ def main(args):
         exit(1)
 
     for record in records:
-        target = record.target_id
         nr_snapshots = len(record.snapshots)
         nr_allowed_errors = nr_snapshots * args.allow_error / 100.0
         nr_aggr_interval_errors = 0

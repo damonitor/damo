@@ -111,7 +111,6 @@ def damos_to_debugfs_input(damos, intervals, quotas_wmarks_supported):
     quotas = damos.quotas
     watermarks = damos.watermarks
 
-    max_nr_accesses = intervals.aggr / intervals.sample
     scheme_input = '%d\t%d\t%d\t%d\t%d\t%d\t%d' % (
             pattern.sz_bytes[0], pattern.sz_bytes[1],
             pattern.nr_acc_min_max[0].samples,

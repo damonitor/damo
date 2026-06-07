@@ -586,7 +586,6 @@ def fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
         fmt_fn = _damo_fmt_str.format_nr
     percentile_txts = []
     idletime_txts = []
-    bars = []
     percentile_txts = ['%d' % p for p, v in percentile_values]
     max_percentile_txt_len = max([len(p) for p in percentile_txts])
     idletime_txts = [fmt_fn(v, fmt.raw_number) for p, v in percentile_values]
@@ -1814,7 +1813,7 @@ def read_and_show(args):
         try:
             pr_records(fmt, records,
                        dont_use_pager = args.repeat is not None)
-        except BrokenPipeError as e:
+        except BrokenPipeError:
             # maybe user piped to 'less' like pager, and quit from it
             pass
 

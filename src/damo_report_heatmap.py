@@ -490,7 +490,6 @@ def mk_show_heatmap(records, args):
             access_frequency_unit = 'hz'
             break
 
-    heats_list = []
     for idx in range(len(args.address_range)):
         heatmap = mk_heatmap(args, idx, records)
 

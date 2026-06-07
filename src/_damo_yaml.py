@@ -5,7 +5,7 @@ import sys
 
 try:
     import yaml
-except ModuleNotFoundError as e:
+except ModuleNotFoundError:
     # do nothing.  The yaml using functions should handle the exception
     # properly.
     pass
