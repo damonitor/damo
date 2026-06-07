@@ -491,21 +491,9 @@ def damon_trace_fields(line):
     fields = line.split()
     if len(fields) < 4:
         return None
-    # The number of leading columns before the timestamp varies: some
-    # 'trace-cmd report' / 'perf script' outputs include a flags column (e.g.
-    # '.....') while others omit it.  Rather than assuming a fixed index, find
-    # the timestamp field and return from there.  The timestamp is the field
-    # that ends with ':' and parses as a float (e.g. '92627.258073:'); the
-    # event name ('damon_aggregated:') and region ('...-...:') also end with
-    # ':' but are not floats, so they are skipped.
-    for idx, field in enumerate(fields):
-        if field.endswith(':'):
-            try:
-                float(field[:-1])
-            except ValueError:
-                continue
-            return fields[idx:]
-    return None
+    if fields[2].endswith(':'):
+        return fields[2:]
+    return fields[3:]
 
 def parse_damon_trace(trace_text, monitoring_intervals):
     '''
