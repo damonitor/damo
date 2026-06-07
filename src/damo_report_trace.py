@@ -128,10 +128,16 @@ def parse_trace_line(line, tracer):
         trace_fields = [first_trace_field] + remaining_trace_fields
     elif tracer == 'trace-cmd':
         # <...>-764   [001] .....  1394.412830: damon_region_aggregated: trace fields
+        # In some versions of trace-cmd,
+        # <...>-764   [001] 1394.412830: damon_region_aggregated: trace fields
         proc = fields[0]
-        timestamp = fields[3][:-1]
-        event = 'damon:%s' % fields[4][:-1]
-        trace_fields = fields[5:]
+        if fields[2].endswith(':'):
+            timestamp_idx = 2
+        else:
+            timestamp_idx = 3
+        timestamp = fields[timestamp_idx][:-1]
+        event = 'damon:%s' % fields[timestamp_idx + 1][:-1]
+        trace_fields = fields[timestamp_idx + 2:]
     return timestamp, proc, event, trace_fields
 
 region_idx = 0
