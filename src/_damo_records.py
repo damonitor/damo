@@ -472,7 +472,8 @@ def damon_trace_fields(line):
            kdamond.0-264454 [007] ..... 92627.258073: damon_aggregated: \
                    target_id=0 nr_regions=10 8255430656-8372879360: 0 1
 
-    In case of some versions of trace-cmd report, the format is like,
+    In case of some versions of trace-cmd report including 3.2-1ubuntu2, the
+    format is like,
 
            kdamond.0-264454 [007] 92627.258073: damon_aggregated: \
                    target_id=0 nr_regions=10 8255430656-8372879360: 0 1

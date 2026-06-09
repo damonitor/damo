@@ -152,7 +152,8 @@ class TestDamon(unittest.TestCase):
              'nr_regions=11', '4294967296-4701806592:', '0'])
 
         # trace-cmd report output without the flags column (some trace-cmd
-        # versions omit it, so the timestamp is one field earlier)
+        # versions including 3.2-1ubuntu2 omit it, so the timestamp is one
+        # field earlier)
         self.assertEqual(_damo_records.damon_trace_fields(
             '       kdamond.0-12015 [096]  5653.356782: '
             'damon_aggregated:     target_id=0 nr_regions=52 '

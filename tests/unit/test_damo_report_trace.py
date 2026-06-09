@@ -33,8 +33,8 @@ class TestDamoReportTrace(unittest.TestCase):
             '99141.640633', '<...>-102481', 'damon:damon_aggregated',
             'target_id=0 nr_regions=12 4185931776-5007028224: 0 2022'.split()))
 
-        # trace-cmd report output on some versions of trace-cmd omits the flags
-        # field.
+        # trace-cmd report output on some versions of trace-cmd including
+        # 3.2-1ubuntu2 omits the flags field.
         outputs = damo_report_trace.parse_trace_line(
                 '           <...>-102481 [006] 99141.640633: damon_aggregated:     target_id=0 nr_regions=12 4185931776-5007028224: 0 2022',
                 'trace-cmd')

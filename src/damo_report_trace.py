@@ -128,7 +128,7 @@ def parse_trace_line(line, tracer):
         trace_fields = [first_trace_field] + remaining_trace_fields
     elif tracer == 'trace-cmd':
         # <...>-764   [001] .....  1394.412830: damon_region_aggregated: trace fields
-        # In some versions of trace-cmd,
+        # In some versions of trace-cmd including 3.2-1ubuntu2,
         # <...>-764   [001] 1394.412830: damon_region_aggregated: trace fields
         proc = fields[0]
         if fields[2].endswith(':'):
