@@ -1513,7 +1513,7 @@ def update_get_snapshot_records(kdamond_idxs, scheme_idxs,
         # todo: update schemes stats only if really required
         err = _damon.update_schemes_stats(kdamond_idxs)
         if err is not None:
-            time.sleep(random.rndrange(
+            time.sleep(random.randrange(
                 2**(nr_tries - 1), 2**nr_tries) / 100)
             continue
 
