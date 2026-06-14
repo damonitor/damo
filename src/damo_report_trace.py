@@ -129,9 +129,39 @@ def pr_wrapped(line, max_cols):
 
 def parse_trace_line(line, tracer):
     '''
-    Input should be output from 'perf script', 'perf trace
-    --libtraceevent_print', 'trace-cmd report' or 'trace-cmd stream'.
+    Input should be output from
+    - 'perf script',
+    - 'perf trace --libtraceevent_print',
+    - 'trace-cmd report', or
+    - 'trace-cmd stream'.
+
+    Expected input formats for different commands are like below.
+
+    perf script: <cmd> <pid> <cpu> <timestamp>: <event>: <trace outputs>
+    perf trace: <timestamp> <cmd/pid> <event>(<trace outputs>)
+    trace-cmd report:
+        <cmd-pid> <cpu> <latency output> <timestamp>: <event>: <trace output>
+    trace-cmd stream:
+        <cmd-pid> <cpu> <latency output> <timestamp>: <event>: <trace output>
+
+    On some versions of trace-cmd including 3.2-1ubuntu2, <latench output> is
+    omitted.
+
+    For example,
+    (perf script)
+    kdamond.0  129062 [004] 100952.251360: damon:damon_aggregated: target_id=0 nr_regions=11 8359534592-8371830784: 0 505
+    (perf trace)
+    3373.653 kthreadd/129062 damon:damon_aggregated(target_id=0 nr_regions=11 8344580096-8371830784: 0 33)
+    (trace-cmd report)
+    kdamond.0-129062 [005] ..... 101005.778382: damon_aggregated:     target_id=0 nr_regions=11 8360624128-8371830784: 0 974
+    (trace-cmd stream)
+    <...>-129062 [000] ..... 101029.459185: damon_aggregated:     target_id=0 nr_regions=11 8335224832-8371830784: 0 560
+    (trace-cmd report of 3.2-1ubuntu2)
+    kdamond.0-129062 [005] 101005.778382: damon_aggregated:     target_id=0 nr_regions=11 8360624128-8371830784: 0 974
+    (trace-cmd stream of 3.2-1ubuntu2)
+    <...>-129062 [000] 101029.459185: damon_aggregated:     target_id=0 nr_regions=11 8335224832-8371830784: 0 560
     '''
+
     fields = line.split()
     if tracer == 'perf':
         #   3128.371 kdamond.0/764 damon:damon_aggregated(trace fields)
