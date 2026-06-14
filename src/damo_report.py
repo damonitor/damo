@@ -33,6 +33,8 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(
             name='holistic', module=damo_report_holistic,
             msg='holistic report'),
+        _damo_subcmds.DamoSubCmd(name='trace', module=damo_report_trace,
+            msg='trace events'),
 
         _damo_subcmds.DamoSubCmd(
             name='pa_layout', module=damo_report_pa_layout,
@@ -50,8 +52,6 @@ subcmds = [
             msg='times of record having specific access pattern'),
         _damo_subcmds.DamoSubCmd(name='nr_regions', module=damo_nr_regions,
             msg='number of DAMON-regions'),
-        _damo_subcmds.DamoSubCmd(name='trace', module=damo_report_trace,
-            msg='trace events'),
 
         ]
 
