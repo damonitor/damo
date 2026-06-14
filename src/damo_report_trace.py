@@ -127,7 +127,7 @@ def pr_wrapped(line, max_cols):
     if len(line_fields) > 0:
         print(' '.join(line_fields))
 
-def parse_trace_line(line, tracer):
+def parse_trace_line(line, cmd):
     '''
     Input should be output from
     - 'perf script',
@@ -163,7 +163,7 @@ def parse_trace_line(line, tracer):
     '''
 
     fields = line.split()
-    if tracer == 'perf':
+    if cmd in ['perf-script', 'perf-trace']:
         #   3128.371 kdamond.0/764 damon:damon_aggregated(trace fields)
         timestamp, proc = fields[:2]
         event_first_trace_fields = fields[2].split('(')
@@ -173,7 +173,7 @@ def parse_trace_line(line, tracer):
         if len(remaining_trace_fields) > 0:
             remaining_trace_fields[-1] = remaining_trace_fields[-1][:-1]
         trace_fields = [first_trace_field] + remaining_trace_fields
-    elif tracer == 'trace-cmd':
+    elif cmd in ['trace-cmd-report', 'trace-cmd-stream']:
         # <...>-764   [001] .....  1394.412830: damon_region_aggregated: trace fields
         # In some versions of trace-cmd including 3.2-1ubuntu2,
         # <...>-764   [001] 1394.412830: damon_region_aggregated: trace fields
@@ -312,8 +312,13 @@ def report_recorded_trace(args):
 
     events = get_events_to_show(args.event, args.no_event)
 
+    if tracer == 'perf':
+        cmd = 'perf-script'
+    else:
+        cmd = 'trace-cmd-report'
+
     for line in trace_text.strip().split('\n'):
-        timestamp, proc, event, trace_fields = parse_trace_line(line, tracer)
+        timestamp, proc, event, trace_fields = parse_trace_line(line, cmd)
         if not event in events:
             continue
         if args.raw:
@@ -364,13 +369,17 @@ def main(args):
 
     tracer_pipe = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT)
+    if tracer == 'perf':
+        cmd = 'perf-trace'
+    else:
+        cmd = 'trace-cmd-stream'
     while True:
         output = tracer_pipe.stdout.readline()
         if not output and tracer_pipe.poll() is not None:
             break
         output = output.decode()
 
-        timestamp, proc, event, trace_fields = parse_trace_line(output, tracer)
+        timestamp, proc, event, trace_fields = parse_trace_line(output, cmd)
         if not event in events:
             continue
         if args.raw:
