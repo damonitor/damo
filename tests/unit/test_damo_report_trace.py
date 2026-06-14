@@ -21,6 +21,12 @@ class TestDamoReportTrace(unittest.TestCase):
 
     def test_parse_trace_line(self):
         outputs = damo_report_trace.parse_trace_line(
+                '       kdamond.0  129062 [004] 100952.251360: damon:damon_aggregated: target_id=0 nr_regions=11 8359534592-8371830784: 0 505', 'perf-script')
+        self.assertEqual(outputs, (
+            '100952.251360', 'kdamond.0/129062', 'damon:damon_aggregated',
+            'target_id=0 nr_regions=11 8359534592-8371830784: 0 505'.split()))
+
+        outputs = damo_report_trace.parse_trace_line(
                 '  1241.509 kdamond.0/102481 damon:damon_aggregated(target_id=0 nr_regions=11 8232701952-8371830784: 0 1485)', 'perf-trace')
         self.assertEqual(outputs, (
             '1241.509', 'kdamond.0/102481', 'damon:damon_aggregated',
