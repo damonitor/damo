@@ -265,6 +265,8 @@ def report_trace_candidates(words, cword):
                            'damon:damos_esz',
                            'damon:damos_stat_after_apply_interval']),
                 Option(name='--raw', nr_args=0),
+                Option(name='--tracer', nr_args=1, repeatable=False,
+                       positional_candidates=[['perf', 'trace-cmd']]),
                 ])
 
 def report_candidates(words, cword):
