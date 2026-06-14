@@ -43,9 +43,30 @@ def read_trace_cmd_record(record_file):
 def read_damo_report_trace_output(output_file):
     try:
         with open(output_file, 'r') as f:
-            return f.read(), None
+            text = f.read()
     except Exception as e:
-        return None, '%s' % e
+        return None, None, '%s' % e
+    lines = text.strip().split('\n')
+    if len(lines) < 3:
+        return None, None, 'no header'
+    header_lines = lines[:3]
+    version_fields = header_lines[0].split()
+    if len(version_fields) != 2:
+        return None, None, 'wrong number of version header field (%d)' % (
+                len(version_fields))
+    if version_fields[0] != 'damo_report_trace_output_format_version:':
+        return None, None, 'unexpected version header field (%s)' % (
+                version_fields[0])
+    tracer_fields = header_lines[2].split()
+    if len(tracer_fields) != 2:
+        return None, None, 'Wrong number of trace header field (%d)' % (
+                len(tracer_fields))
+    name, val = tracer_fields
+    if name != 'damo_report_trace_output_tracer:':
+        return None, None, 'Wrong tracer field name (%d)' % name
+    if not val in ['perf', 'trace-cmd']:
+        return None, None, 'Unsupported tracer (%d)' % val
+    return text, val, None
 
 def read_trace_record(record_file):
     '''
@@ -60,12 +81,8 @@ def read_trace_record(record_file):
     trace_text, trace_cmd_err = read_trace_cmd_record(record_file)
     if trace_cmd_err is None:
         return trace_text, 'trace-cmd', None
-    trace_text, text_err = read_damo_report_trace_output(record_file)
+    trace_text, tracer, text_err = read_damo_report_trace_output(record_file)
     if text_err is None:
-        lines = trace_text.split('\n')
-        # first three lines are damo-metadata
-        tracer = lines[2].split()[1]
-        trace_text = '\n'.join(lines[3:])
         return trace_text, tracer, None
     err = 'cannot parse %s via perf (%s), trace-cmd (%s), file read (%s)' % (
             record_file, perf_err, trace_cmd_err, text_err)
