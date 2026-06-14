@@ -259,6 +259,7 @@ def report_trace_candidates(words, cword):
                 Option(name='--event', nr_args=-1, repeatable=False,
                        non_positional_candidates=[
                            'damon:damon_aggregated',
+                           'damon:damon_region_aggregated',
                            'damon:damos_before_apply',
                            'damon:damon_monitor_intervals_tune',
                            'damon:damos_esz',
