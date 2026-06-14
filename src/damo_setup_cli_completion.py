@@ -264,6 +264,7 @@ def report_trace_candidates(words, cword):
                            'damon:damon_monitor_intervals_tune',
                            'damon:damos_esz',
                            'damon:damos_stat_after_apply_interval']),
+                Option(name='--raw', nr_args=0),
                 ])
 
 def report_candidates(words, cword):
