@@ -496,7 +496,7 @@ def damon_trace_fields(line):
         return fields[2:]
     return fields[3:]
 
-def parse_damon_trace(trace_text, monitoring_intervals):
+def parse_damon_trace(trace_text, trace_cmd, monitoring_intervals):
     '''
     Parse DAMON tracepoints.  trace_text could be output of 'perf script' or
     'trace-cmd report'.
@@ -559,7 +559,8 @@ def parse_perf_damon_record(
                     stderr=fnull).decode()
     except Exception as e:
         return None, 'failed perf-script (%s)' % e
-    return parse_damon_trace(perf_script_output, monitoring_intervals)
+    return parse_damon_trace(
+            perf_script_output, 'perf-script', monitoring_intervals)
 
 def parse_json(json_str):
     kvpairs = json.loads(json_str)
@@ -600,7 +601,8 @@ def parse_records_file(record_file, monitoring_intervals=None):
     if file_type == 'ASCII text':
         with open(record_file, 'r') as f:
             perf_script_output = f.read()
-        return parse_damon_trace(perf_script_output, monitoring_intervals)
+        return parse_damon_trace(
+                perf_script_output, 'perf-script', monitoring_intervals)
 
     return parse_perf_damon_record(
             record_file, monitoring_intervals, perf_cmd='perf')
@@ -720,7 +722,8 @@ def convert_trace_cmd_to_damon_data(
                     stderr=fnull).decode()
     except Exception as e:
         return 'trace-cmd report fail (%s)' % e
-    records, err = parse_damon_trace(output, monitoring_intervals)
+    records, err = parse_damon_trace(
+            output, 'trace-cmd-report', monitoring_intervals)
     if err:
         return 'trace-cmd output parsing fail (%s)' % err
     return write_damon_records(records, file_path, file_format,
