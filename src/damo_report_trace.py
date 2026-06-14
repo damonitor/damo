@@ -135,6 +135,8 @@ def parse_trace_line(line, cmd):
     - 'trace-cmd report', or
     - 'trace-cmd stream'.
 
+    Returns timestamp, proc, event and trace fields.
+
     Expected input formats for different commands are like below.
 
     perf script: <cmd> <pid> <cpu> <timestamp>: <event>: <trace outputs>
