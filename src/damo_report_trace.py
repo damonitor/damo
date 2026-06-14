@@ -135,7 +135,9 @@ def parse_trace_line(line, cmd):
     - 'trace-cmd report', or
     - 'trace-cmd stream'.
 
-    Returns timestamp, proc, event and trace fields.
+    Returns timestamp, proc, event and trace fields.  For lines not having the
+    information, e.g., trace-cmd report's header lines, four None objects are
+    returned.
 
     Expected input formats for different commands are like below.
 
@@ -165,6 +167,9 @@ def parse_trace_line(line, cmd):
     '''
 
     fields = line.split()
+    # trace-report may have header lines
+    if len(fields) < 4:
+        return None, None, None, None
     if cmd == 'perf-script':
         proc = '%s/%s' % (fields[0], fields[1])
         timestamp = fields[3][:-1]
@@ -326,6 +331,8 @@ def report_recorded_trace(args):
 
     for line in trace_text.strip().split('\n'):
         timestamp, proc, event, trace_fields = parse_trace_line(line, cmd)
+        if trace_fields is None:
+            continue
         if not event in events:
             continue
         if args.raw:
@@ -387,6 +394,8 @@ def main(args):
         output = output.decode()
 
         timestamp, proc, event, trace_fields = parse_trace_line(output, cmd)
+        if trace_fields is None:
+            continue
         if not event in events:
             continue
         if args.raw:
