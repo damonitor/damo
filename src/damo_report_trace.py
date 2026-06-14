@@ -328,7 +328,8 @@ def main(args):
             continue
         if args.raw:
             print(output.strip())
-        pr_trace(timestamp, proc, event, trace_fields, args.max_cols)
+        else:
+            pr_trace(timestamp, proc, event, trace_fields, args.max_cols)
 
         if output_file is not None:
             output_file.write(output)
