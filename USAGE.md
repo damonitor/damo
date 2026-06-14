@@ -631,6 +631,12 @@ It shows every kdamond with the parameters that applied to it, running status
 detailed applied regions information.  It supports more command line options
 for retrieving status of specific parts.
 
+### `damo report trace`
+
+`damo report trace` shows DAMON's trace events in live.  The user can select
+what trace events to track, using `--event` option.  By default, all events are
+selected.  It can be useful for low level DAMON turning and investigations.
+
 ### `damo report access`
 
 `damo report access` visualizes DAMON's access monitoring result snapshots in
