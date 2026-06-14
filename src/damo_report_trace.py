@@ -163,7 +163,12 @@ def parse_trace_line(line, cmd):
     '''
 
     fields = line.split()
-    if cmd in ['perf-script', 'perf-trace']:
+    if cmd == 'perf-script':
+        proc = '%s/%s' % (fields[0], fields[1])
+        timestamp = fields[3][:-1]
+        event = fields[4][:-1]
+        trace_fields = fields[5:]
+    elif cmd == 'perf-trace':
         #   3128.371 kdamond.0/764 damon:damon_aggregated(trace fields)
         timestamp, proc = fields[:2]
         event_first_trace_fields = fields[2].split('(')
