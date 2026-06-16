@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-__version__ = '3.2.7'
+__version__ = '3.2.8'
 
 def get_release_version():
     return __version__
