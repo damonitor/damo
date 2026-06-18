@@ -1742,6 +1742,9 @@ To ask help to DAMON community, you can
 def initialize(damon_interface, debug_damon, load_sysinfo):
     if debug_damon:
         _damo_fs.debug_print_ops(True)
+    err = set_damon_interface(damon_interface)
+    if err is not None:
+        return err
     if load_sysinfo:
         sysinfo, err = _damo_sysinfo.get_sysinfo()
         if err is not None:
@@ -1749,9 +1752,6 @@ def initialize(damon_interface, debug_damon, load_sysinfo):
         version, err = sysinfo.infer_damon_version()
         if version == '<5.15':
             return damon_unavail_msg
-    err = set_damon_interface(damon_interface)
-    if err is not None:
-        return err
 
     return None
 
