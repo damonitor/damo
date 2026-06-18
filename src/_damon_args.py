@@ -1138,7 +1138,7 @@ def warn_unsupported_damon_features_for(args):
         warn_for_features('--ops paddr', ['sysfs/paddr', 'debugfs/paddr'])
     if args.deducible_target == 'paddr':
         warn_for_features('ops paddr', ['sysfs/paddr', 'debugfs/paddr'])
-    if args.damos_action is not None:
+    if args.damos_action != []:
         warn_for_features(
                 '--damos_action', ['sysfs/schemes', 'debugfs/schemes'])
 
