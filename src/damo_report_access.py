@@ -1732,21 +1732,21 @@ def handle_args_input(args):
     return None
 
 def read_and_show(args):
-    record_filter, err = _damo_records.args_to_filter(args)
-    if err != None:
-        print(err)
-        exit(1)
-
     err = handle_args_input(args)
     if err is not None:
         print('--input handling failed (%s)' % err)
         exit(1)
 
-    if args.input_file == None:
+    if args.input_file is None:
         _damon.ensure_root_and_initialized(args)
         if _damon.any_kdamond_running() is False:
             if os.path.exists('damon.data'):
                 args.input_file = 'damon.data'
+
+    record_filter, err = _damo_records.args_to_filter(args)
+    if err != None:
+        print(err)
+        exit(1)
 
     dfilters, err = _damon_args.damos_options_to_filters(
             args.snapshot_damos_filter)
