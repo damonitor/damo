@@ -1501,19 +1501,20 @@ def set_formats_record_default(fmt, records):
         fmt.format_record_tail = '\n'.join(tail_lines)
 
 def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
-    if fmt.format_snapshot_head == None:
-        need_snapshot_head = False
-        for record in records:
-            if len(record.snapshots) > 1:
-                need_snapshot_head = True
-                break
-        if need_snapshot_head:
-            fmt.format_snapshot_head = \
-                    'snapshot time: [<start time>, <end time>] ' \
-                    '(<duration>)\n<heatmap>'
-        else:
-            fmt.format_snapshot_head = 'heatmap: <heatmap>'
-        fmt.format_snapshot_head += '\nintervals: <snapshot intervals>'
+    if fmt.format_snapshot_head is not None:
+        return
+    need_snapshot_head = False
+    for record in records:
+        if len(record.snapshots) > 1:
+            need_snapshot_head = True
+            break
+    if need_snapshot_head:
+        fmt.format_snapshot_head = \
+                'snapshot time: [<start time>, <end time>] ' \
+                '(<duration>)\n<heatmap>'
+    else:
+        fmt.format_snapshot_head = 'heatmap: <heatmap>'
+    fmt.format_snapshot_head += '\nintervals: <snapshot intervals>'
     if ops_filters_installed:
         fmt.format_snapshot_head += \
                 '\n# damos filters (df): <filters passed type>'
