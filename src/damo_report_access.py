@@ -1500,8 +1500,7 @@ def set_formats_record_default(fmt, records):
 
         fmt.format_record_tail = '\n'.join(tail_lines)
 
-def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
-    # handle snapshot head and tail
+def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
     if fmt.format_snapshot_head == None:
         need_snapshot_head = False
         for record in records:
@@ -1520,6 +1519,7 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
                 '\n# damos filters (df): <filters passed type>'
         fmt.format_snapshot_head += '\ndf-pass: <filters passed heatmap>'
 
+def set_fmt_snapshot_tail_default(fmt, args, ops_filters_installed):
     if fmt.format_snapshot_tail is None:
         fmt.format_snapshot_tail = \
                 'memory bw estimate: <estimated memory bandwidth>\n' \
@@ -1538,6 +1538,10 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
         if fmt.format_snapshot_tail.find('<region box description>') == -1:
             fmt.format_snapshot_tail = ('%s\n<region box description>' %
                     fmt.format_record_tail)
+
+def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
+    set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed)
+    set_fmt_snapshot_tail_default(fmt, args, ops_filters_installed)
 
 def set_formats_region_default(fmt, records, args):
     default_region_format = \
