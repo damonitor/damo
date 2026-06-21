@@ -1399,6 +1399,7 @@ def set_formats_handle_format_set_arg(fmt, format_arg):
     '''
     if format_arg is None:
         return fmt, None
+    # Handle json file or string case
     if len(format_arg) == 1 and len(format_arg[0]) == 1:
         fmt_string = format_arg[0][0]
         if os.path.isfile(fmt_string):
@@ -1410,24 +1411,25 @@ def set_formats_handle_format_set_arg(fmt, format_arg):
             return None, 'wrong --format option'
     for format_fields in format_arg:
         if len(format_fields) != 3:
-            return None, 'wrong --format option (%s)' % format_fields
+            return None, 'wrong nr of --format option (%s)' % format_fields
         action, target_area, fmt_string = format_fields
         if not action in ['set', 'append']:
             return None, 'wrong --format action (%s)' % format_fields
         if not target_area in ['record_head', 'snapshot_head', 'region',
                                'snapshot_tail', 'record_tail']:
             return None, 'wrong --format target area (%s)' % format_fields
-        if action == 'set':
-            if target_area == 'record_head':
-                fmt.format_record_head = fmt_string
-            elif target_area == 'snapshot_head':
-                fmt.format_snapshot_head = fmt_string
-            elif target_area == 'region':
-                fmt.format_region = fmt_string
-            elif target_area == 'snapshot_tail':
-                fmt.format_snapshot_tail = fmt_string
-            elif target_area == 'record_tail':
-                fmt.format_record_tail = fmt_string
+        if action == 'append':
+            continue
+        if target_area == 'record_head':
+            fmt.format_record_head = fmt_string
+        elif target_area == 'snapshot_head':
+            fmt.format_snapshot_head = fmt_string
+        elif target_area == 'region':
+            fmt.format_region = fmt_string
+        elif target_area == 'snapshot_tail':
+            fmt.format_snapshot_tail = fmt_string
+        elif target_area == 'record_tail':
+            fmt.format_record_tail = fmt_string
     return fmt, None
 
 def set_formats_handle_styles(fmt, args, records):
