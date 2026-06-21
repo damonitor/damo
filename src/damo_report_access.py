@@ -1889,12 +1889,13 @@ def add_fmt_args(parser, hide_help=False):
     # found.  Keep supporting for now, but hide from the help message.
     parser.add_argument('--format', metavar=fmt_flexible_metavar,
                         action='append', nargs='+',
-                        help='visualization format in json format')
+                        help='customize report content format')
 
-    # don't set default for record head and snapshot head because it depends on
-    # given number of record and snapshots.  Decide those in set_formats().
-    # below five options can be replaced with --format.  Keep backward
-    # compatibility support, but hide from help messages.
+    # Below five options are used for the content format customization by
+    # default, and overridden by --format, in set_formats().  Actually --format
+    # can completely replace below five options, and encouraged to be used
+    # instead.  Hence these options are also hidden from the help message.
+    # Keep supporting for backward combaptibility, though.
     parser.add_argument(
             '--format_record_head', metavar='<template>',
             # help='output format to show at the beginning of each record'
