@@ -1702,6 +1702,12 @@ def handle_exec(cmd, records):
     return None
 
 def handle_args_input(args):
+    '''
+    Users can set data to show via three different options: --input_file,
+    --tried_regions_of, and --input.  --input is the latest and recommended way
+    to set everything.  Validate --input and set --tried_regions_of and
+    --input_file accordingly.
+    '''
     if args.input is None:
         return None
 
