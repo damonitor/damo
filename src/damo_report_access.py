@@ -1583,6 +1583,9 @@ def set_formats_handle_format_append_arg(fmt, format_args):
             fmt.format_record_tail += fmt_string
 
 def set_formats(args, records):
+    # Setup basic formats as user specified, including
+    # --format_{record_head,record_tail,snapshot_head,snapshot_tail,region}
+    # options.  --format is not yet applied.
     fmt = ReportFormat.from_args(args)
 
     fmt, err = set_formats_handle_format_set_arg(fmt, args.format)
