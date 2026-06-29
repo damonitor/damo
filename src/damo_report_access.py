@@ -1542,7 +1542,33 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed)
     set_fmt_snapshot_tail_default(fmt, args, ops_filters_installed)
 
+def set_formats_region_probe_hits_default(fmt, records, args):
+    default_region_format = \
+            '<index> <start address> <size>  <access hz> <age> <probe hits> '
+    if args.region_box:
+        if fmt.region_box_min_max_height[1] > 1:
+            fmt.format_region = '<box>%s' % default_region_format
+        else:
+            fmt.format_region = '<box>\n%s' % default_region_format
+
+    if fmt.format_region is None:
+        fmt.format_region = default_region_format
+        for record in records:
+            if len(record.scheme_filters) > 0:
+                fmt.format_region += ' df-passed <filters passed bytes>'
+                break
+
+
 def set_formats_region_default(fmt, records, args):
+    for r in records:
+        for s in r.snapshots:
+            for r in s.regions:
+                if len(r.probe_hits) > 0:
+                    return set_formats_region_probe_hits_default(
+                            fmt, records, args)
+                break
+            break
+        break
     default_region_format = \
             '<index> addr <start address> size <size> access <access hz> ' \
             'age <age>'
