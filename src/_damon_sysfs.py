@@ -601,7 +601,13 @@ def write_probe_dir(dir_path, probe):
                 os.path.join(filters_dir, '%d' % idx), filter)
         if err is not None:
             return err
-    return None
+
+    weight_file = os.path.join(dir_path, 'weight')
+    if not os.path.isfile(weight_file):
+        return None
+
+    return _damo_fs.write_file(
+            os.path.join(dir_path, 'weight'), '%d' % probe.weight)
 
 def write_probes_dir(dir_path, probes):
     if not os.path.isdir(dir_path):
