@@ -1071,7 +1071,11 @@ def files_content_to_probe(files_content):
     for kv in number_sorted_dirs(filters_content):
         filter = files_content_to_damon_filter(kv)
         filters.append(filter)
-    return _damon.DamonProbe(filters=filters)
+    if 'weight' in files_content:
+        weight = int(files_content['weight'])
+    else:
+        weight = None
+    return _damon.DamonProbe(filters=filters, weight=weight)
 
 def files_content_to_probes(files_content):
     probes = []
