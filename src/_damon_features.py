@@ -352,6 +352,10 @@ features_list = [
                      upstream_status='merged in v7.2-rc1 (45c49d9fd6089)',
                      upstreamed_version='7.2'),
 
+        DamonFeature(name='sysfs/probe_weights',
+                     upstream_status='hacking on damon/next',
+                     upstreamed_version='none'),
+
         DamonFeature(name='sysfs/damon_sample_control',
                      upstream_status='hacking on damon/next',
                      upstreamed_version='none',
