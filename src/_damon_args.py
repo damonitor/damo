@@ -958,10 +958,12 @@ def warn_unsupported_damon_features_for(args):
     if args.sample_primitives is not None:
         warn_for('--sample_primitives', 'sysfs/damon_sample_control')
 
-    if args.probe_filter != []:
-        warn_for('--probe_filter', 'sysfs/attrs_monitoring')
+    if args.probe_weight != []:
+        warn_for('--probe_weight', 'sysfs/damon_probe_weights')
 
     # 7.2
+    if args.probe_filter != []:
+        warn_for('--probe_filter', 'sysfs/attrs_monitoring')
     if _damon.damos_action_collapse in args.damos_action:
         warn_for('--damos_action collapse', 'sysfs/damos_action_collapse')
     for quota_goal in args.damos_quota_goal:
