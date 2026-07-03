@@ -803,10 +803,18 @@ def probes_for(args):
         return None, \
                 '--nr_probe_filters mismatches --probe_filter (%d != %d)' % (
                         sum(args.nr_probe_filters), len(filters))
+    if args.probe_weight != []:
+        if len(args.probe_weight) != len(args.nr_probe_filters):
+            return None, \
+                    '--probe_weight mismatches --nr_probe_filters (%d != %d)' \
+                    % (len(args.probe_weight), len(args.nr_probe_filters))
+    else:
+        args.probe_weight = [0 for _ in args.nr_probe_filters]
     for nr in args.nr_probe_filters:
         filters_for_probe = filters[filter_idx:filter_idx + nr]
+        weight = args.probe_weight[len(probes)]
         try:
-            probe = _damon.DamonProbe(filters=filters_for_probe)
+            probe = _damon.DamonProbe(filters=filters_for_probe, weight=weight)
         except Exception as e:
             return None, 'probe creation fail (%s)' % e
         probes.append(probe)
@@ -959,7 +967,7 @@ def warn_unsupported_damon_features_for(args):
         warn_for('--sample_primitives', 'sysfs/damon_sample_control')
 
     if args.probe_weight != []:
-        warn_for('--probe_weight', 'sysfs/damon_probe_weights')
+        warn_for('--probe_weight', 'sysfs/probe_weights')
 
     # 7.2
     if args.probe_filter != []:
@@ -1386,6 +1394,10 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
             '--nr_probe_filters', type=int, nargs='+', metavar='<integer>',
             help='number of filters for each probe (in order)'
             if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--probe_weight', type=int, action='append',
+                        default=[], metavar='<int>',
+                        help='data attribute probe weight'
+                        if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--nr_probes', type=int, nargs='+', metavar='<integer>',
             help='number of probes for each context (in order)'
