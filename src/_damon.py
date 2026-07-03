@@ -66,31 +66,44 @@ class DamonFilter:
 
 class DamonProbe:
     filters = None
+    weight = None
 
-    def __init__(self, filters):
+    def __init__(self, filters, weight=None):
         if type(filters) is not list:
             raise Exception('filters for DamonProbe() is not a list')
         self.filters = filters
+        if weight is None:
+            weight = 0
+        if type(weight) is not int:
+            raise Exception('weight is not an int')
+        self.weight = weight
 
     def to_str(self, raw):
-        return ', '.join([f.to_str(raw) for f in self.filters])
+        words = [', '.join([f.to_str(raw) for f in self.filters])]
+        words.append(' (weight: %s)' % self.weight)
+        return ''.join(words)
 
     def __str__(self):
         return self.to_str(False)
 
     def __eq__(self, other):
         return type(self) == type(other) and \
-                self.filters == other.filters
+                self.filters == other.filters and \
+                self.weight == other.weigt
 
     @classmethod
     def from_kvpairs(cls, kv):
-        return DamonProbe(filters=[
-                DamonFilter.from_kvpairs(filter_kv)
-                for filter_kv in kv['filters']])
+        return DamonProbe(
+                filters=[
+                    DamonFilter.from_kvpairs(filter_kv)
+                    for filter_kv in kv['filters']],
+                weight=kv.get('weight', None),
+                )
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('filters', [f.to_kvpairs(raw) for f in self.filters]),
+            ('weight', self.weight),
             ])
 
 class OpsAttrs:
