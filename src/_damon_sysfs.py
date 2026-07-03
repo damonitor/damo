@@ -1441,6 +1441,28 @@ def mk_feature_supports_map():
             os.path.join(ctx_dir_of(0, 0), 'monitoring_attrs', 'probes')):
         supports_map['sysfs/attrs_monitoring'] = True
 
+
+    if supports_map['sysfs/attrs_monitoring'] is True:
+        kdamonds_for_feature_check = [
+                _damon.Kdamond(
+                    state=None, pid=None, contexts=[
+                        _damon.DamonCtx(
+                            targets=[_damon.DamonTarget(
+                                pid=None, regions=[])],
+                            probes=[_damon.DamonProbe(filters=[])],
+                            )])]
+        err = stage_kdamonds(kdamonds_for_feature_check)
+        if err is not None:
+            stage_kdamonds(orig_kdamonds)
+            return None, \
+                    'staging damon probe feature check purpose kdamond failed'
+
+        probe_dir = os.path.join(
+            ctx_dir_of(0, 0), 'monitoring_attrs', 'probes', '0')
+
+        if os.path.isfile(os.path.join(probe_dir, 'weight')):
+            supports_map['sysfs/probe_weights'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
 
