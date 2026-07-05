@@ -4,6 +4,8 @@ picked by human sense, so could be incomplete and missing many things.
 v3.3.1
 - damo report heatmap: Fix an age backfill bug.
 - Support probe weights.
+- Break 'damo pa_layout' and 'damo record_info' for deprecation.
+  - Use 'damo report pa_layout' and 'damo report record_info' instead.
 
 v3.3.0
 - 'damo report access': show probe hits by default if probes are set.
