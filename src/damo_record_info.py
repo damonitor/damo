@@ -193,7 +193,7 @@ def pr_guide(records, raw_numbers=True):
 def main(args):
     _damo_deprecation_notice.deprecated(
             feature='damo record_info', deadline='2026-07-01',
-            alternative='damo report record_info')
+            alternative='damo report record_info', do_exit=True)
     records, err = _damo_records.get_records(record_file=args.input)
     if err != None:
         print('monitoring result file (%s) parsing failed (%s)' %
