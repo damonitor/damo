@@ -204,7 +204,7 @@ def numa_addr_ranges(nodes):
 def main(args):
     _damo_deprecation_notice.deprecated(
             feature='damo pa_layout', deadline='2026-07-01',
-            alternative='damo report pa_layout')
+            alternative='damo report pa_layout', do_exit=True)
     _damon.ensure_root_permission()
 
     if args.numa_addr is not None:
