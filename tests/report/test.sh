@@ -31,6 +31,38 @@ do
 	for style in recency-percentiles temperature-percentiles \
 		recency-sz-hist temperature-sz-hist detailed
 	do
+		test_cmd="$damo report attrs \
+			--input damon.data.snapshot.$filter \
+			--style $style"
+		test_report "$test_cmd" "$style-$filter"
+	done
+done
+
+damo_report_raw="$damo report attrs --raw_form --input"
+
+test_report "$damo_report_raw damon.data" "raw"
+
+test_report "$damo_report_raw damon.data.json_compressed" "raw"
+
+test_report \
+	"$damo_report_raw perf.data.script" \
+	"raw_perf_script"
+
+test_report \
+	"$damo adjust --aggregate_interval 1000000 && \
+	$damo_report_raw damon.adjusted.data" \
+	"aggr_1s_raw"
+
+test_report \
+	"$damo adjust --skip 30 --aggregate_interval 1000000 && \
+	$damo_report_raw damon.adjusted.data" \
+	"aggr_1s_raw_skip_30"
+
+for filter in nofilter active inactive anon file unmapped hugepage
+do
+	for style in recency-percentiles temperature-percentiles \
+		recency-sz-hist temperature-sz-hist detailed
+	do
 		test_cmd="$damo report access \
 			--input damon.data.snapshot.$filter \
 			--style $style"
