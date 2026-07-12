@@ -2046,11 +2046,11 @@ def add_fmt_args(parser, hide_help=False):
             ])
 
 def set_argparser(parser):
-    parser.description = 'Show DAMON-monitored access pattern'
+    parser.description = 'Show DAMON-monitored data attributes information.'
     parser.epilog=' '.join([
-        'If --input_file is not provided, capture snapshot.',
-        'If --input_file is not provided, DAMON is not running,',
-        'and "damon.data" file exists, use "damon.data" as --input_file.'])
+        'If --input is not provided and DAMON is running, capture snapshot.',
+        'If --input is not provided, DAMON is not running,',
+        'and "damon.data" file exists, use "damon.data" as --input.'])
 
     _damon_args.add_interface_debug_args(parser)
 
@@ -2061,14 +2061,16 @@ def set_argparser(parser):
             '--input', '-i', metavar='<file or special words>', nargs='+',
             action='append',
             help=' '.join([
-                'Source of the access pattern to show.',
+                'Source of the attributes information to show.',
                 'Can be file or',
                 '"tried_regions_of <kdamond idx> <context idx> <scheme idx>"'
                 ]))
+    # TODO: remove
     parser.add_argument('--input_file', metavar='<file>', nargs='+',
                         # source of the access pattern to show
                         # suppress in favor of --input.
                         help=argparse.SUPPRESS)
+    # TODO: remove
     parser.add_argument(
             '--tried_regions_of', nargs=3, type=int, action='append',
             metavar=('<kdamond idx>', '<context idx>', '<scheme idx>'),
@@ -2080,6 +2082,7 @@ def set_argparser(parser):
 
     parser.add_argument('--exec', metavar='<command or \'interpreter\'>',
                         help='execute python code with the records')
+    # TODO: remove
     parser.add_argument(
             '--on_cache', nargs=3,
             metavar=('<cache size>', '<cache ways>', '<cache line size>'),
