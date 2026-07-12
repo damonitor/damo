@@ -1051,11 +1051,6 @@ class ReportFormat:
         self.hist_cumulate = args.hist_cumulate
         self.hist_ranges = args.hist_ranges
         self.percentiles_range = args.percentiles_range
-        self.format_record_head = args.format_record_head
-        self.format_record_tail = args.format_record_tail
-        self.format_snapshot_head = args.format_snapshot_head
-        self.format_snapshot_tail = args.format_snapshot_tail
-        self.format_region = args.format_region
         self.snapshot_heatmap_width = args.snapshot_heatmap_width
         self.snapshot_heatmap_static = args.snapshot_heatmap_static
         self.snapshot_heatmap_colorset = args.snapshot_heatmap_colorset
