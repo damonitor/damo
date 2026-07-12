@@ -1566,30 +1566,6 @@ def add_fmt_args(parser, hide_help=False):
                         action='append', nargs='+',
                         help='customize report content format')
 
-    # Below five options are used for the content format customization by
-    # default, and overridden by --format, in set_formats().  Actually --format
-    # can completely replace below five options, and encouraged to be used
-    # instead.  Hence these options are also hidden from the help message.
-    # Keep supporting for backward combaptibility, though.
-    parser.add_argument(
-            '--format_record_head', metavar='<template>',
-            # help='output format to show at the beginning of each record'
-            help=argparse.SUPPRESS)
-    parser.add_argument('--format_record_tail', metavar='<template>',
-                        # help='output format to show at the end of each record'
-                        help=argparse.SUPPRESS)
-    parser.add_argument(
-            '--format_snapshot_head', metavar='<template>',
-            # help='output format to show at the beginning of each snapshot'
-            help=argparse.SUPPRESS)
-    parser.add_argument(
-            '--format_snapshot_tail', metavar='<template>',
-            # help='output format to show at the end of each snapshot'
-            help=argparse.SUPPRESS)
-    parser.add_argument('--format_region', metavar='<template>',
-                        # help='output format to show for each memory region'
-                        help=argparse.SUPPRESS)
-
     # for snapshot heatmap
     parser.add_argument(
             '--snapshot_heatmap_width', metavar='<number>', default=80,
