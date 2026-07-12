@@ -1886,7 +1886,7 @@ def get_records(tried_regions_of=None, record_file=None,
     else:
         filter_copy = RecordFilter(None, None, None, None, None, None, None)
 
-    if record_file is None:
+    if record_file is None or len(record_file) == 0:
         records, err = get_snapshot_records_of(
                 SnapshotRequest(
                     tried_regions_of, snapshot_damos_filters,
