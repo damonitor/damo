@@ -1948,6 +1948,7 @@ def add_fmt_args(parser, hide_help=False):
                      ['<size>', 11], ['<access rate>', 5],
                      ['<access hz>', 6],
                      ['<age>', 13],
+                     ['<filters passed bytes>', 11],
                      ['<filters passed type>', 10],
                      ],
             help='minimum character for each keyword of the format'

@@ -1,0 +1,31 @@
+# damos filters (df): allow unmapped
+# df-passed temperature percentiles
+<df-passed percentile> <temperature (weights: [0, 100, 100])>
+  0  -31,800,000,000  |                    |
+  1   -1,800,000,000  |******************  |
+ 25                0  |******************* |
+ 50                0  |******************* |
+ 75                0  |******************* |
+ 99                0  |******************* |
+100      900,002,500  |********************|
+
+# total temperature percentiles
+<percentile> <temperature (weights: [0, 100, 100])>
+  0  -31,800,000,000  |                    |
+  1  -31,800,000,000  |                    |
+ 25  -31,800,000,000  |                    |
+ 50  -29,700,000,000  |                    |
+ 75   -1,800,000,000  |***********         |
+ 99   18,300,000,500  |********************|
+100   18,300,000,500  |********************|
+memory bw estimate: 11.503 GiB per second  df-passed: 6.803 MiB per second
+total size: 59.868 GiB  df-passed 2.418 GiB  
+scheme stats
+tried 0 times (0 B)
+applied 0 times (0 B)
+0 B passed filters
+quota exceeded 0 times
+0 B
+tried 0 snapshots (max 0)
+record DAMON intervals: sample 150 ms, aggr 3 s
+# target 4 % accesses per 1 aggrs, [5 ms, 150 ms] sampling interval
