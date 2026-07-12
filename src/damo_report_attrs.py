@@ -1719,18 +1719,15 @@ def read_and_show(args):
     if err is not None:
         print('--input handling failed (%s)' % err)
         exit(1)
-    if len(input_files) == 0:
-        input_files = None
     if len(tried_regions_of_list) == 0:
         tried_regions_of_list = None
-    args.input_file = input_files
     args.tried_regions_of = tried_regions_of_list
 
-    if args.input_file is None:
+    if len(input_files) == 0:
         _damon.ensure_root_and_initialized(args)
         if _damon.any_kdamond_running() is False:
             if os.path.exists('damon.data'):
-                args.input_file = 'damon.data'
+                input_files = ['damon.data']
 
     record_filter, err = _damo_records.args_to_filter(args)
     if err != None:
@@ -1765,7 +1762,7 @@ def read_and_show(args):
             break
         records, err = _damo_records.get_records(
                     tried_regions_of=args.tried_regions_of,
-                    record_file=args.input_file,
+                    record_file=input_files,
                     snapshot_damos_filters=dfilters,
                     record_filter=record_filter,
                     total_sz_only=args.total_sz_only,
@@ -1775,9 +1772,8 @@ def read_and_show(args):
             exit(1)
         if signal_received is True:
             break
-        if len(records) == 0 and args.input_file is not None and \
-                repeat_count == 1:
-            print('No record in %s' % args.input_file)
+        if len(records) == 0 and len(input_files) > 0 and repeat_count == 1:
+            print('No record in %s' % input_files)
 
         if args.exec:
             err = handle_exec(args.exec, records)
