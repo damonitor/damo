@@ -106,14 +106,6 @@ snapshot_formatters = [
             lambda snapshot, record, fmt:
             _damo_fmt_str.format_nr(len(snapshot.regions), fmt.raw_number),
             'the number of regions in the snapshot'),
-        Formatter('<region box colors>',
-            lambda snapshot, record, fmt:
-            _damo_ascii_color.color_samples(fmt.region_box_format.colorset),
-            'available colors for the region box'),
-        Formatter('<region box description>',
-            lambda snapshot, record, fmt:
-            fmt.region_box_format.description_msg(fmt.raw_number),
-            'description about region box (what and how it represents)'),
         Formatter('<temperature-sz histogram>',
                   lambda snapshot, record, fmt:
                   temperature_sz_hist_str(snapshot, record, fmt, False),
