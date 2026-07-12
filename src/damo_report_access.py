@@ -1564,16 +1564,11 @@ def set_formats_region_probe_hits_default(fmt, records, args):
                 break
 
 
-def set_formats_region_default(fmt, records, args):
-    for r in records:
-        for s in r.snapshots:
-            for r in s.regions:
-                if len(r.probe_hits) > 0:
-                    return set_formats_region_probe_hits_default(
-                            fmt, records, args)
-                break
-            break
-        break
+def set_formats_region_default(fmt, records, args, has_probes):
+    if has_probes is True:
+        return set_formats_region_probe_hits_default(
+                fmt, records, args)
+
     default_region_format = \
             '<index> addr <start address> size <size> access <access hz> ' \
             'age <age>'
@@ -1596,10 +1591,19 @@ def set_formats_update_default_formats(fmt, records, args):
         if len(record.scheme_filters) > 0:
             ops_filters_installed = True
             break
+    has_probes = False
+    for r in records:
+        for s in r.snapshots:
+            for r in s.regions:
+                if len(r.probe_hits) > 0:
+                    has_probes = True
+                    break
+            break
+        break
 
     set_formats_record_default(fmt, records)
     set_formats_snapshot_default(fmt, records, args, ops_filters_installed)
-    set_formats_region_default(fmt, records, args)
+    set_formats_region_default(fmt, records, args, has_probes)
 
 def set_formats_handle_format_append_arg(fmt, format_args):
     if format_args is None:
