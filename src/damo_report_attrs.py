@@ -1500,6 +1500,25 @@ def set_formats_record_default(fmt, records):
 
         fmt.format_record_tail = '\n'.join(tail_lines)
 
+def get_min_chars_for(name, min_chars_list):
+    for n, val in min_chars_list:
+        if n == name:
+            return val
+
+def region_legend_line(min_chars_for):
+    words = ['#']
+    words.append(' ' * (get_min_chars_for('<index>', min_chars_for)))
+    words.append('addr')
+    words.append(' ' * (get_min_chars_for('<start address>', min_chars_for) -
+                 len('addr') + 1))
+    words.append('size')
+    words.append(' ' * (get_min_chars_for('<size>', min_chars_for) -
+                 len('size') + 2))
+    words.append('age')
+    words.append(' ' * (get_min_chars_for('<age>', min_chars_for) - len('age') + 1))
+    words.append('probe_hits')
+    return ''.join(words)
+
 def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
     if fmt.format_snapshot_head is not None:
         return
@@ -1516,6 +1535,10 @@ def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
     if ops_filters_installed:
         lines.append('# damos filters (df): <filters passed type>')
         lines.append('df-pass: <filters passed heatmap>')
+
+    if fmt.format_region is None:
+        lines.append(region_legend_line(fmt.min_chars_for))
+
     fmt.format_snapshot_head = '\n'.join(lines)
 
 def set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed):
