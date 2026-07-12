@@ -1686,36 +1686,6 @@ def handle_exec(cmd, records):
     recursive_del(script_dir_path)
     return None
 
-def handle_args_input(args):
-    '''
-    Users can set data to show via three different options: --input_file,
-    --tried_regions_of, and --input.  --input is the latest and recommended way
-    to set everything.  Validate --input and set --tried_regions_of and
-    --input_file accordingly.
-    '''
-    if args.input is None:
-        return None
-
-    tried_regions_of_list = []
-    input_files = []
-    for input_args in args.input:
-        if input_args[0] == 'tried_regions_of':
-            if len(input_args) != 4:
-                return 'wrong number of args for tried_regions_of'
-            try:
-                tried_regions_of_list.append([int(x) for x in input_args[1:]])
-            except:
-                return 'tried_regions_of should get only ints'
-        elif len(input_args) == 1 and os.path.isfile(input_args[0]):
-            input_files.append(input_args[0])
-        else:
-            return 'unsupported input'
-    if len(tried_regions_of_list) > 0:
-        args.tried_regions_of = tried_regions_of_list
-    if len(input_files) > 0:
-        args.input_file = input_files
-    return None
-
 def parse_input_option(input_args_list):
     '''
     Parse --input option.  Returns input files, schemes tried regions, and
