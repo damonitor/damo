@@ -1547,7 +1547,7 @@ def set_fmt_snapshot_head_default(
     if ops_filters_installed:
         lines.append('# damos filters (df): <filters passed type>')
         lines.append('df-pass: <filters passed heatmap>')
-    if has_probes:
+    if has_probes and fmt.format_region is None:
         lines += probe_legend_lines(fmt.min_chars_for)
     fmt.format_snapshot_head = '\n'.join(lines)
 
