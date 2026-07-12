@@ -857,31 +857,6 @@ class ColoredBox:
             box += '\n'
         return box
 
-class SortedAccessPatterns:
-    sz_regions = None
-    access_rates_percent = None
-    ages_us = None
-
-    def __init__(self, records):
-        self.sz_regions = []
-        self.access_rates_percent = []
-        self.ages_us = []
-
-        for record in records:
-            for snapshot in record.snapshots:
-                for region in snapshot.regions:
-                    self.sz_regions.append(region.size())
-
-                    region.nr_accesses.add_unset_unit(record.intervals)
-                    self.access_rates_percent.append(
-                            region.nr_accesses.percent)
-
-                    region.age.add_unset_unit(record.intervals)
-                    self.ages_us.append(region.age.usec)
-        self.sz_regions.sort()
-        self.access_rates_percent.sort()
-        self.ages_us.sort()
-
 def apply_min_chars(min_chars, field_name, txt):
     # min_chars: [[<field name>, <number of min chars>]...]
     for name, nr in min_chars:
