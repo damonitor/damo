@@ -1399,16 +1399,6 @@ def set_formats_handle_format_set_arg(fmt, format_arg):
     '''
     if format_arg is None:
         return fmt, None
-    # Handle json file or string case
-    if len(format_arg) == 1 and len(format_arg[0]) == 1:
-        fmt_string = format_arg[0][0]
-        if os.path.isfile(fmt_string):
-            with open(fmt_string, 'r') as f:
-                fmt_string = f.read()
-        try:
-            return ReportFormat.from_kvpairs(json.loads(fmt_string)), None
-        except:
-            return None, 'wrong --format option'
     for format_fields in format_arg:
         if len(format_fields) != 3:
             return None, 'wrong nr of --format option (%s)' % format_fields
