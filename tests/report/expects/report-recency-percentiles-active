@@ -20,5 +20,12 @@
 100  3 m 24 s  |********************|
 memory bw estimate: 92.839 MiB per second  df-passed: 23.836 MiB per second
 total size: 59.868 GiB  df-passed 1.213 GiB
+scheme stats
+tried 0 times (0 B)
+applied 0 times (0 B)
+0 B passed filters
+quota exceeded 0 times
+0 B
+tried 0 snapshots (max 0)
 record DAMON intervals: sample 150 ms, aggr 3 s
 # target 4 % accesses per 1 aggrs, [5 ms, 150 ms] sampling interval

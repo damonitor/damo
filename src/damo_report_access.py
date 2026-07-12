@@ -1518,7 +1518,12 @@ def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
         lines.append('df-pass: <filters passed heatmap>')
     fmt.format_snapshot_head = '\n'.join(lines)
 
-def set_fmt_snapshot_tail_default(fmt, args, ops_filters_installed):
+def set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed):
+    has_damos_snapshot = False
+    for record in records:
+        if record.scheme_filters:
+            has_damos_snapshot = True
+            break
     if fmt.format_snapshot_tail is None:
         fmt.format_snapshot_tail = \
                 'memory bw estimate: <estimated memory bandwidth>\n' \
@@ -1530,7 +1535,7 @@ def set_fmt_snapshot_tail_default(fmt, args, ops_filters_installed):
                     '\ntotal size: <total bytes>  ' \
                     'df-passed <filters passed bytes>'
         # further check if scheme action is not stat
-        if args.tried_regions_of is not None:
+        if has_damos_snapshot is True:
             fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
 
     if args.region_box:
@@ -1540,7 +1545,7 @@ def set_fmt_snapshot_tail_default(fmt, args, ops_filters_installed):
 
 def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed)
-    set_fmt_snapshot_tail_default(fmt, args, ops_filters_installed)
+    set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed)
 
 def set_formats_region_probe_hits_default(fmt, records, args):
     default_region_format = \
