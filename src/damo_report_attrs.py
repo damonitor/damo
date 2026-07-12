@@ -1505,7 +1505,7 @@ def get_min_chars_for(name, min_chars_list):
         if n == name:
             return val
 
-def region_legend_line(min_chars_for):
+def region_legend_line(min_chars_for, ops_filters_installed):
     words = ['#']
     words.append(' ' * (get_min_chars_for('<index>', min_chars_for)))
     words.append('addr')
@@ -1514,8 +1514,14 @@ def region_legend_line(min_chars_for):
     words.append('size')
     words.append(' ' * (get_min_chars_for('<size>', min_chars_for) -
                  len('size') + 2))
+    if ops_filters_installed is True:
+        words.append('df-passed')
+        words.append(' ' * (get_min_chars_for(
+            '<filters passed bytes>', min_chars_for) - len('df-passed') + 2))
+
     words.append('age')
     words.append(' ' * (get_min_chars_for('<age>', min_chars_for) - len('age') + 1))
+
     words.append('probe_hits')
     return ''.join(words)
 
@@ -1537,7 +1543,8 @@ def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
         lines.append('df-pass: <filters passed heatmap>')
 
     if fmt.format_region is None:
-        lines.append(region_legend_line(fmt.min_chars_for))
+        lines.append(region_legend_line(
+            fmt.min_chars_for, ops_filters_installed))
 
     fmt.format_snapshot_head = '\n'.join(lines)
 
@@ -1570,16 +1577,15 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed)
     set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed)
 
-def set_formats_region_default(fmt, records, args):
+def set_formats_region_default(fmt, records, args, ops_filters_installed):
     if fmt.format_region is not None:
         return
-    default_region_format = \
-            '<index> <start address> <size>  <age> <probe hits> '
+
+    default_region_format = '<index> <start address> <size>'
+    if ops_filters_installed:
+        default_region_format += '  <filters passed bytes>'
+    default_region_format += '  <age> <probe hits>'
     fmt.format_region = default_region_format
-    for record in records:
-        if len(record.scheme_filters) > 0:
-            fmt.format_region += ' df-passed <filters passed bytes>'
-            break
 
 def set_formats_update_default_formats(fmt, records, args):
     ops_filters_installed = False
@@ -1590,7 +1596,7 @@ def set_formats_update_default_formats(fmt, records, args):
 
     set_formats_record_default(fmt, records)
     set_formats_snapshot_default(fmt, records, args, ops_filters_installed)
-    set_formats_region_default(fmt, records, args)
+    set_formats_region_default(fmt, records, args, ops_filters_installed)
 
 def set_formats_handle_format_append_arg(fmt, format_args):
     if format_args is None:
