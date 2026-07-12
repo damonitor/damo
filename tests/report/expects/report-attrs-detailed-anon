@@ -1,0 +1,122 @@
+heatmap: [48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;255m9[0m[48;5;232m[38;5;247m5[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;239m1[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m
+# min/max temperatures: -30,600,000,000, 600,002,369, column size: 766.312 MiB
+intervals: sample 150 ms aggr 3 s (max access hz 6.667)
+# damos filters (df): allow anon
+df-pass: [48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5;255m9[0m[48;5;232m[38;5;255m9[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;245m4[0m[48;5;232m[38;5;253m8[0m[...][48;5;232m[38;5;251m7[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;243m3[0m[48;5;232m[38;5;251m7[0m[...][48;5;232m[38;5;249m6[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;237m0[0m[48;5;232m[38;5;245m4[0m
+# min/max temperatures: -30,600,000,000, 600,002,500, column size: 252.817 MiB
+0   4.000 GiB    1.937 GiB    0 hz   0 ns            df-passed 143.027 MiB
+1   5.937 GiB    2.905 GiB    0 hz   0 ns            df-passed 350.684 MiB
+2   8.841 GiB    1.119 GiB    0 hz   9 s             df-passed 40.684 MiB
+3   9.961 GiB    1.119 GiB    0 hz   9 s             df-passed 52.555 MiB
+4   11.080 GiB   56.609 MiB   0.667 hz 9 s             df-passed 22.379 MiB
+5   11.135 GiB   14.156 MiB   0.667 hz 9 s             df-passed 572.000 KiB
+6   11.149 GiB   18.871 MiB   0 hz   0 ns            df-passed 720.000 KiB
+7   11.167 GiB   28.309 MiB   0 hz   0 ns            df-passed 760.000 KiB
+8   11.195 GiB   143.301 MiB  1.000 hz 0 ns            df-passed 18.461 MiB
+9   11.335 GiB   15.926 MiB   1.000 hz 0 ns            df-passed 6.094 MiB
+10  11.351 GiB   5.309 MiB    5.000 hz 0 ns            df-passed 6.000 MiB
+11  11.356 GiB   12.387 MiB   4.667 hz 0 ns            df-passed 8.000 MiB
+12  11.368 GiB   2.094 MiB    4.333 hz 0 ns            df-passed 2.000 MiB
+13  11.370 GiB   3.145 MiB    4.333 hz 0 ns            df-passed 2.000 MiB
+14  11.373 GiB   400.000 KiB  6.333 hz 0 ns            df-passed 2.000 MiB
+15  11.373 GiB   944.000 KiB  6.333 hz 0 ns            df-passed 0 B
+16  11.374 GiB   9.043 MiB    0 hz   3 s             df-passed 244.000 KiB
+17  11.383 GiB   81.422 MiB   0 hz   3 s             df-passed 1.469 MiB
+18  11.463 GiB   40.496 MiB   2.333 hz 0 ns            df-passed 30.074 MiB
+19  11.502 GiB   40.500 MiB   1.667 hz 0 ns            df-passed 1.059 MiB
+20  11.542 GiB   65.016 MiB   2.667 hz 0 ns            df-passed 24.387 MiB
+21  11.605 GiB   151.715 MiB  2.333 hz 0 ns            df-passed 63.469 MiB
+22  11.753 GiB   65.020 MiB   1.333 hz 6 s             df-passed 3.266 MiB
+23  11.817 GiB   151.715 MiB  1.667 hz 6 s             df-passed 51.520 MiB
+24  11.965 GiB   14.859 MiB   5.333 hz 0 ns            df-passed 8.000 MiB
+25  11.980 GiB   3.715 MiB    5.333 hz 0 ns            df-passed 4.000 MiB
+26  11.983 GiB   150.477 MiB  2.667 hz 0 ns            df-passed 57.469 MiB
+27  12.130 GiB   16.723 MiB   1.667 hz 0 ns            df-passed 400.000 KiB
+28  12.146 GiB   48.020 MiB   1.333 hz 3 s             df-passed 764.000 KiB
+29  12.193 GiB   72.031 MiB   2.000 hz 3 s             df-passed 34.254 MiB
+30  12.264 GiB   12.004 MiB   0 hz   0 ns            df-passed 164.000 KiB
+31  12.275 GiB   1.336 MiB    0 hz   0 ns            df-passed 36.000 KiB
+32  12.277 GiB   259.375 MiB  4.000 hz 0 ns            df-passed 133.320 MiB
+33  12.530 GiB   259.379 MiB  3.667 hz 0 ns            df-passed 158.371 MiB
+34  12.783 GiB   2.664 MiB    3.667 hz 0 ns            df-passed 2.000 MiB
+35  12.786 GiB   6.227 MiB    4.667 hz 0 ns            df-passed 6.000 MiB
+36  12.792 GiB   597.355 MiB  2.667 hz 0 ns            df-passed 408.008 MiB
+37  13.375 GiB   398.238 MiB  3.333 hz 0 ns            df-passed 240.000 MiB
+38  13.764 GiB   133.453 MiB  4.333 hz 3 s             df-passed 104.000 MiB
+39  13.895 GiB   33.363 MiB   4.000 hz 3 s             df-passed 20.000 MiB
+40  13.927 GiB   9.262 MiB    5.667 hz 6 s             df-passed 10.000 MiB
+41  13.936 GiB   6.180 MiB    5.667 hz 6 s             df-passed 6.000 MiB
+42  13.942 GiB   4.633 MiB    2.333 hz 0 ns            df-passed 0 B
+43  13.947 GiB   10.812 MiB   3.000 hz 0 ns            df-passed 6.000 MiB
+44  13.957 GiB   1.027 MiB    3.333 hz 0 ns            df-passed 0 B
+45  13.958 GiB   1.441 MiB    4.667 hz 0 ns            df-passed 2.000 MiB
+46  13.960 GiB   988.000 KiB  5.333 hz 0 ns            df-passed 0 B
+47  13.961 GiB   2.777 MiB    4.000 hz 0 ns            df-passed 4.000 MiB
+48  13.963 GiB   6.488 MiB    4.333 hz 0 ns            df-passed 2.000 MiB
+49  13.970 GiB   12.973 MiB   1.000 hz 3 s             df-passed 8.000 MiB
+50  13.982 GiB   8.652 MiB    0.333 hz 3 s             df-passed 0 B
+51  13.991 GiB   10.297 MiB   0 hz   0 ns            df-passed 0 B
+52  14.001 GiB   1.094 MiB    4.000 hz 0 ns            df-passed 0 B
+53  14.002 GiB   9.848 MiB    4.667 hz 0 ns            df-passed 10.000 MiB
+54  14.012 GiB   2.316 MiB    2.333 hz 0 ns            df-passed 4.000 MiB
+55  14.014 GiB   3.477 MiB    3.333 hz 0 ns            df-passed 2.000 MiB
+56  14.017 GiB   2.250 MiB    4.333 hz 0 ns            df-passed 2.000 MiB
+57  14.019 GiB   5.258 MiB    4.000 hz 0 ns            df-passed 4.000 MiB
+58  14.025 GiB   1.500 MiB    5.667 hz 0 ns            df-passed 2.000 MiB
+59  14.026 GiB   1.504 MiB    5.667 hz 0 ns            df-passed 2.000 MiB
+60  14.027 GiB   2.254 MiB    4.667 hz 3 s             df-passed 2.000 MiB
+61  14.030 GiB   2.254 MiB    5.000 hz 3 s             df-passed 2.000 MiB
+62  14.032 GiB   2.465 MiB    4.667 hz 3 s             df-passed 2.000 MiB
+63  14.034 GiB   284.000 KiB  4.667 hz 3 s             df-passed 0 B
+64  14.035 GiB   316.000 KiB  5.667 hz 0 ns            df-passed 0 B
+65  14.035 GiB   17.590 MiB   4.667 hz 0 ns            df-passed 16.000 MiB
+66  14.052 GiB   4.398 MiB    4.667 hz 0 ns            df-passed 4.000 MiB
+67  14.056 GiB   3.848 MiB    2.333 hz 0 ns            df-passed 2.000 MiB
+68  14.060 GiB   1.652 MiB    1.667 hz 0 ns            df-passed 0 B
+69  14.062 GiB   2.562 MiB    3.000 hz 0 ns            df-passed 2.000 MiB
+70  14.064 GiB   2.566 MiB    3.667 hz 0 ns            df-passed 2.000 MiB
+71  14.067 GiB   21.945 MiB   2.333 hz 0 ns            df-passed 12.000 MiB
+72  14.088 GiB   21.949 MiB   2.667 hz 0 ns            df-passed 20.000 MiB
+73  14.110 GiB   6.484 MiB    0.667 hz 0 ns            df-passed 6.000 MiB
+74  14.116 GiB   6.488 MiB    0.333 hz 0 ns            df-passed 0 B
+75  14.122 GiB   4.988 MiB    1.667 hz 0 ns            df-passed 0 B
+76  14.127 GiB   436.000 KiB  3.000 hz 3 s             df-passed 0 B
+77  14.128 GiB   2.008 MiB    5.000 hz 0 ns            df-passed 2.000 MiB
+78  14.129 GiB   4.691 MiB    5.000 hz 0 ns            df-passed 4.000 MiB
+79  14.134 GiB   13.395 MiB   3.667 hz 0 ns            df-passed 10.000 MiB
+80  14.147 GiB   13.398 MiB   3.667 hz 0 ns            df-passed 12.000 MiB
+81  14.160 GiB   16.074 MiB   4.333 hz 0 ns            df-passed 14.000 MiB
+82  14.176 GiB   1.789 MiB    4.667 hz 0 ns            df-passed 0 B
+83  14.178 GiB   1000.000 KiB  5.000 hz 0 ns            df-passed 2.000 MiB
+84  14.179 GiB   3.910 MiB    5.000 hz 0 ns            df-passed 2.000 MiB
+85  14.182 GiB   7.328 MiB    4.667 hz 0 ns            df-passed 2.000 MiB
+86  14.190 GiB   836.000 KiB  4.667 hz 0 ns            df-passed 0 B
+87  14.190 GiB   2.930 MiB    3.667 hz 0 ns            df-passed 2.000 MiB
+88  14.193 GiB   4.402 MiB    3.000 hz 0 ns            df-passed 6.000 MiB
+89  14.198 GiB   123.133 MiB  2.333 hz 0 ns            df-passed 50.000 MiB
+90  14.318 GiB   13.684 MiB   2.667 hz 0 ns            df-passed 12.000 MiB
+91  14.331 GiB   34.207 MiB   0 hz   0 ns            df-passed 0 B
+92  14.365 GiB   315.176 MiB  1.333 hz 6 s             df-passed 172.000 MiB
+93  14.672 GiB   735.414 MiB  1.667 hz 6 s             df-passed 244.000 MiB
+94  15.391 GiB   2.957 GiB    0 hz   2 m 42 s        df-passed 42.000 MiB
+95  18.348 GiB   1.267 GiB    0 hz   2 m 42 s        df-passed 0 B
+96  19.616 GiB   322.617 MiB  0 hz   3 m 18 s        df-passed 0 B
+97  19.931 GiB   2.836 GiB    0 hz   3 m 18 s        df-passed 1.707 MiB
+98  22.766 GiB   5.053 GiB    0 hz   4 m 18 s        df-passed 0 B
+99  27.820 GiB   5.298 GiB    0 hz   4 m 42 s        df-passed 0 B
+100 33.118 GiB   5.664 GiB    0 hz   4 m 54 s        df-passed 0 B
+101 38.782 GiB   5.740 GiB    0 hz   5 m             df-passed 0 B
+102 44.522 GiB   16.408 GiB   0 hz   5 m 6 s         df-passed 0 B
+103 60.930 GiB   2.644 GiB    0 hz   5 m 6 s         df-passed 436.000 KiB
+104 63.574 GiB   300.883 MiB  0 hz   5 m 6 s         df-passed 0 B
+memory bw estimate: 10.373 GiB per second  df-passed: 5.727 GiB per second
+total size: 59.868 GiB  df-passed 2.657 GiB
+scheme stats
+tried 0 times (0 B)
+applied 0 times (0 B)
+0 B passed filters
+quota exceeded 0 times
+0 B
+tried 0 snapshots (max 0)
+record DAMON intervals: sample 150 ms, aggr 3 s
+# target 4 % accesses per 1 aggrs, [5 ms, 150 ms] sampling interval

@@ -34,7 +34,13 @@ do
 		test_cmd="$damo report attrs \
 			--input damon.data.snapshot.$filter \
 			--style $style"
-		test_report "$test_cmd" "$style-$filter"
+		if [ "$style" = "detailed" ]
+		then
+			test_name="attrs-$style-$filter"
+		else
+			test_name="$style-$filter"
+		fi
+		test_report "$test_cmd" "$test_name"
 	done
 done
 
