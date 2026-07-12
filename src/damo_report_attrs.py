@@ -1726,7 +1726,6 @@ def read_and_show(args):
         exit(1)
     if len(tried_regions_of_list) == 0:
         tried_regions_of_list = None
-    args.tried_regions_of = tried_regions_of_list
 
     if len(input_files) == 0:
         _damon.ensure_root_and_initialized(args)
@@ -1766,7 +1765,7 @@ def read_and_show(args):
         if signal_received is True:
             break
         records, err = _damo_records.get_records(
-                    tried_regions_of=args.tried_regions_of,
+                    tried_regions_of=tried_regions_of_list,
                     record_file=input_files,
                     snapshot_damos_filters=dfilters,
                     record_filter=record_filter,
