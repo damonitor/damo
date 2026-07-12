@@ -3,6 +3,7 @@
 import _damo_subcmds
 import damo_nr_regions
 import damo_report_access
+import damo_report_attrs
 import damo_report_damon
 import damo_report_footprint
 import damo_report_heatmap
@@ -27,6 +28,8 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='record_info',
                                  module=damo_report_record_info,
                                  msg='show record information'),
+        _damo_subcmds.DamoSubCmd(name='attrs', module=damo_report_attrs,
+            msg='data attributes (experimental)'),
 
         _damo_subcmds.DamoSubCmd(name='heatmap', module=damo_report_heatmap,
             msg='heatmap of access patterns'),
