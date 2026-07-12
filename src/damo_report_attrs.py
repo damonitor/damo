@@ -1571,14 +1571,15 @@ def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed)
 
 def set_formats_region_default(fmt, records, args):
+    if fmt.format_region is not None:
+        return
     default_region_format = \
             '<index> <start address> <size>  <age> <probe hits> '
-    if fmt.format_region is None:
-        fmt.format_region = default_region_format
-        for record in records:
-            if len(record.scheme_filters) > 0:
-                fmt.format_region += ' df-passed <filters passed bytes>'
-                break
+    fmt.format_region = default_region_format
+    for record in records:
+        if len(record.scheme_filters) > 0:
+            fmt.format_region += ' df-passed <filters passed bytes>'
+            break
 
 def set_formats_update_default_formats(fmt, records, args):
     ops_filters_installed = False
