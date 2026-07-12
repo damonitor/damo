@@ -1211,21 +1211,6 @@ def set_formats_handle_styles(fmt, args, records):
         set_formats_percentiles(args, fmt, records, 'recency')
     elif args.style == 'temperature-percentiles':
         set_formats_percentiles(args, fmt, records, 'temperature')
-    elif args.style == 'cold':
-        fmt.format_region = '<box> <size> access <access hz> <age>'
-        fmt.region_box_min_max_height = [1, 1]
-        fmt.region_box_min_max_length = [1, 40]
-        fmt.region_box_align = 'right'
-        fmt.region_box_colorset = 'emotion'
-        fmt.sort_regions_by = ['temperature']
-    elif args.style == 'hot':
-        fmt.format_region = '<box> <size> access <access hz> <age>'
-        fmt.region_box_min_max_height = [1, 1]
-        fmt.region_box_min_max_length = [1, 40]
-        fmt.region_box_align = 'right'
-        fmt.region_box_colorset = 'emotion'
-        fmt.sort_regions_by = ['temperature']
-        fmt.sort_regions_dsc = ['temperature']
 
 def intervals_goal_enabled(records):
     for record in records:
@@ -1579,7 +1564,7 @@ def add_fmt_args(parser, hide_help=False):
                                 # recency-percentiles
                                 'recency-percentiles', 'idle-time-percentiles',
                                 'temperature-percentiles',
-                                'cold', 'hot'],
+                                ],
             default='detailed',
             help='output format selection among pre-configures ones')
     # how to show, in highly tunable way
