@@ -1061,18 +1061,11 @@ def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights):
     return regions
 
 def fmt_records(fmt, records):
-    sorted_access_patterns = SortedAccessPatterns(records)
-    fmt.region_box_format = RegionBoxFormat(sorted_access_patterns,
-            RegionBoxAttr(fmt.region_box_values[0],
-                fmt.region_box_min_max_length,
-                fmt.region_box_scales[0] == 'log'), fmt.region_box_align,
-            RegionBoxAttr(fmt.region_box_values[1],
-                [0, 9], fmt.region_box_scales[1] == 'log'),
-            fmt.region_box_colorset,
-            RegionBoxAttr(fmt.region_box_values[2],
-                fmt.region_box_min_max_height,
-                fmt.region_box_scales[2] == 'log'))
-
+    for record in records:
+        for snapshot in record.snapshots:
+            for region in snapshot.regions:
+                region.nr_accesses.add_unset_unit(record.intervals)
+                region.age.add_unset_unit(record.intervals)
     outputs = []
     for record in records:
         outputs.append(
