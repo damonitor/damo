@@ -1500,7 +1500,38 @@ def set_formats_record_default(fmt, records):
 
         fmt.format_record_tail = '\n'.join(tail_lines)
 
-def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
+def get_min_chars_for(name, min_chars_list):
+    for n, val in min_chars_list:
+        if n == name:
+            return val
+
+def probe_legend_lines(min_chars_for):
+    lines =[]
+    words = ['#']
+    words.append(' ' * (get_min_chars_for('<index>', min_chars_for)))
+    words.append('addr')
+    words.append(' ' * (get_min_chars_for('<start address>', min_chars_for) -
+                 len('addr') + 1))
+    words.append('size')
+    words.append(' ' * (get_min_chars_for('<size>', min_chars_for) -
+                 len('size') + 2))
+    words.append(' ' * (get_min_chars_for('<access hz>', min_chars_for) + 1))
+    words.append('age')
+    words.append(' ' * (get_min_chars_for('<age>', min_chars_for) - len('age') + 1))
+    words.append('probe_hits')
+    lines.append(''.join(words))
+    lines.append(
+            ''.join([
+                '#',
+                ' ' * (
+                    get_min_chars_for('<index>', min_chars_for) + 1 +
+                    get_min_chars_for('<start address>', min_chars_for) + 1 +
+                    get_min_chars_for('<size>', min_chars_for) + 1),
+                'access_hz']))
+    return lines
+
+def set_fmt_snapshot_head_default(
+        fmt, records, args, ops_filters_installed, has_probes):
     if fmt.format_snapshot_head is not None:
         return
     need_snapshot_time = False
@@ -1516,6 +1547,8 @@ def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
     if ops_filters_installed:
         lines.append('# damos filters (df): <filters passed type>')
         lines.append('df-pass: <filters passed heatmap>')
+    if has_probes:
+        lines += probe_legend_lines(fmt.min_chars_for)
     fmt.format_snapshot_head = '\n'.join(lines)
 
 def set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed):
@@ -1543,8 +1576,10 @@ def set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed):
             fmt.format_snapshot_tail = ('%s\n<region box description>' %
                     fmt.format_record_tail)
 
-def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
-    set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed)
+def set_formats_snapshot_default(
+        fmt, records, args, ops_filters_installed, has_probes):
+    set_fmt_snapshot_head_default(
+            fmt, records, args, ops_filters_installed, has_probes)
     set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed)
 
 def set_formats_region_probe_hits_default(fmt, records, args):
@@ -1562,7 +1597,6 @@ def set_formats_region_probe_hits_default(fmt, records, args):
             if len(record.scheme_filters) > 0:
                 fmt.format_region += ' df-passed <filters passed bytes>'
                 break
-
 
 def set_formats_region_default(fmt, records, args, has_probes):
     if has_probes is True:
@@ -1602,7 +1636,8 @@ def set_formats_update_default_formats(fmt, records, args):
         break
 
     set_formats_record_default(fmt, records)
-    set_formats_snapshot_default(fmt, records, args, ops_filters_installed)
+    set_formats_snapshot_default(
+            fmt, records, args, ops_filters_installed, has_probes)
     set_formats_region_default(fmt, records, args, has_probes)
 
 def set_formats_handle_format_append_arg(fmt, format_args):
