@@ -1806,9 +1806,6 @@ def add_fmt_args(parser, hide_help=False):
             if not hide_help else argparse.SUPPRESS)
 
     # for region box
-    parser.add_argument('--region_box', action='store_true',
-            help='show region access pattern as a box'
-            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--region_box_values',
             choices=['size', 'access_rate', 'age', 'none'], nargs=3,
