@@ -1468,11 +1468,6 @@ def set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed):
         if has_damos_snapshot is True:
             fmt.format_snapshot_tail += '\nscheme stats\n<damos stats>'
 
-    if args.region_box:
-        if fmt.format_snapshot_tail.find('<region box description>') == -1:
-            fmt.format_snapshot_tail = ('%s\n<region box description>' %
-                    fmt.format_record_tail)
-
 def set_formats_snapshot_default(fmt, records, args, ops_filters_installed):
     set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed)
     set_fmt_snapshot_tail_default(fmt, records, args, ops_filters_installed)
