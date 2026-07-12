@@ -1636,38 +1636,6 @@ def add_fmt_args(parser, hide_help=False):
             help='draw snapshot heatmap as static'
             if not hide_help else argparse.SUPPRESS)
 
-    # for region box
-    parser.add_argument(
-            '--region_box_values',
-            choices=['size', 'access_rate', 'age', 'none'], nargs=3,
-            default=['age', 'access_rate', 'size'],
-            help='values to show via the <box>\'s length, color, and height'
-            if not hide_help else argparse.SUPPRESS)
-    parser.add_argument(
-            '--region_box_min_max_length', nargs=2, type=int,
-            metavar=('<min>', '<max>'), default=[1, 30],
-            help='minimum and maximum number of the region box\' length'
-            if not hide_help else argparse.SUPPRESS)
-    parser.add_argument(
-            '--region_box_min_max_height', nargs=2, type=int,
-            metavar=('<min>', '<max>'), default=[1, 5],
-            help='minimum and maximum number of region box\' height'
-            if not hide_help else argparse.SUPPRESS)
-    parser.add_argument(
-            '--region_box_colorset', default='gray',
-            choices=['gray', 'flame', 'emotion'],
-            help='colorset to use for region box'
-            if not hide_help else argparse.SUPPRESS)
-    parser.add_argument(
-            '--region_box_scales', choices=['linear', 'log'],
-            nargs=3, default=['log', 'linear', 'log'],
-            help='scale of region box\' length, color, and height'
-            if not hide_help else argparse.SUPPRESS)
-    parser.add_argument(
-            '--region_box_align', choices=['left', 'right'], default='left',
-            help='where to align the region box'
-            if not hide_help else argparse.SUPPRESS)
-
     # misc control
     parser.add_argument(
             '--min_chars_for', nargs=2,
