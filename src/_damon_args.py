@@ -1323,7 +1323,7 @@ def turn_damon_on(args):
 
 # Commandline options setup helpers
 
-def set_common_argparser(parser):
+def add_interface_debug_args(parser):
     parser.add_argument('--damon_interface_DEPRECATED',
             choices=['sysfs', 'debugfs', 'auto'],
             default='auto',
@@ -1581,7 +1581,7 @@ def set_argparser(parser, add_record_options, min_help):
     if add_record_options:
         parser.add_argument('-o', '--out', metavar='<file path>', type=str,
                 default='damon.data', help='output file path')
-    set_common_argparser(parser)
+    add_interface_debug_args(parser)
     if min_help:
         if parser.epilog is None:
             parser.epilog = ''

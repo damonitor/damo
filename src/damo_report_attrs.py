@@ -2052,7 +2052,7 @@ def set_argparser(parser):
         'If --input_file is not provided, DAMON is not running,',
         'and "damon.data" file exists, use "damon.data" as --input_file.'])
 
-    _damon_args.set_common_argparser(parser)
+    _damon_args.add_interface_debug_args(parser)
 
     # what to show
     _damo_records.set_filter_argparser(parser, hide_help=True)

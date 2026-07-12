@@ -243,5 +243,5 @@ def set_argparser(parser):
                 'A json file containing the status of kdamonds to show.',
                 'If this is not given, capture and show status of',
                 'current kdamonds.']))
-    _damon_args.set_common_argparser(parser)
+    _damon_args.add_interface_debug_args(parser)
     return parser

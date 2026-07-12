@@ -21,6 +21,6 @@ def main(args):
         exit(1)
 
 def set_argparser(parser):
-    _damon_args.set_common_argparser(parser)
+    _damon_args.add_interface_debug_args(parser)
     parser.description = 'Stop DAMON'
     return parser

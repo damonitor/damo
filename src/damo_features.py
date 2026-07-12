@@ -54,4 +54,4 @@ def set_argparser(parser):
                         help='infer version of DAMON')
     parser.add_argument('--invalidate_cache', action='store_true',
                         help='check features again, from the scratch')
-    _damon_args.set_common_argparser(parser)
+    _damon_args.add_interface_debug_args(parser)
