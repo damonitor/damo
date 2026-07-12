@@ -257,12 +257,6 @@ region_formatters = [
             _damo_fmt_str.format_sz(region.sz_filter_passed, fmt.raw_number)
             if region.sz_filter_passed is not None else 'N/A',
             'bytes of the region that passed DAMOS filters'),
-        Formatter(
-            '<box>',
-            lambda index, region, snapshot, record, fmt:
-            fmt.region_box_format.to_str(region),
-            'user-customizable (via --region_box_*) box ' \
-                    '(age/access_rate/size by default)'),
         ]
 
 def record_intervals(record, raw_number):
