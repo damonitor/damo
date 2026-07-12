@@ -1745,10 +1745,16 @@ def parse_input_option(input_args_list):
     return input_files, tried_regions_of_list, None
 
 def read_and_show(args):
-    err = handle_args_input(args)
+    input_files, tried_regions_of_list, err = parse_input_option(args.input)
     if err is not None:
         print('--input handling failed (%s)' % err)
         exit(1)
+    if len(input_files) == 0:
+        input_files = None
+    if len(tried_regions_of_list) == 0:
+        tried_regions_of_list = None
+    args.input_file = input_files
+    args.tried_regions_of = tried_regions_of_list
 
     if args.input_file is None:
         _damon.ensure_root_and_initialized(args)
