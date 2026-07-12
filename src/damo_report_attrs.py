@@ -1059,13 +1059,6 @@ class ReportFormat:
     snapshot_heatmap_colorset = None
     snapshot_heatmap_static = None
 
-    region_box_values = None
-    region_box_min_max_height = None
-    region_box_min_max_length = None
-    region_box_colorset = None
-    region_box_scales = None
-    region_box_align = None
-
     min_chars_for = None
     raw_number = None
     json = None
@@ -1091,13 +1084,6 @@ class ReportFormat:
         self.snapshot_heatmap_width = args.snapshot_heatmap_width
         self.snapshot_heatmap_static = args.snapshot_heatmap_static
         self.snapshot_heatmap_colorset = args.snapshot_heatmap_colorset
-        self.region_box_values = [
-                v if v != 'none' else None for v in args.region_box_values]
-        self.region_box_min_max_height = args.region_box_min_max_height
-        self.region_box_min_max_length = args.region_box_min_max_length
-        self.region_box_colorset = args.region_box_colorset
-        self.region_box_scales = args.region_box_scales
-        self.region_box_align = args.region_box_align
         self.min_chars_for = args.min_chars_for
         self.raw_number = args.raw_number
         self.json = args.json
