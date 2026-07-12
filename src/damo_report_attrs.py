@@ -1520,7 +1520,8 @@ def region_legend_line(min_chars_for, ops_filters_installed):
             '<filters passed bytes>', min_chars_for) - len('df-passed') + 2))
 
     words.append('age')
-    words.append(' ' * (get_min_chars_for('<age>', min_chars_for) - len('age') + 1))
+    words.append(' ' *
+                 (get_min_chars_for('<age>', min_chars_for) - len('age') + 1))
 
     words.append('probe_hits')
     return ''.join(words)
