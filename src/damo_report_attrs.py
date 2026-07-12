@@ -1716,6 +1716,34 @@ def handle_args_input(args):
         args.input_file = input_files
     return None
 
+def parse_input_option(input_args_list):
+    '''
+    Parse --input option.  Returns input files, schemes tried regions, and
+    error string.
+    '''
+    if input_args_list is None:
+        return [], [], None
+
+    tried_regions_of_list = []
+    input_files = []
+    for input_args in input_args_list:
+        if input_args[0] == 'tried_regions_of':
+            if len(input_args) != 4:
+                return None, None, \
+                        'wrong number of args for tried_regions_of (%s)' % \
+                        input_args
+            try:
+                tried_regions_of_list.append([int(x) for x in input_args[1:]])
+            except:
+                return None, None, \
+                        'tried_regions_of should get only ints (%s)' % \
+                        input_args
+        elif len(input_args) == 1 and os.path.isfile(input_args[0]):
+            input_files.append(input_args[0])
+        else:
+            return None, None, 'unsupported input (%s)' % input_args
+    return input_files, tried_regions_of_list, None
+
 def read_and_show(args):
     err = handle_args_input(args)
     if err is not None:
