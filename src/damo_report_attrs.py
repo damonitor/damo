@@ -1179,9 +1179,6 @@ class ReportFormat:
     region_box_scales = None
     region_box_align = None
 
-    # RegionBoxFormat.  Set on fmt_records()
-    region_box_format = None
-
     min_chars_for = None
     raw_number = None
     json = None
