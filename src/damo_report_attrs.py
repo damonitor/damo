@@ -1204,16 +1204,7 @@ def set_formats_handle_styles(fmt, args, records):
     if args.style is None:
         return
 
-    if args.style == 'simple-boxes':
-        fmt.format_snapshot_head = \
-                'snapshot time: [<start time>, <end time>] (<duration>)'
-        fmt.format_region = \
-                '<box> size <size> access <access hz> age <age>'
-        fmt.region_box_min_max_height = [1, 1]
-        fmt.region_box_min_max_length = [1, 40]
-        fmt.region_box_align = 'right'
-        fmt.region_box_colorset = 'emotion'
-    elif args.style in ['temperature-sz-hist', 'recency-sz-hist',
+    if args.style in ['temperature-sz-hist', 'recency-sz-hist',
                         'cold-memory-tail']:
         set_formats_hist_style(args, fmt, records)
     elif args.style in ['recency-percentiles', 'idle-time-percentiles']:
@@ -1579,7 +1570,7 @@ def main(args):
 def add_fmt_args(parser, hide_help=False):
     # how to show, in simple selection
     parser.add_argument(
-            '--style', choices=['detailed', 'simple-boxes',
+            '--style', choices=['detailed',
                                 'temperature-sz-hist',
                                 # cold-memory-tail is just another name of
                                 # recency-sz-hist
