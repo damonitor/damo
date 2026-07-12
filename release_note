@@ -1,6 +1,10 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v3.3.2
+- Introduce 'damo report attrs'
+  - Experimental; actively being changed.
+
 v3.3.1
 - Support probe weights.
 - damo report heatmap: Fix an age backfill bug.
