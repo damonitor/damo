@@ -44,7 +44,7 @@ def set_damon_sysfs_features():
             avail_damon_features=avail_features)
 
 class TestDamonArgs(unittest.TestCase):
-    def test_damon_ctxs_for(self):
+    def test_kdamonds_for(self):
         _damon._damon_fs = _damon_sysfs
         set_damon_sysfs_features()
 
@@ -57,7 +57,8 @@ class TestDamonArgs(unittest.TestCase):
                     '--minr 10 --maxr 1000 --regions=123-456 paddr').split())
         err = _damon_args.deduce_target_update_args(args)
         self.assertEqual(err, None)
-        ctxs, err = _damon_args.damon_ctxs_for(args)
+        kdamonds, err = _damon_args.kdamonds_for(args)
+        ctxs = kdamonds[0].contexts
         self.assertEqual(err, None)
         ctx = ctxs[0]
         self.assertEqual(ctx, _damon.DamonCtx('paddr',
@@ -75,7 +76,8 @@ class TestDamonArgs(unittest.TestCase):
                     '--minr 10 --maxr 1,000 --regions=1K-4K paddr').split())
         err = _damon_args.deduce_target_update_args(args)
         self.assertEqual(err, None)
-        ctxs, err = _damon_args.damon_ctxs_for(args)
+        kdamonds, err = _damon_args.kdamonds_for(args)
+        ctxs = kdamonds[0].contexts
         self.assertEqual(err, None)
         ctx = ctxs[0]
         self.assertEqual(ctx, _damon.DamonCtx('paddr',
@@ -91,7 +93,8 @@ class TestDamonArgs(unittest.TestCase):
                 ('--sample 5ms --aggr 100ms --updr 1s ' +
                     '--minr 10 --maxr 1,000 --regions=1K-4K ' +
                     '--ops paddr').split())
-        ctxs, err = _damon_args.damon_ctxs_for(args)
+        kdamonds, err = _damon_args.kdamonds_for(args)
+        ctxs = kdamonds[0].contexts
         self.assertEqual(err, None)
         ctx = ctxs[0]
         self.assertEqual(ctx, _damon.DamonCtx('paddr',
