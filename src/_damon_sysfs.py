@@ -1513,6 +1513,7 @@ def mk_feature_supports_map():
         if os.path.isdir(os.path.join(probe_dir, 'preps')):
             supports_map['sysfs/probe_preps'] = True
             supports_map['sysfs/probe_prep_set_pgidle'] = True
+            supports_map['sysfs/probe_type_pgidle_unset'] = True
 
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
