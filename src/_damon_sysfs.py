@@ -1080,6 +1080,12 @@ def files_content_to_target(files_content):
     regions = files_content_to_regions(files_content['regions'])
     return _damon.DamonTarget(pid, regions, obsolete=obsolete)
 
+def files_content_to_probe_preps(files_content):
+    preps = []
+    for kv in number_sorted_dirs(files_content):
+        preps.append(_damon.DamonPrep(prep_action=kv['prep_action'].strip()))
+    return preps
+
 def files_content_to_damon_filter(files_content):
     path = None
     if 'path' in files_content:
@@ -1090,6 +1096,11 @@ def files_content_to_damon_filter(files_content):
         allow=files_content['allow'].strip(), path=path)
 
 def files_content_to_probe(files_content):
+    if 'preps' in files_content:
+        preps = files_content_to_probe_preps(files_content['preps'])
+    else:
+        preps = []
+
     filters_content = files_content['filters']
     filters = []
     for kv in number_sorted_dirs(filters_content):
@@ -1099,7 +1110,7 @@ def files_content_to_probe(files_content):
         weight = int(files_content['weight'])
     else:
         weight = None
-    return _damon.DamonProbe(filters=filters, weight=weight)
+    return _damon.DamonProbe(preps=preps, filters=filters, weight=weight)
 
 def files_content_to_probes(files_content):
     probes = []
