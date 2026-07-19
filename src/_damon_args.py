@@ -1016,6 +1016,8 @@ def warn_unsupported_damon_features_for(args):
     if len(args.probe_prep) > 0:
         warn_for('--probe_prep', 'sysfs/probe_preps')
 
+    # mm.git
+
     if args.probe_weight != []:
         warn_for('--probe_weight', 'sysfs/probe_weights')
 
