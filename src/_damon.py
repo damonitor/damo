@@ -49,6 +49,16 @@ class DamonPrep:
             ('prep_action', self.prep_action),
             ])
 
+damon_filter_type_anon = 'anon'
+damon_filter_type_memcg = 'memcg'
+damon_filter_type_pgidle_unset = 'pgidle_unset'
+
+damon_filter_types = [
+        damon_filter_type_anon,
+        damon_filter_type_memcg,
+        damon_filter_type_pgidle_unset,
+        ]
+
 class DamonFilter:
     filter_type = None  # anon, memcg
     matching = None
@@ -56,6 +66,8 @@ class DamonFilter:
     path = None
 
     def __init__(self, filter_type, matching, allow=False, path=None):
+        if not filter_type in damon_filter_types:
+            raise Exception('wrong damon filter type (%s)' % filter_type)
         self.filter_type = filter_type
         self.matching = _damo_fmt_str.text_to_bool(matching)
         self.allow = _damo_fmt_str.text_to_bool(allow)
