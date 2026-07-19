@@ -1385,6 +1385,15 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
                         help='monitoring operations set'
                         if not hide_help else argparse.SUPPRESS)
 
+    parser.add_argument('--probe_prep', action='append',
+                        metavar='<prep action>',
+                        help='data attribute monitoring probe prep'
+                        if not hide_help else argparse.SUPPRESS)
+    parser.add_argument('--nr_probe_preps', type=int, nargs='+',
+                        metavar='<integer>',
+                        help='number of preps for each probe (in order)'
+                        if not hide_help else argparse.SUPPRESS)
+
     parser.add_argument('--probe_filter', nargs='+', action='append',
                         default=[],
                         metavar='<<allow|reject> [non] <type> [option]...>',
