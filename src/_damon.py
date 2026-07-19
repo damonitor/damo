@@ -101,8 +101,9 @@ class DamonPrep:
 class DamonProbe:
     filters = None
     weight = None
+    preps = None
 
-    def __init__(self, filters, weight=None):
+    def __init__(self, filters, weight=None, preps=None):
         if type(filters) is not list:
             raise Exception('filters for DamonProbe() is not a list')
         self.filters = filters
@@ -111,9 +112,19 @@ class DamonProbe:
         if type(weight) is not int:
             raise Exception('weight is not an int')
         self.weight = weight
+        if preps is None:
+            preps = []
+        if type(preps) is not list:
+            raise Exception('preps is not a list')
+        self.preps = preps
 
     def to_str(self, raw):
-        words = [', '.join([f.to_str(raw) for f in self.filters])]
+        words = []
+        if len(self.preps) > 0:
+            words.append('prep: %s' % ', '.join([
+                prep.to_str(raw) for prep in self.preps]))
+            words.append(', filter: ')
+        words.append(', '.join([f.to_str(raw) for f in self.filters]))
         words.append(' (weight: %s)' % self.weight)
         return ''.join(words)
 
@@ -123,19 +134,26 @@ class DamonProbe:
     def __eq__(self, other):
         return type(self) == type(other) and \
                 self.filters == other.filters and \
-                self.weight == other.weigt
+                self.weight == other.weigt and \
+                self.preps == other.preps
 
     @classmethod
     def from_kvpairs(cls, kv):
+        if 'preps' in kv:
+            preps = [DamonPrep.from_kvpairs(pkv) for pkv in kv['preps']]
+        else:
+            preps = []
         return DamonProbe(
                 filters=[
                     DamonFilter.from_kvpairs(filter_kv)
                     for filter_kv in kv['filters']],
                 weight=kv.get('weight', None),
+                preps=preps,
                 )
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
+            ('preps', [p.to_kvpairs(raw) for p in self.preps]),
             ('filters', [f.to_kvpairs(raw) for f in self.filters]),
             ('weight', self.weight),
             ])
