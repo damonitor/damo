@@ -752,6 +752,18 @@ def gen_assign_schemes(ctxs, args):
         scheme_idx += nr
     return None
 
+def probe_preps_for(preps_args):
+    preps = []
+    if preps_args is None:
+        return preps, None
+    for prep_action in preps_args:
+        try:
+            prep = _damon.DamonPrep(prep_action=prep_action)
+        except Exception as e:
+            return None, 'prep creation fail (%s)' % e
+        preps.append(prep)
+    return preps, None
+
 def probe_filter_for(filter_arg_fields):
     fields = filter_arg_fields
     if len(fields) < 2:
@@ -790,13 +802,25 @@ def probe_filters_for(filters_args):
     return filters, None
 
 def probes_for(args):
+    preps, err = probe_preps_for(args.probe_prep)
+    if err is not None:
+        return None, err
+    if args.nr_probe_preps is None:
+        args.nr_probe_preps = [len(preps)]
+    if sum(args.nr_probe_preps) != len(preps):
+        return None, '--nr_probe_preps mismatches --probe_prep (%d != %d)' % (
+                sum(args.nr_probe_preps), len(preps))
+
     filters, err = probe_filters_for(args.probe_filter)
     if err is not None:
         return None, err
-    if len(filters) == 0:
+
+    if len(preps) == 0 and len(filters) == 0:
         return [], None
+
     probes = []
     filter_idx = 0
+
     if args.nr_probe_filters is None:
         args.nr_probe_filters = [len(args.probe_filter)]
     if sum(args.nr_probe_filters) != len(filters):
@@ -810,11 +834,21 @@ def probes_for(args):
                     % (len(args.probe_weight), len(args.nr_probe_filters))
     else:
         args.probe_weight = [0 for _ in args.nr_probe_filters]
-    for nr in args.nr_probe_filters:
+
+    nr_probes = len(args.nr_probe_filters)
+    for i in range(nr_probes - len(preps)):
+        args.nr_probe_preps.append(0)
+    prep_idx = 0
+
+    for probe_idx, nr in enumerate(args.nr_probe_filters):
+        preps_for_probe = preps[
+                prep_idx:prep_idx + args.nr_probe_preps[probe_idx]]
         filters_for_probe = filters[filter_idx:filter_idx + nr]
         weight = args.probe_weight[len(probes)]
         try:
-            probe = _damon.DamonProbe(filters=filters_for_probe, weight=weight)
+            probe = _damon.DamonProbe(
+                    preps=preps_for_probe, filters=filters_for_probe,
+                    weight=weight)
         except Exception as e:
             return None, 'probe creation fail (%s)' % e
         probes.append(probe)
