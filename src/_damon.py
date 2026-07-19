@@ -64,6 +64,40 @@ class DamonFilter:
             ('path', self.path),
             ])
 
+prep_action_set_pgidle = 'set_pgidle'
+
+prep_actions = [
+        prep_action_set_pgidle,
+        ]
+
+class DamonPrep:
+    prep_action = None
+
+    def __init__(self, prep_action=prep_action_set_pgidle):
+        if not prep_action in prep_actions:
+            raise Exception('wrong prep action (%s)' % prep_action)
+
+        self.prep_action = prep_action
+
+    def to_str(self, raw):
+        return self.prep_action
+
+    def __str__(self):
+        return self.to_str(False)
+
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+                self.prep_action == other.prep_action
+
+    @classmethod
+    def from_kvpairs(cls, kv):
+        return DamonPrep(prep_action=kv['prep_action'])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('prep_action', self.prep_action),
+            ])
+
 class DamonProbe:
     filters = None
     weight = None
