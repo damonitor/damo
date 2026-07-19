@@ -359,6 +359,9 @@ features_list = [
         DamonFeature(name='sysfs/probe_preps',
                      upstream_status='hacking on damon/next',
                      upstreamed_version='none'),
+        DamonFeature(name='sysfs/probe_prep_set_pgidle',
+                     upstream_status='hacking on damon/next',
+                     upstreamed_version='none'),
 
         DamonFeature(name='sysfs/damon_sample_control',
                      upstream_status='hacking on damon/next',
