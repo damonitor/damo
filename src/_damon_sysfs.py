@@ -1485,6 +1485,8 @@ def mk_feature_supports_map():
     if os.path.isdir(
             os.path.join(ctx_dir_of(0, 0), 'monitoring_attrs', 'probes')):
         supports_map['sysfs/attrs_monitoring'] = True
+        supports_map['sysfs/probe_type_anon'] = True
+        supports_map['sysfs/probe_type_memcg'] = True
 
 
     if supports_map['sysfs/attrs_monitoring'] is True:
