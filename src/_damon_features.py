@@ -353,7 +353,7 @@ features_list = [
                      upstreamed_version='7.2'),
 
         DamonFeature(name='sysfs/probe_weights',
-                     upstream_status='hacking on damon/next',
+                     upstream_status='merged into mm.git',
                      upstreamed_version='none'),
 
         DamonFeature(name='sysfs/damon_sample_control',
