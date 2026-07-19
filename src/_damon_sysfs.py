@@ -1473,6 +1473,9 @@ def mk_feature_supports_map():
         if os.path.isfile(os.path.join(probe_dir, 'weight')):
             supports_map['sysfs/probe_weights'] = True
 
+        if os.path.isdir(os.path.join(probe_dir, 'preps')):
+            supports_map['sysfs/probe_preps'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
 
