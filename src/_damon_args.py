@@ -1000,6 +1000,9 @@ def warn_unsupported_damon_features_for(args):
     if args.sample_primitives is not None:
         warn_for('--sample_primitives', 'sysfs/damon_sample_control')
 
+    if args.probe_prep is not None:
+        warn_for('--probe_prep', 'sysfs/probe_preps')
+
     if args.probe_weight != []:
         warn_for('--probe_weight', 'sysfs/probe_weights')
 
