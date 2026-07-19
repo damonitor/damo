@@ -754,8 +754,6 @@ def gen_assign_schemes(ctxs, args):
 
 def probe_preps_for(preps_args):
     preps = []
-    if preps_args is None:
-        return preps, None
     for prep_action in preps_args:
         try:
             prep = _damon.DamonPrep(prep_action=prep_action)
@@ -981,6 +979,13 @@ def deduce_target_update_args(args):
             print('warning: override --ops by <deducible target> and --regions')
         args.ops = ['fvaddr']
 
+def update_args_defaults(args):
+    # having default=[] makes complicated global shared states.  Instantiate
+    # default values here.
+    for arg_name in ['probe_prep']:
+        if getattr(args, arg_name) is None:
+            setattr(args, arg_name, [])
+
 def warn_for(arg, feature):
     if _damo_sysinfo.damon_feature_available(feature):
         return
@@ -1000,7 +1005,7 @@ def warn_unsupported_damon_features_for(args):
     if args.sample_primitives is not None:
         warn_for('--sample_primitives', 'sysfs/damon_sample_control')
 
-    if args.probe_prep is not None:
+    if len(args.probe_prep) > 0:
         warn_for('--probe_prep', 'sysfs/probe_preps')
 
     if args.probe_weight != []:
@@ -1195,6 +1200,7 @@ def warn_unsupported_damon_features_for(args):
                       ['interface/damon_debugfs', 'interface/damon_sysfs'])
 
 def evaluate_args(args):
+    update_args_defaults(args)
     warn_unsupported_damon_features_for(args)
 
     '''
