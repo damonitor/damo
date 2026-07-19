@@ -570,6 +570,24 @@ def write_ops_attrs_dir(dir_path, ops_attrs):
     if err is not None:
         return err
 
+def write_probe_prep_dir(dir_path, prep):
+    err = _damo_fs.write_file(
+            os.path.join(dir_path, 'prep_action'), prep.prep_action)
+    if err is not None:
+        return err
+    return None
+
+def write_probe_preps_dir(dir_path, preps):
+    err = ensure_nr_file_for(os.path.join(dir_path, 'nr_preps'), preps)
+    if err is not None:
+        return err
+
+    for idx, prep in enumerate(preps):
+        err = write_probe_prep_dir(os.path.join(dir_path, '%d' % idx), prep)
+        if err is not None:
+            return err
+    return None
+
 def write_probe_filter_dir(dir_path, filter):
     err = _damo_fs.write_file(
             os.path.join(dir_path, 'type'), filter.filter_type)
@@ -590,6 +608,12 @@ def write_probe_filter_dir(dir_path, filter):
     return None
 
 def write_probe_dir(dir_path, probe):
+    preps_dir = os.path.join(dir_path, 'preps')
+    if os.path.isdir(preps_dir):
+        err = write_probe_preps_dir(preps_dir, probe.preps)
+        if err is not None:
+            return err
+
     filters_dir = os.path.join(dir_path, 'filters')
     err = ensure_nr_file_for(os.path.join(filters_dir, 'nr_filters'),
                              probe.filters)
