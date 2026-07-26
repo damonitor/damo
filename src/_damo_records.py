@@ -1935,6 +1935,19 @@ def get_records(tried_regions_of=None, record_file=None,
     filter_copy.filter_records(records)
     return records, None
 
+def get_damo_records(
+        tried_regions_of=None, record_file=None, snapshot_damos_filters=None,
+        record_filter=None, total_sz_only=False, dont_merge_regions=True):
+    '''
+    Returns DamoRecords and err.
+    '''
+    damon_records, err = get_records(
+            tried_regions_of, record_file, snapshot_damos_filters,
+            record_filter, total_sz_only, dont_merge_regions)
+    if err is not None:
+        return None, err
+    return DamoRecords(kdamonds=[], records=[damon_records]), None
+
 def parse_sort_bytes_ranges_input(bytes_ranges_input):
     try:
         ranges = [[_damo_fmt_str.text_to_bytes(start),
