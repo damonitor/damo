@@ -799,64 +799,6 @@ def rescale(val, orig_scale_minmax, new_scale_minmax, logscale=True):
     ratio = new_length / orig_length if orig_length > 0 else 1
     return (val - orig_scale_minmax[0]) * ratio + new_scale_minmax[0]
 
-class BoxValue:
-    val = None
-    val_min_max = None      # list of min/max
-    display_min_max = None  # list of min/max
-    display_logscale = None # bool
-
-    def __init__(self, val, val_min_max, display_min_max, display_logscale):
-        self.val = val
-        self.val_min_max = val_min_max
-        self.display_min_max = display_min_max
-        self.display_logscale = display_logscale
-
-    def display_value(self):
-        return rescale(self.val, self.val_min_max, self.display_min_max,
-                self.display_logscale)
-
-class ColoredBox:
-    # BoxValue
-    length = None
-    color = None
-    height = None
-
-    colorset = None
-    horizontal_align = None
-
-    def __init__(self, length, horizontal_align, color, colorset, height):
-        self.length = length
-        self.color = color
-        self.horizontal_align = horizontal_align
-        self.colorset = colorset
-        self.height = height
-
-    def __str__(self):
-        length = int(self.length.display_value())
-
-        if self.height.val != None:
-            height = int(self.height.display_value())
-        else:
-            self.height.display_min, self.height.display_max = [1, 1]
-            height = 1
-
-        if type(self.color.val) == str:
-            row = '%s' % (self.color.val * length)
-        else:
-            color_level = int(self.color.display_value())
-            row = '%s' % _damo_ascii_color.colored(
-                    ('%d' % color_level) * length, self.colorset, color_level)
-        row = '|%s|' % row
-
-        if self.horizontal_align == 'right':
-            indent = ' ' * (self.length.display_min_max[1] - length)
-            row = indent + row
-
-        box = '\n'.join([row] * height)
-        if self.height.display_min_max[1] > 1:
-            box += '\n'
-        return box
-
 def apply_min_chars(min_chars, field_name, txt):
     # min_chars: [[<field name>, <number of min chars>]...]
     for name, nr in min_chars:
