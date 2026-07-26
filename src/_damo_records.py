@@ -561,6 +561,11 @@ def parse_perf_damon_record(
 
 def parse_json(json_str):
     kvpairs = json.loads(json_str)
+    damo_record_ver = 0
+    if 'damo_reocrd_ver' in kvpairs:
+        damo_record_ver = kvpairs['damo_record_ver']
+    if damo_record_ver == 1:
+        return DamoRecords.from_kvpairs(kvpairs['damo_records'])
     return [DamonRecord.from_kvpairs(kvp) for kvp in kvpairs]
 
 def parse_compressed_json(record_file):
