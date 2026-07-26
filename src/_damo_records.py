@@ -246,6 +246,28 @@ class DamonRecord:
         self.snapshots += other.snapshots
         self.snapshots.sort(key=lambda s: s.start_time)
 
+class DamoRecords:
+    kdamonds = None # list of _damon.Kdamond
+    records = None  # list of DamonRecord
+
+    def __init__(self, kdamonds, records):
+        if kdamonds is None:
+            kdamonds = []
+        if records is None:
+            records = []
+        self.kdamonds = kdamonds
+        self.records = records
+
+    @classmethod
+    def from_kvpairs(self, kv):
+        return DamoRecords(kdamonds=kv['kdamonds'], records=kv['records'])
+
+    def to_kvpairs(self, raw=False):
+        return collections.OrderedDict([
+            ('kdamonds', [k.to_kvapairs(raw=raw) for k in self.kdamonds]),
+            ('records', [r.to_kvpairs(raw=raw) for r in self.records]),
+            ])
+
 # for monitoring results manipulation
 
 def merge_records(records):
