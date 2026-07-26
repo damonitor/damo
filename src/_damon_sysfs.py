@@ -1089,7 +1089,7 @@ def files_content_to_probe_preps(files_content):
 def files_content_to_damon_filter(files_content):
     path = None
     if 'path' in files_content:
-        files_content.get('path').strip()
+        path = files_content['path'].strip()
     return _damon.DamonFilter(
         filter_type=files_content['type'].strip(),
         matching=files_content['matching'].strip(),
