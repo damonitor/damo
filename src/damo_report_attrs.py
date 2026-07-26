@@ -339,15 +339,14 @@ def max_access_hz(intervals):
 
 def snapshot_intervals_str(snapshot, record, fmt):
     intervals = record.intervals
-    aggr_sample_ratio = intervals.aggr / intervals.sample
+    aggr_sample_ratio = intervals.aggr // intervals.sample
     snapshot_aggr_us = infer_aggr_time_us(snapshot, record)
     snapshot_sample_us = snapshot_aggr_us / aggr_sample_ratio
-    max_access_hz = aggr_sample_ratio / (snapshot_aggr_us / 1000000)
 
-    return 'sample %s aggr %s (max access hz %s)' % (
+    return 'sample %s aggr %s (max probe hits %s)' % (
         _damo_fmt_str.format_time_us(snapshot_sample_us, fmt.raw_number),
         _damo_fmt_str.format_time_us(snapshot_aggr_us, fmt.raw_number),
-        _damo_fmt_str.format_hz(max_access_hz, fmt.raw_number, no_suffix=True))
+        _damo_fmt_str.format_nr(aggr_sample_ratio, fmt.raw_number))
 
 def estimated_mem_bw(snapshot, record, fmt, filter_passed_only=False):
     access_bytes = 0
