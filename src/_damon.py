@@ -82,10 +82,9 @@ class DamonFilter:
         if self.matching is False:
             words.append('non')
         words.append(self.filter_type)
-        if self.filter_type in ['anon']:
-            return ' '.join(words)
         if self.filter_type == 'memcg':
             return ' '.join(words + [self.path])
+        return ' '.join(words)
 
     def __str__(self):
         return self.to_str(False)
