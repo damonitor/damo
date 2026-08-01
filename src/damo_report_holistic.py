@@ -8,9 +8,9 @@ import _damo_fmt_str
 import _damo_print
 import _damo_records
 import _damo_subproc
-import damo_record_info
 import damo_report_footprint
 import damo_report_heatmap
+import damo_report_record_info
 import damo_wss
 
 def fmt_report_short(args):
@@ -21,7 +21,7 @@ def fmt_report_short(args):
               (args.access_pattern, err))
         exit(1)
 
-    guides = damo_record_info.get_guide_info(records)
+    guides = damo_report_record_info.get_guide_info(records)
     lines.append('# Heatmap')
     for guide in guides:
         if args.heatmap_time_last_n_sec is not None:
@@ -108,7 +108,7 @@ def fmt_report(args):
               (args.access_pattern, err))
         exit(1)
 
-    guides = damo_record_info.get_guide_info(records)
+    guides = damo_report_record_info.get_guide_info(records)
 
     lines.append('Overall recorded access pattern')
     lines.append('===============================')
