@@ -13,7 +13,7 @@ import _damo_fs
 import _damo_sysinfo
 import _damon
 import _damon_features
-import damo_pa_layout
+import damo_report_pa_layout
 
 def get_param_dir(module_name):
     sysinfo = _damo_sysinfo.get_sysinfo_or_panic()
@@ -67,7 +67,7 @@ def damon_stat_kdamonds():
             access_bp=400, aggrs=3, min_sample_us=5000, max_sample_us=10000000)
     target_regions = [
             _damon.DamonRegion(r[0], r[1])
-            for r in [damo_pa_layout.default_paddr_region()]]
+            for r in [damo_report_pa_layout.default_paddr_region()]]
     target = _damon.DamonTarget(
             pid=None, regions=target_regions)
     context = _damon.DamonCtx(intervals=intervals, targets=[target])
