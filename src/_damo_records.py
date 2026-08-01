@@ -1946,12 +1946,23 @@ def get_damo_records(
     '''
     Returns DamoRecords and err.
     '''
+
+    if record_file is None:
+        record_file = []
+
     damon_records, err = get_records(
             tried_regions_of, record_file, snapshot_damos_filters,
             record_filter, total_sz_only, dont_merge_regions)
     if err is not None:
         return None, err
-    return DamoRecords(kdamonds=[], records=[damon_records]), None
+
+    if record_file == []:
+        kdamonds = _damon.current_kdamonds()
+    else:
+        # TODO: implement
+        kdamonds = []
+
+    return DamoRecords(kdamonds=kdamonds, records=[damon_records]), None
 
 def parse_sort_bytes_ranges_input(bytes_ranges_input):
     try:
