@@ -1272,25 +1272,25 @@ def recursive_del(dirpath):
             os.remove(filepath)
     os.rmdir(dirpath)
 
-def handle_exec(cmd, records):
+def handle_exec(cmd, damo_records):
     if cmd == 'interpreter':
         code.interact(
                 local=locals(),
-                banner="DAMON records are available as 'records'",
+                banner="damo records are available as 'damo_records'",
                 exitmsg='Exit the session.')
         return None
     cmd_fields = cmd.split()
     if not os.path.isfile(cmd_fields[0]):
         return 'first token is not file'
-    script_dir_path = tempfile.mkdtemp(prefix='damo_script_')
-    script_module_name = 'damo_report_access_script'
+    script_dir_path = tempfile.mkdtemp(prefix='damo_report_attrs_script_')
+    script_module_name = 'damo_report_attrs_script'
     script_file_name = '%s.py' % script_module_name
     with open(cmd_fields[0], 'r') as f:
         with open(os.path.join(script_dir_path, script_file_name), 'w') as f2:
             f2.write(f.read())
     sys.path.append(script_dir_path)
-    import damo_report_access_script
-    damo_report_access_script.main(records, cmd_fields)
+    import damo_report_attrs_script
+    damo_report_attrs_script.main(damo_records, cmd_fields)
     recursive_del(script_dir_path)
     return None
 
@@ -1386,7 +1386,7 @@ def read_and_show(args):
             print('No record in %s' % input_files)
 
         if args.exec:
-            err = handle_exec(args.exec, records)
+            err = handle_exec(args.exec, damo_records)
             if err is not None:
                 print('format_script handling fail (%s)' % err)
                 exit(1)
