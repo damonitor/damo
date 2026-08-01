@@ -1944,25 +1944,39 @@ def get_damo_records(
         tried_regions_of=None, record_files=None, snapshot_damos_filters=None,
         record_filter=None, total_sz_only=False, dont_merge_regions=True):
     '''
-    Returns DamoRecords and err.
+    Returns list of DamoRecords objects and err.
     '''
 
     if record_files is None:
         record_files = []
 
-    damon_records, err = get_records(
-            tried_regions_of, record_files, snapshot_damos_filters,
-            record_filter, total_sz_only, dont_merge_regions)
-    if err is not None:
-        return None, err
-
     if record_files == []:
-        kdamonds = _damon.current_kdamonds()
-    else:
-        # TODO: implement
-        kdamonds = []
+        damon_records, err = get_records(
+                tried_regions_of, record_files, snapshot_damos_filters,
+                record_filter, total_sz_only, dont_merge_regions)
+        if err is not None:
+            return None, err
 
-    return DamoRecords(kdamonds=kdamonds, records=[damon_records]), None
+        kdamonds = _damon.current_kdamonds()
+        return [DamoRecords(kdamonds=kdamonds, records=[damon_records])], None
+
+    damo_records = []
+    for record_file in record_files:
+        kdamonds_file = '%s.kdamonds' % record_file
+        if not os.path.isfile(kdamonds_file):
+            return None, '%s file not found' % kdamonds_file
+        with open(kdamonds_file, 'r') as f:
+            kvpairs = json.load(f)
+        kdamonds = [_damon.Kdamond.from_kvpairs(kvp) for kvp in kvpairs]
+
+        damon_records, err = get_records(
+                tried_regions_of, [record_file], snapshot_damos_filters,
+                record_filter, total_sz_only, dont_merge_regions)
+        if err is not None:
+            return None, err
+        damo_records.append(DamoRecords(kdamonds=kdamonds,
+                                        records=damon_records))
+    return damo_records, None
 
 def parse_sort_bytes_ranges_input(bytes_ranges_input):
     try:
