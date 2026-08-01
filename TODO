@@ -54,6 +54,7 @@
   - For damo record
 - Add a test for 'damo report trace'
 - Unify traceevent handling in damo_report_trace and _damo_records.
+- Define and use simple Region for records.
 
 - Deprecate old features
   - Deprecate 'damo record_info'
