@@ -246,7 +246,7 @@ class DamonRecord:
         self.snapshots += other.snapshots
         self.snapshots.sort(key=lambda s: s.start_time)
 
-class DamoRecords:
+class DamoRecord:
     kdamonds = None # list of _damon.Kdamond
     records = None  # list of DamonRecord
 
@@ -260,7 +260,7 @@ class DamoRecords:
 
     @classmethod
     def from_kvpairs(self, kv):
-        return DamoRecords(kdamonds=kv['kdamonds'], records=kv['records'])
+        return DamoRecord(kdamonds=kv['kdamonds'], records=kv['records'])
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
@@ -565,7 +565,7 @@ def parse_json(json_str):
     if 'damo_reocrd_ver' in kvpairs:
         damo_record_ver = kvpairs['damo_record_ver']
     if damo_record_ver == 1:
-        return DamoRecords.from_kvpairs(kvpairs['damo_records'])
+        return DamoRecord.from_kvpairs(kvpairs['damo_records'])
     return [DamonRecord.from_kvpairs(kvp) for kvp in kvpairs]
 
 def parse_compressed_json(record_file):
@@ -1944,7 +1944,7 @@ def get_damo_records(
         tried_regions_of=None, record_files=None, snapshot_damos_filters=None,
         record_filter=None, total_sz_only=False, dont_merge_regions=True):
     '''
-    Returns list of DamoRecords objects and err.
+    Returns list of DamoRecord objects and err.
     '''
 
     if record_files is None:
@@ -1958,7 +1958,7 @@ def get_damo_records(
             return None, err
 
         kdamonds = _damon.current_kdamonds()
-        return [DamoRecords(kdamonds=kdamonds, records=damon_records)], None
+        return [DamoRecord(kdamonds=kdamonds, records=damon_records)], None
 
     damo_records = []
     for record_file in record_files:
@@ -1974,7 +1974,7 @@ def get_damo_records(
                 record_filter, total_sz_only, dont_merge_regions)
         if err is not None:
             return None, err
-        damo_records.append(DamoRecords(kdamonds=kdamonds,
+        damo_records.append(DamoRecord(kdamonds=kdamonds,
                                         records=damon_records))
     return damo_records, None
 
