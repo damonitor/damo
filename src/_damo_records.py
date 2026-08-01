@@ -1941,22 +1941,22 @@ def get_records(tried_regions_of=None, record_file=None,
     return records, None
 
 def get_damo_records(
-        tried_regions_of=None, record_file=None, snapshot_damos_filters=None,
+        tried_regions_of=None, record_files=None, snapshot_damos_filters=None,
         record_filter=None, total_sz_only=False, dont_merge_regions=True):
     '''
     Returns DamoRecords and err.
     '''
 
-    if record_file is None:
-        record_file = []
+    if record_files is None:
+        record_files = []
 
     damon_records, err = get_records(
-            tried_regions_of, record_file, snapshot_damos_filters,
+            tried_regions_of, record_files, snapshot_damos_filters,
             record_filter, total_sz_only, dont_merge_regions)
     if err is not None:
         return None, err
 
-    if record_file == []:
+    if record_files == []:
         kdamonds = _damon.current_kdamonds()
     else:
         # TODO: implement
