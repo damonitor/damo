@@ -1,0 +1,50 @@
+[
+    {
+        "state": "on",
+        "pid": "98414",
+        "refresh_ms": 0,
+        "contexts": [
+            {
+                "ops": "paddr",
+                "addr_unit": "1 B",
+                "targets": [
+                    {
+                        "pid": 28077,
+                        "obsolete": false,
+                        "regions": [
+                            {
+                                "start": "4,096",
+                                "end": "8,589,934,592"
+                            }
+                        ]
+                    }
+                ],
+                "intervals": {
+                    "sample_us": "5 ms",
+                    "aggr_us": "100 ms",
+                    "ops_update_us": "1 s",
+                    "intervals_goal": {
+                        "access_bp": "0 %",
+                        "aggrs": "0",
+                        "min_sample_us": "0 ns",
+                        "max_sample_us": "0 ns"
+                    }
+                },
+                "nr_regions": {
+                    "min": "10",
+                    "max": "1,000"
+                },
+                "probes": [],
+                "sample_control": {
+                    "primitives_enabled": {
+                        "page_table": true,
+                        "page_fault": false
+                    },
+                    "sample_filters": []
+                },
+                "pause": false,
+                "schemes": []
+            }
+        ]
+    }
+]

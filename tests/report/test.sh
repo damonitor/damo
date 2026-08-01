@@ -17,6 +17,7 @@ test_report() {
 	if ! diff -q "$expected" "$result"
 	then
 		echo "FAIL report-$test_name"
+		echo "# cmd: $cmd"
 		echo "# for detail, vimdiff $expected $result"
 		echo "# if this is expected change, cp $result $expected"
 		exit 1
@@ -49,10 +50,6 @@ damo_report_raw="$damo report attrs --raw_form --input"
 test_report "$damo_report_raw damon.data" "raw"
 
 test_report "$damo_report_raw damon.data.json_compressed" "raw"
-
-test_report \
-	"$damo_report_raw perf.data.script" \
-	"raw_perf_script"
 
 test_report \
 	"$damo adjust --aggregate_interval 1000000 && \

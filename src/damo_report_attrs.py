@@ -1367,9 +1367,9 @@ def read_and_show(args):
     while read_show_count < repeat_count or repeat_count == -1:
         if signal_received is True:
             break
-        records, err = _damo_records.get_records(
+        damo_records, err = _damo_records.get_damo_records(
                     tried_regions_of=tried_regions_of_list,
-                    record_file=input_files,
+                    record_files=input_files,
                     snapshot_damos_filters=dfilters,
                     record_filter=record_filter,
                     total_sz_only=args.total_sz_only,
@@ -1377,6 +1377,9 @@ def read_and_show(args):
         if err != None:
             print(err)
             exit(1)
+        records = []
+        for damo_record in damo_records:
+            records += damo_record.records
         if signal_received is True:
             break
         if len(records) == 0 and len(input_files) > 0 and repeat_count == 1:
