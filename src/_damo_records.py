@@ -1958,7 +1958,7 @@ def get_damo_records(
             return None, err
 
         kdamonds = _damon.current_kdamonds()
-        return [DamoRecords(kdamonds=kdamonds, records=[damon_records])], None
+        return [DamoRecords(kdamonds=kdamonds, records=damon_records)], None
 
     damo_records = []
     for record_file in record_files:
