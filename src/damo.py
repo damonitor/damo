@@ -23,7 +23,6 @@ import damo_help
 import damo_lru_sort
 import damo_module
 import damo_monitor
-import damo_pa_layout
 import damo_reclaim
 import damo_record
 import damo_replay
@@ -91,13 +90,6 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='diagnose',
             module=damo_diagnose,
             msg='generate a report on if DAMON is malfunctioning'),
-        _damo_subcmds.DamoSubCmd(name='pa_layout',
-            module=damo_pa_layout,
-            msg=''.join([
-                'show physical address layout ',
-                '(WILL BE DEPRECATED by 2026-06-01; ',
-                'use "damo report pa_layout" instead)',
-            ])),
         ]
 
 class SubCmdHelpFormatter(argparse.RawDescriptionHelpFormatter):
