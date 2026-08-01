@@ -31,8 +31,8 @@ import tempfile
 import _damo_ascii_color
 import _damo_fmt_str
 import _damo_records
-import damo_record_info
 import damo_report_access
+import damo_report_record_info
 
 class HeatPixel:
     time = None
@@ -358,7 +358,7 @@ def complete_src_args(args, records):
         args.scheme_idx is not None and args.tid is not None and
         args.time_range is not None and args.address_range is not None):
         return None
-    guides = damo_record_info.get_guide_info(records)
+    guides = damo_report_record_info.get_guide_info(records)
     guide = guides[0]
     if args.kdamond_idx is None:
         args.kdamond_idx = guide.kdamond_idx
@@ -652,10 +652,10 @@ def main(args):
             args.resol = [500, 500]
 
     if args.guide:
-        damo_record_info.pr_guide(records)
+        damo_report_record_info.pr_guide(records)
         return
     if args.guide_human is True:
-        damo_record_info.pr_guide(records, raw_numbers=False)
+        damo_report_record_info.pr_guide(records, raw_numbers=False)
         return
 
     err = complete_src_args(args, records)
