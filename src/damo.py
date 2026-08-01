@@ -26,7 +26,6 @@ import damo_monitor
 import damo_pa_layout
 import damo_reclaim
 import damo_record
-import damo_record_info
 import damo_replay
 import damo_report
 import damo_schemes
@@ -92,13 +91,6 @@ subcmds = [
         _damo_subcmds.DamoSubCmd(name='diagnose',
             module=damo_diagnose,
             msg='generate a report on if DAMON is malfunctioning'),
-        _damo_subcmds.DamoSubCmd(name='record_info',
-            module=damo_record_info,
-            msg=''.join([
-                'print basic information of a data accesses record file ',
-                '(WILL BE DEPRECATED by 2026-06-01; ',
-                'use "damo report record_info" instead)',
-            ])),
         _damo_subcmds.DamoSubCmd(name='pa_layout',
             module=damo_pa_layout,
             msg=''.join([
