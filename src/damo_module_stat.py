@@ -182,8 +182,11 @@ def handle_read_write(args):
                 exit(1)
         else:
             input_idle_time_percentiles = None
-        for to_read in args.to_read:
-            handle_read(to_read, args, input_idle_time_percentiles, param_dir)
+        if args.to_read:
+            for to_read in args.to_read:
+                handle_read(to_read, args, input_idle_time_percentiles, param_dir)
+        else:
+            handle_read(None, args, input_idle_time_percentiles, param_dir)
     elif args.action == 'write':
         if len(args.parameter_value) % 2 != 0:
             print('wrong paramter_value')
