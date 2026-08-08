@@ -46,41 +46,39 @@ class FormatFnParams:
         self.region_idx = region_idx
 
 record_formatters = [
-        Formatter('<kdamond index>',
-            lambda record, fmt: '%s' % record.kdamond_idx,
+        Formatter(
+            '<kdamond index>', lambda p: '%s' % p.record.kdamond_idx,
             'index of the record\'s kdamond'),
-        Formatter('<context index>',
-            lambda record, fmt: '%s' % record.context_idx,
+        Formatter(
+            '<context index>', lambda p: '%s' % p.record.context_idx,
             'index of the record\'s DAMON context'),
-        Formatter('<scheme index>',
-            lambda record, fmt: '%s' % record.scheme_idx,
+        Formatter(
+            '<scheme index>', lambda p: '%s' % p.record.scheme_idx,
             'index of the record\'s DAMOS scheme'),
-        Formatter('<target id>',
-            lambda record, fmt: '%s' % record.target_id,
+        Formatter(
+            '<target id>',
+            lambda p: '%s' % p.record.target_id,
             'index of the record\'s DAMON target'),
-        Formatter('<abs start time>',
-            lambda record, fmt:
-            _damo_fmt_str.format_time_ns(record.snapshots[0].start_time,
-                                         fmt.raw_number),
+        Formatter(
+            '<abs start time>',
+            lambda p: _damo_fmt_str.format_time_ns(
+                p.record.snapshots[0].start_time, p.fmt.raw_number),
             'absolute time of the start of the record'),
-        Formatter('<duration>',
-            lambda record, fmt:
-            _damo_fmt_str.format_time_ns(
-                record.snapshots[-1].end_time - record.snapshots[0].start_time,
-                fmt.raw_number),
+        Formatter(
+            '<duration>',
+            lambda p: _damo_fmt_str.format_time_ns(
+                p.record.snapshots[-1].end_time -
+                p.record.snapshots[0].start_time, p.fmt.raw_number),
             'duration of the record'),
         Formatter('<intervals>',
-                  lambda record, fmt: record_intervals(record, fmt.raw_number),
+                  lambda p: record_intervals(p.record, p.fmt.raw_number),
                   'monitoring intervals'),
-        Formatter('<intervals goal>',
-                  lambda record, fmt:
-                  record.intervals.intervals_goal.to_str(fmt.raw_number),
+        Formatter('<intervals goal>', lambda p:
+                  p.record.intervals.intervals_goal.to_str(p.fmt.raw_number),
                   'monitoring intervals'),
-        Formatter('<data source>',
-                  lambda record, fmt: record.data_source,
+        Formatter('<data source>', lambda p: p.record.data_source,
                   'data source of the record'),
-        Formatter('<format strings>',
-                  lambda record, fmt: format_strings(fmt),
+        Formatter('<format strings>', lambda record, fmt: format_strings(fmt),
                   'current format strings')
         ]
 
@@ -786,11 +784,14 @@ def format_output(template, formatters, fmt, record, snapshot=None,
                   region=None, region_index=None):
     if template == '':
         return
+    param = FormatFnParams(
+            fmt=fmt, record=record, snapshot=snapshot, region=region,
+            region_idx=region_index)
     for formatter in formatters:
         if template.find(formatter.keyword) == -1:
             continue
         if formatters == record_formatters:
-            txt = formatter.format_fn(record, fmt)
+            txt = formatter.format_fn(param)
         elif formatters == snapshot_formatters:
             txt = formatter.format_fn(snapshot, record, fmt)
         elif formatters == region_formatters:
