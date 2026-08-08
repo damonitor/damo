@@ -767,18 +767,15 @@ def apply_min_chars(min_chars, field_name, txt):
             return txt
     return txt
 
-def format_output(template, formatters, fmt, record, snapshot=None,
-                  region=None, region_index=None):
+def format_output(template, formatters, format_params):
     if template == '':
         return
-    param = FormatFnParams(
-            fmt=fmt, record=record, snapshot=snapshot, region=region,
-            region_idx=region_index)
     for formatter in formatters:
         if template.find(formatter.keyword) == -1:
             continue
-        txt = formatter.format_fn(param)
-        txt = apply_min_chars(fmt.min_chars_for, formatter.keyword, txt)
+        txt = formatter.format_fn(format_params)
+        txt = apply_min_chars(
+                format_params.fmt.min_chars_for, formatter.keyword, txt)
         template = template.replace(formatter.keyword, txt)
     template = template.replace('\\n', '\n')
     return template
@@ -823,36 +820,43 @@ def fmt_records(fmt, records):
                 region.age.add_unset_unit(record.intervals)
     outputs = []
     for record in records:
+        record_fmt_params = FormatFnParams(fmt=fmt, record=record)
         outputs.append(
                 format_output(
-                    fmt.format_record_head, record_formatters, fmt, record))
+                    fmt.format_record_head, record_formatters,
+                    record_fmt_params))
         snapshots = record.snapshots
 
         for sidx, snapshot in enumerate(snapshots):
+            snapshot_fmt_params = FormatFnParams(
+                    fmt=fmt, record=record, snapshot=snapshot)
             outputs.append(
                     format_output(
                         fmt.format_snapshot_head, snapshot_formatters,
-                        fmt, record, snapshot))
+                        snapshot_fmt_params))
             for r in snapshot.regions:
                 r.nr_accesses.add_unset_unit(record.intervals)
                 r.age.add_unset_unit(record.intervals)
             for idx, r in enumerate(
                     sorted_regions(snapshot.regions, fmt.sort_regions_by,
                         fmt.sort_regions_dsc, fmt.temperature_weights)):
+                params = FormatFnParams(
+                        fmt=fmt, record=record, snapshot=snapshot,
+                        region=r, region_idx=idx)
                 outputs.append(
                         format_output(
-                            fmt.format_region, region_formatters,
-                            fmt, record, snapshot, r, idx))
+                            fmt.format_region, region_formatters, params))
             outputs.append(
                     format_output(
                         fmt.format_snapshot_tail, snapshot_formatters,
-                        fmt, record, snapshot))
+                        snapshot_fmt_params))
 
             if sidx < len(snapshots) - 1 and not fmt.total_sz_only():
                 outputs.append('')
         outputs.append(
                 format_output(
-                    fmt.format_record_tail, record_formatters, fmt, record))
+                    fmt.format_record_tail, record_formatters,
+                    record_fmt_params))
     outputs = [o for o in outputs if o is not None]
     return '\n'.join(outputs)
 
