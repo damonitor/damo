@@ -776,12 +776,7 @@ def format_output(template, formatters, fmt, record, snapshot=None,
     for formatter in formatters:
         if template.find(formatter.keyword) == -1:
             continue
-        if formatters == record_formatters:
-            txt = formatter.format_fn(param)
-        elif formatters == snapshot_formatters:
-            txt = formatter.format_fn(param)
-        elif formatters == region_formatters:
-            txt = formatter.format_fn(param)
+        txt = formatter.format_fn(param)
         txt = apply_min_chars(fmt.min_chars_for, formatter.keyword, txt)
         template = template.replace(formatter.keyword, txt)
     template = template.replace('\\n', '\n')
