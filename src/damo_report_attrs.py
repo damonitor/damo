@@ -31,6 +31,20 @@ class Formatter:
     def __str__(self):
         return '%s\n%s' % (self.keyword, self.help_msg)
 
+class FormatFnParams:
+    fmt = None
+    record = None       # DamonRecord
+    snapshot = None
+    region = None
+    region_idx = None
+
+    def __init__(self, fmt, record, snapshot, region, region_idx):
+        self.fmt = fmt
+        self.record = record
+        self.snapshot = snapshot
+        self.region = region
+        self.region_idx = region_idx
+
 record_formatters = [
         Formatter('<kdamond index>',
             lambda record, fmt: '%s' % record.kdamond_idx,
