@@ -265,7 +265,7 @@ class DamoRecord:
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
-            ('kdamonds', [k.to_kvapairs(raw=raw) for k in self.kdamonds]),
+            ('kdamonds', [k.to_kvpairs(raw=raw) for k in self.kdamonds]),
             ('damon_records', [r.to_kvpairs(raw=raw) for r in
                                self.damon_records]),
             ])
