@@ -899,7 +899,11 @@ def pr_records_raw_form(records, raw_number):
     lines.append('')
     _damo_print.pr_with_pager_if_needed('\n'.join(lines))
 
-def pr_records(fmt, records, dont_use_pager):
+def pr_records(fmt, damo_records, dont_use_pager):
+    records = []
+    for damo_record in damo_records:
+        records += damo_record.damon_records
+
     if fmt.json:
         _damo_print.pr_with_pager_if_needed(
                 json.dumps([r.to_kvpairs(fmt.raw_number) for r in records],
@@ -1393,7 +1397,7 @@ def read_and_show(args):
             exit(1)
 
         try:
-            pr_records(fmt, records,
+            pr_records(fmt, damo_records,
                        dont_use_pager = args.repeat is not None)
         except BrokenPipeError:
             # maybe user piped to 'less' like pager, and quit from it
