@@ -38,7 +38,8 @@ class FormatFnParams:
     region = None
     region_idx = None
 
-    def __init__(self, fmt, record, snapshot, region, region_idx):
+    def __init__(self, fmt, record, snapshot=None, region=None,
+                 region_idx=None):
         self.fmt = fmt
         self.record = record
         self.snapshot = snapshot
