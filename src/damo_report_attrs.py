@@ -906,8 +906,9 @@ def pr_records(fmt, damo_records, dont_use_pager):
 
     if fmt.json:
         _damo_print.pr_with_pager_if_needed(
-                json.dumps([r.to_kvpairs(fmt.raw_number) for r in records],
-                           indent=4))
+                json.dumps(
+                    [r.to_kvpairs(fmt.raw_number) for r in damo_records],
+                    indent=4))
     elif fmt.raw:
         pr_records_raw_form(records, fmt.raw_number)
     else:
