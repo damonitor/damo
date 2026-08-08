@@ -200,44 +200,38 @@ snapshot_formatters = [
 region_formatters = [
         Formatter(
             '<index>',
-            lambda index, region, snapshot, record, fmt:
-            _damo_fmt_str.format_nr(index, fmt.raw_number),
+            lambda p: _damo_fmt_str.format_nr(p.region_idx, p.fmt.raw_number),
             'index of the region in the regions of the snapshot'),
         Formatter(
             '<start address>',
-            lambda index, region, snapshot, record, fmt:
-            _damo_fmt_str.format_sz(region.start, fmt.raw_number),
+            lambda p: _damo_fmt_str.format_sz(
+                p.region.start, p.fmt.raw_number),
             'start address of the region'),
         Formatter(
             '<end address>',
-            lambda index, region, snapshot, record, fmt:
-            _damo_fmt_str.format_sz(region.end, fmt.raw_number),
+            lambda p: _damo_fmt_str.format_sz(p.region.end, p.fmt.raw_number),
             'end address of the region'),
         Formatter(
-            '<size>',
-            lambda index, region, snapshot, record, fmt:
-            _damo_fmt_str.format_sz(region.size(), fmt.raw_number),
+            '<size>', lambda p: _damo_fmt_str.format_sz(
+                p.region.size(), p.fmt.raw_number),
             'size of the region'),
         Formatter(
-            '<age>',
-            lambda index, region, snapshot, record, fmt:
-            _damo_fmt_str.format_time_us(region.age.usec, fmt.raw_number),
+            '<age>', lambda p: _damo_fmt_str.format_time_us(
+                p.region.age.usec, p.fmt.raw_number),
             'how long the access pattern of the region has maintained'),
         Formatter(
             '<temperature>',
-            lambda index, region, snapshot, record, fmt:
-            temperature_str(region, fmt.raw_number, fmt),
+            lambda p: temperature_str(p.region, p.fmt.raw_number, p.fmt),
             'access temperature of the region'),
         Formatter(
             '<probe hits>',
-            lambda index, region, snapshot, record, fmt:
-            ' '.join(['%d' % h for h in region.probe_hits]),
+            lambda p: ' '.join(['%d' % h for h in p.region.probe_hits]),
             'data attributese probe hit counts'),
         Formatter(
             '<filters passed bytes>',
-            lambda index, region, snapshot, record, fmt:
-            _damo_fmt_str.format_sz(region.sz_filter_passed, fmt.raw_number)
-            if region.sz_filter_passed is not None else 'N/A',
+            lambda p: _damo_fmt_str.format_sz(
+                p.region.sz_filter_passed, p.fmt.raw_number)
+            if p.region.sz_filter_passed is not None else 'N/A',
             'bytes of the region that passed DAMOS filters'),
         ]
 
@@ -787,8 +781,7 @@ def format_output(template, formatters, fmt, record, snapshot=None,
         elif formatters == snapshot_formatters:
             txt = formatter.format_fn(param)
         elif formatters == region_formatters:
-            txt = formatter.format_fn(
-                    region_index, region, snapshot, record, fmt)
+            txt = formatter.format_fn(param)
         txt = apply_min_chars(fmt.min_chars_for, formatter.keyword, txt)
         template = template.replace(formatter.keyword, txt)
     template = template.replace('\\n', '\n')
