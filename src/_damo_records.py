@@ -248,24 +248,26 @@ class DamonRecord:
 
 class DamoRecord:
     kdamonds = None # list of _damon.Kdamond
-    records = None  # list of DamonRecord
+    damon_records = None  # list of DamonRecord
 
-    def __init__(self, kdamonds, records):
+    def __init__(self, kdamonds, damon_records):
         if kdamonds is None:
             kdamonds = []
-        if records is None:
-            records = []
+        if damon_records is None:
+            damon_records = []
         self.kdamonds = kdamonds
-        self.records = records
+        self.damon_records = damon_records
 
     @classmethod
     def from_kvpairs(self, kv):
-        return DamoRecord(kdamonds=kv['kdamonds'], records=kv['records'])
+        return DamoRecord(kdamonds=kv['kdamonds'],
+                          damon_records=kv['damon_records'])
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('kdamonds', [k.to_kvapairs(raw=raw) for k in self.kdamonds]),
-            ('records', [r.to_kvpairs(raw=raw) for r in self.records]),
+            ('damon_records', [r.to_kvpairs(raw=raw) for r in
+                               self.damon_records]),
             ])
 
 # for monitoring results manipulation
@@ -1958,7 +1960,8 @@ def get_damo_records(
             return None, err
 
         kdamonds = _damon.current_kdamonds()
-        return [DamoRecord(kdamonds=kdamonds, records=damon_records)], None
+        return [DamoRecord(
+            kdamonds=kdamonds, damon_records=damon_records)], None
 
     damo_records = []
     for record_file in record_files:
@@ -1974,8 +1977,8 @@ def get_damo_records(
                 record_filter, total_sz_only, dont_merge_regions)
         if err is not None:
             return None, err
-        damo_records.append(DamoRecord(kdamonds=kdamonds,
-                                        records=damon_records))
+        damo_records.append(DamoRecord(
+            kdamonds=kdamonds, damon_records=damon_records))
     return damo_records, None
 
 def parse_sort_bytes_ranges_input(bytes_ranges_input):
