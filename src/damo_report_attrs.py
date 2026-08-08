@@ -1394,11 +1394,6 @@ def read_and_show(args):
             read_show_count += 1
             continue
 
-        if len([r for r in records if r.intervals is None]) != 0:
-            if not args.json and not args.raw_form:
-                print('some records lack the intervals information')
-                exit(1)
-
         fmt, err = set_formats(args, records)
         if err is not None:
             print('format setting failed (%s)' % err)
