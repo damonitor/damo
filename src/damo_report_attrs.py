@@ -215,12 +215,6 @@ region_formatters = [
             _damo_fmt_str.format_sz(region.size(), fmt.raw_number),
             'size of the region'),
         Formatter(
-            '<access rate>',
-            lambda index, region, snapshot, record, fmt:
-            _damo_fmt_str.format_percent(region.nr_accesses.percent,
-                                         fmt.raw_number),
-            'monitored access rate of the region'),
-        Formatter(
             '<access hz>',
             lambda index, region, snapshot, record, fmt:
             _damo_fmt_str.format_hz(
@@ -1500,7 +1494,7 @@ def add_fmt_args(parser, hide_help=False):
             metavar=('<keyword>', '<number>'), action='append',
             default=[['<index>', 3],
                      ['<start address>', 12],['<end address>', 11],
-                     ['<size>', 11], ['<access rate>', 5],
+                     ['<size>', 11],
                      ['<access hz>', 6],
                      ['<age>', 13],
                      ['<filters passed bytes>', 11],
