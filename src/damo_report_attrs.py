@@ -1221,11 +1221,15 @@ def set_formats_handle_format_append_arg(fmt, format_args):
         elif target_area == 'record_tail':
             fmt.format_record_tail += fmt_string
 
-def set_formats(args, records):
+def set_formats(args, damo_records):
     # Setup basic formats as user specified, including
     # --format_{record_head,record_tail,snapshot_head,snapshot_tail,region}
     # options.  --format is not yet applied.
     fmt = ReportFormat.from_args(args)
+
+    records = []
+    for damo_record in damo_records:
+        records += damo_record.records
 
     fmt, err = set_formats_handle_format_set_arg(fmt, args.format)
     if err is not None:
@@ -1394,7 +1398,7 @@ def read_and_show(args):
             read_show_count += 1
             continue
 
-        fmt, err = set_formats(args, records)
+        fmt, err = set_formats(args, damo_records)
         if err is not None:
             print('format setting failed (%s)' % err)
             exit(1)
