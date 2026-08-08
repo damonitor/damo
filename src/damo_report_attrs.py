@@ -83,125 +83,117 @@ record_formatters = [
         ]
 
 snapshot_formatters = [
-        Formatter('<total bytes>',
-            lambda snapshot, record, fmt:
-            _damo_fmt_str.format_sz(snapshot.total_bytes, fmt.raw_number),
+        Formatter(
+            '<total bytes>', lambda p: _damo_fmt_str.format_sz(
+                p.snapshot.total_bytes, p.fmt.raw_number),
             'total bytes of regions in the snapshot'),
-        Formatter('<duration>',
-            lambda snapshot, record, fmt:
-                  _damo_fmt_str.format_time_ns(
-                      snapshot.end_time - snapshot.start_time, fmt.raw_number),
-                  'access monitoring duration for the snapshot'),
-        Formatter('<start time>',
-            lambda snapshot, record, fmt:
-                  _damo_fmt_str.format_time_ns(
-                      snapshot.start_time -
-                      record.snapshots[0].start_time, fmt.raw_number),
-                  'access monitoring start time for the snapshot, ' \
-                          'relative to the record start time'),
-        Formatter('<end time>',
-            lambda snapshot, record, fmt:
-                  _damo_fmt_str.format_time_ns(
-                      snapshot.end_time - record.snapshots[0].start_time,
-                      fmt.raw_number),
-                  'access monitoring end time for the snapshot, ' \
-                          'relative to the record end time'),
-        Formatter('<abs start time>',
-            lambda snapshot, record, fmt:
-            _damo_fmt_str.format_time_ns(snapshot.start_time, fmt.raw_number),
+        Formatter(
+            '<duration>', lambda p:
+            _damo_fmt_str.format_time_ns(
+                p.snapshot.end_time - p.snapshot.start_time,
+                p.fmt.raw_number),
+            'access monitoring duration for the snapshot'),
+        Formatter(
+            '<start time>', lambda p: _damo_fmt_str.format_time_ns(
+                p.snapshot.start_time - p.record.snapshots[0].start_time,
+                p.fmt.raw_number),
+            'access monitoring start time for the snapshot, ' \
+                    'relative to the record start time'),
+        Formatter(
+            '<end time>', lambda p: _damo_fmt_str.format_time_ns(
+                p.  snapshot.end_time - p.record.snapshots[0].start_time,
+                p.fmt.raw_number),
+            'access monitoring end time for the snapshot, ' \
+                    'relative to the record end time'),
+        Formatter(
+            '<abs start time>', lambda p: _damo_fmt_str.format_time_ns(
+                p.snapshot.start_time, p.fmt.raw_number),
             'absolute access monitoring start time for the snapshot'),
-        Formatter('<abs end time>',
-            lambda snapshot, record, fmt:
-            _damo_fmt_str.format_time_ns(snapshot.end_time, fmt.raw_number),
+        Formatter(
+            '<abs end time>', lambda p: _damo_fmt_str.format_time_ns(
+                p.snapshot.end_time, p.fmt.raw_number),
             'absolute access monitoring end time for the snapshot'),
-        Formatter('<number of regions>',
-            lambda snapshot, record, fmt:
-            _damo_fmt_str.format_nr(len(snapshot.regions), fmt.raw_number),
+        Formatter(
+            '<number of regions>', lambda p:
+            _damo_fmt_str.format_nr(len(p.snapshot.regions), p.fmt.raw_number),
             'the number of regions in the snapshot'),
-        Formatter('<temperature-sz histogram>',
-                  lambda snapshot, record, fmt:
-                  temperature_sz_hist_str(snapshot, record, fmt, False),
-                  'temperature to total size of the regions histogram'),
-        Formatter('<temperature-df-passed-sz histogram>',
-                  lambda snapshot, record, fmt:
-                  temperature_sz_hist_str(snapshot, record, fmt, True),
-                  ' '.join(['temperature to total size of DAMOS filters (df)',
-                            'passed regions histogram'])),
-        Formatter('<recency-sz histogram>',
-                  lambda snapshot, record, fmt:
-                  recency_hist_str(snapshot, record, fmt, False),
-                  'idle time to total size of the regions histogram'),
-        Formatter('<recency-df-passed-sz histogram>',
-                  lambda snapshot, record, fmt:
-                  recency_hist_str(snapshot, record, fmt, True),
-                  ' '.join(['idle time to total size of',
-                            'DAMOS filters (df) passed regions histogram'])),
-        Formatter('<recency percentiles>',
-                  lambda snapshot, record, fmt:
-                  recency_percentiles(snapshot, record, fmt, False),
-                  'per-byte idle time distribution in percentiles'),
-        Formatter('<df-passed recency percentiles>',
-                  lambda snapshot, record, fmt:
-                  recency_percentiles(snapshot, record, fmt, True),
-                  ' '.join(['per-df-passed byte idle time',
-                            'distribution in percentiles'])),
-        Formatter('<temperature percentiles>',
-                  lambda snapshot, record, fmt:
-                  temperature_percentiles(snapshot, record, fmt, False),
-                  'per-byte access temperature distribution in percentiles'),
-        Formatter('<df-passed temperature percentiles>',
-                  lambda snapshot, record, fmt:
-                  temperature_percentiles(snapshot, record, fmt, True),
-                  ' '.join(['per-df-passed byte access temperature',
-                            'distribution in percentiles'])),
-
-        Formatter('<heatmap>',
-                  lambda snapshot, record, fmt:
-                  heatmap_str(snapshot, record, fmt),
-                  'heatmap of the snapshot'),
-        Formatter('<filters passed heatmap>',
-                  lambda snapshot, record, fmt:
-                  df_passed_heatmap_str(snapshot, record, fmt),
-                  'heatmap of the snapshot for filter-passed regions'),
         Formatter(
-            '<filters passed type>',
-            lambda snapshot, record, fmt: filters_pass_type_of(record),
-            'type of <filters passed bytes> memory'),
+            '<temperature-sz histogram>', lambda p: temperature_sz_hist_str(
+                p.snapshot, p.record, p.fmt, False),
+            'temperature to total size of the regions histogram'),
         Formatter(
-                '<filters passed bytes>',
-                lambda snapshot, record, fmt:
-                filters_passed_bytes(snapshot, fmt),
+            '<temperature-df-passed-sz histogram>', lambda p:
+            temperature_sz_hist_str(p.snapshot, p.record, p.fmt, True),
+            ' '.join(['temperature to total size of DAMOS filters (df)',
+                      'passed regions histogram'])),
+            Formatter(
+                '<recency-sz histogram>', lambda p: recency_hist_str(
+                    p.snapshot, p.record, p.fmt, False),
+                'idle time to total size of the regions histogram'),
+            Formatter(
+                '<recency-df-passed-sz histogram>', lambda p: recency_hist_str(
+                    p.snapshot, p.record, p.fmt, True),
+                ' '.join(['idle time to total size of',
+                          'DAMOS filters (df) passed regions histogram'])),
+        Formatter(
+                '<recency percentiles>', lambda p: recency_percentiles(
+                    p.snapshot, p.record, p.fmt, False),
+                'per-byte idle time distribution in percentiles'),
+        Formatter(
+                '<df-passed recency percentiles>', lambda p:
+                recency_percentiles(p.snapshot, p.record, p.fmt, True),
+                ' '.join(['per-df-passed byte idle time',
+                          'distribution in percentiles'])),
+        Formatter(
+                '<temperature percentiles>', lambda p: temperature_percentiles(
+                    p.snapshot, p.record, p.fmt, False),
+                'per-byte access temperature distribution in percentiles'),
+        Formatter(
+                '<df-passed temperature percentiles>', lambda p:
+                temperature_percentiles(p.snapshot, p.record, p.fmt, True),
+                ' '.join(['per-df-passed byte access temperature',
+                          'distribution in percentiles'])),
+        Formatter(
+                '<heatmap>', lambda p:
+                heatmap_str(p.snapshot, p.record, p.fmt),
+                'heatmap of the snapshot'),
+        Formatter(
+                '<filters passed heatmap>',
+                lambda p: df_passed_heatmap_str(p.snapshot, p.record, p.fmt),
+                'heatmap of the snapshot for filter-passed regions'),
+        Formatter(
+                '<filters passed type>', lambda p:
+                filters_pass_type_of(p.record),
+                'type of <filters passed bytes> memory'),
+        Formatter(
+                '<filters passed bytes>', lambda p:
+                filters_passed_bytes(p.snapshot, p.fmt),
                 'bytes of regions that passed DAMOS filters'),
         Formatter(
                 '<positive access samples ratio>',
-                lambda snapshot, record, fmt:
-                positive_access_sample_ratio(snapshot, record, fmt),
+                lambda p: positive_access_sample_ratio(
+                    p.snapshot, p.record, p.fmt),
                 'positive access samples ratio'),
         Formatter(
-                '<estimated memory bandwidth>',
-                lambda snapshot, record, fmt:
-                estimated_mem_bw(snapshot, record, fmt),
+                '<estimated memory bandwidth>', lambda p:
+                estimated_mem_bw(p.snapshot, p.record, p.fmt),
                 'estimated memory bandwidth'),
         Formatter(
                 '<filters passed estimated memory bandwidth>',
-                lambda snapshot, record, fmt:
-                estimated_mem_bw(snapshot, record, fmt,
-                                 filter_passed_only=True),
+                lambda p: estimated_mem_bw(p.snapshot, p.record, p.fmt,
+                                           filter_passed_only=True),
                 'estimated memory bandwidth'),
         Formatter(
                 '<intervals tuning status>',
-                lambda snapshot, record, fmt:
-                intervals_tuning_status(snapshot, record, fmt),
+                lambda p: intervals_tuning_status(p.snapshot, p.record, p.fmt),
                 'intervals tuning status'),
         Formatter(
                 '<damos stats>',
-                lambda snapshot, record, fmt:
-                damos_stats_str(snapshot, record, fmt),
+                lambda p: damos_stats_str(p.snapshot, p.record, p.fmt),
                 'DAMOS stats for the snapshot-retrieval scheme'),
         Formatter(
                 '<snapshot intervals>',
-                lambda snapshot, record, fmt:
-                snapshot_intervals_str(snapshot, record, fmt),
+                lambda p: snapshot_intervals_str(p.snapshot, p.record, p.fmt),
                 'Snapshot intervals status'),
         ]
 
@@ -793,7 +785,7 @@ def format_output(template, formatters, fmt, record, snapshot=None,
         if formatters == record_formatters:
             txt = formatter.format_fn(param)
         elif formatters == snapshot_formatters:
-            txt = formatter.format_fn(snapshot, record, fmt)
+            txt = formatter.format_fn(param)
         elif formatters == region_formatters:
             txt = formatter.format_fn(
                     region_index, region, snapshot, record, fmt)
