@@ -769,7 +769,7 @@ def apply_min_chars(min_chars, field_name, txt):
     return txt
 
 def format_output(template, formatters, fmt, record, snapshot=None,
-                  region=None, index=None):
+                  region=None, region_index=None):
     if template == '':
         return
     for formatter in formatters:
@@ -780,7 +780,8 @@ def format_output(template, formatters, fmt, record, snapshot=None,
         elif formatters == snapshot_formatters:
             txt = formatter.format_fn(snapshot, record, fmt)
         elif formatters == region_formatters:
-            txt = formatter.format_fn(index, region, snapshot, record, fmt)
+            txt = formatter.format_fn(
+                    region_index, region, snapshot, record, fmt)
         txt = apply_min_chars(fmt.min_chars_for, formatter.keyword, txt)
         template = template.replace(formatter.keyword, txt)
     template = template.replace('\\n', '\n')
