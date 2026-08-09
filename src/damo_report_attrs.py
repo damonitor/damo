@@ -902,7 +902,7 @@ def pr_records_raw_form(records, raw_number):
 def pr_records(fmt, damo_records, dont_use_pager):
     records = []
     for damo_record in damo_records:
-        records += damo_record.damon_records_list
+        records += damo_record.damon_records.record_list
 
     if fmt.json:
         _damo_print.pr_with_pager_if_needed(
@@ -1223,7 +1223,7 @@ def set_formats(args, damo_records):
 
     records = []
     for damo_record in damo_records:
-        records += damo_record.damon_records_list
+        records += damo_record.damon_records.record_list
 
     fmt, err = set_formats_handle_format_set_arg(fmt, args.format)
     if err is not None:
@@ -1377,7 +1377,7 @@ def read_and_show(args):
             exit(1)
         records = []
         for damo_record in damo_records:
-            records += damo_record.damon_records_list
+            records += damo_record.damon_records.record_list
         if signal_received is True:
             break
         if len(records) == 0 and len(input_files) > 0 and repeat_count == 1:
