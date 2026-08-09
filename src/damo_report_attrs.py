@@ -829,7 +829,8 @@ def fmt_damon_records(fmt, damon_records):
 
     outputs = []
     for record in damon_records.record_list:
-        record_fmt_params = FormatFnParams(fmt=fmt, record=record)
+        record_fmt_params = FormatFnParams(
+                fmt=fmt, damon_records=damon_records, record=record)
         outputs.append(
                 format_output(
                     fmt.format_record_head, record_formatters,
@@ -838,7 +839,8 @@ def fmt_damon_records(fmt, damon_records):
 
         for sidx, snapshot in enumerate(snapshots):
             snapshot_fmt_params = FormatFnParams(
-                    fmt=fmt, record=record, snapshot=snapshot)
+                    fmt=fmt, damon_records=damon_records, record=record,
+                    snapshot=snapshot)
             outputs.append(
                     format_output(
                         fmt.format_snapshot_head, snapshot_formatters,
@@ -850,8 +852,8 @@ def fmt_damon_records(fmt, damon_records):
                     sorted_regions(snapshot.regions, fmt.sort_regions_by,
                         fmt.sort_regions_dsc, fmt.temperature_weights)):
                 params = FormatFnParams(
-                        fmt=fmt, record=record, snapshot=snapshot,
-                        region=r, region_idx=idx)
+                        fmt=fmt, damon_records=damon_records, record=record,
+                        snapshot=snapshot, region=r, region_idx=idx)
                 outputs.append(
                         format_output(
                             fmt.format_region, region_formatters, params))
