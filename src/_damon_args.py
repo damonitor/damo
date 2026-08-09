@@ -825,13 +825,16 @@ def probes_for(args):
         return None, \
                 '--nr_probe_filters mismatches --probe_filter (%d != %d)' % (
                         sum(args.nr_probe_filters), len(filters))
-    if args.probe_weight != []:
-        if len(args.probe_weight) != len(args.nr_probe_filters):
-            return None, \
-                    '--probe_weight mismatches --nr_probe_filters (%d != %d)' \
-                    % (len(args.probe_weight), len(args.nr_probe_filters))
-    else:
-        args.probe_weight = [0 for _ in args.nr_probe_filters]
+
+    probe_weights = []
+    for probe_weights_list in args.probe_weight:
+        probe_weights += probe_weights_list
+    if len(probe_weights) > len(args.nr_probe_filters):
+        return None, \
+                '--probe_weight mismatches --nr_probe_filters (%d > %d)' \
+                % (len(probe_weights), len(args.nr_probe_filters))
+    probe_weights += [0] * (
+            len(args.nr_probe_filters) - len(probe_weights))
 
     nr_probes = len(args.nr_probe_filters)
     for i in range(nr_probes - len(preps)):
@@ -842,7 +845,7 @@ def probes_for(args):
         preps_for_probe = preps[
                 prep_idx:prep_idx + args.nr_probe_preps[probe_idx]]
         filters_for_probe = filters[filter_idx:filter_idx + nr]
-        weight = args.probe_weight[len(probes)]
+        weight = probe_weights[len(probes)]
         try:
             probe = _damon.DamonProbe(
                     preps=preps_for_probe, filters=filters_for_probe,
@@ -1461,7 +1464,7 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
             '--nr_probe_filters', type=int, nargs='+', metavar='<integer>',
             help='number of filters for each probe (in order)'
             if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--probe_weight', type=int, action='append',
+    parser.add_argument('--probe_weight', type=int, nargs='+', action='append',
                         metavar='<int>',
                         help='data attribute probe weight'
                         if not hide_help else argparse.SUPPRESS)
