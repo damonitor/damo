@@ -185,6 +185,12 @@ class DamonRecord:
 
     def __init__(self, kd_idx, ctx_idx, intervals, scheme_idx, target_id,
                  scheme_filters, data_source=record_data_source_unknown):
+        # Recording path sets kd_idx and ctx_idx None.
+        # TODO: update the path to set these correctly.
+        if kd_idx is None:
+            kd_idx = 0
+        if ctx_idx is None:
+            ctx_idx = 0
         self.kdamond_idx = kd_idx
         self.context_idx = ctx_idx
         self.intervals = intervals
@@ -429,6 +435,7 @@ def record_of(target_id, records, intervals):
     for record in records:
         if record.target_id == target_id:
             return record
+    # TODO: set kdamond and ctx idx
     record = DamonRecord(None, None, intervals, None, target_id, scheme_filters=[])
     records.append(record)
     return record
