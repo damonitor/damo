@@ -271,10 +271,15 @@ class DamonRecords:
             ])
 
 class DamoRecord:
+    damon_records = None    # DamonRecords
+
     kdamonds = None # list of _damon.Kdamond
     damon_records_list = None  # list of DamonRecord
 
-    def __init__(self, kdamonds=None, damon_records_list=None):
+    def __init__(self, damon_records=None, kdamonds=None,
+                 damon_records_list=None):
+        self.damon_records=damon_records
+
         if kdamonds is None:
             kdamonds = []
         if damon_records_list is None:
@@ -284,11 +289,18 @@ class DamoRecord:
 
     @classmethod
     def from_kvpairs(self, kv):
-        return DamoRecord(kdamonds=kv['kdamonds'],
-                          damon_records_list=kv['damon_records_list'])
+        return DamoRecord(
+                damon_records=DamonRecords.from_kvpairs(kv['damon_records']),
+                kdamonds=kv['kdamonds'],
+                damon_records_list=kv['damon_records_list'])
 
     def to_kvpairs(self, raw=False):
+        if self.damon_records is None:
+            damon_records_kv = None
+        else:
+            damon_records_kv = self.damon_records.to_kvpairs(raw=raw)
         return collections.OrderedDict([
+            ('damon_records', damon_records_kv),
             ('kdamonds', [k.to_kvpairs(raw=raw) for k in self.kdamonds]),
             ('damon_records_list', [r.to_kvpairs(raw=raw) for r in
                                self.damon_records_list]),
