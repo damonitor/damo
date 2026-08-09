@@ -1176,6 +1176,7 @@ def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
     if need_snapshot_time:
         lines.append('snapshot time: [<start time>, <end time>] (<duration>)')
     lines.append('heatmap: <heatmap>')
+    lines.append('<probes>')
     lines.append('intervals: <snapshot intervals>')
     if ops_filters_installed:
         lines.append('# damos filters (df): <filters passed type>')
