@@ -169,7 +169,10 @@ record_data_source_damon_stat = 'damon_stat'
 
 class DamonRecord:
     '''
-    Contains data access monitoring results for single target
+    Class for DAMON-generated per-monitoring target monitoring results.
+    'kdamond_idx', 'context_idx', 'scheme_idx' and 'target_id' can be used to
+    get specific parameters that was used to generate this monitoring results,
+    from 'kdamonds' of the 'DamonRecords' object for this object.
     '''
     kdamond_idx = None
     context_idx = None
@@ -247,6 +250,17 @@ class DamonRecord:
         self.snapshots.sort(key=lambda s: s.start_time)
 
 class DamonRecords:
+    '''
+    Class for recorded DAMON monitoring results.
+    'kdamonds' is the DAMON parameters that were used for generating the
+    monitoring results.  If intervals auto-tuning is enabled, new object of
+    this class is generated for each intervals auto-tuned change.
+    'record_list' is the list of DamonRecord objects that were generated under
+    the (auto-tuned) kdamonds setup.
+
+    Note that generating new DamonRecords object for auto-tuned interval change
+    is not yet implemented.
+    '''
     kdamonds = None     # list of _damon.Kdamond
     record_list = None  # list of DamonRecord objects
 
@@ -270,6 +284,10 @@ class DamonRecords:
             ])
 
 class DamoRecord:
+    '''
+    Class for all records that can be generated via 'damo record' command.
+    'damon_records' is a DamonRecords object.
+    '''
     damon_records = None    # DamonRecords
     # This will later be extended for other records such as mem footprint.
 
