@@ -272,26 +272,26 @@ class DamonRecords:
 
 class DamoRecord:
     kdamonds = None # list of _damon.Kdamond
-    damon_records = None  # list of DamonRecord
+    damon_records_list = None  # list of DamonRecord
 
-    def __init__(self, kdamonds, damon_records):
+    def __init__(self, kdamonds, damon_records_list):
         if kdamonds is None:
             kdamonds = []
-        if damon_records is None:
-            damon_records = []
+        if damon_records_list is None:
+            damon_records_list = []
         self.kdamonds = kdamonds
-        self.damon_records = damon_records
+        self.damon_records_list = damon_records_list
 
     @classmethod
     def from_kvpairs(self, kv):
         return DamoRecord(kdamonds=kv['kdamonds'],
-                          damon_records=kv['damon_records'])
+                          damon_records_list=kv['damon_records_list'])
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('kdamonds', [k.to_kvpairs(raw=raw) for k in self.kdamonds]),
-            ('damon_records', [r.to_kvpairs(raw=raw) for r in
-                               self.damon_records]),
+            ('damon_records_list', [r.to_kvpairs(raw=raw) for r in
+                               self.damon_records_list]),
             ])
 
 # for monitoring results manipulation
@@ -1977,7 +1977,7 @@ def get_damo_records(
         record_files = []
 
     if record_files == []:
-        damon_records, err = get_records(
+        damon_records_list, err = get_records(
                 tried_regions_of, record_files, snapshot_damos_filters,
                 record_filter, total_sz_only, dont_merge_regions)
         if err is not None:
@@ -1985,7 +1985,7 @@ def get_damo_records(
 
         kdamonds = _damon.current_kdamonds()
         return [DamoRecord(
-            kdamonds=kdamonds, damon_records=damon_records)], None
+            kdamonds=kdamonds, damon_records_list=damon_records_list)], None
 
     damo_records = []
     for record_file in record_files:
@@ -1996,13 +1996,13 @@ def get_damo_records(
             kvpairs = json.load(f)
         kdamonds = [_damon.Kdamond.from_kvpairs(kvp) for kvp in kvpairs]
 
-        damon_records, err = get_records(
+        damon_records_list, err = get_records(
                 tried_regions_of, [record_file], snapshot_damos_filters,
                 record_filter, total_sz_only, dont_merge_regions)
         if err is not None:
             return None, err
         damo_records.append(DamoRecord(
-            kdamonds=kdamonds, damon_records=damon_records))
+            kdamonds=kdamonds, damon_records_list=damon_records_list))
     return damo_records, None
 
 def parse_sort_bytes_ranges_input(bytes_ranges_input):
