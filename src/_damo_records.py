@@ -289,6 +289,15 @@ class DamonRecords:
             ('record_list', [r.to_kvpairs(raw=raw) for r in self.record_list]),
             ])
 
+    def damon_ctx_of(self, damon_record):
+        '''
+        damon_record: DamonRecord
+        Returns _damon.DamonCtx
+        '''
+        kidx = damon_record.kdamond_idx
+        cidx = damon_record.context_idx
+        return self.kdamonds[kidx].contexts[cidx]
+
 class DamoRecord:
     '''
     Class for all records that can be generated via 'damo record' command.
