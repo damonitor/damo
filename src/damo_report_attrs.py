@@ -814,7 +814,11 @@ def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights):
                     key=lambda r: temperature_of(r, temperature_weights))
     return regions
 
-def fmt_records(fmt, records):
+def fmt_records(fmt, damo_records):
+    records = []
+    for damo_record in damo_records:
+        records += damo_record.damon_records.record_list
+
     for record in records:
         for snapshot in record.snapshots:
             for region in snapshot.regions:
@@ -914,11 +918,11 @@ def pr_records(fmt, damo_records, dont_use_pager):
     elif fmt.raw:
         pr_records_raw_form(records, fmt.raw_number)
     else:
-        to_show = fmt_records(fmt, records)
+        to_show = fmt_records(fmt, damo_records)
         if dont_use_pager:
             print(to_show)
         else:
-            _damo_print.pr_with_pager_if_needed(fmt_records(fmt, records))
+            _damo_print.pr_with_pager_if_needed(fmt_records(fmt, damo_records))
 
 class ReportFormat:
     sort_regions_by = None
