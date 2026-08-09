@@ -1088,6 +1088,9 @@ def set_formats_handle_format_set_arg(fmt, format_arg):
     return fmt, None
 
 def set_formats_handle_styles(fmt, args, damo_records):
+    '''
+    Set output formats that are dependent to the --style
+    '''
     if args.style is None:
         return
 
