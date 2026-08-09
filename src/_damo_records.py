@@ -247,27 +247,26 @@ class DamonRecord:
         self.snapshots.sort(key=lambda s: s.start_time)
 
 class DamonRecords:
-    kdamonds = None         # list of _damon.Kdamond
-    damon_record_list = None    # list of DamonRecord objects
+    kdamonds = None     # list of _damon.Kdamond
+    record_list = None  # list of DamonRecord objects
 
-    def __init__(self, kdamonds, damon_record_list):
+    def __init__(self, kdamonds, record_list):
         if kdamonds is None:
             kdamonds = []
-        if damon_record_list is None:
-            damon_record_list = []
+        if record_list is None:
+            record_list = []
         self.kdamonds = kdamonds
-        self.damon_record_list = damon_record_list
+        self.record_list = record_list
 
     @classmethod
     def from_kvpairs(cls, kv):
-        return DamonRecords(kdamonds=kv['kdamonds'],
-                          damon_record_list=kv['damon_record_list'])
+        return DamonRecords(
+                kdamonds=kv['kdamonds'], record_list=kv['record_list'])
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('kdamonds', [k.to_kvpairs(raw=raw) for k in self.kdamonds]),
-            ('damon_record_list', [r.to_kvpairs(raw=raw) for r in
-                               self.damon_record_list]),
+            ('record_list', [r.to_kvpairs(raw=raw) for r in self.record_list]),
             ])
 
 class DamoRecord:
@@ -1997,7 +1996,7 @@ def get_damo_records(
 
         kdamonds = _damon.current_kdamonds()
         damon_records = DamonRecords(
-                kdamonds=kdamonds, damon_record_list=damon_records_list)
+                kdamonds=kdamonds, record_list=damon_records_list)
         return [DamoRecord(
             damon_records=damon_records, kdamonds=kdamonds,
             damon_records_list=damon_records_list)], None
@@ -2017,7 +2016,7 @@ def get_damo_records(
         if err is not None:
             return None, err
         damon_records = DamonRecords(
-                kdamonds=kdamonds, damon_record_list=damon_records_list)
+                kdamonds=kdamonds, record_list=damon_records_list)
         damo_records.append(DamoRecord(
             damon_records=damon_records, kdamonds=kdamonds,
             damon_records_list=damon_records_list))
