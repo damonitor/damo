@@ -1087,9 +1087,13 @@ def set_formats_handle_format_set_arg(fmt, format_arg):
             fmt.format_record_tail = fmt_string
     return fmt, None
 
-def set_formats_handle_styles(fmt, args, records):
+def set_formats_handle_styles(fmt, args, damo_records):
     if args.style is None:
         return
+
+    records = []
+    for damo_record in damo_records:
+        records += damo_record.damon_records.record_list
 
     if args.style in ['temperature-sz-hist', 'recency-sz-hist',
                         'cold-memory-tail']:
@@ -1248,19 +1252,19 @@ def set_formats(args, damo_records):
     # options.  --format is not yet applied.
     fmt = ReportFormat.from_args(args)
 
-    records = []
-    for damo_record in damo_records:
-        records += damo_record.damon_records.record_list
-
     fmt, err = set_formats_handle_format_set_arg(fmt, args.format)
     if err is not None:
         return fmt, err
-    set_formats_handle_styles(fmt, args, records)
+    set_formats_handle_styles(fmt, args, damo_records)
 
     if args.total_sz_only:
         fmt.format_snapshot_head = ''
         fmt.format_region = ''
         fmt.format_snapshot_tail = '<total bytes>'
+
+    records = []
+    for damo_record in damo_records:
+        records += damo_record.damon_records.record_list
 
     set_formats_update_default_formats(fmt, records, args)
     set_formats_handle_format_append_arg(fmt, args.format)
