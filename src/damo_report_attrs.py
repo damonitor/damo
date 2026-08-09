@@ -87,6 +87,10 @@ record_formatters = [
 
 snapshot_formatters = [
         Formatter(
+            '<probes>', lambda p: format_probes(
+                p.damon_records.damon_ctx_of(p.record), p.fmt.raw_number),
+            'probes description'),
+        Formatter(
             '<total bytes>', lambda p: _damo_fmt_str.format_sz(
                 p.snapshot.total_bytes, p.fmt.raw_number),
             'total bytes of regions in the snapshot'),
@@ -252,6 +256,13 @@ def format_strings(fmt):
         'snapshot tail: "%s"' % fmt.format_snapshot_tail,
         'record tail: "%s"' % fmt.format_record_tail,
         ])
+
+def format_probes(ctx, raw_number):
+    lines = []
+    ctx.add_probes_str(lines, raw_number)
+    if len(lines) == 0:
+        return 'No probe'
+    return '\n'.join(lines)
 
 def filters_passed_bytes(snapshot, fmt):
     bytes = 0
