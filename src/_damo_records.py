@@ -1996,8 +1996,11 @@ def get_damo_records(
             return None, err
 
         kdamonds = _damon.current_kdamonds()
+        damon_records = DamonRecords(
+                kdamonds=kdamonds, damon_record_list=damon_records_list)
         return [DamoRecord(
-            kdamonds=kdamonds, damon_records_list=damon_records_list)], None
+            damon_records=damon_records, kdamonds=kdamonds,
+            damon_records_list=damon_records_list)], None
 
     damo_records = []
     for record_file in record_files:
@@ -2013,8 +2016,11 @@ def get_damo_records(
                 record_filter, total_sz_only, dont_merge_regions)
         if err is not None:
             return None, err
+        damon_records = DamonRecords(
+                kdamonds=kdamonds, damon_record_list=damon_records_list)
         damo_records.append(DamoRecord(
-            kdamonds=kdamonds, damon_records_list=damon_records_list))
+            damon_records=damon_records, kdamonds=kdamonds,
+            damon_records_list=damon_records_list))
     return damo_records, None
 
 def parse_sort_bytes_ranges_input(bytes_ranges_input):
