@@ -1402,12 +1402,14 @@ def read_and_show(args):
         if err != None:
             print(err)
             exit(1)
-        records = []
-        for damo_record in damo_records:
-            records += damo_record.damon_records.record_list
         if signal_received is True:
             break
-        if len(records) == 0 and len(input_files) > 0 and repeat_count == 1:
+        zero_damon_records = True
+        for damo_record in damo_records:
+            if len(damo_record.damon_records.record_list) > 0:
+                zero_damon_records = False
+                break
+        if zero_damon_records and len(input_files) > 0 and repeat_count == 1:
             print('No record in %s' % input_files)
 
         if args.exec:
