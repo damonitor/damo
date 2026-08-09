@@ -814,18 +814,21 @@ def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights):
                     key=lambda r: temperature_of(r, temperature_weights))
     return regions
 
-def fmt_records(fmt, damo_records):
-    records = []
-    for damo_record in damo_records:
-        records += damo_record.damon_records.record_list
+def fmt_damon_records(fmt, damon_records):
+    '''
+    damon_records: _damo_records.DamonRecords
+    Return list of strings of lines for the formatted output
+    '''
 
-    for record in records:
+    # required for histograms.  Should be removed in future.
+    for record in damon_records.record_list:
         for snapshot in record.snapshots:
             for region in snapshot.regions:
                 region.nr_accesses.add_unset_unit(record.intervals)
                 region.age.add_unset_unit(record.intervals)
+
     outputs = []
-    for record in records:
+    for record in damon_records.record_list:
         record_fmt_params = FormatFnParams(fmt=fmt, record=record)
         outputs.append(
                 format_output(
@@ -863,7 +866,12 @@ def fmt_records(fmt, damo_records):
                 format_output(
                     fmt.format_record_tail, record_formatters,
                     record_fmt_params))
-    outputs = [o for o in outputs if o is not None]
+    return [o for o in outputs if o is not None]
+
+def fmt_records(fmt, damo_records):
+    outputs = []
+    for damo_record in damo_records:
+        outputs += fmt_damon_records(fmt, damo_record.damon_records)
     return '\n'.join(outputs)
 
 def pr_records_raw_form(records, raw_number):
