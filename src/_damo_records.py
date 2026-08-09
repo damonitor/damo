@@ -274,7 +274,7 @@ class DamoRecord:
     kdamonds = None # list of _damon.Kdamond
     damon_records_list = None  # list of DamonRecord
 
-    def __init__(self, kdamonds, damon_records_list):
+    def __init__(self, kdamonds=None, damon_records_list=None):
         if kdamonds is None:
             kdamonds = []
         if damon_records_list is None:
