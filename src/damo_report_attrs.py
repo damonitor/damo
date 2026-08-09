@@ -33,14 +33,16 @@ class Formatter:
 
 class FormatFnParams:
     fmt = None
+    damon_records = None    # _damo_records.DamonRecords
     record = None       # DamonRecord
     snapshot = None
     region = None
     region_idx = None
 
     def __init__(self, fmt, record, snapshot=None, region=None,
-                 region_idx=None):
+                 region_idx=None, damon_records=None):
         self.fmt = fmt
+        self.damon_records = damon_records
         self.record = record
         self.snapshot = snapshot
         self.region = region
