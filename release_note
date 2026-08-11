@@ -3,7 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.3.6
 - damo report attrs: Show probe hits in --raw and --json output.
-- damo report attrs: Show probes in snapshot header.
+- damo report attrs: Show probes description in snapshot header.
 - Internal code/data structure cleanup and refactoring.
 
 v3.3.5
