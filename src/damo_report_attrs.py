@@ -140,11 +140,11 @@ snapshot_formatters = [
                       'passed regions histogram'])),
             Formatter(
                 '<recency-sz histogram>', lambda p: recency_hist_str(
-                    p.snapshot, p.record, p.fmt, False),
+                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
                 'idle time to total size of the regions histogram'),
             Formatter(
                 '<recency-df-passed-sz histogram>', lambda p: recency_hist_str(
-                    p.snapshot, p.record, p.fmt, True),
+                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, True),
                 ' '.join(['idle time to total size of',
                           'DAMOS filters (df) passed regions histogram'])),
         Formatter(
@@ -504,7 +504,7 @@ def get_idle_time(region, fmt, aggr_interval):
         return 0
     return region.age.usec + aggr_interval
 
-def recency_hist_str(snapshot, record, fmt, df_passed_sz):
+def recency_hist_str(snapshot, record, probe_weights, fmt, df_passed_sz):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
 
