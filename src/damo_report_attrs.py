@@ -697,7 +697,8 @@ def heatmap_pixels_minmax_temps(snapshot, sz_unit, probe_weights, fmt):
     while start < snapshot.regions[-1].end:
         end = start + sz_unit
         pixels.append(HeatPixel(
-            start, end, snapshot.regions, fmt.temperature_weights))
+            start, end, snapshot.regions, fmt.temperature_weights,
+            probe_weights=probe_weights))
         if pixels[-1].is_void is True:
             next_region = region_after(end, snapshot.regions)
             if next_region is None:
