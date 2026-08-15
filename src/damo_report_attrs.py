@@ -857,9 +857,11 @@ def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights,
         elif field == 'size':
             regions = sorted(regions, key=lambda r: r.size(), reverse=dsc)
         elif field == 'temperature':
+            probe_weights = fmt_fn_params.get_probe_weights()
             regions = sorted(
                     regions, reverse=dsc,
-                    key=lambda r: temperature_of(r, temperature_weights))
+                    key=lambda r: attrs_temperate_of(
+                        r, probe_weights, temperature_weights))
     return regions
 
 def fmt_damon_records(fmt, damon_records):
