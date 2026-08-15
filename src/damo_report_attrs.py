@@ -237,7 +237,8 @@ region_formatters = [
             'how long the access pattern of the region has maintained'),
         Formatter(
             '<temperature>',
-            lambda p: temperature_str(p.region, p.fmt.raw_number, p.fmt),
+            lambda p: temperature_str(
+                p.region, p.fmt.raw_number, p.get_probe_weights(), p.fmt),
             'access temperature of the region'),
         Formatter(
             '<probe hits>',
@@ -631,8 +632,9 @@ def temperature_percentiles(snapshot, record, probe_weights, fmt, df_passed):
     return percentiles_str(
             snapshot, record, probe_weights, fmt, df_passed, 'temperature')
 
-def temperature_str(region, raw, fmt):
-    temperature = temperature_of(region, fmt.temperature_weights)
+def temperature_str(region, raw, probe_weights, fmt):
+    temperature = attrs_temperate_of(
+            region, probe_weights, fmt.temperature_weights)
     return _damo_fmt_str.format_nr(temperature, raw)
 
 def region_in(start, end, regions):
