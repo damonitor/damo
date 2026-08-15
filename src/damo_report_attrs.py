@@ -490,11 +490,9 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, probe_weights,
 
     return histogram_str(hist)
 
-def get_temperature(region, fmt, aggr_us, probe_weights=None):
+def get_temperature(region, fmt, aggr_us, probe_weights):
     # set size weight zero
     weights = [fmt.temperature_weights[0], fmt.temperature_weights[1], 0]
-    if probe_weights is None:
-        return temperature_of(region, weights)
     return attrs_temperate_of(region, probe_weights, weights)
 
 def temperature_sz_hist_str(
