@@ -167,15 +167,12 @@ snapshot_formatters = [
         Formatter(
                 '<heatmap>', lambda p:
                 heatmap_str(
-                    p.snapshot, p.record,
-                    p.damon_records.damon_ctx_of(p.record),
-                    p.fmt),
+                    p.snapshot, p.record, p.get_probe_weights(), p.fmt),
                 'heatmap of the snapshot'),
         Formatter(
                 '<filters passed heatmap>',
                 lambda p: df_passed_heatmap_str(
-                    p.snapshot, p.record,
-                    p.damon_records.damon_ctx_of(p.record), p.fmt),
+                    p.snapshot, p.record, p.get_probe_weights(), p.fmt),
                 'heatmap of the snapshot for filter-passed regions'),
         Formatter(
                 '<filters passed type>', lambda p:
@@ -742,7 +739,7 @@ def heatmap_dots(
             '%d' % temp_level, fmt.snapshot_heatmap_colorset, temp_level))
     return ''.join(dots)
 
-def heatmap_str(snapshot, record, damon_ctx, fmt):
+def heatmap_str(snapshot, record, probe_weights, fmt):
     if len(snapshot.regions) == 0:
         return 'n/a (no region)'
     raw = fmt.raw_number
@@ -757,8 +754,6 @@ def heatmap_str(snapshot, record, damon_ctx, fmt):
     map_length = fmt.snapshot_heatmap_width
     sz_unit = total_sz / map_length
 
-    probe_weights = [p.weight for p in damon_ctx.probes]
-
     pixels, min_temperature, max_temperature = heatmap_pixels_minmax_temps(
             snapshot, sz_unit, probe_weights, fmt)
     dots = heatmap_dots(
@@ -770,7 +765,7 @@ def heatmap_str(snapshot, record, damon_ctx, fmt):
             _damo_fmt_str.format_sz(sz_unit, raw))
     return '%s\n%s' % (dots, comment)
 
-def df_passed_heatmap_str(snapshot, record, damon_ctx, fmt):
+def df_passed_heatmap_str(snapshot, record, probe_weights, fmt):
     regions = []
     for region in snapshot.regions:
         cp_region = copy.deepcopy(region)
@@ -781,7 +776,7 @@ def df_passed_heatmap_str(snapshot, record, damon_ctx, fmt):
             _damo_records.DamonSnapshot(
                 snapshot.start_time, snapshot.end_time, regions,
                 total_bytes=None),
-            record, damon_ctx, fmt)
+            record, probe_weights, fmt)
 
 def apply_min_chars(min_chars, field_name, txt):
     # min_chars: [[<field name>, <number of min chars>]...]
