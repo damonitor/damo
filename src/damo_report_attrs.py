@@ -130,11 +130,12 @@ snapshot_formatters = [
             'the number of regions in the snapshot'),
         Formatter(
             '<temperature-sz histogram>', lambda p: temperature_sz_hist_str(
-                p.snapshot, p.record, p.fmt, False),
+                p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
             'temperature to total size of the regions histogram'),
         Formatter(
             '<temperature-df-passed-sz histogram>', lambda p:
-            temperature_sz_hist_str(p.snapshot, p.record, p.fmt, True),
+            temperature_sz_hist_str(
+                p.snapshot, p.record, p.get_probe_weights(), p.fmt, True),
             ' '.join(['temperature to total size of DAMOS filters (df)',
                       'passed regions histogram'])),
             Formatter(
@@ -491,7 +492,8 @@ def get_temperature(region, fmt, aggr_us):
     weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
     return temperature_of(region, weights)
 
-def temperature_sz_hist_str(snapshot, record, fmt, df_passed_sz):
+def temperature_sz_hist_str(
+        snapshot, record, probe_weights, fmt, df_passed_sz):
     return sz_hist_str(
             snapshot, fmt, df_passed_sz, get_temperature,
             infer_aggr_time_us(snapshot, record) , _damo_fmt_str.format_nr,
