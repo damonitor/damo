@@ -798,6 +798,18 @@ def format_output(template, formatters, format_params):
     template = template.replace('\\n', '\n')
     return template
 
+def attrs_temperate_of(region, probe_weights, hits_age_sz_weights):
+    attrs_wsum = 0
+    for idx, hit in enumerate(region.probe_hits):
+        attrs_wsum += hit * probe_weights[idx]
+    hits_weight, age_weight, sz_weight = hits_age_sz_weights
+    hits_score = attrs_wsum * hits_weight
+    age_score = region.age.usec * age_weight
+    sz_score = region.size() * sz_weight
+    score = hits_score + age_score + sz_score
+    if attrs_wsum <= 0:
+        score = -score
+    return score
 
 def temperature_of(region, weights):
     sz_weight, access_rate_weight, age_weight = weights
