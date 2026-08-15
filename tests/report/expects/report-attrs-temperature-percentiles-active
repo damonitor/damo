@@ -1,23 +1,23 @@
 # damos filters (df): allow active
 # df-passed temperature percentiles
-<df-passed percentile> <temperature (weights: [0, 100, 100])>
+<df-passed percentile> <temperature (weights: [100, 100, 0])>
   0  -20,100,000,000  |                    |
   1   -1,500,000,000  |******************  |
  25   -1,500,000,000  |******************  |
- 50                0  |******************* |
- 75                0  |******************* |
- 99              500  |******************* |
-100            1,000  |********************|
+ 50                0  |********************|
+ 75                0  |********************|
+ 99                0  |********************|
+100                0  |********************|
 
 # total temperature percentiles
-<percentile> <temperature (weights: [0, 100, 100])>
+<percentile> <temperature (weights: [100, 100, 0])>
   0  -20,100,000,000  |                    |
   1  -20,100,000,000  |                    |
  25  -20,100,000,000  |                    |
  50  -20,100,000,000  |                    |
  75  -17,400,000,000  |**                  |
- 99                0  |******************* |
-100            1,000  |********************|
+ 99                0  |********************|
+100                0  |********************|
 memory bw estimate: 92.839 MiB per second  df-passed: 23.836 MiB per second
 total size: 59.868 GiB  df-passed 1.213 GiB  
 scheme stats

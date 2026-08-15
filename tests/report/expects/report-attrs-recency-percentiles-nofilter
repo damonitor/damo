@@ -1,7 +1,7 @@
 # total recency percentiles
 <percentile> <idle time>
-  0               0 ns  |                    |
-  1               0 ns  |                    |
+  0             100 ms  |                    |
+  1            1.400 s  |                    |
  25      44 m 33.600 s  |********            |
  50  1 h 35 m 15.800 s  |*****************   |
  75  1 h 43 m 13.600 s  |******************  |
