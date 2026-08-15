@@ -489,7 +489,7 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, aggr_us,
 
 def get_temperature(region, fmt, aggr_us):
     # set size weight zero
-    weights = [0, fmt.temperature_weights[1], fmt.temperature_weights[2]]
+    weights = [fmt.temperature_weights[0], fmt.temperature_weights[1], 0]
     return temperature_of(region, weights)
 
 def temperature_sz_hist_str(
