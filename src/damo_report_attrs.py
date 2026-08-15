@@ -500,8 +500,9 @@ def temperature_sz_hist_str(
             _damo_fmt_str.text_to_nr)
 
 def get_idle_time(region, fmt, aggr_interval):
-    if region.nr_accesses.percent > 0:
-        return 0
+    for hit in region.probe_hits:
+        if hit > 0:
+            return 0
     return region.age.usec + aggr_interval
 
 def recency_hist_str(snapshot, record, probe_weights, fmt, df_passed_sz):
