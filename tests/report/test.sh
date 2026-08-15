@@ -44,7 +44,7 @@ damo_report_raw="$damo report attrs --raw_form --input"
 
 test_report "$damo_report_raw damon.data" "attrs-raw"
 
-test_report "$damo_report_raw damon.data.json_compressed" "atrs-raw"
+test_report "$damo_report_raw damon.data.json_compressed" "attrs-raw"
 
 test_report \
 	"$damo adjust --aggregate_interval 1000000 && \
