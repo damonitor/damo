@@ -697,12 +697,9 @@ class HeatPixel:
             # <pixel>
             region = copy.deepcopy(region)
             region.end = end
-        if probe_weights is None:
-            self.total_heat += temperature_of(region, weights) * region.size()
-        else:
-            self.total_heat += attrs_temperate_of(
-                    region, probe_weights,
-                    hits_age_sz_weights=weights) * region.size()
+        self.total_heat += attrs_temperate_of(
+                region, probe_weights,
+                hits_age_sz_weights=weights) * region.size()
 
 def heatmap_pixels_minmax_temps(snapshot, sz_unit, probe_weights, fmt):
     pixels = []
