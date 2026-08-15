@@ -874,7 +874,6 @@ def fmt_damon_records(fmt, damon_records):
     for record in damon_records.record_list:
         for snapshot in record.snapshots:
             for region in snapshot.regions:
-                region.nr_accesses.add_unset_unit(record.intervals)
                 region.age.add_unset_unit(record.intervals)
 
     outputs = []
@@ -895,9 +894,6 @@ def fmt_damon_records(fmt, damon_records):
                     format_output(
                         fmt.format_snapshot_head, snapshot_formatters,
                         snapshot_fmt_params))
-            for r in snapshot.regions:
-                r.nr_accesses.add_unset_unit(record.intervals)
-                r.age.add_unset_unit(record.intervals)
             for idx, r in enumerate(
                     sorted_regions(snapshot.regions, fmt.sort_regions_by,
                         fmt.sort_regions_dsc, fmt.temperature_weights)):
