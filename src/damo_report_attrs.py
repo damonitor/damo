@@ -683,7 +683,7 @@ class HeatPixel:
             region.end = end
         self.total_heat += temperature_of(region, weights) * (region.size())
 
-def heatmap_pixels_minmax_temps(snapshot, sz_unit, fmt):
+def heatmap_pixels_minmax_temps(snapshot, sz_unit, probe_weights, fmt):
     pixels = []
     min_temperature = None
     max_temperature = None
@@ -746,8 +746,10 @@ def heatmap_str(snapshot, record, damon_ctx, fmt):
     map_length = fmt.snapshot_heatmap_width
     sz_unit = total_sz / map_length
 
+    probe_weights = [p.weight for p in damon_ctx.probes]
+
     pixels, min_temperature, max_temperature = heatmap_pixels_minmax_temps(
-            snapshot, sz_unit, fmt)
+            snapshot, sz_unit, probe_weights, fmt)
     dots = heatmap_dots(
             pixels, min_temperature, max_temperature, fmt, sz_unit, static)
 
