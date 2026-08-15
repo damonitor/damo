@@ -1491,10 +1491,10 @@ def add_fmt_args(parser, hide_help=False):
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--temperature_weights', type=int, metavar='<int>', nargs=3,
-            default=[0, 100, 100],
+            default=[100, 100, 0],
             help=' '.join(
-                ['temperature weights for size, access frequency, and age',
-                 'of each region']) if not hide_help else argparse.SUPPRESS)
+                ['region temperature weights for probe hits weighted sum, age',
+                'and size']) if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--hist_logscale', action='store_true',
                         help='draw histograms in logscale'
                         if not hide_help else argparse.SUPPRESS)
