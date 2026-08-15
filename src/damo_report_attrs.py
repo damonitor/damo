@@ -842,7 +842,8 @@ def temperature_of(region, weights):
     else:
         return -1 * score
 
-def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights):
+def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights,
+                   fmt_fn_params):
     for field in sort_fields:
         dsc = sort_dsc_keys != None and ('all' in sort_dsc_keys or
                                          field in sort_dsc_keys)
@@ -892,8 +893,10 @@ def fmt_damon_records(fmt, damon_records):
                         fmt.format_snapshot_head, snapshot_formatters,
                         snapshot_fmt_params))
             for idx, r in enumerate(
-                    sorted_regions(snapshot.regions, fmt.sort_regions_by,
-                        fmt.sort_regions_dsc, fmt.temperature_weights)):
+                    sorted_regions(
+                        snapshot.regions, fmt.sort_regions_by,
+                        fmt.sort_regions_dsc, fmt.temperature_weights,
+                        snapshot_fmt_params)):
                 params = FormatFnParams(
                         fmt=fmt, damon_records=damon_records, record=record,
                         snapshot=snapshot, region=r, region_idx=idx)
