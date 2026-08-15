@@ -608,7 +608,9 @@ def fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
             idletime_padding, idletime_txt, bar))
     return '\n'.join(lines)
 
-def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
+def percentiles_str(
+        snapshot, record, probe_weights, fmt, df_passed,
+        recency_or_temperature):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
 
@@ -620,10 +622,12 @@ def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
                               df_passed)
 
 def recency_percentiles(snapshot, record, probe_weights, fmt, df_passed):
-    return percentiles_str(snapshot, record, fmt, df_passed, 'recency')
+    return percentiles_str(
+            snapshot, record, probe_weights, fmt, df_passed, 'recency')
 
 def temperature_percentiles(snapshot, record, probe_weights, fmt, df_passed):
-    return percentiles_str(snapshot, record, fmt, df_passed, 'temperature')
+    return percentiles_str(
+            snapshot, record, probe_weights, fmt, df_passed, 'temperature')
 
 def temperature_str(region, raw, fmt):
     temperature = temperature_of(region, fmt.temperature_weights)
