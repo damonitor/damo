@@ -166,7 +166,9 @@ snapshot_formatters = [
                 'heatmap of the snapshot'),
         Formatter(
                 '<filters passed heatmap>',
-                lambda p: df_passed_heatmap_str(p.snapshot, p.record, p.fmt),
+                lambda p: df_passed_heatmap_str(
+                    p.snapshot, p.record,
+                    p.damon_records.damon_ctx_of(p.record), p.fmt),
                 'heatmap of the snapshot for filter-passed regions'),
         Formatter(
                 '<filters passed type>', lambda p:
@@ -752,7 +754,7 @@ def heatmap_str(snapshot, record, fmt):
             _damo_fmt_str.format_sz(sz_unit, raw))
     return '%s\n%s' % (dots, comment)
 
-def df_passed_heatmap_str(snapshot, record, fmt):
+def df_passed_heatmap_str(snapshot, record, damon_ctx, fmt):
     regions = []
     for region in snapshot.regions:
         cp_region = copy.deepcopy(region)
