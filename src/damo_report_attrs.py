@@ -642,7 +642,8 @@ class HeatPixel:
     temperature = None
     is_void = None
 
-    def __init__(self, start, end, regions, temperature_weights):
+    def __init__(self, start, end, regions, temperature_weights,
+                 probe_weights=None):
         self.start = start
         self.end = end
 
@@ -654,10 +655,10 @@ class HeatPixel:
             if end <= region.start:
                 break
             self.is_void = False
-            self.add_temperature(region, temperature_weights)
+            self.add_temperature(region, probe_weights, temperature_weights)
         self.temperature = self.total_heat / (self.end - self.start)
 
-    def add_temperature(self, region, weights):
+    def add_temperature(self, region, probe_weights, weights):
         start = self.start
         end = self.end
         # caller should ensure region intersects with self
@@ -681,7 +682,12 @@ class HeatPixel:
             # <pixel>
             region = copy.deepcopy(region)
             region.end = end
-        self.total_heat += temperature_of(region, weights) * (region.size())
+        if probe_weights is None:
+            self.total_heat += temperature_of(region, weights) * region.size()
+        else:
+            self.total_heat += attrs_temperate_of(
+                    region, probe_weights,
+                    hits_age_sz_weights=weights) * region.size()
 
 def heatmap_pixels_minmax_temps(snapshot, sz_unit, probe_weights, fmt):
     pixels = []
