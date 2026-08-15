@@ -431,7 +431,8 @@ def histogram_str(hist):
         lines.append('%s %s %s' % (xrange_str, y_str, bar))
     return '\n'.join(lines)
 
-def get_distribution(snapshot, fmt, get_metric_fn, aggr_us, get_count_fn):
+def get_distribution(snapshot, fmt, get_metric_fn, probe_weights, aggr_us,
+                     get_count_fn):
     dist = {}
     for region in snapshot.regions:
         metric_val = get_metric_fn(region, fmt, aggr_us)
@@ -480,7 +481,7 @@ def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, probe_weights,
     else:
         get_count_fn = get_sz_region
     dist = get_distribution(
-            snapshot, fmt, get_metric_fn, aggr_us, get_count_fn)
+            snapshot, fmt, get_metric_fn, probe_weights, aggr_us, get_count_fn)
     hist = get_sorted_ranged_historgram(
             dist, fmt, fmt_metric_fn, parse_metric_fn, _damo_fmt_str.format_sz,
             lambda sz_list: sum(sz_list))
