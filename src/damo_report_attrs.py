@@ -149,11 +149,12 @@ snapshot_formatters = [
                           'DAMOS filters (df) passed regions histogram'])),
         Formatter(
                 '<recency percentiles>', lambda p: recency_percentiles(
-                    p.snapshot, p.record, p.fmt, False),
+                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
                 'per-byte idle time distribution in percentiles'),
         Formatter(
                 '<df-passed recency percentiles>', lambda p:
-                recency_percentiles(p.snapshot, p.record, p.fmt, True),
+                recency_percentiles(
+                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, True),
                 ' '.join(['per-df-passed byte idle time',
                           'distribution in percentiles'])),
         Formatter(
@@ -617,7 +618,7 @@ def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
     return fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
                               df_passed)
 
-def recency_percentiles(snapshot, record, fmt, df_passed):
+def recency_percentiles(snapshot, record, probe_weights, fmt, df_passed):
     return percentiles_str(snapshot, record, fmt, df_passed, 'recency')
 
 def temperature_percentiles(snapshot, record, fmt, df_passed):
