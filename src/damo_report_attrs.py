@@ -159,11 +159,12 @@ snapshot_formatters = [
                           'distribution in percentiles'])),
         Formatter(
                 '<temperature percentiles>', lambda p: temperature_percentiles(
-                    p.snapshot, p.record, p.fmt, False),
+                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
                 'per-byte access temperature distribution in percentiles'),
         Formatter(
                 '<df-passed temperature percentiles>', lambda p:
-                temperature_percentiles(p.snapshot, p.record, p.fmt, True),
+                temperature_percentiles(
+                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, True),
                 ' '.join(['per-df-passed byte access temperature',
                           'distribution in percentiles'])),
         Formatter(
@@ -621,7 +622,7 @@ def percentiles_str(snapshot, record, fmt, df_passed, recency_or_temperature):
 def recency_percentiles(snapshot, record, probe_weights, fmt, df_passed):
     return percentiles_str(snapshot, record, fmt, df_passed, 'recency')
 
-def temperature_percentiles(snapshot, record, fmt, df_passed):
+def temperature_percentiles(snapshot, record, probe_weights, fmt, df_passed):
     return percentiles_str(snapshot, record, fmt, df_passed, 'temperature')
 
 def temperature_str(region, raw, fmt):
