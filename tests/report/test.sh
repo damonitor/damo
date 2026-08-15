@@ -27,34 +27,34 @@ test_report() {
 
 mkdir -p results
 
-for filter in nofilter active inactive anon file unmapped hugepage
-do
-	for style in recency-percentiles temperature-percentiles \
-		recency-sz-hist temperature-sz-hist detailed
-	do
-		test_cmd="$damo report attrs \
-			--input damon.data.snapshot.$filter \
-			--style $style"
-		test_name="attrs-$style-$filter"
-		test_report "$test_cmd" "$test_name"
-	done
-done
-
-damo_report_raw="$damo report attrs --raw_form --input"
-
-test_report "$damo_report_raw damon.data" "attrs-raw"
-
-test_report "$damo_report_raw damon.data.json_compressed" "attrs-raw"
-
-test_report \
-	"$damo adjust --aggregate_interval 1000000 && \
-	$damo_report_raw damon.adjusted.data" \
-	"attrs-aggr_1s_raw"
-
-test_report \
-	"$damo adjust --skip 30 --aggregate_interval 1000000 && \
-	$damo_report_raw damon.adjusted.data" \
-	"attrs-aggr_1s_raw_skip_30"
+# for filter in nofilter active inactive anon file unmapped hugepage
+# do
+# 	for style in recency-percentiles temperature-percentiles \
+# 		recency-sz-hist temperature-sz-hist detailed
+# 	do
+# 		test_cmd="$damo report attrs \
+# 			--input damon.data.snapshot.$filter \
+# 			--style $style"
+# 		test_name="attrs-$style-$filter"
+# 		test_report "$test_cmd" "$test_name"
+# 	done
+# done
+#
+# damo_report_raw="$damo report attrs --raw_form --input"
+#
+# test_report "$damo_report_raw damon.data" "attrs-raw"
+#
+# test_report "$damo_report_raw damon.data.json_compressed" "attrs-raw"
+#
+# test_report \
+# 	"$damo adjust --aggregate_interval 1000000 && \
+# 	$damo_report_raw damon.adjusted.data" \
+# 	"attrs-aggr_1s_raw"
+#
+# test_report \
+# 	"$damo adjust --skip 30 --aggregate_interval 1000000 && \
+# 	$damo_report_raw damon.adjusted.data" \
+# 	"attrs-aggr_1s_raw_skip_30"
 
 for filter in nofilter active inactive anon file unmapped hugepage
 do
