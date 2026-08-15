@@ -832,18 +832,6 @@ def attrs_temperate_of(region, probe_weights, hits_age_sz_weights):
         score = -score
     return score
 
-def temperature_of(region, weights):
-    sz_weight, access_rate_weight, age_weight = weights
-    sz_score = region.size() * sz_weight
-    ar_score = region.nr_accesses.percent * access_rate_weight
-    age_score = region.age.usec * age_weight
-    score = sz_score + ar_score + age_score
-
-    if region.nr_accesses.percent > 0:
-        return score
-    else:
-        return -1 * score
-
 def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights,
                    fmt_fn_params):
     for field in sort_fields:
