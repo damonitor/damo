@@ -162,7 +162,10 @@ snapshot_formatters = [
                           'distribution in percentiles'])),
         Formatter(
                 '<heatmap>', lambda p:
-                heatmap_str(p.snapshot, p.record, p.fmt),
+                heatmap_str(
+                    p.snapshot, p.record,
+                    p.damon_records.damon_ctx_of(p.record),
+                    p.fmt),
                 'heatmap of the snapshot'),
         Formatter(
                 '<filters passed heatmap>',
@@ -728,7 +731,7 @@ def heatmap_dots(
             '%d' % temp_level, fmt.snapshot_heatmap_colorset, temp_level))
     return ''.join(dots)
 
-def heatmap_str(snapshot, record, fmt):
+def heatmap_str(snapshot, record, damon_ctx, fmt):
     if len(snapshot.regions) == 0:
         return 'n/a (no region)'
     raw = fmt.raw_number
@@ -765,7 +768,7 @@ def df_passed_heatmap_str(snapshot, record, damon_ctx, fmt):
             _damo_records.DamonSnapshot(
                 snapshot.start_time, snapshot.end_time, regions,
                 total_bytes=None),
-            record, fmt)
+            record, damon_ctx, fmt)
 
 def apply_min_chars(min_chars, field_name, txt):
     # min_chars: [[<field name>, <number of min chars>]...]
