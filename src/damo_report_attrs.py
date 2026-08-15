@@ -537,7 +537,8 @@ def get_percentile_values(snapshot, aggr_us, recency_or_temperature, df_passed,
     else:
         get_metric_fn = get_temperature
     regions = sorted(snapshot.regions,
-                     key=lambda r: get_metric_fn(r, fmt, aggr_us))
+                     key=lambda r: get_metric_fn(
+                         r, fmt, aggr_us, probe_weights))
     if df_passed is True:
         total_sz = sum(r.sz_filter_passed for r in regions)
     else:
@@ -553,12 +554,14 @@ def get_percentile_values(snapshot, aggr_us, recency_or_temperature, df_passed,
             if percentile < percentiles_to_show[0]:
                 break
             percentile_values.append(
-                    [percentiles_to_show[0], get_metric_fn(r, fmt, aggr_us)])
+                    [percentiles_to_show[0], get_metric_fn(
+                        r, fmt, aggr_us, probe_weights)])
             percentiles_to_show = percentiles_to_show[1:]
         if percentile >= 100.0:
             break
     if 100 in percentiles_to_show:
-        percentile_values.append([100, get_metric_fn(r, fmt, aggr_us)])
+        percentile_values.append([100, get_metric_fn(
+            r, fmt, aggr_us, probe_weights)])
     return percentile_values
 
 def fmt_percentile_str_head(recency_or_temperature, df_passed, fmt):
