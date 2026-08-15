@@ -531,7 +531,7 @@ def get_percentiles_to_show(fmt):
     return percentiles_to_show
 
 def get_percentile_values(snapshot, aggr_us, recency_or_temperature, df_passed,
-                          percentiles_to_show, fmt):
+                          percentiles_to_show, probe_weights, fmt):
     if recency_or_temperature == 'recency':
         get_metric_fn = get_idle_time
     else:
@@ -617,7 +617,8 @@ def percentiles_str(
     percentiles_to_show = get_percentiles_to_show(fmt)
     percentile_values = get_percentile_values(
             snapshot, infer_aggr_time_us(snapshot, record),
-            recency_or_temperature, df_passed, percentiles_to_show, fmt)
+            recency_or_temperature, df_passed, percentiles_to_show,
+            probe_weights, fmt)
     return fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
                               df_passed)
 
