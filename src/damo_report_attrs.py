@@ -839,9 +839,6 @@ def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights,
                                          field in sort_dsc_keys)
         if field == 'address':
             regions = sorted(regions, key=lambda r: r.start, reverse=dsc)
-        elif field == 'access_rate':
-            regions = sorted(regions, key=lambda r: r.nr_accesses.percent,
-                    reverse=dsc)
         elif field == 'age':
             regions = sorted(regions, key=lambda r: r.age.usec, reverse=dsc)
         elif field == 'size':
@@ -1501,12 +1498,12 @@ def add_fmt_args(parser, hide_help=False):
             'If >3 argumenta are given, show percentiles of each argument.')
     parser.add_argument(
             '--sort_regions_by', nargs='+',
-            choices=['address', 'access_rate', 'age', 'size', 'temperature'],
+            choices=['address', 'age', 'size', 'temperature'],
             default=['address'],
             help='fields to sort regions by'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--sort_regions_dsc',
-            choices=['address', 'access_rate', 'age', 'size', 'temperature',
+            choices=['address', 'age', 'size', 'temperature',
                      'all'],
             nargs='+',
             help='sort regions in descending order for the given keys'
