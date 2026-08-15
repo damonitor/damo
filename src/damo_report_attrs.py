@@ -437,7 +437,7 @@ def get_distribution(snapshot, fmt, get_metric_fn, probe_weights, aggr_us,
                      get_count_fn):
     dist = {}
     for region in snapshot.regions:
-        metric_val = get_metric_fn(region, fmt, aggr_us)
+        metric_val = get_metric_fn(region, fmt, aggr_us, probe_weights)
         if not metric_val in dist:
             dist[metric_val] = 0
         dist[metric_val] += get_count_fn(region, fmt)
