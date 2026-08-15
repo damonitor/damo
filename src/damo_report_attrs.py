@@ -48,6 +48,10 @@ class FormatFnParams:
         self.region = region
         self.region_idx = region_idx
 
+    def get_probe_weights(self):
+        damon_ctx = self.damon_records.damon_ctx_of(self.record)
+        return [p.weight for p in damon_ctx.probes]
+
 record_formatters = [
         Formatter(
             '<kdamond index>', lambda p: '%s' % p.record.kdamond_idx,
