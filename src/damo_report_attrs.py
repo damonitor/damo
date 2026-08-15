@@ -502,7 +502,7 @@ def temperature_sz_hist_str(
             infer_aggr_time_us(snapshot, record) , _damo_fmt_str.format_nr,
             _damo_fmt_str.text_to_nr)
 
-def get_idle_time(region, fmt, aggr_interval):
+def get_idle_time(region, fmt, aggr_interval, probe_weights=None):
     for hit in region.probe_hits:
         if hit > 0:
             return 0
