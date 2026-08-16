@@ -186,11 +186,6 @@ snapshot_formatters = [
                 filters_passed_bytes(p.snapshot, p.fmt),
                 'bytes of regions that passed DAMOS filters'),
         Formatter(
-                '<positive access samples ratio>',
-                lambda p: positive_access_sample_ratio(
-                    p.snapshot, p.record, p.fmt),
-                'positive access samples ratio'),
-        Formatter(
                 '<estimated memory bandwidth>', lambda p:
                 estimated_mem_bw(p.snapshot, p.record, p.fmt),
                 'estimated memory bandwidth'),
@@ -281,16 +276,6 @@ def filters_passed_bytes(snapshot, fmt):
             return 'N/A'
         bytes += region.sz_filter_passed
     return _damo_fmt_str.format_sz(bytes, fmt.raw_number)
-
-def positive_access_sample_ratio(snapshot, record, fmt):
-    max_samples_per_region = record.intervals.aggr / record.intervals.sample
-    max_samples = max_samples_per_region * len(snapshot.regions)
-    nr_samples = 0
-    for region in snapshot.regions:
-        region.nr_accesses.add_unset_unit(record.intervals)
-        nr_samples += region.nr_accesses.samples
-    return _damo_fmt_str.format_percent(
-            nr_samples * 100 / max_samples, fmt.raw_number)
 
 def intervals_tuning_status(snapshot, record, fmt):
     max_samples_per_region = record.intervals.aggr / record.intervals.sample
