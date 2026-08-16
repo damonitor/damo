@@ -930,16 +930,15 @@ def pr_records_raw_form(records, raw_number):
                         raw_number))
             lines.append('target_id: %s' % record.target_id)
             lines.append('nr_regions: %s' % len(snapshot.regions))
-            lines.append('# %10s %12s  %12s  %11s %5s probe_hits' %
-                    ('start_addr', 'end_addr', 'length', 'nr_accesses', 'age'))
+            lines.append('# %10s %12s  %12s  %5s probe_hits' %
+                    ('start_addr', 'end_addr', 'length', 'age'))
             for r in snapshot.regions:
                 probe_hits = ' '.join(['%d' % h for h in r.probe_hits])
-                lines.append("%012x-%012x (%12s) %11d %5d %s" %
+                lines.append("%012x-%012x (%12s) %5d %s" %
                         (r.start, r.end,
-                            _damo_fmt_str.format_sz(r.size(), raw_number),
-                            r.nr_accesses.samples, r.age.aggr_intervals
-                                if r.age.aggr_intervals != None else -1,
-                         probe_hits))
+                         _damo_fmt_str.format_sz(r.size(), raw_number),
+                         r.age.aggr_intervals if r.age.aggr_intervals != None
+                         else -1, probe_hits))
             lines.append('')
     lines.append('')
     _damo_print.pr_with_pager_if_needed('\n'.join(lines))
