@@ -1521,8 +1521,6 @@ def add_fmt_args(parser, hide_help=False):
             '<record_head|snapshot_head|region|snapshot_tail|record_tail> ' \
             '<format string>'
 
-    # This option also receives json string or file.  But, no real use case is
-    # found.  Keep supporting for now, but hide from the help message.
     parser.add_argument('--format', metavar=fmt_flexible_metavar,
                         action='append', nargs='+',
                         help='customize report content format')
