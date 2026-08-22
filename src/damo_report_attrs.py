@@ -1510,12 +1510,11 @@ def add_fmt_args(parser, hide_help=False):
             'ranges are made with Python range() function. '
             'If >3 argumenta are given, show percentiles of each argument.')
     parser.add_argument(
-            '--sort_regions_by', nargs='+',
+            '--sort_regions_by', nargs='+', metavar='<keyword>',
             default=['address'],
             help='Sort regions by given properties in order.  '
             '"address", "probe_hits_wsum", "age", "size", "temperature" are '
-            'supported keys.  Add "reverse" for descending order sort.'
-            if not hide_help else argparse.SUPPRESS)
+            'supported keys.  Add "reverse" for descending order sort.')
     parser.add_argument(
             '--temperature_weights', type=int, metavar='<int>', nargs=3,
             default=[100, 100, 0],
