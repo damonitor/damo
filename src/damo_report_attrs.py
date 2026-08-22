@@ -823,9 +823,15 @@ def attrs_temperate_of(region, probe_weights, hits_age_sz_weights):
 
 def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights,
                    fmt_fn_params):
-    for field in sort_fields:
-        dsc = sort_dsc_keys != None and ('all' in sort_dsc_keys or
-                                         field in sort_dsc_keys)
+    idx = 0
+    while idx < len(sort_fields):
+        field = sort_fields[idx]
+        idx += 1
+        dsc = False
+        if idx < len(sort_fields) and sort_fields[idx] == 'reverse':
+            dsc = True
+            idx += 1
+
         if field == 'address':
             regions = sorted(regions, key=lambda r: r.start, reverse=dsc)
         elif field == 'probe_hits_wsum':
@@ -1491,10 +1497,10 @@ def add_fmt_args(parser, hide_help=False):
             'If >3 argumenta are given, show percentiles of each argument.')
     parser.add_argument(
             '--sort_regions_by', nargs='+',
-            choices=['address', 'probe_hits_wsum', 'age', 'size',
-                     'temperature'],
             default=['address'],
-            help='fields to sort regions by'
+            help='Sort regions by given properties in order.  '
+            '"address", "probe_hits_wsum", "age", "size", "temperature" are '
+            'supported keys.  Add "reverse" for descending order sort.'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--sort_regions_dsc',
             choices=['address', 'probe_hits_wsum', 'age', 'size',
