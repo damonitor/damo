@@ -823,7 +823,7 @@ def attrs_temperate_of(region, probe_weights, hits_age_sz_weights):
 
 def sorted_regions(regions, sort_fields, temperature_weights, fmt_fn_params):
     if sort_fields is None:
-        sort_fields = ['address']
+        sort_fields = ['temperature']
     idx = 0
     while idx < len(sort_fields):
         field = sort_fields[idx]

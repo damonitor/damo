@@ -3,138 +3,138 @@ heatmap: [48;5;232m[38;5;253m8[0m[48;5;232m[38;5;253m8[0m[48;5;232m[38;5
 No probe
 intervals: sample 5 ms aggr 100 ms (max probe hits 20)
 #   addr         size         age           probe_hits
-0   4.000 GiB    1.366 GiB    3.400 s       
-1   5.366 GiB    8.000 KiB    700 ms        
-2   5.366 GiB    4.000 KiB    0 ns          
-3   5.366 GiB    60.000 KiB   2.200 s       
-4   5.366 GiB    8.000 KiB    100 ms        
-5   5.366 GiB    4.000 KiB    2 s           
-6   5.366 GiB    8.000 KiB    100 ms        
-7   5.366 GiB    8.000 KiB    0 ns          
-8   5.366 GiB    8.000 KiB    0 ns          
-9   5.366 GiB    36.000 KiB   0 ns          
-10  5.366 GiB    8.000 KiB    100 ms        
-11  5.366 GiB    12.000 KiB   1.500 s       
-12  5.366 GiB    8.000 KiB    500 ms        
-13  5.366 GiB    4.000 KiB    600 ms        
-14  5.366 GiB    12.000 KiB   0 ns          
-15  5.366 GiB    8.000 KiB    800 ms        
-16  5.366 GiB    4.000 KiB    0 ns          
-17  5.366 GiB    8.000 KiB    100 ms        
-18  5.366 GiB    4.000 KiB    900 ms        
-19  5.366 GiB    4.000 KiB    100 ms        
-20  5.366 GiB    16.000 KiB   100 ms        
-21  5.366 GiB    4.000 KiB    0 ns          
-22  5.366 GiB    16.000 KiB   400 ms        
-23  5.366 GiB    8.000 KiB    400 ms        
-24  5.366 GiB    8.000 KiB    0 ns          
-25  5.366 GiB    44.000 KiB   2.900 s       
-26  5.366 GiB    64.000 KiB   3 s           
-27  5.366 GiB    4.000 KiB    2.800 s       
-28  5.366 GiB    20.000 KiB   100 ms        
-29  5.366 GiB    20.000 KiB   2.700 s       
-30  5.366 GiB    4.000 KiB    100 ms        
-31  5.366 GiB    20.000 KiB   400 ms        
-32  5.366 GiB    4.000 KiB    0 ns          
-33  5.366 GiB    8.000 KiB    0 ns          
-34  5.366 GiB    8.000 KiB    1.200 s       
-35  5.366 GiB    8.000 KiB    0 ns          
-36  5.366 GiB    20.000 KiB   0 ns          
-37  5.366 GiB    4.000 KiB    0 ns          
-38  5.366 GiB    8.000 KiB    0 ns          
-39  5.366 GiB    16.000 KiB   0 ns          
-40  5.366 GiB    8.000 KiB    0 ns          
-41  5.366 GiB    4.000 KiB    300 ms        
-42  5.366 GiB    28.000 KiB   300 ms        
-43  5.366 GiB    4.000 KiB    0 ns          
-44  5.366 GiB    8.000 KiB    500 ms        
-45  5.366 GiB    4.000 KiB    400 ms        
-46  5.366 GiB    8.000 KiB    100 ms        
-47  5.366 GiB    4.000 KiB    100 ms        
-48  5.366 GiB    28.000 KiB   100 ms        
-49  5.366 GiB    16.000 KiB   100 ms        
-50  5.366 GiB    8.000 KiB    100 ms        
-51  5.366 GiB    4.000 KiB    100 ms        
-52  5.366 GiB    8.000 KiB    900 ms        
-53  5.366 GiB    4.000 KiB    2.800 s       
-54  5.366 GiB    8.000 KiB    500 ms        
-55  5.366 GiB    4.000 KiB    500 ms        
-56  5.366 GiB    16.000 KiB   100 ms        
-57  5.366 GiB    4.000 KiB    400 ms        
-58  5.366 GiB    60.000 KiB   400 ms        
-59  5.366 GiB    8.000 KiB    0 ns          
-60  5.366 GiB    16.000 KiB   500 ms        
-61  5.366 GiB    8.000 KiB    0 ns          
-62  5.366 GiB    4.000 KiB    0 ns          
-63  5.366 GiB    8.000 KiB    0 ns          
-64  5.366 GiB    4.000 KiB    0 ns          
-65  5.366 GiB    4.000 KiB    200 ms        
-66  5.366 GiB    100.000 KiB  400 ms        
-67  5.366 GiB    16.000 KiB   2.100 s       
-68  5.366 GiB    12.000 KiB   200 ms        
-69  5.366 GiB    8.000 KiB    200 ms        
-70  5.366 GiB    36.000 KiB   200 ms        
-71  5.367 GiB    4.000 KiB    0 ns          
-72  5.367 GiB    4.000 KiB    100 ms        
-73  5.367 GiB    124.000 KiB  100 ms        
-74  5.367 GiB    8.000 KiB    0 ns          
-75  5.367 GiB    24.000 KiB   0 ns          
-76  5.367 GiB    16.000 KiB   0 ns          
-77  5.367 GiB    8.000 KiB    0 ns          
-78  5.367 GiB    4.000 KiB    0 ns          
-79  5.367 GiB    12.000 KiB   100 ms        
-80  5.367 GiB    4.000 KiB    0 ns          
-81  5.367 GiB    8.000 KiB    0 ns          
-82  5.367 GiB    4.000 KiB    0 ns          
-83  5.367 GiB    12.000 KiB   0 ns          
-84  5.367 GiB    8.000 KiB    0 ns          
-85  5.367 GiB    8.000 KiB    500 ms        
-86  5.367 GiB    4.000 KiB    700 ms        
-87  5.367 GiB    8.000 KiB    2.700 s       
-88  5.367 GiB    4.000 KiB    0 ns          
-89  5.367 GiB    4.000 KiB    2.100 s       
-90  5.367 GiB    8.000 KiB    300 ms        
-91  5.367 GiB    8.000 KiB    300 ms        
-92  5.367 GiB    8.000 KiB    0 ns          
-93  5.367 GiB    28.000 KiB   1.100 s       
-94  5.367 GiB    264.000 KiB  1.100 s       
-95  5.367 GiB    4.000 KiB    0 ns          
-96  5.367 GiB    4.000 KiB    100 ms        
-97  5.367 GiB    20.000 KiB   100 ms        
-98  5.367 GiB    64.000 KiB   100 ms        
-99  5.367 GiB    48.000 KiB   200 ms        
-100 5.367 GiB    12.000 KiB   200 ms        
-101 5.367 GiB    144.000 KiB  500 ms        
-102 5.367 GiB    4.000 KiB    0 ns          
-103 5.367 GiB    12.000 KiB   0 ns          
-104 5.367 GiB    4.000 KiB    700 ms        
-105 5.367 GiB    8.000 KiB    400 ms        
-106 5.367 GiB    16.000 KiB   1.700 s       
-107 5.367 GiB    8.000 KiB    0 ns          
-108 5.367 GiB    8.000 KiB    2.900 s       
-109 5.367 GiB    8.000 KiB    400 ms        
-110 5.367 GiB    4.000 KiB    400 ms        
-111 5.367 GiB    4.000 KiB    0 ns          
-112 5.367 GiB    8.000 KiB    600 ms        
-113 5.367 GiB    4.000 KiB    100 ms        
-114 5.367 GiB    12.000 KiB   1.300 s       
-115 5.367 GiB    120.000 KiB  1.300 s       
-116 5.368 GiB    84.000 KiB   0 ns          
-117 5.368 GiB    8.000 KiB    200 ms        
-118 5.368 GiB    12.000 KiB   100 ms        
-119 5.368 GiB    4.000 KiB    200 ms        
-120 5.368 GiB    3.765 GiB    1.300 s       
-121 9.133 GiB    2.196 GiB    4 m 46.900 s  
-122 11.329 GiB   5.240 GiB    17 m 58.700 s 
-123 16.569 GiB   5.449 GiB    44 m 33.500 s 
-124 22.018 GiB   5.535 GiB    1 h 10 m 33.200 s 
-125 27.553 GiB   5.596 GiB    1 h 25 m 53.900 s 
-126 33.149 GiB   5.458 GiB    1 h 35 m 15.700 s 
-127 38.606 GiB   5.891 GiB    1 h 39 m 47.300 s 
-128 44.497 GiB   5.873 GiB    1 h 43 m 13.500 s 
-129 50.370 GiB   5.124 GiB    1 h 47 m 11 s 
-130 55.494 GiB   5.792 GiB    1 h 49 m 49.500 s 
-131 61.285 GiB   2.583 GiB    1 h 50 m 48.100 s 
+0   61.285 GiB   2.583 GiB    1 h 50 m 48.100 s 
+1   55.494 GiB   5.792 GiB    1 h 49 m 49.500 s 
+2   50.370 GiB   5.124 GiB    1 h 47 m 11 s 
+3   44.497 GiB   5.873 GiB    1 h 43 m 13.500 s 
+4   38.606 GiB   5.891 GiB    1 h 39 m 47.300 s 
+5   33.149 GiB   5.458 GiB    1 h 35 m 15.700 s 
+6   27.553 GiB   5.596 GiB    1 h 25 m 53.900 s 
+7   22.018 GiB   5.535 GiB    1 h 10 m 33.200 s 
+8   16.569 GiB   5.449 GiB    44 m 33.500 s 
+9   11.329 GiB   5.240 GiB    17 m 58.700 s 
+10  9.133 GiB    2.196 GiB    4 m 46.900 s  
+11  4.000 GiB    1.366 GiB    3.400 s       
+12  5.366 GiB    64.000 KiB   3 s           
+13  5.366 GiB    44.000 KiB   2.900 s       
+14  5.367 GiB    8.000 KiB    2.900 s       
+15  5.366 GiB    4.000 KiB    2.800 s       
+16  5.366 GiB    4.000 KiB    2.800 s       
+17  5.366 GiB    20.000 KiB   2.700 s       
+18  5.367 GiB    8.000 KiB    2.700 s       
+19  5.366 GiB    60.000 KiB   2.200 s       
+20  5.366 GiB    16.000 KiB   2.100 s       
+21  5.367 GiB    4.000 KiB    2.100 s       
+22  5.366 GiB    4.000 KiB    2 s           
+23  5.367 GiB    16.000 KiB   1.700 s       
+24  5.366 GiB    12.000 KiB   1.500 s       
+25  5.367 GiB    12.000 KiB   1.300 s       
+26  5.367 GiB    120.000 KiB  1.300 s       
+27  5.368 GiB    3.765 GiB    1.300 s       
+28  5.366 GiB    8.000 KiB    1.200 s       
+29  5.367 GiB    28.000 KiB   1.100 s       
+30  5.367 GiB    264.000 KiB  1.100 s       
+31  5.366 GiB    4.000 KiB    900 ms        
+32  5.366 GiB    8.000 KiB    900 ms        
+33  5.366 GiB    8.000 KiB    800 ms        
+34  5.366 GiB    8.000 KiB    700 ms        
+35  5.367 GiB    4.000 KiB    700 ms        
+36  5.367 GiB    4.000 KiB    700 ms        
+37  5.366 GiB    4.000 KiB    600 ms        
+38  5.367 GiB    8.000 KiB    600 ms        
+39  5.366 GiB    8.000 KiB    500 ms        
+40  5.366 GiB    8.000 KiB    500 ms        
+41  5.366 GiB    8.000 KiB    500 ms        
+42  5.366 GiB    4.000 KiB    500 ms        
+43  5.366 GiB    16.000 KiB   500 ms        
+44  5.367 GiB    8.000 KiB    500 ms        
+45  5.367 GiB    144.000 KiB  500 ms        
+46  5.366 GiB    16.000 KiB   400 ms        
+47  5.366 GiB    8.000 KiB    400 ms        
+48  5.366 GiB    20.000 KiB   400 ms        
+49  5.366 GiB    4.000 KiB    400 ms        
+50  5.366 GiB    4.000 KiB    400 ms        
+51  5.366 GiB    60.000 KiB   400 ms        
+52  5.366 GiB    100.000 KiB  400 ms        
+53  5.367 GiB    8.000 KiB    400 ms        
+54  5.367 GiB    8.000 KiB    400 ms        
+55  5.367 GiB    4.000 KiB    400 ms        
+56  5.366 GiB    4.000 KiB    300 ms        
+57  5.366 GiB    28.000 KiB   300 ms        
+58  5.367 GiB    8.000 KiB    300 ms        
+59  5.367 GiB    8.000 KiB    300 ms        
+60  5.366 GiB    4.000 KiB    200 ms        
+61  5.366 GiB    12.000 KiB   200 ms        
+62  5.366 GiB    8.000 KiB    200 ms        
+63  5.366 GiB    36.000 KiB   200 ms        
+64  5.367 GiB    48.000 KiB   200 ms        
+65  5.367 GiB    12.000 KiB   200 ms        
+66  5.368 GiB    8.000 KiB    200 ms        
+67  5.368 GiB    4.000 KiB    200 ms        
+68  5.366 GiB    8.000 KiB    100 ms        
+69  5.366 GiB    8.000 KiB    100 ms        
+70  5.366 GiB    8.000 KiB    100 ms        
+71  5.366 GiB    8.000 KiB    100 ms        
+72  5.366 GiB    4.000 KiB    100 ms        
+73  5.366 GiB    16.000 KiB   100 ms        
+74  5.366 GiB    20.000 KiB   100 ms        
+75  5.366 GiB    4.000 KiB    100 ms        
+76  5.366 GiB    8.000 KiB    100 ms        
+77  5.366 GiB    4.000 KiB    100 ms        
+78  5.366 GiB    28.000 KiB   100 ms        
+79  5.366 GiB    16.000 KiB   100 ms        
+80  5.366 GiB    8.000 KiB    100 ms        
+81  5.366 GiB    4.000 KiB    100 ms        
+82  5.366 GiB    16.000 KiB   100 ms        
+83  5.367 GiB    4.000 KiB    100 ms        
+84  5.367 GiB    124.000 KiB  100 ms        
+85  5.367 GiB    12.000 KiB   100 ms        
+86  5.367 GiB    4.000 KiB    100 ms        
+87  5.367 GiB    20.000 KiB   100 ms        
+88  5.367 GiB    64.000 KiB   100 ms        
+89  5.367 GiB    4.000 KiB    100 ms        
+90  5.368 GiB    12.000 KiB   100 ms        
+91  5.366 GiB    4.000 KiB    0 ns          
+92  5.366 GiB    8.000 KiB    0 ns          
+93  5.366 GiB    8.000 KiB    0 ns          
+94  5.366 GiB    36.000 KiB   0 ns          
+95  5.366 GiB    12.000 KiB   0 ns          
+96  5.366 GiB    4.000 KiB    0 ns          
+97  5.366 GiB    4.000 KiB    0 ns          
+98  5.366 GiB    8.000 KiB    0 ns          
+99  5.366 GiB    4.000 KiB    0 ns          
+100 5.366 GiB    8.000 KiB    0 ns          
+101 5.366 GiB    8.000 KiB    0 ns          
+102 5.366 GiB    20.000 KiB   0 ns          
+103 5.366 GiB    4.000 KiB    0 ns          
+104 5.366 GiB    8.000 KiB    0 ns          
+105 5.366 GiB    16.000 KiB   0 ns          
+106 5.366 GiB    8.000 KiB    0 ns          
+107 5.366 GiB    4.000 KiB    0 ns          
+108 5.366 GiB    8.000 KiB    0 ns          
+109 5.366 GiB    8.000 KiB    0 ns          
+110 5.366 GiB    4.000 KiB    0 ns          
+111 5.366 GiB    8.000 KiB    0 ns          
+112 5.366 GiB    4.000 KiB    0 ns          
+113 5.367 GiB    4.000 KiB    0 ns          
+114 5.367 GiB    8.000 KiB    0 ns          
+115 5.367 GiB    24.000 KiB   0 ns          
+116 5.367 GiB    16.000 KiB   0 ns          
+117 5.367 GiB    8.000 KiB    0 ns          
+118 5.367 GiB    4.000 KiB    0 ns          
+119 5.367 GiB    4.000 KiB    0 ns          
+120 5.367 GiB    8.000 KiB    0 ns          
+121 5.367 GiB    4.000 KiB    0 ns          
+122 5.367 GiB    12.000 KiB   0 ns          
+123 5.367 GiB    8.000 KiB    0 ns          
+124 5.367 GiB    4.000 KiB    0 ns          
+125 5.367 GiB    8.000 KiB    0 ns          
+126 5.367 GiB    4.000 KiB    0 ns          
+127 5.367 GiB    4.000 KiB    0 ns          
+128 5.367 GiB    12.000 KiB   0 ns          
+129 5.367 GiB    8.000 KiB    0 ns          
+130 5.367 GiB    4.000 KiB    0 ns          
+131 5.368 GiB    84.000 KiB   0 ns          
 memory bw estimate: 75.464 GiB per second
 total size: 59.868 GiB
 record DAMON intervals: sample 5 ms, aggr 100 ms
