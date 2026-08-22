@@ -1024,6 +1024,12 @@ def warn_unsupported_damon_features_for(args):
                     '--probe_filter of %s' %
                     _damon.damon_filter_type_pgidle_unset,
                     'sysfs/probe_type_pgidle_unset')
+    for probe_filter_args in args.probe_filter:
+        if _damon.damon_filter_type_pgidle_set in args.probe_filter:
+            warn_for(
+                    '--probe_filter of %s' %
+                    _damon.damon_filter_type_pgidle_set,
+                    'sysfs/probe_type_pgidle_set')
 
     # mm.git
 
