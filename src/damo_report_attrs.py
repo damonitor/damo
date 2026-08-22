@@ -822,6 +822,8 @@ def attrs_temperate_of(region, probe_weights, hits_age_sz_weights):
     return score
 
 def sorted_regions(regions, sort_fields, temperature_weights, fmt_fn_params):
+    if sort_fields is None:
+        sort_fields = ['address']
     idx = 0
     while idx < len(sort_fields):
         field = sort_fields[idx]
@@ -1375,6 +1377,8 @@ def parse_input_option(input_args_list):
     return input_files, tried_regions_of_list, None
 
 def validate_regions_sort_option(option):
+    if option is None:
+        return None
     valid_keys = ['address', 'probe_hits_wsum', 'age', 'size', 'temperature']
     for idx, field in enumerate(option):
         if field in valid_keys:
@@ -1511,7 +1515,6 @@ def add_fmt_args(parser, hide_help=False):
             'If >3 argumenta are given, show percentiles of each argument.')
     parser.add_argument(
             '--sort_regions_by', nargs='+', metavar='<keyword>',
-            default=['address'],
             help='Sort regions by given properties in order.  '
             '"address", "probe_hits_wsum", "age", "size", "temperature" are '
             'supported keys.  Add "reverse" for descending order sort.')
