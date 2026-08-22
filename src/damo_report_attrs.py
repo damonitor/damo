@@ -968,7 +968,6 @@ def pr_records(fmt, damo_records, dont_use_pager):
 
 class ReportFormat:
     sort_regions_by = None
-    sort_regions_dsc = None
     temperature_weights = None
     dont_merge_regions = None
 
@@ -996,7 +995,6 @@ class ReportFormat:
     def from_args(cls, args):
         self = cls()
         self.sort_regions_by = args.sort_regions_by
-        self.sort_regions_dsc = args.sort_regions_dsc
         self.temperature_weights = args.temperature_weights
         self.dont_merge_regions = args.dont_merge_regions
         self.hist_logscale = args.hist_logscale
@@ -1517,12 +1515,6 @@ def add_fmt_args(parser, hide_help=False):
             help='Sort regions by given properties in order.  '
             '"address", "probe_hits_wsum", "age", "size", "temperature" are '
             'supported keys.  Add "reverse" for descending order sort.'
-            if not hide_help else argparse.SUPPRESS)
-    parser.add_argument('--sort_regions_dsc',
-            choices=['address', 'probe_hits_wsum', 'age', 'size',
-                     'temperature', 'all'],
-            nargs='+',
-            help='sort regions in descending order for the given keys'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--temperature_weights', type=int, metavar='<int>', nargs=3,
