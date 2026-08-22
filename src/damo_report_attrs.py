@@ -821,8 +821,7 @@ def attrs_temperate_of(region, probe_weights, hits_age_sz_weights):
         score = -score
     return score
 
-def sorted_regions(regions, sort_fields, sort_dsc_keys, temperature_weights,
-                   fmt_fn_params):
+def sorted_regions(regions, sort_fields, temperature_weights, fmt_fn_params):
     idx = 0
     while idx < len(sort_fields):
         field = sort_fields[idx]
@@ -884,8 +883,7 @@ def fmt_damon_records(fmt, damon_records):
             for idx, r in enumerate(
                     sorted_regions(
                         snapshot.regions, fmt.sort_regions_by,
-                        fmt.sort_regions_dsc, fmt.temperature_weights,
-                        snapshot_fmt_params)):
+                        fmt.temperature_weights, snapshot_fmt_params)):
                 params = FormatFnParams(
                         fmt=fmt, damon_records=damon_records, record=record,
                         snapshot=snapshot, region=r, region_idx=idx)
