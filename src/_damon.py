@@ -52,11 +52,13 @@ class DamonPrep:
 damon_filter_type_anon = 'anon'
 damon_filter_type_memcg = 'memcg'
 damon_filter_type_pgidle_unset = 'pgidle_unset'
+damon_filter_type_pgidle_set = 'pgidle_set'
 
 damon_filter_types = [
         damon_filter_type_anon,
         damon_filter_type_memcg,
         damon_filter_type_pgidle_unset,
+        damon_filter_type_pgidle_set,
         ]
 
 class DamonFilter:
