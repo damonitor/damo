@@ -1541,6 +1541,11 @@ def add_fmt_args(parser, hide_help=False):
                         action='append', nargs='+',
                         help='customize report content format')
 
+    parser.add_argument('--region_sz', metavar='<field>', nargs='+',
+                        action='append',
+                        help='adjust region size.  '
+                        '<df_passed|probe_hits_rate> [probe idx]')
+
     # for snapshot heatmap
     parser.add_argument(
             '--snapshot_heatmap_width', metavar='<number>', default=80,
