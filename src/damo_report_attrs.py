@@ -1378,6 +1378,19 @@ def parse_input_option(input_args_list):
             return None, None, 'unsupported input (%s)' % input_args
     return input_files, tried_regions_of_list, None
 
+def validate_regions_sort_option(option):
+    valid_keys = ['address', 'probe_hits_wsum', 'age', 'size', 'temperature']
+    for idx, field in enumerate(option):
+        if field in valid_keys:
+            continue
+        if field == 'reverse':
+            if idx > 0 and option[idx - 1] in valid_keys:
+                continue
+            return '"reverse" at unexpected position (%d-th)' % idx
+        else:
+            return 'unsupported input (%s)' % field
+    return None
+
 def read_and_show(args):
     input_files, tried_regions_of_list, err = parse_input_option(args.input)
     if err is not None:
@@ -1414,6 +1427,11 @@ def read_and_show(args):
         repeat_count = _damo_fmt_str.text_to_nr(args.repeat[1])
     else:
         print('--repeat receives only zero or two arguments')
+        exit(1)
+
+    err = validate_regions_sort_option(args.sort_regions_by)
+    if err is not None:
+        print('invalid --sort_regions_by (%s)' % err)
         exit(1)
 
     signal.signal(signal.SIGINT, sighandler)
