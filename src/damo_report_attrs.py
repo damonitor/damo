@@ -1335,32 +1335,72 @@ def max_probe_hits_of(damon_record, kdamonds):
     intervals = damon_ctx.intervals
     return intervals.aggr / intervals.sample
 
-def adjust_region_sz_one(region, adjust_rules, max_probe_hits):
-    for rule_set in adjust_rules:
-        '''
-        rule_set: <df_passed|probe_hits_rate> [probe idx]
-        '''
-        if not len(rule_set) in [1, 2]:
-            return 'wrong number of fields (%s)' % len(rule_set)
-        if rule_set[0] == 'df_passed':
-            if region.sz_filter_passed is None:
+def adjust_region_sz(region, rule_set, max_probe_hits):
+    if not len(rule_set) in [1, 2]:
+        return 'wrong number of size adjustment fields (%s)' % len(rule_set)
+    if rule_set[0] == 'df_passed':
+        if region.sz_filter_passed is None:
                 return 'No DAMOS filter?'
-            new_sz = region.sz_filter_passed
-        elif rule_set[0] == 'probe_hits_rate':
-            if not len(rule_set) == 2:
-                return 'no probe idx'
-            probe_idx = rule_set[1]
-            if not probe_idx.isnumeric():
-                return 'probe idx is not number'
-            probe_idx = int(probe_idx)
-            if probe_idx >= len(region.probe_hits):
-                return 'probe idx >= %d' % len(region.probe_hits)
-            hit_rate = region.probe_hits[probe_idx] / max_probe_hits
-            new_sz = region.size() * hit_rate
-        region.end = region.start + new_sz
+        new_sz = region.sz_filter_passed
+    elif rule_set[0] == 'probe_hits_rate':
+        if not len(rule_set) == 2:
+            return 'no probe idx'
+        probe_idx = rule_set[1]
+        if not probe_idx.isnumeric():
+            return 'probe idx is not number'
+        probe_idx = int(probe_idx)
+        if probe_idx >= len(region.probe_hits):
+            return 'probe idx >= %d' % len(region.probe_hits)
+        hit_rate = region.probe_hits[probe_idx] / max_probe_hits
+        new_sz = region.size() * hit_rate
+    region.end = region.start + new_sz
     return None
 
-def adjust_region_sz(damo_records, adjust_rules):
+def adjust_region_probe_hits(region, rule_set, max_probe_hits):
+    # rule_set should be
+    # <probe idx> <df_passed|probe_hits_rate> [probe idx]
+    if not len(rule_set) in [2, 3]:
+        return 'wrong number of probe hits adjustment fields (%s)' % len(
+                rule_set)
+    dst_probe_idx = rule_set[0]
+    if not dst_probe_idx.isnumeric():
+        return 'dst probe idx is not number'
+    dst_probe_idx = int(dst_probe_idx)
+    if dst_probe_idx >= len(region.probe_hits):
+        return 'dst probe idx >= %d' % len(region.probe_hits)
+    if rule_set[1] == 'df_passed':
+        if region.sz_filter_passed is None:
+            return 'No DAMOS filter?'
+        rate = region.sz_filter_passed / region.size()
+    elif rule_set[1] == 'probe_hits_rate':
+        if not len(rule_set) == 3:
+            return 'no src probe idx'
+        src_probe_idx = rule_set[2]
+        if not src_probe_idx.isnumeric():
+            return 'src probe idx is not number'
+        src_probe_idx = int(src_probe_idx)
+        if src_probe_idx >= len(region.probe_hits):
+            return 'src probe idx >= %d' % len(region.probe_hits)
+        rate = region.probe_hits[src_probe_idx] / max_probe_hits
+    region.probe_hits[dst_probe_idx] *= rate
+    return None
+
+def adjust_region_one(region, adjust_rules, max_probe_hits):
+    for rule_set in adjust_rules:
+        '''
+        rule_set:
+        <size|probe_hits> [probe idx] <df_passed|probe_hits_rate> [probe idx]
+        '''
+        if not len(rule_set) in [2, 3, 4]:
+            return 'wrong number of fields (%s)' % len(rule_set)
+        if rule_set[0] == 'size':
+            return adjust_region_sz(region, rule_set[1:], max_probe_hits)
+        elif rule_set[0] == 'probe_hits':
+            return adjust_region_probe_hits(
+                    region, rule_set[1:], max_probe_hits)
+    return None
+
+def adjust_region(damo_records, adjust_rules):
     '''Return error'''
     if adjust_rules is None:
         return None
@@ -1370,7 +1410,7 @@ def adjust_region_sz(damo_records, adjust_rules):
             max_probe_hits = max_probe_hits_of(damon_record, kdamonds)
             for snapshot in damon_record.snapshots:
                 for region in snapshot.regions:
-                    err = adjust_region_sz_one(
+                    err = adjust_region_one(
                             region, adjust_rules, max_probe_hits)
                     if err is not None:
                         return err
@@ -1446,10 +1486,10 @@ def read_and_show(args):
         if zero_damon_records and len(input_files) > 0 and repeat_count == 1:
             print('No record in %s' % input_files)
 
-        if args.region_sz:
-            err = adjust_region_sz(damo_records, args.region_sz)
+        if args.adjust_region:
+            err = adjust_region(damo_records, args.adjust_region)
             if err is not None:
-                print('--region_sz fail (%s)' % err)
+                print('--adjust_region fail (%s)' % err)
                 exit(1)
 
         if args.exec:
@@ -1532,9 +1572,10 @@ def add_fmt_args(parser, hide_help=False):
                         action='append', nargs='+',
                         help='customize report content format')
 
-    parser.add_argument('--region_sz', metavar='<field>', nargs='+',
+    parser.add_argument('--adjust_region', metavar='<field>', nargs='+',
                         action='append',
-                        help='adjust region size.  '
+                        help='adjust region properties.  '
+                        '<size|probe_hits> [probe idx] '
                         '<df_passed|probe_hits_rate> [probe idx]')
 
     # for snapshot heatmap
