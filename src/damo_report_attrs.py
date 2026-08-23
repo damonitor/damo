@@ -525,8 +525,7 @@ def fmt_percentile_str_head(recency_or_temperature, fmt):
         legend_str = '<temperature (weights: %s)>' % fmt.temperature_weights
     return '<percentile> %s' % legend_str
 
-def fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
-                       df_passed):
+def fmt_percentile_str(percentile_values, fmt, recency_or_temperature):
     lines = [fmt_percentile_str_head(recency_or_temperature, fmt)]
     if recency_or_temperature == 'recency':
         fmt_fn = _damo_fmt_str.format_time_us
@@ -569,8 +568,7 @@ def percentiles_str(
     percentile_values = get_percentile_values(
             snapshot, infer_aggr_time_us(snapshot, record),
             recency_or_temperature, percentiles_to_show, probe_weights, fmt)
-    return fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
-                              df_passed)
+    return fmt_percentile_str(percentile_values, fmt, recency_or_temperature)
 
 def recency_percentiles(snapshot, record, probe_weights, fmt, df_passed):
     return percentiles_str(
