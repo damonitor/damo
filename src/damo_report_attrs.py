@@ -150,11 +150,6 @@ snapshot_formatters = [
                     p.snapshot, p.record, p.get_probe_weights(), p.fmt),
                 'heatmap of the snapshot'),
         Formatter(
-                '<filters passed heatmap>',
-                lambda p: df_passed_heatmap_str(
-                    p.snapshot, p.record, p.get_probe_weights(), p.fmt),
-                'heatmap of the snapshot for filter-passed regions'),
-        Formatter(
                 '<filters passed type>', lambda p:
                 filters_pass_type_of(p.record),
                 'type of <filters passed bytes> memory'),
@@ -722,19 +717,6 @@ def heatmap_str(snapshot, record, probe_weights, fmt):
             _damo_fmt_str.format_nr(max_temperature, raw),
             _damo_fmt_str.format_sz(sz_unit, raw))
     return '%s\n%s' % (dots, comment)
-
-def df_passed_heatmap_str(snapshot, record, probe_weights, fmt):
-    regions = []
-    for region in snapshot.regions:
-        cp_region = copy.deepcopy(region)
-        if region.sz_filter_passed == 0:
-            continue
-        regions.append(cp_region)
-    return heatmap_str(
-            _damo_records.DamonSnapshot(
-                snapshot.start_time, snapshot.end_time, regions,
-                total_bytes=None),
-            record, probe_weights, fmt)
 
 def apply_min_chars(min_chars, field_name, txt):
     # min_chars: [[<field name>, <number of min chars>]...]
