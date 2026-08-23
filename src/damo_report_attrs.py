@@ -487,7 +487,7 @@ def get_percentiles_to_show(fmt):
             percentiles_to_show = sorted(percentiles_range)
     return percentiles_to_show
 
-def get_percentile_values(snapshot, aggr_us, recency_or_temperature, df_passed,
+def get_percentile_values(snapshot, aggr_us, recency_or_temperature,
                           percentiles_to_show, probe_weights, fmt):
     if recency_or_temperature == 'recency':
         get_metric_fn = get_idle_time
@@ -496,17 +496,11 @@ def get_percentile_values(snapshot, aggr_us, recency_or_temperature, df_passed,
     regions = sorted(snapshot.regions,
                      key=lambda r: get_metric_fn(
                          r, fmt, aggr_us, probe_weights))
-    if df_passed is True:
-        total_sz = sum(r.sz_filter_passed for r in regions)
-    else:
-        total_sz = sum(r.size() for r in regions)
+    total_sz = sum(r.size() for r in regions)
     percentile_values = []
     percentile = 0
     for r in regions:
-        if df_passed is True:
-            percentile += r.sz_filter_passed * 100 / total_sz
-        else:
-            percentile += r.size() * 100 / total_sz
+        percentile += r.size() * 100 / total_sz
         while len(percentiles_to_show) > 0:
             if percentile < percentiles_to_show[0]:
                 break
@@ -577,8 +571,7 @@ def percentiles_str(
     percentiles_to_show = get_percentiles_to_show(fmt)
     percentile_values = get_percentile_values(
             snapshot, infer_aggr_time_us(snapshot, record),
-            recency_or_temperature, df_passed, percentiles_to_show,
-            probe_weights, fmt)
+            recency_or_temperature, percentiles_to_show, probe_weights, fmt)
     return fmt_percentile_str(percentile_values, fmt, recency_or_temperature,
                               df_passed)
 
