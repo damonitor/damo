@@ -1419,7 +1419,7 @@ def adjust_region_sz_one(region, adjust_rules, max_probe_hits):
                 if region.sz_filter_passed is None:
                     return 'No DAMOS filter?'
                 new_sz = region.sz_filter_passed
-            region.end = region.start = new_sz
+            region.end = region.start + new_sz
     return None
 
 def adjust_region_sz(damo_records, adjust_rules):
