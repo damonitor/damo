@@ -136,11 +136,6 @@ snapshot_formatters = [
                 '<recency-sz histogram>', lambda p: recency_hist_str(
                     p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
                 'idle time to total size of the regions histogram'),
-            Formatter(
-                '<recency-df-passed-sz histogram>', lambda p: recency_hist_str(
-                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, True),
-                ' '.join(['idle time to total size of',
-                          'DAMOS filters (df) passed regions histogram'])),
         Formatter(
                 '<recency percentiles>', lambda p: recency_percentiles(
                     p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
