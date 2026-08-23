@@ -138,7 +138,7 @@ snapshot_formatters = [
             'idle time to total size of the regions histogram'),
         Formatter(
             '<recency percentiles>', lambda p: recency_percentiles(
-                p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
+                p.snapshot, p.record, p.get_probe_weights(), p.fmt),
             'per-byte idle time distribution in percentiles'),
         Formatter(
                 '<temperature percentiles>', lambda p: temperature_percentiles(
@@ -569,7 +569,7 @@ def percentiles_str(
             recency_or_temperature, percentiles_to_show, probe_weights, fmt)
     return fmt_percentile_str(percentile_values, fmt, recency_or_temperature)
 
-def recency_percentiles(snapshot, record, probe_weights, fmt, df_passed):
+def recency_percentiles(snapshot, record, probe_weights, fmt):
     return percentiles_str(
             snapshot, record, probe_weights, fmt, 'recency')
 
