@@ -437,14 +437,11 @@ def get_sz_region(region, fmt):
 def get_df_passed_sz_region(region, fmt):
     return region.sz_filter_passed
 
-def sz_hist_str(snapshot, fmt, df_passed_sz, get_metric_fn, probe_weights,
+def sz_hist_str(snapshot, fmt, get_metric_fn, probe_weights,
                 aggr_us, fmt_metric_fn, parse_metric_fn):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
-    if df_passed_sz is True:
-        get_count_fn = get_df_passed_sz_region
-    else:
-        get_count_fn = get_sz_region
+    get_count_fn = get_sz_region
     dist = get_distribution(
             snapshot, fmt, get_metric_fn, probe_weights, aggr_us, get_count_fn)
     hist = get_sorted_ranged_historgram(
@@ -461,7 +458,7 @@ def get_temperature(region, fmt, aggr_us, probe_weights):
 def temperature_sz_hist_str(
         snapshot, record, probe_weights, fmt, df_passed_sz):
     return sz_hist_str(
-            snapshot, fmt, df_passed_sz, get_temperature, probe_weights,
+            snapshot, fmt, get_temperature, probe_weights,
             infer_aggr_time_us(snapshot, record) , _damo_fmt_str.format_nr,
             _damo_fmt_str.text_to_nr)
 
@@ -476,7 +473,7 @@ def recency_hist_str(snapshot, record, probe_weights, fmt, df_passed_sz):
         return 'no region in snapshot'
 
     return sz_hist_str(
-            snapshot, fmt, df_passed_sz, get_idle_time, probe_weights,
+            snapshot, fmt, get_idle_time, probe_weights,
             infer_aggr_time_us(snapshot, record), _damo_fmt_str.format_time_us,
             _damo_fmt_str.text_to_us)
 
