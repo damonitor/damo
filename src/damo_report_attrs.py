@@ -1139,7 +1139,6 @@ def set_fmt_snapshot_head_default(fmt, records, args, ops_filters_installed):
     lines.append('intervals: <snapshot intervals>')
     if ops_filters_installed:
         lines.append('# damos filters (df): <filters passed type>')
-        lines.append('df-pass: <filters passed heatmap>')
 
     if fmt.format_region is None:
         lines.append(region_legend_line(
