@@ -130,7 +130,7 @@ snapshot_formatters = [
             'the number of regions in the snapshot'),
         Formatter(
             '<temperature-sz histogram>', lambda p: temperature_sz_hist_str(
-                p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
+                p.snapshot, p.record, p.get_probe_weights(), p.fmt),
             'temperature to total size of the regions histogram'),
         Formatter(
             '<recency-sz histogram>', lambda p: recency_hist_str(
@@ -455,8 +455,7 @@ def get_temperature(region, fmt, aggr_us, probe_weights):
     weights = [fmt.temperature_weights[0], fmt.temperature_weights[1], 0]
     return attrs_temperate_of(region, probe_weights, weights)
 
-def temperature_sz_hist_str(
-        snapshot, record, probe_weights, fmt, df_passed_sz):
+def temperature_sz_hist_str(snapshot, record, probe_weights, fmt):
     return sz_hist_str(
             snapshot, fmt, get_temperature, probe_weights,
             infer_aggr_time_us(snapshot, record) , _damo_fmt_str.format_nr,
