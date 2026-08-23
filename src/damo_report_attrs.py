@@ -132,12 +132,6 @@ snapshot_formatters = [
             '<temperature-sz histogram>', lambda p: temperature_sz_hist_str(
                 p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
             'temperature to total size of the regions histogram'),
-        Formatter(
-            '<temperature-df-passed-sz histogram>', lambda p:
-            temperature_sz_hist_str(
-                p.snapshot, p.record, p.get_probe_weights(), p.fmt, True),
-            ' '.join(['temperature to total size of DAMOS filters (df)',
-                      'passed regions histogram'])),
             Formatter(
                 '<recency-sz histogram>', lambda p: recency_hist_str(
                     p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
