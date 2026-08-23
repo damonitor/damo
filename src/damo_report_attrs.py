@@ -1337,27 +1337,27 @@ def max_probe_hits_of(damon_record, kdamonds):
 
 def adjust_region_sz_one(region, adjust_rules, max_probe_hits):
     for rule_set in adjust_rules:
-        idx = 0
-        while idx < len(rule_set):
-            field = rule_set[idx]
-            idx += 1
-            if field == 'probe_hits_rate':
-                if idx == len(rule_set) - 1:
-                    return 'no probe idx'
-                idx += 1
-                probe_idx = rule_set[idx + 1]
-                if not probe_idx.isnumeric():
-                    return 'probe idx is not number'
-                probe_idx = int(probe_idx)
-                if probe_idx >= len(region.probe_hits):
-                    return 'probe idx >= %d' % len(region.probe_hits)
-                hit_rate = region.probe_hits[probe_idx] / max_probe_hits
-                new_sz = region.size() * hit_rate
-            elif field == 'df_passed':
-                if region.sz_filter_passed is None:
-                    return 'No DAMOS filter?'
-                new_sz = region.sz_filter_passed
-            region.end = region.start + new_sz
+        '''
+        rule_set: <df_passed|probe_hits_rate> [probe idx]
+        '''
+        if not len(rule_set) in [1, 2]:
+            return 'wrong number of fields (%s)' % len(rule_set)
+        if rule_set[0] == 'df_passed':
+            if region.sz_filter_passed is None:
+                return 'No DAMOS filter?'
+            new_sz = region.sz_filter_passed
+        elif rule_set[0] == 'probe_hits_rate':
+            if not len(rule_set) == 2:
+                return 'no probe idx'
+            probe_idx = rule_set[1]
+            if not probe_idx.isnumeric():
+                return 'probe idx is not number'
+            probe_idx = int(probe_idx)
+            if probe_idx >= len(region.probe_hits):
+                return 'probe idx >= %d' % len(region.probe_hits)
+            hit_rate = region.probe_hits[probe_idx] / max_probe_hits
+            new_sz = region.size() * hit_rate
+        region.end = region.start + new_sz
     return None
 
 def adjust_region_sz(damo_records, adjust_rules):
