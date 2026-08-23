@@ -2,9 +2,13 @@ This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
 v3.3.8
-- damo report attrs: Introduce --region_sz.
-  - Allows per-cgroup formatting.
-- damo report attrs: Merge --sort_regions_dsc into --sort_regions.
+- damo report attrs updates
+  - Introduce --adjust_region
+    - Allows DAMOS filter/probe hits based size/probe_hits adjustment
+    - Enables per-cgroup/attributes formatting.
+  - Drop DAMOS filter passed pattern formats.
+  - Merge --sort_regions_dsc into --sort_regions.
+  - Sort regions with temperature by default.
 - Support pgidle_set probe filter type.
 
 v3.3.7
