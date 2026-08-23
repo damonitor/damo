@@ -1029,18 +1029,12 @@ def set_formats_hist_style(args, fmt, records):
     if args.style == 'temperature-sz-hist':
         legend = '<temperature>'
         hist_keyword = '<temperature-sz histogram>'
-        filter_passed_hist_keyword = '<temperature-df-passed-sz histogram>'
     else:
         # args.style == 'recency-sz-hist':
         legend = '<idle time (us)>'
         hist_keyword = '<recency-sz histogram>'
-        filter_passed_hist_keyword = '<recency-df-passed-sz histogram>'
 
     snapshot_head_content = []
-    if has_ops_filters(records):
-        snapshot_head_content += [
-                '# damos filters (df): <filters passed type>',
-                '%s <df-passed size>' % legend, filter_passed_hist_keyword, '']
     snapshot_head_content += ['%s <total size>' % legend, hist_keyword]
     fmt.format_snapshot_head = '\n'.join(snapshot_head_content)
     fmt.format_region = ''
