@@ -1394,7 +1394,7 @@ def validate_regions_sort_option(option):
 def max_probe_hits_of(damon_record, kdamonds):
     damon_ctx = kdamonds[
             damon_record.kdamond_idx].contexts[damon_record.context_idx]
-    intervals = damon_ctx.intervals.aggr
+    intervals = damon_ctx.intervals
     return intervals.aggr / intervals.sample
 
 def adjust_region_sz_one(region, adjust_rules, max_probe_hits):
