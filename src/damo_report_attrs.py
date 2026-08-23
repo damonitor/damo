@@ -141,21 +141,9 @@ snapshot_formatters = [
                     p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
                 'per-byte idle time distribution in percentiles'),
         Formatter(
-                '<df-passed recency percentiles>', lambda p:
-                recency_percentiles(
-                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, True),
-                ' '.join(['per-df-passed byte idle time',
-                          'distribution in percentiles'])),
-        Formatter(
                 '<temperature percentiles>', lambda p: temperature_percentiles(
                     p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
                 'per-byte access temperature distribution in percentiles'),
-        Formatter(
-                '<df-passed temperature percentiles>', lambda p:
-                temperature_percentiles(
-                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, True),
-                ' '.join(['per-df-passed byte access temperature',
-                          'distribution in percentiles'])),
         Formatter(
                 '<heatmap>', lambda p:
                 heatmap_str(
