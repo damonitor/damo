@@ -142,7 +142,7 @@ snapshot_formatters = [
             'per-byte idle time distribution in percentiles'),
         Formatter(
                 '<temperature percentiles>', lambda p: temperature_percentiles(
-                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
+                    p.snapshot, p.record, p.get_probe_weights(), p.fmt),
                 'per-byte access temperature distribution in percentiles'),
         Formatter(
                 '<heatmap>', lambda p:
@@ -573,7 +573,7 @@ def recency_percentiles(snapshot, record, probe_weights, fmt):
     return percentiles_str(
             snapshot, record, probe_weights, fmt, 'recency')
 
-def temperature_percentiles(snapshot, record, probe_weights, fmt, df_passed):
+def temperature_percentiles(snapshot, record, probe_weights, fmt):
     return percentiles_str(
             snapshot, record, probe_weights, fmt, 'temperature')
 
