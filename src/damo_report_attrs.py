@@ -1018,13 +1018,6 @@ class ReportFormat:
                 self.format_region == '' and
                 self.format_snapshot_tail == '<total bytes>')
 
-def has_ops_filters(records):
-    for record in records:
-        for scheme_filter in record.scheme_filters:
-            if scheme_filter.handled_by_ops():
-                return True
-    return False
-
 def set_formats_hist_style(args, fmt, records):
     if args.style == 'temperature-sz-hist':
         legend = '<temperature>'
