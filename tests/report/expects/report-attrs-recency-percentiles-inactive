@@ -1,14 +1,3 @@
-# damos filters (df): reject active
-# df-passed recency percentiles
-<df-passed percentile> <idle time>
-  0       3 s  |                    |
-  1       3 s  |                    |
- 25       6 s  |                    |
- 50      24 s  |*                   |
- 75      24 s  |*                   |
- 99      39 s  |**                  |
-100  5 m 42 s  |********************|
-
 # total recency percentiles
 <percentile> <idle time>
   0       3 s  |                    |

@@ -1050,15 +1050,6 @@ def set_formats_percentiles(args, fmt, records, recency_or_temperature):
     if has_multiple_snapshots(records):
         snapshot_head_content.append(
                 'snapshot time: [<start time>, <end time>] (<duration>)')
-    if has_ops_filters(records):
-        snapshot_head_content += [
-                '# damos filters (df): <filters passed type>',
-                '# df-passed %s percentiles' % recency_or_temperature]
-        if recency_or_temperature == 'recency':
-            snapshot_head_content.append('<df-passed recency percentiles>')
-        else:
-            snapshot_head_content.append('<df-passed temperature percentiles>')
-        snapshot_head_content.append('')
     if recency_or_temperature == 'recency':
         snapshot_head_content += [
                 '# total recency percentiles',
