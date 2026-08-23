@@ -132,14 +132,14 @@ snapshot_formatters = [
             '<temperature-sz histogram>', lambda p: temperature_sz_hist_str(
                 p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
             'temperature to total size of the regions histogram'),
-            Formatter(
-                '<recency-sz histogram>', lambda p: recency_hist_str(
-                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
-                'idle time to total size of the regions histogram'),
         Formatter(
-                '<recency percentiles>', lambda p: recency_percentiles(
-                    p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
-                'per-byte idle time distribution in percentiles'),
+            '<recency-sz histogram>', lambda p: recency_hist_str(
+                p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
+            'idle time to total size of the regions histogram'),
+        Formatter(
+            '<recency percentiles>', lambda p: recency_percentiles(
+                p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
+            'per-byte idle time distribution in percentiles'),
         Formatter(
                 '<temperature percentiles>', lambda p: temperature_percentiles(
                     p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
