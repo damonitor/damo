@@ -134,7 +134,7 @@ snapshot_formatters = [
             'temperature to total size of the regions histogram'),
         Formatter(
             '<recency-sz histogram>', lambda p: recency_hist_str(
-                p.snapshot, p.record, p.get_probe_weights(), p.fmt, False),
+                p.snapshot, p.record, p.get_probe_weights(), p.fmt),
             'idle time to total size of the regions histogram'),
         Formatter(
             '<recency percentiles>', lambda p: recency_percentiles(
@@ -467,7 +467,7 @@ def get_idle_time(region, fmt, aggr_interval, probe_weights=None):
             return 0
     return region.age.usec + aggr_interval
 
-def recency_hist_str(snapshot, record, probe_weights, fmt, df_passed_sz):
+def recency_hist_str(snapshot, record, probe_weights, fmt):
     if len(snapshot.regions) == 0:
         return 'no region in snapshot'
 
