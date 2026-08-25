@@ -6,9 +6,9 @@ v3.3.8
   - Introduce --adjust_region
     - Allows DAMOS filter/probe hits based size/probe_hits adjustment
     - Enables per-cgroup/attributes formatting.
-  - Drop DAMOS filter passed pattern formats.
-  - Merge --sort_regions_dsc into --sort_regions.
   - Sort regions with temperature by default.
+  - Merge --sort_regions_dsc into --sort_regions.
+  - Drop DAMOS filter passed pattern formats.
 - Support pgidle_set probe filter type.
 
 v3.3.7
