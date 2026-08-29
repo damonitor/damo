@@ -154,6 +154,13 @@ def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
         hugepage_size = [optional_words[0], optional_words[1]]
         return _damon.DamosFilter(ftype, fmatching, allow=allow,
                                   hugepage_size=hugepage_size), None, 2
+    elif ftype == 'probe_hits_wsum':
+        if len(optional_words) < 2:
+            return None, 'no range for probe hits wsum is given', 0
+        probe_hits_wsum_range = [optional_words[0], optional_words[1]]
+        return _damon.DamosFilter(
+                ftype, fmatching, allow=allow,
+                probe_hits_wsum_range=probe_hits_wsum_range), None, 2
 
     return None, 'unsupported filter type', 0
 
