@@ -383,6 +383,9 @@ features_list = [
         DamonFeature(name='sysfs/avail_damos_filter_types',
                      upstream_status='hacking on damon/next',
                      upstreamed_version='none'),
+        DamonFeature(name='sysfs/damos_filter_probe_hits_wsum',
+                     upstream_status='hacking on damon/next',
+                     upstreamed_version='none'),
 
         # planned to not be upstreamed.
         DamonFeature(name='sysfs/damon_sample_control',
