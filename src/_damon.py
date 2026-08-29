@@ -1192,11 +1192,12 @@ class DamosFilter:
     address_range = None    # DamonRegion
     hugepage_size = None    # list of min/max hugepage size in bytes
     damon_target_idx = None
+    probe_hits_wsum_range = None
     scheme = None
 
     def __init__(self, filter_type, matching, allow=False,
                  memcg_path=None, address_range=None, damon_target_idx=None,
-                 hugepage_size=None):
+                 hugepage_size=None, probe_hits_wsum_range=None):
         self.filter_type = filter_type
         self.matching = _damo_fmt_str.text_to_bool(matching)
         self.memcg_path = memcg_path
@@ -1209,6 +1210,16 @@ class DamosFilter:
                     _damo_fmt_str.text_to_bytes(x) for x in hugepage_size]
         if damon_target_idx != None:
             self.damon_target_idx = _damo_fmt_str.text_to_nr(damon_target_idx)
+        if probe_hits_wsum_range is not None:
+            if filter_type != 'probe_hits_wsum':
+                raise Exception(
+                        'probe hits wsum range for !probe_hits_wsum filter')
+            if (not type(probe_hits_wsum_range) is list and
+                len(probe_hits_wsum_range) != 2):
+                raise Exception(
+                        'wrong probe_hits_wsum_range for DamosFilter()')
+            self.probe_hits_wsum_range = [
+                    _damo_fmt_str.text_to_nr(x) for x in probe_hits_wsum_range]
 
     def to_str(self, raw):
         words = []
@@ -1234,6 +1245,14 @@ class DamosFilter:
                         '[%s, %s]' %
                         (_damo_fmt_str.format_sz(self.hugepage_size[0], raw),
                          _damo_fmt_str.format_sz(self.hugepage_size[1], raw)))
+            return ' '.join(words)
+        if self.filter_type == 'probe_hits_wsum':
+            words.append(
+                    '[%s, %s]' %
+                    (_damo_fmt_str.format_nr(
+                        self.probe_hits_wsum_range[0], raw),
+                     _damo_fmt_str.format_nr(
+                         self.probe_hits_wsum_range[1], raw)))
             return ' '.join(words)
 
     def __str__(self):
@@ -1262,7 +1281,9 @@ class DamosFilter:
                     if kv['filter_type'] == 'addr' else None,
                 kv['damon_target_idx']
                     if kv['filter_type'] == 'target' else None,
-                    hugepage_size=hugepage_size)
+                    hugepage_size=hugepage_size,
+                    probe_hits_wsum_range=kv.get(
+                        'probe_hits_wsum_range', None))
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
@@ -1278,6 +1299,10 @@ class DamosFilter:
             ('hugepage_size',
              [_damo_fmt_str.format_sz(x, raw) for x in self.hugepage_size]
              if self.hugepage_size is not None else None),
+            ('probe_hits_wsum_range',
+             [_damo_fmt_str.format_nr(x, raw)
+              for x in self.probe_hits_wsum_range]
+             if self.probe_hits_wsum_range is not None else None),
             ])
 
     def handled_by_ops(self):
