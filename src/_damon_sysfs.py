@@ -972,10 +972,18 @@ def files_content_to_damos_filter(files_content):
     elif 'pass' in files_content:
         allow = files_content['pass'].strip()
 
+    ftype = files_content['type'].strip()
+
     hugepage_size=None
-    if 'min' in files_content and 'max' in files_content:
+    if ftype == 'hugepage_size':
         hugepage_size = [_damo_fmt_str.text_to_bytes(x)
                          for x in [files_content['min'], files_content['max']]]
+
+    probe_hits_wsum_range = None
+    if ftype == 'probe_hits_wsum':
+        probe_hits_wsum_range = [
+                _damo_fmt_str.text_to_nr(x)
+                for x in [files_content['min'], files_content['max']]]
 
     return _damon.DamosFilter(
         files_content['type'].strip(),
@@ -988,7 +996,8 @@ def files_content_to_damos_filter(files_content):
         else None,
         files_content['damon_target_idx']
         if 'damon_target_idx' in files_content else None,
-        hugepage_size=hugepage_size)
+        hugepage_size=hugepage_size,
+        probe_hits_wsum_range=probe_hits_wsum_range)
 
 def files_content_to_damos_filters(scheme_files_content):
     filters = []
