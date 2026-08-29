@@ -228,7 +228,7 @@ def write_filters_dir(dir_path, filters):
     return None
 
 def is_core_filter(damos_filter):
-    return damos_filter.filter_type in ['addr', 'target']
+    return damos_filter.filter_type in ['addr', 'target', 'probe_hits_wsum']
 
 def write_core_ops_filters_dirs(scheme_dir_path, filters):
     core_filters = [f for f in filters if is_core_filter(f)]
