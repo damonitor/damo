@@ -1514,8 +1514,9 @@ def mk_feature_supports_map():
             supports_map['sysfs/probe_preps'] = True
             supports_map['sysfs/probe_prep_set_pgidle'] = True
             supports_map['sysfs/probe_type_pgidle_unset'] = True
-            # hopefully pgidle_set is merged in 7.4 together with preps
+            # hopefully below will be merged in 7.4 together with preps
             supports_map['sysfs/probe_type_pgidle_set'] = True
+            supports_map['sysfs/damos_filter_probe_hits_wsum'] = True
 
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
