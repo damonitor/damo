@@ -3,28 +3,28 @@ heatmap: [48;5;232m[38;5;255m9[0m[48;5;232m[38;5;255m9[0m[48;5;232m[38;5
 No probe
 intervals: sample 150 ms aggr 3 s (max probe hits 20)
 # damos filters (df): allow hugepage_size [2.000 MiB, max]
-#   addr         size         df-passed    age           probe_hits
-0   44.522 GiB   19.346 GiB   0 B          4 m 51 s      
-1   38.782 GiB   5.740 GiB    0 B          4 m 45 s      
-2   33.118 GiB   5.664 GiB    0 B          4 m 39 s      
-3   27.231 GiB   5.887 GiB    0 B          4 m 27 s      
-4   21.650 GiB   5.581 GiB    0 B          4 m           
-5   15.689 GiB   5.961 GiB    0 B          2 m 39 s      
-6   4.000 GiB    4.464 GiB    0 B          0 ns          
-7   8.464 GiB    1.610 GiB    0 B          0 ns          
-8   10.074 GiB   1.006 GiB    14.000 MiB   0 ns          
-9   11.080 GiB   327.633 MiB  44.000 MiB   0 ns          
-10  11.400 GiB   764.484 MiB  180.000 MiB  0 ns          
-11  12.146 GiB   468.051 MiB  142.000 MiB  0 ns          
-12  12.603 GiB   163.816 MiB  56.000 MiB   0 ns          
-13  12.763 GiB   109.211 MiB  66.000 MiB   0 ns          
-14  12.870 GiB   117.016 MiB  52.000 MiB   0 ns          
-15  12.984 GiB   675.746 MiB  370.000 MiB  0 ns          
-16  13.644 GiB   289.605 MiB  162.000 MiB  0 ns          
-17  13.927 GiB   107.262 MiB  34.000 MiB   0 ns          
-18  14.032 GiB   101.801 MiB  50.000 MiB   0 ns          
-19  14.131 GiB   67.867 MiB   36.000 MiB   0 ns          
-20  14.198 GiB   1.491 GiB    296.000 MiB  0 ns          
+#   size         address       df-passed    age           probe_hits
+0   19.346 GiB   44.522 GiB    0 B          4 m 51 s      
+1   5.740 GiB    38.782 GiB    0 B          4 m 45 s      
+2   5.664 GiB    33.118 GiB    0 B          4 m 39 s      
+3   5.887 GiB    27.231 GiB    0 B          4 m 27 s      
+4   5.581 GiB    21.650 GiB    0 B          4 m           
+5   5.961 GiB    15.689 GiB    0 B          2 m 39 s      
+6   4.464 GiB    4.000 GiB     0 B          0 ns          
+7   1.610 GiB    8.464 GiB     0 B          0 ns          
+8   1.006 GiB    10.074 GiB    14.000 MiB   0 ns          
+9   327.633 MiB  11.080 GiB    44.000 MiB   0 ns          
+10  764.484 MiB  11.400 GiB    180.000 MiB  0 ns          
+11  468.051 MiB  12.146 GiB    142.000 MiB  0 ns          
+12  163.816 MiB  12.603 GiB    56.000 MiB   0 ns          
+13  109.211 MiB  12.763 GiB    66.000 MiB   0 ns          
+14  117.016 MiB  12.870 GiB    52.000 MiB   0 ns          
+15  675.746 MiB  12.984 GiB    370.000 MiB  0 ns          
+16  289.605 MiB  13.644 GiB    162.000 MiB  0 ns          
+17  107.262 MiB  13.927 GiB    34.000 MiB   0 ns          
+18  101.801 MiB  14.032 GiB    50.000 MiB   0 ns          
+19  67.867 MiB   14.131 GiB    36.000 MiB   0 ns          
+20  1.491 GiB    14.198 GiB    296.000 MiB  0 ns          
 memory bw estimate: 11.678 GiB per second  df-passed: 3.870 GiB per second
 total size: 59.868 GiB  df-passed 1.467 GiB  
 scheme stats
