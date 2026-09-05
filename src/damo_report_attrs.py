@@ -1087,12 +1087,13 @@ def get_min_chars_for(name, min_chars_list):
 def region_legend_line(min_chars_for, ops_filters_installed):
     words = ['#']
     words.append(' ' * (get_min_chars_for('<index>', min_chars_for)))
-    words.append('addr')
-    words.append(' ' * (get_min_chars_for('<start address>', min_chars_for) -
-                 len('addr') + 1))
     words.append('size')
     words.append(' ' * (get_min_chars_for('<size>', min_chars_for) -
                  len('size') + 2))
+
+    words.append('address')
+    words.append(' ' * (get_min_chars_for('<start address>', min_chars_for) -
+                 len('address') + 2))
     if ops_filters_installed is True:
         words.append('df-passed')
         words.append(' ' * (get_min_chars_for(
@@ -1156,7 +1157,7 @@ def set_formats_region_default(fmt, records, args, ops_filters_installed):
     if fmt.format_region is not None:
         return
 
-    default_region_format = '<index> <start address> <size>'
+    default_region_format = '<index> <size>  <start address>'
     if ops_filters_installed:
         default_region_format += '  <filters passed bytes>'
     default_region_format += '  <age> <probe hits>'
