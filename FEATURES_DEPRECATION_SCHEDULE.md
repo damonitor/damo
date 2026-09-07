@@ -4,6 +4,11 @@ Deprecated, or Will be Deprecated Features
 Below are features that deprecated, or will be deprecated.  If you depend on
 any of those, please [report](REPORTING.md).
 
+`damo features`
+---------------
+
+Will be deprecated.  Use `damo report sysinfo` instead.
+
 `damo pa_layout`
 ---------------
 
