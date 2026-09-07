@@ -1368,6 +1368,18 @@ def adjust_region_probe_hits(region, rule_set, max_probe_hits):
     return None
 
 def adjust_region_one(region, adjust_rules, max_probe_hits):
+    '''
+    Adjust region size or probe_hits in proportion to df_passed or probe_hits
+    rate of a given probe.
+
+    For example,
+    - "size df_passed" is the rule set and a region has 100 MiB size and 10 MiB
+      of the region is df_passed, update the region's size to 10 MiB.
+    - "size probe_hits_rate 2" is the rule set, a region has 100 MiB size, the
+      region's probe_hits[2] is 10 while the context's aggr_interval /
+      sample_interval is 100, update the region's size to 10 MiB.
+    '''
+
     for rule_set in adjust_rules:
         '''
         rule_set:
