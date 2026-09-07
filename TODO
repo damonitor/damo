@@ -36,9 +36,8 @@
       - use min sampling interval?
       - treat larger than a value as same
 - Support multiple targets snapshot (get_snapshot_records())
-- support 2d heatmap on report access
+- support 2d heatmap on report attrs
 - Support drgn based 'damo diagnose'
-- damo start,tune: inform unsupported features.
 - Make --perf_path of 'damo record' aligned with _damo_sysinfo.
 - Use max_nr_snapshot for snapshot DAMOS uninstall
 - Make modules better controlled with main commands
@@ -49,9 +48,6 @@
 - Support 'damo record' works with DAMON_RECLAIM
 - Document full DAMON parameter options
 - Document 'damo report trace'
-- Support data attributes monitoring
-  - For damo report access
-  - For damo record
 - Add a test for 'damo report trace'
 - Unify traceevent handling in damo_report_trace and _damo_records.
 - Define and use simple Region for records.
