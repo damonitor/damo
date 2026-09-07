@@ -1,9 +1,9 @@
-DAMO: Data Access Monitoring Operator
-=====================================
+DAMO: DAMON Operator
+====================
 
 `damo` is a user space tool for [DAMON](https://damonitor.github.io).  Using
-this, you can monitor the data access patterns of your system or workloads and
-do data access-aware memory management operations.
+this, you can monitor the data attributes including access patterns of your
+system or workloads, and do data attributes-aware memory management operations.
 
 ![damo monitor demo for water_nsquared](images/damo_monitor_water_nsquared.gif)
 
