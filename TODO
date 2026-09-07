@@ -53,6 +53,11 @@
 - Define and use simple Region for records.
 
 - Deprecate old features
+  - Deprecate 'damo features'
+    - show warning on stderr by 2026-10-07
+    - mark as deprecated by 2026-11-07
+    - break functionality by 2026-12-07
+    - remove by 2027-01-07
   - Deprecate 'damo record_info'
   - Deprecate 'damo pa_layout'
   - Deprecate 'damo report raw' (done.)
