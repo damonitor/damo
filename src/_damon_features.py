@@ -359,14 +359,14 @@ features_list = [
                      upstreamed_version='7.2'),
 
         DamonFeature(name='sysfs/probe_weights',
-                     upstream_status='merged into mm.git',
-                     upstreamed_version='none'),
+                     upstream_status='merged in v7.3-rc1 (37aae41c1056)',
+                     upstreamed_version='7.3'),
 
         DamonFeature(name='sysfs/probe_preps',
-                     upstream_status='hacking on damon/next',
+                     upstream_status='merged into mm.git',
                      upstreamed_version='none'),
         DamonFeature(name='sysfs/probe_prep_set_pgidle',
-                     upstream_status='hacking on damon/next',
+                     upstream_status='merged into mm.git',
                      upstreamed_version='none'),
         DamonFeature(name='sysfs/probe_type_pgidle_unset',
                      upstream_status='hacking on damon/next',
