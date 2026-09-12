@@ -1517,7 +1517,9 @@ def mk_feature_supports_map():
                         _damon.DamonCtx(
                             targets=[_damon.DamonTarget(
                                 pid=None, regions=[])],
-                            probes=[_damon.DamonProbe(filters=[])],
+                            probes=[_damon.DamonProbe(filters=[
+                                _damon.DamonFilter(
+                                    _damon.damon_filter_type_anon)])],
                             )])]
         err = stage_kdamonds(kdamonds_for_feature_check)
         if err is not None:
@@ -1538,6 +1540,11 @@ def mk_feature_supports_map():
             # hopefully below will be merged in 7.4 together with preps
             supports_map['sysfs/probe_type_pgidle_set'] = True
             supports_map['sysfs/damos_filter_probe_hits_wsum'] = True
+
+        probe_filter_dir = os.path.join(probe_dir, 'filters', '0')
+
+        if os.path.isfile(os.path.join(probe_filter_dir, 'min')):
+            supports_map['sysfs/probe_type_hugepage_size'] = True
 
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
