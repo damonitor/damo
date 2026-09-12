@@ -369,13 +369,13 @@ features_list = [
                      upstream_status='merged into mm.git',
                      upstreamed_version='none'),
         DamonFeature(name='sysfs/probe_type_pgidle_unset',
-                     upstream_status='hacking on damon/next',
+                     upstream_status='merged into mm.git',
                      upstreamed_version='none'),
         DamonFeature(name='sysfs/probe_type_pgidle_set',
-                     upstream_status='hacking on damon/next',
+                     upstream_status='merged into mm.git',
                      upstreamed_version='none'),
         DamonFeature(name='sysfs/damos_filter_probe_hits_wsum',
-                     upstream_status='hacking on damon/next',
+                     upstream_status='merged into mm.git',
                      upstreamed_version='none'),
 
         # planned to not be upstreamed.
