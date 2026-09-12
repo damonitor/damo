@@ -1111,10 +1111,17 @@ def files_content_to_damon_filter(files_content):
     path = None
     if 'path' in files_content:
         path = files_content['path'].strip()
+    if 'min' in files_content:
+        range_min = files_content['min'].strip()
+        range_max = files_content['max'].strip()
+    else:
+        range_min = None
+        range_max = None
     return _damon.DamonFilter(
         filter_type=files_content['type'].strip(),
         matching=files_content['matching'].strip(),
-        allow=files_content['allow'].strip(), path=path)
+        allow=files_content['allow'].strip(), path=path,
+        range_min=range_min, range_max=range_max)
 
 def files_content_to_probe(files_content):
     if 'preps' in files_content:
