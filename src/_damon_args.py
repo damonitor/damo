@@ -786,7 +786,7 @@ def probe_filter_for(filter_arg_fields):
     filter_type = fields[0]
     fields = fields[1:]
     path = None
-    if filter_type == 'memcg':
+    if filter_type == _damon.damon_filter_type_memcg:
         if len(fields) < 1:
             return None, 'memcg path is not given'
         path = fields[0]
