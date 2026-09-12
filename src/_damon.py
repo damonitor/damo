@@ -93,7 +93,7 @@ class DamonFilter:
         if self.matching is False:
             words.append('non')
         words.append(self.filter_type)
-        if self.filter_type == 'memcg':
+        if self.filter_type == damon_filter_type_memcg:
             return ' '.join(words + [self.path])
         if self.filter_type == damon_filter_type_hugepage_size:
             return ' '.join(words + ['[%s, %s]' % (
