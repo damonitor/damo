@@ -617,6 +617,16 @@ def write_probe_filter_dir(dir_path, filter):
         err = _damo_fs.write_file(os.path.join(dir_path, 'path'), filter.path)
         if err is not None:
             return err
+    if filter.filter_type == _damon.damon_filter_type_hugepage_size:
+        err = _damo_fs.write_file(os.path.join(dir_path, 'min'),
+                                  '%d' % filter.range_min)
+        if err is not None:
+            return err
+        err = _damo_fs.write_file(os.path.join(dir_path, 'max'),
+                                  '%d' % filter.range_max)
+        if err is not None:
+            return err
+
     return None
 
 def write_probe_dir(dir_path, probe):
