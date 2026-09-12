@@ -1038,6 +1038,8 @@ def warn_unsupported_damon_features_for(args):
                     _damon.damon_filter_type_hugepage_size,
                     'sysfs/probe_type_hugepage_size')
 
+    # mm.git
+
     if len(args.probe_prep) > 0:
         warn_for('--probe_prep', 'sysfs/probe_preps')
     for probe_filter_args in args.probe_filter:
@@ -1053,8 +1055,7 @@ def warn_unsupported_damon_features_for(args):
                     _damon.damon_filter_type_pgidle_set,
                     'sysfs/probe_type_pgidle_set')
 
-    # mm.git
-
+    # 7.3
     if args.probe_weight != []:
         warn_for('--probe_weight', 'sysfs/probe_weights')
 
