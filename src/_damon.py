@@ -67,7 +67,7 @@ class DamonFilter:
     allow = None
     path = None
 
-    def __init__(self, filter_type, matching, allow=False, path=None):
+    def __init__(self, filter_type, matching=True, allow=False, path=None):
         if not filter_type in damon_filter_types:
             raise Exception('wrong damon filter type (%s)' % filter_type)
         self.filter_type = filter_type
