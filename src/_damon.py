@@ -53,12 +53,14 @@ damon_filter_type_anon = 'anon'
 damon_filter_type_memcg = 'memcg'
 damon_filter_type_pgidle_unset = 'pgidle_unset'
 damon_filter_type_pgidle_set = 'pgidle_set'
+damon_filter_type_hugepage_size = 'hugepage_size'
 
 damon_filter_types = [
         damon_filter_type_anon,
         damon_filter_type_memcg,
         damon_filter_type_pgidle_unset,
         damon_filter_type_pgidle_set,
+        damon_filter_type_hugepage_size,
         ]
 
 class DamonFilter:
@@ -66,14 +68,21 @@ class DamonFilter:
     matching = None
     allow = None
     path = None
+    range_min = None
+    range_max = None
 
-    def __init__(self, filter_type, matching=True, allow=False, path=None):
+    def __init__(self, filter_type, matching=True, allow=False, path=None,
+                 range_min=None, range_max=None):
         if not filter_type in damon_filter_types:
             raise Exception('wrong damon filter type (%s)' % filter_type)
         self.filter_type = filter_type
         self.matching = _damo_fmt_str.text_to_bool(matching)
         self.allow = _damo_fmt_str.text_to_bool(allow)
         self.path = path
+        if range_min is not None:
+            self.range_min = _damo_fmt_str.text_to_bytes(range_min)
+        if range_max is not None:
+            self.range_max = _damo_fmt_str.text_to_bytes(range_max)
 
     def to_str(self, raw):
         words = []
@@ -86,6 +95,10 @@ class DamonFilter:
         words.append(self.filter_type)
         if self.filter_type == 'memcg':
             return ' '.join(words + [self.path])
+        if self.filter_type == damon_filter_type_hugepage_size:
+            return ' '.join(words + ['[%s, %s]' % (
+                _damo_fmt_str.format_sz(self.range_min, raw),
+                _damo_fmt_str.format_sz(self.range_max, raw))])
         return ' '.join(words)
 
     def __str__(self):
@@ -95,13 +108,17 @@ class DamonFilter:
         return type(self) == type(other) and \
                 self.filter_type == other.filter_type and \
                 self.matching == other.matching and \
-                self.allow == other.allow and self.path == other.path
+                self.allow == other.allow and self.path == other.path and \
+                self.range_min == other.range_min and \
+                self.range_max == other.range_max
 
     @classmethod
     def from_kvpairs(cls, kv):
         return DamonFilter(
                 filter_type=kv['filter_type'], matching=kv['matching'],
-                allow=kv['allow'], path=kv['path'])
+                allow=kv['allow'], path=kv['path'],
+                range_min=kv.get('range_min'), range_max=kv.get('range_max'),
+                )
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
@@ -109,6 +126,8 @@ class DamonFilter:
             ('matching', self.matching),
             ('allow', self.allow),
             ('path', self.path),
+            ('range_min', _damo_fmt_str.format_sz_accurate(self.range_min, raw)),
+            ('range_max', _damo_fmt_str.format_sz_accurate(self.range_max, raw)),
             ])
 
 class DamonProbe:
