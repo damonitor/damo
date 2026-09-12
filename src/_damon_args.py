@@ -786,13 +786,21 @@ def probe_filter_for(filter_arg_fields):
     filter_type = fields[0]
     fields = fields[1:]
     path = None
+    range_min = None
+    range_max = None
     if filter_type == _damon.damon_filter_type_memcg:
         if len(fields) < 1:
             return None, 'memcg path is not given'
         path = fields[0]
+    elif filter_type == _damon.damon_filter_type_hugepage_size:
+        if len(fields) < 2:
+            return None, 'min, max are not given'
+        range_min = fields[0]
+        range_max = fields[1]
     try:
-        filter = _damon.DamonFilter(filter_type=filter_type, matching=matching,
-                                    allow=allow, path=path)
+        filter = _damon.DamonFilter(
+                filter_type=filter_type, matching=matching, allow=allow,
+                path=path, range_min=range_min, range_max=range_max)
     except Exception as e:
         return None, 'filter creation fail (%s)' % e
     return filter, None
