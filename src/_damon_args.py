@@ -1055,6 +1055,14 @@ def warn_unsupported_damon_features_for(args):
                     _damon.damon_filter_type_pgidle_set,
                     'sysfs/probe_type_pgidle_set')
 
+    if args.damos_filter != []:
+        filters, err = damos_options_to_filters(args.damos_filter)
+        if err is None:
+            for filter in filters:
+                if filter.filter_type == 'probe_hits_wsum':
+                    warn_for('--damos_filter with probe_hits_wsum type',
+                             'sysfs/damos_filter_probe_hits_wsum')
+
     # 7.3
     if args.probe_weight != []:
         warn_for('--probe_weight', 'sysfs/probe_weights')
