@@ -666,16 +666,26 @@ def update_nr_list_for(word, option_name, nr_idx, nrs):
 
 def set_nr_args(args):
     '''Return an error'''
-    if args.probe is False:
+    if args.probe is False and args.damos_scheme is False:
         return None
     probe_idx = -1
     nr_probe_preps = []
     nr_probe_filters = []
+
+    scheme_idx = -1
+    damos_nr_quota_goals = []
+    damos_nr_filters = []
+
     for field in sys.argv:
         if field == '--probe':
             probe_idx += 1
             nr_probe_preps.append(0)
             nr_probe_filters.append(0)
+        if field == '--damos_scheme':
+            scheme_idx += 1
+            damos_nr_quota_goals.append(0)
+            damos_nr_filters.append(0)
+
         err = update_nr_list_for(
                 field, 'probe_prep', probe_idx, nr_probe_preps)
         if err is not None:
@@ -684,8 +694,22 @@ def set_nr_args(args):
                 field, 'probe_filter', probe_idx, nr_probe_filters)
         if err is not None:
             return err
-    args.nr_probe_preps = nr_probe_preps
-    args.nr_probe_filters = nr_probe_filters
+
+        err = update_nr_list_for(
+                field, 'damos_quota_goal', scheme_idx, damos_nr_quota_goals)
+        if err is not None:
+            return err
+        err = update_nr_list_for(
+                field, 'damos_filter', scheme_idx, damos_nr_filters)
+        if err is not None:
+            return err
+
+    if probe_idx >= 0:
+        args.nr_probe_preps = nr_probe_preps
+        args.nr_probe_filters = nr_probe_filters
+    if scheme_idx >= 0:
+        args.damos_nr_quota_goals = damos_nr_quota_goals
+        args.damos_nr_filters = damos_nr_filters
     return None
 
 def get_nr_ctxs(args):
@@ -1309,6 +1333,8 @@ def evaluate_args(args):
     '''
     if not args.damos_action:
         for key, value in args.__dict__.items():
+            if key == 'damos_scheme':
+                continue
             if key.startswith('damos_') and len(value):
                 if key == 'damos_action': continue
                 return False, '\'damos_action\' not specified while using --damos_* option(s)'
@@ -1611,6 +1637,9 @@ def set_monitoring_argparser(parser, hide_help=False):
                         if not hide_help else argparse.SUPPRESS)
 
 def set_damos_argparser(parser, hide_help):
+    parser.add_argument(
+            '--damos_scheme', action='store_true',
+            help='mark start of options for a scheme on the command line')
     parser.add_argument('--damos_action', metavar='<action>', nargs='+',
                         action='append',
                         help=' '.join([
