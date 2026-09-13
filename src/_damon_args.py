@@ -175,7 +175,7 @@ def damos_options_to_filter_v2(words):
     allow = words[0] == 'allow'
     nr_consumed_words = 1
     word = words[nr_consumed_words]
-    if word == 'none':
+    if word in ['non', 'none']:
         fmatching = False
         nr_consumed_words += 1
     else:
