@@ -666,8 +666,16 @@ def update_nr_list_for(word, option_name, nr_idx, nrs):
 
 def set_nr_args(args):
     '''Return an error'''
-    if args.probe is False and args.damos_scheme is False:
+    if args.kdamond is False and args.damon_ctx is False and \
+            args.probe is False and args.damos_scheme is False:
         return None
+
+    kdamond_idx = -1
+    nr_ctxs = []
+
+    ctx_idx = -1
+    nr_schemes = []
+
     probe_idx = -1
     nr_probe_preps = []
     nr_probe_filters = []
@@ -677,6 +685,12 @@ def set_nr_args(args):
     damos_nr_filters = []
 
     for field in sys.argv:
+        if field == '--kdamond':
+            kdamond_idx += 1
+            nr_ctxs.append(0)
+        if field == '--damon_ctx':
+            ctx_idx += 1
+            nr_schemes.append(0)
         if field == '--probe':
             probe_idx += 1
             nr_probe_preps.append(0)
@@ -685,6 +699,16 @@ def set_nr_args(args):
             scheme_idx += 1
             damos_nr_quota_goals.append(0)
             damos_nr_filters.append(0)
+
+        err = update_nr_list_for(
+                field, 'damon_ctx', kdamond_idx, nr_ctxs)
+        if err is not None:
+            return err
+
+        err = update_nr_list_for(
+                field, 'damos_action', ctx_idx, nr_schemes)
+        if err is not None:
+            return err
 
         err = update_nr_list_for(
                 field, 'probe_prep', probe_idx, nr_probe_preps)
@@ -704,6 +728,10 @@ def set_nr_args(args):
         if err is not None:
             return err
 
+    if kdamond_idx >= 0:
+        args.nr_ctxs = nr_ctxs
+    if ctx_idx >= 0:
+        args.nr_schemes = nr_schemes
     if probe_idx >= 0:
         args.nr_probe_preps = nr_probe_preps
         args.nr_probe_filters = nr_probe_filters
@@ -1550,6 +1578,14 @@ def set_monitoring_attrs_argparser(parser, hide_help=False):
                         if not hide_help else argparse.SUPPRESS)
 
 def set_monitoring_damos_common_args(parser, hide_help=False):
+    parser.add_argument(
+            '--kdamond', action='store_true',
+            help='mark start of options for a kdamond on the command line')
+    parser.add_argument(
+            '--damon_ctx', action='store_true',
+            help='mark start of options for a DAMON context on '
+            'the command line')
+
     parser.add_argument('--ops', choices=['vaddr', 'paddr', 'fvaddr'],
                         action='append',
                         help='monitoring operations set'
