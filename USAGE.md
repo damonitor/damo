@@ -308,11 +308,11 @@ installed for the access-aware system operations.
 The option format is as below:
 
 ```
-<allow|reject> [none] <type> [<additional type options>...] [<damos filter>....]
+<allow|reject> [non] <type> [<additional type options>...] [<damos filter>....]
 ```
 
 The first argument (`allow` or `reject`) specifies if the filter should `allow`
-or `reject` the memory.  If it is not given, it applies `reject` by default.
+or `reject` the memory.
 
 `<type>` is the type of the memory that the filter should work for.  Depending
 on the `<type>`, `<additional type options>` need to be given.  For example, if
@@ -321,19 +321,18 @@ on the `<type>`, `<additional type options>` need to be given.  For example, if
 are same to what the [kernel
 documentation](https://docs.kernel.org/mm/damon/design.html#filters) lists.
 
-If the filter is for memory except the given type, `none` keyword can be given
+If the filter is for memory except the given type, `non` keyword can be given
 before the `<type>` part.  For example,
 
 - `reject young`: Reject applying the DAMOS action to young pages.  In other
   words, apply the action to non-young pages only.
-- `reject none young`: Reject applying the DAMOS action to none-young pages.
+- `reject non young`: Reject applying the DAMOS action to none-young pages.
   In other words, apply the action to young pages only.
-- `reject none addr 1234 56678`: Reject applying the DAMOS action to address
+- `reject non addr 1234 56678`: Reject applying the DAMOS action to address
   ranges except 1234-5678.  In other words, apply the action to only 1234-5678
   address range.
 
-To use multiple filters, users can use multiple `--snapshot_damos_filter`.  For
-example,
+To use multiple filters, users can use multiple `--damos_filter`.  For example,
 
 ```
 --damos_filter allow anon --damos_filter reject memcg user.slice/workloads/foo
