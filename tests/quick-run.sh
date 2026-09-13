@@ -11,3 +11,4 @@ bindir=$(dirname "$0")
 "$bindir/flake8.sh"
 "$bindir/pre-commit/test.sh"
 "$bindir/unit/test.sh"
+"$bindir/args_damon/test.sh"
