@@ -121,13 +121,19 @@ class DamonFilter:
                 )
 
     def to_kvpairs(self, raw=False):
+        range_min = self.range_min
+        if range_min is not None:
+            range_min = _damo_fmt_str.format_sz_accurate(self.range_min, raw)
+        range_max = self.range_max
+        if range_max is not None:
+            range_max = _damo_fmt_str.format_sz_accurate(self.range_max, raw)
         return collections.OrderedDict([
             ('filter_type', self.filter_type),
             ('matching', self.matching),
             ('allow', self.allow),
             ('path', self.path),
-            ('range_min', _damo_fmt_str.format_sz_accurate(self.range_min, raw)),
-            ('range_max', _damo_fmt_str.format_sz_accurate(self.range_max, raw)),
+            ('range_min', range_min),
+            ('range_max', range_max),
             ])
 
 class DamonProbe:
