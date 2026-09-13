@@ -646,6 +646,26 @@ def damon_ctx_for(args, idx):
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
 
+def set_nr_args(args):
+    if args.probe is False:
+        return
+    probe_idx = -1
+    nr_probe_preps = []
+    nr_probe_filters = []
+    for field in sys.argv:
+        if field == '--probe':
+            probe_idx += 1
+            nr_probe_preps.append(0)
+            nr_probe_filters.append(0)
+        if probe_idx == -1:
+            continue
+        if field == '--probe_prep' or field.startswith('--probe_prep='):
+            nr_probe_preps[probe_idx] += 1
+        if field == '--probe_filter' or field.startswith('--probe_filter='):
+            nr_probe_filters[probe_idx] += 1
+    args.nr_probe_preps = nr_probe_preps
+    args.nr_probe_filters = nr_probe_filters
+
 def get_nr_ctxs(args):
     candidates = []
     for v in [args.ops, args.nr_probes, args.sample, args.aggr, args.updr,
@@ -895,6 +915,7 @@ def gen_assign_probes(ctxs, args):
     return None
 
 def damon_ctxs_for(args):
+    set_nr_args(args)
     fillup_none_ctx_args(args)
     fillup_none_target_args(args)
     ctxs = []
@@ -1483,6 +1504,10 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
                         action='append',
                         help='monitoring operations set'
                         if not hide_help else argparse.SUPPRESS)
+
+    parser.add_argument(
+            '--probe', action='store_true',
+            help='mark beginning of a new probe options on the command line')
 
     parser.add_argument('--probe_prep', action='append',
                         metavar='<prep action>',
