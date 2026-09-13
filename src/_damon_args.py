@@ -1515,8 +1515,8 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--nr_probe_preps', type=int, nargs='+',
                         metavar='<integer>',
-                        help='number of preps for each probe (in order)'
-                        if not hide_help else argparse.SUPPRESS)
+                        help=argparse.SUPPRESS)
+                        # number of preps for each probe (in order)
 
     parser.add_argument('--probe_filter', nargs='+', action='append',
                         metavar='<<allow|reject> [non] <type> [option]...>',
@@ -1524,8 +1524,8 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--nr_probe_filters', type=int, nargs='+', metavar='<integer>',
-            help='number of filters for each probe (in order)'
-            if not hide_help else argparse.SUPPRESS)
+            help=argparse.SUPPRESS)
+            # number of filters for each probe (in order)
     parser.add_argument('--probe_weight', type=int, nargs='+', action='append',
                         metavar='<int>',
                         help='data attribute probe weight'
