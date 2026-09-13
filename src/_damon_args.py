@@ -1674,8 +1674,9 @@ def set_monitoring_argparser(parser, hide_help=False):
     set_monitoring_attrs_argparser(parser, hide_help)
     parser.add_argument(
             '--nr_targets', metavar='<number>', nargs='+', type=int,
-            help='number of monitoring targets for each context (in order)'
-            if not hide_help else argparse.SUPPRESS)
+            # number of monitoring targets for each context (in order)
+            # hidden in favor of --damon_target
+            help=argparse.SUPPRESS)
     parser.add_argument('--obsolete_targets', metavar='<target index>',
                         nargs='+', type=int,
                         help='obsolte targets'
