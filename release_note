@@ -3,6 +3,10 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.4.1
 - Support hugepage_size DAMON filter.
+- Support more intuitive multiple kdamonds/contexts/targets/schemes/probes
+  configuration.
+  - Mark start of options for new kdamond, context, target, scheme, probe via
+    --kdamond, --damon_ctx, --damon_target, --damos_scheme, --probe.
 
 v3.4.0
 - damo report attrs: Show size of region before address.
