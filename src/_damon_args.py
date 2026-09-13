@@ -1663,9 +1663,9 @@ def set_damos_argparser(parser, hide_help):
             help='number of quota goals for each scheme (in order)'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
-            '--damos_filter', nargs='+', action='append',
-            metavar='<<allow|reject> [none] <type> [option]...>',
-            help='damos filter' if not hide_help else argparse.SUPPRESS)
+            '--damos_filter', nargs='+', action='append', metavar='<filed>',
+            help='<allow|reject> [none] <type> [option]...'
+            if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--damos_nr_filters', type=int, nargs='+', metavar='<integer>',
             help='number of filters for each scheme (in order)'
