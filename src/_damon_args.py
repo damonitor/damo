@@ -194,13 +194,15 @@ def damos_options_to_filter_v2(words):
         return filter, None, nr_consumed_words + nr_words
 
 def damos_options_to_filters_v2(words):
+    if len(words) == 0:
+        return [], None
     filters = []
-    while len(words) > 0:
-        filter, err, nr_consumed_words = damos_options_to_filter_v2(words)
-        if err is not None:
-            return None, err
-        filters.append(filter)
-        words = words[nr_consumed_words:]
+    filter, err, nr_consumed_words = damos_options_to_filter_v2(words)
+    if err is not None:
+        return None, err
+    filters.append(filter)
+    if nr_consumed_words != len(words):
+        return None, 'should have single filter for single option'
     return filters, None
 
 def convert_damos_filter_v1_to_v2(filter_args):
