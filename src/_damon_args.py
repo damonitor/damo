@@ -1711,16 +1711,18 @@ def set_damos_argparser(parser, hide_help):
             help='quota\'s goal-based tuner')
     parser.add_argument(
             '--damos_nr_quota_goals', type=int, nargs='+', metavar='<integer>',
-            help='number of quota goals for each scheme (in order)'
-            if not hide_help else argparse.SUPPRESS)
+            # number of quota goals for each scheme (in order)
+            # hidden in favor of --damos_scheme
+            help=argparse.SUPPRESS)
     parser.add_argument(
             '--damos_filter', nargs='+', action='append', metavar='<filed>',
             help='<allow|reject> [none] <type> [option]...'
             if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--damos_nr_filters', type=int, nargs='+', metavar='<integer>',
-            help='number of filters for each scheme (in order)'
-            if not hide_help else argparse.SUPPRESS)
+            # number of filters for each scheme (in order)
+            # hidden in favor of --damos_scheme
+            help=argparse.SUPPRESS)
     parser.add_argument(
             '--damos_wmarks', nargs=5, action='append',
             metavar=('<metric (none|free_mem_rate)>', '<interval (us)>',
