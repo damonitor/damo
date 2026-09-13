@@ -30,22 +30,24 @@ fi
 "$damo_bin" module stat write enabled N
 "$damo_bin" start \
 	` # demote cold memory from node 0 to node 1 ` \
-	--numa_node 0 --monitoring_intervals_goal 4% 3 5ms 10s \
-		--damos_action migrate_cold 1 --damos_access_rate 0% 0% \
-		--damos_apply_interval 1s \
-		` # up to 200 MB per second ` \
-		--damos_quota_interval 1s --damos_quota_space 200MB \
-		` # aiming node 0 has at least 0.5% free space ` \
-		--damos_quota_goal node_mem_free_bp 0.5% 0 \
-		--damos_filter reject young \
+	--kdamond --damon_ctx --monitoring_intervals_goal 4% 3 5ms 10s \
+		--damon_target --numa_node 0 \
+		--damos_scheme \
+			--damos_action migrate_cold 1 \
+			--damos_access_rate 0% 0% --damos_apply_interval 1s \
+			` # up to 200 MB per second ` \
+			--damos_quota_interval 1s --damos_quota_space 200MB \
+			` # aiming at least 0.5% node 0 free memory ` \
+			--damos_quota_goal node_mem_free_bp 0.5% 0 \
+			--damos_filter reject young \
 	` # promote hot memory from node 1 to node 0 ` \
-	--numa_node 1 --monitoring_intervals_goal 4% 3 5ms 10s \
-		--damos_action migrate_hot 0 --damos_access_rate 5% max \
-		--damos_apply_interval 1s \
-		` # up to 200 MB per second ` \
-		--damos_quota_interval 1s --damos_quota_space 200MB \
-		` # aiming node 0 has at least 99.7% memory utilization ` \
-		--damos_quota_goal node_mem_used_bp 99.7% 0 \
-		--damos_filter allow young \
-		--damos_nr_quota_goals 1 1 --damos_nr_filters 1 1 \
-	--nr_targets 1 1 --nr_schemes 1 1 --nr_ctxs 1 1
+	--kdamond --damon_ctx --monitoring_intervals_goal 4% 3 5ms 10s \
+		--damon_target --numa_node 1 \
+		--damos_scheme \
+			--damos_action migrate_hot 0 \
+			--damos_access_rate 5% max --damos_apply_interval 1s \
+			` # up to 200 MB per second ` \
+			--damos_quota_interval 1s --damos_quota_space 200MB \
+			` # aiming at least 99.7% node 0 memory utilization ` \
+			--damos_quota_goal node_mem_used_bp 99.7% 0 \
+			--damos_filter allow young \
