@@ -6,7 +6,7 @@ cd "$bindir"
 
 testname=$(basename $(pwd))
 
-for script in lru_sort.sh mem_tier.sh weighted_interleave.sh
+for script in test_*.sh
 do
 	if ! sudo bash "./${script}" &> /dev/null
 	then
