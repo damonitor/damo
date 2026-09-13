@@ -200,23 +200,30 @@ found from the kernel doc
 
 Users can create multiple monitoring targets, multiple DAMON contexts and
 multiple kdamonds.  For that, users can specify related options multiple times
-to set the parameter values with non-default ones.  Users should also set
-`--nr_targets` and `--nr_ctxs` when multiple contexts are used, for assigning
-monitoring targets to each context, and contexts to each kdamond.
+to set the parameter values with non-default ones.  For that, users should put
+`--kdamond`, `--damon_ctx`, `--damon_target`, and `--damos_scheme` on the
+command line before options of a new kdamond, DAMON context, monitoring target,
+and DAMOS scheme, respectively.
 
 To see what full DAMON parameters are created with given command line, users
 can use `damo args damon --format report`.  For example:
 
 ```
 $ sudo ./damo args damon --format report \
-	--ops paddr --regions 100-200 --damos_action migrate_cold 1 \
-	--ops paddr --regions 400-700 --damos_action migrate_hot 0 \
-	--nr_targets 1 1 --nr_schemes 1 1 --nr_ctxs 1 1
+    --kdamond --damon_ctx --ops paddr \
+        --damon_target --regions 100-200 \
+        --damon_target --regions 200-400 \
+        --damos_scheme --damos_action migrate_cold 1 \
+    --kdamond --damon_ctx --ops paddr \
+		--damon_target --regions 400-700 \
+        --damos_scheme --damos_action migrate_hot 0
 kdamond 0
     context 0
         ops: paddr
         target 0
             region [100, 200) (100 B)
+        target 1
+            region [200, 400) (200 B)
         intervals: sample 5 ms, aggr 100 ms, update 1 s
         nr_regions: [10, 1,000]
         scheme 0
@@ -231,6 +238,8 @@ kdamond 0
             watermarks
                 metric none, interval 0 ns
                 0 %, 0 %, 0 %
+        access sample control
+        enabled primitives: page_table
 kdamond 1
     context 0
         ops: paddr
@@ -250,6 +259,8 @@ kdamond 1
             watermarks
                 metric none, interval 0 ns
                 0 %, 0 %, 0 %
+        access sample control
+        enabled primitives: page_table
 ```
 
 ### Partial DAMOS Parameters Update
