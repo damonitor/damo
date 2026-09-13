@@ -674,6 +674,7 @@ def set_nr_args(args):
     nr_ctxs = []
 
     ctx_idx = -1
+    nr_targets = []
     nr_schemes = []
 
     probe_idx = -1
@@ -690,6 +691,7 @@ def set_nr_args(args):
             nr_ctxs.append(0)
         if field == '--damon_ctx':
             ctx_idx += 1
+            nr_targets.append(0)
             nr_schemes.append(0)
         if field == '--probe':
             probe_idx += 1
@@ -705,6 +707,10 @@ def set_nr_args(args):
         if err is not None:
             return err
 
+        err = update_nr_list_for(
+                field, 'damon_target', ctx_idx, nr_targets)
+        if err is not None:
+            return err
         err = update_nr_list_for(
                 field, 'damos_action', ctx_idx, nr_schemes)
         if err is not None:
@@ -731,6 +737,7 @@ def set_nr_args(args):
     if kdamond_idx >= 0:
         args.nr_ctxs = nr_ctxs
     if ctx_idx >= 0:
+        args.nr_targets = nr_targets
         args.nr_schemes = nr_schemes
     if probe_idx >= 0:
         args.nr_probe_preps = nr_probe_preps
@@ -1648,6 +1655,9 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
             help='DAMON address unit')
 
 def set_monitoring_argparser(parser, hide_help=False):
+    parser.add_argument(
+            '--damon_target', action='store_true',
+            help='mark start of options for a target on the command line')
     parser.add_argument('--target_pid', type=int, metavar='<pid>',
                         action='append',
                         help='pid of monitoring target process'
