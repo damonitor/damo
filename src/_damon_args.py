@@ -655,9 +655,19 @@ def is_option_filed(word, option_name):
         return True
     return False
 
+def update_nr_list_for(word, option_name, nr_idx, nrs):
+    if is_option_filed(word, option_name) is False:
+        return None
+    if nr_idx < 0:
+        return 'wrong position of --%s' % option_name
+    if nr_idx >= len(nrs):
+        raise Exception('bug! %s >= %s' % (nr_idx, len(nrs)))
+    nrs[nr_idx] += 1
+
 def set_nr_args(args):
+    '''Return an error'''
     if args.probe is False:
-        return
+        return None
     probe_idx = -1
     nr_probe_preps = []
     nr_probe_filters = []
@@ -666,14 +676,17 @@ def set_nr_args(args):
             probe_idx += 1
             nr_probe_preps.append(0)
             nr_probe_filters.append(0)
-        if probe_idx == -1:
-            continue
-        if is_option_filed(field, 'probe_prep'):
-            nr_probe_preps[probe_idx] += 1
-        if is_option_filed(field, 'probe_filter'):
-            nr_probe_filters[probe_idx] += 1
+        err = update_nr_list_for(
+                field, 'probe_prep', probe_idx, nr_probe_preps)
+        if err is not None:
+            return err
+        err = update_nr_list_for(
+                field, 'probe_filter', probe_idx, nr_probe_filters)
+        if err is not None:
+            return err
     args.nr_probe_preps = nr_probe_preps
     args.nr_probe_filters = nr_probe_filters
+    return None
 
 def get_nr_ctxs(args):
     candidates = []
@@ -924,7 +937,9 @@ def gen_assign_probes(ctxs, args):
     return None
 
 def damon_ctxs_for(args):
-    set_nr_args(args)
+    err = set_nr_args(args)
+    if err is not None:
+        return None, err
     fillup_none_ctx_args(args)
     fillup_none_target_args(args)
     ctxs = []
