@@ -30,3 +30,10 @@ fi
 		--damos_action migrate_hot 0 1 1 1 --damos_access_rate 5% max \
 		--damos_apply_interval 1s \
 		--damos_quota_interval 1s --damos_quota_space 200MB \
+
+"$damo_bin" args damon --format report \
+	--target_pid $target_proc --ops vaddr \
+		--monitoring_intervals_goal 4% 3 5ms 10s \
+		--damos_action migrate_hot 0 1 1 1 --damos_access_rate 5% max \
+		--damos_apply_interval 1s \
+		--damos_quota_interval 1s --damos_quota_space 200MB \
