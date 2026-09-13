@@ -308,7 +308,7 @@ installed for the access-aware system operations.
 The option format is as below:
 
 ```
-<allow|reject> [non] <type> [<additional type options>...] [<damos filter>....]
+<allow|reject> [non] <type> [<additional type options>...]
 ```
 
 The first argument (`allow` or `reject`) specifies if the filter should `allow`
