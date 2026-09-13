@@ -27,14 +27,17 @@ fi
 
 "$damo_bin" module stat write enabled N
 "$damo_bin" start \
-	--monitoring_intervals_goal 4% 3 5ms 10s \
-		--damos_action lru_deprio --damos_access_rate 0% 0% \
+	--kdamond --damon_ctx --monitoring_intervals_goal 4% 3 5ms 10s \
+		--damon_target \
+		--damos_scheme \
+			--damos_action lru_deprio --damos_access_rate 0% 0% \
 			--damos_apply_interval 1s \
 			--damos_quota_interval 1s --damos_quota_space 100MB \
 			--damos_quota_goal inactive_mem_bp 50.1% \
 			--damos_quota_weights 0 1 1 \
 			--damos_filter reject young \
-		--damos_action lru_prio --damos_access_rate 5% max \
+		--damos_scheme \
+			--damos_action lru_prio --damos_access_rate 5% max \
 			--damos_apply_interval 1s \
 			--damos_quota_interval 1s --damos_quota_space 100MB \
 			--damos_quota_goal active_mem_bp 50.1% \
