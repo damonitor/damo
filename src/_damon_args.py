@@ -648,6 +648,13 @@ def damon_ctx_for(args, idx):
     except Exception as e:
         return None, 'Creating context from arguments failed (%s)' % e
 
+def is_option_filed(word, option_name):
+    if word == '--%s' % option_name:
+        return True
+    if word.startswith('--%s=' % option_name):
+        return True
+    return False
+
 def set_nr_args(args):
     if args.probe is False:
         return
@@ -661,9 +668,9 @@ def set_nr_args(args):
             nr_probe_filters.append(0)
         if probe_idx == -1:
             continue
-        if field == '--probe_prep' or field.startswith('--probe_prep='):
+        if is_option_filed(field, 'probe_prep'):
             nr_probe_preps[probe_idx] += 1
-        if field == '--probe_filter' or field.startswith('--probe_filter='):
+        if is_option_filed(field, 'probe_filter'):
             nr_probe_filters[probe_idx] += 1
     args.nr_probe_preps = nr_probe_preps
     args.nr_probe_filters = nr_probe_filters
