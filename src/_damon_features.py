@@ -377,9 +377,8 @@ features_list = [
         DamonFeature(name='sysfs/damos_filter_probe_hits_wsum',
                      upstream_status='merged into mm.git',
                      upstreamed_version='none'),
-
         DamonFeature(name='sysfs/probe_type_hugepage_size',
-                     upstream_status='hacking on damon/next',
+                     upstream_status='merged into mm.git',
                      upstreamed_version='none'),
 
         # planned to not be upstreamed.
