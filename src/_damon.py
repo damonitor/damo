@@ -923,18 +923,20 @@ qgoal_metrics = [qgoal_user_input, qgoal_some_mem_psi_us,
 
 class DamosQuotaGoal:
     metric = None
+    complement = None
     target_value = None
     current_value = None
     nid = None
     memcg_path = None
     quotas = None
 
-    def __init__(self, metric=qgoal_user_input,
+    def __init__(self, metric=qgoal_user_input, complement=False,
                  target_value='0', current_value='0', nid=None,
                  memcg_path=None):
         if not metric in qgoal_metrics:
             raise Exception('unsupported DAMOS quota goal metric')
         self.metric = metric
+        self.complement = _damo_fmt_str.text_to_bool(complement)
         if metric == qgoal_some_mem_psi_us:
             self.target_value = _damo_fmt_str.text_to_us(target_value)
         elif metric in [qgoal_node_mem_used_bp, qgoal_node_mem_free_bp,
@@ -967,6 +969,8 @@ class DamosQuotaGoal:
 
     def to_str(self, raw):
         metric_str = self.metric
+        if self.complement is True:
+            metric_str += ' (complement)'
         additional_words = []
         if self.has_nid():
             additional_words.append('nid %s' %
@@ -986,6 +990,7 @@ class DamosQuotaGoal:
 
     def __eq__(self, other):
         return (type(self) == type(other) and self.metric == other.metric and
+                self.complement == other.complement and
                 self.nid == other.nid and
                 self.memcg_path == other.memcg_path and
                 self.target_value == other.target_value and
@@ -998,12 +1003,17 @@ class DamosQuotaGoal:
             # later.
             return DamosQuotaGoal(target_value=kv['target_value_bp'],
                                   current_value=kv['current_value_bp'])
+        if 'complement' in kv:
+            complement = kv['complement']
+        else:
+            complement = False
         if 'memcg_path' in kv:
             memcg_path = kv['memcg_path']
         else:
             memcg_path = None
         return DamosQuotaGoal(
                 metric=kv['metric'], nid=kv['nid'] if 'nid' in kv else None,
+                complement=complement,
                 memcg_path=memcg_path,
                 target_value=kv['target_value'],
                 current_value=kv['current_value'])
@@ -1011,6 +1021,7 @@ class DamosQuotaGoal:
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
             ('metric', self.metric),
+            ('complement', self.complement),
             ('nid', _damo_fmt_str.format_nr(self.nid, raw)
              if self.nid is not None else None),
             ('memcg_path', self.memcg_path),
