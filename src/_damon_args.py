@@ -274,6 +274,7 @@ def damos_quotas_cons_arg(cmd_args):
 def damos_options_to_quota_goal(garg):
     # garg is the user inputs
     # garg should be <metric> <target value> [<optional>...]
+    # for every metric, first optional argument could be "complement".
     # for user_input, one optional argument for "current value" is given.
     # for node_mem[cg]_{used,free}_bp, one optional argument for node id is
     # given.
@@ -285,6 +286,11 @@ def damos_options_to_quota_goal(garg):
     current_value = 0
     nid = None
     memcg_path = None
+    if len(optionals) >= 1 and optionals[0] == 'complement':
+        complement = True
+        optionals = optionals[1:]
+    else:
+        complement = False
     if metric in [_damon.qgoal_node_mem_used_bp,
                   _damon.qgoal_node_mem_free_bp]:
         if len(optionals) != 1:
@@ -302,8 +308,8 @@ def damos_options_to_quota_goal(garg):
         current_value = optionals[0]
     try:
         return _damon.DamosQuotaGoal(
-                metric=metric, target_value=target_value,
-                current_value=current_value,
+                metric=metric, complement=complement,
+                target_value=target_value, current_value=current_value,
                 nid=nid, memcg_path=memcg_path), None
     except Exception as e:
         return None, 'DamosQuotaGoal creation fail (%s, %s)' % (garg, e)
