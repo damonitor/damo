@@ -1472,6 +1472,11 @@ def mk_feature_supports_map():
 
         if os.path.isfile(
                 os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
+                             'complement')):
+            supports_map['sysfs/damos_quota_goal_complement'] = True
+
+        if os.path.isfile(
+                os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
                              'path')):
             supports_map['sysfs/schemes_quota_goal_node_memcg_used_free'] = True
 
