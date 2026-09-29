@@ -1477,7 +1477,7 @@ def mk_feature_supports_map():
         if err is not None:
             stage_kdamonds(orig_kdamonds)
             return None, \
-                    'staging damos goal feature check purpose kdamond failed'
+                    'staging damos goal feature check kdamond fail (%s)' % err
 
         if os.path.isfile(
                 os.path.join(scheme_dir_of(0, 0, 0), 'quotas', 'goals', '0',
