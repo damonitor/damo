@@ -284,13 +284,14 @@ def write_quota_goal_dir(dir_path, goal):
         if err is not None:
             return err
 
-    if not os.path.isfile(os.path.join(dir_path, 'complement')) and \
-            goal.complement is not False:
+    complement_path = os.path.join(dir_path, 'complement')
+    if os.path.isfile(complement_path):
+        err = _damo_fs.write_file(os.path.join(dir_path, 'complement'),
+                                  'Y' if goal.complement else 'N')
+        if err is not None:
+            return err
+    elif goal.complement is not False:
         return 'the kernel is not supporting quota goal complement flag'
-    err = _damo_fs.write_file(os.path.join(dir_path, 'complement'),
-                              'Y' if goal.complement else 'N')
-    if err is not None:
-        return err
 
     if goal.has_nid():
         err = _damo_fs.write_file(os.path.join(dir_path, 'nid'), '%d' % goal.nid)
