@@ -91,19 +91,23 @@ available commands and brief description of those via `damo --help`.  It's
 command line [auto-completion](#command-line-auto-completion) should also be
 helpful.  The major commands can be categorized as below:
 
-- For controlling DAMON (monitoring and monitoring-based system optimization)
+- DAMON control
+  - For controlling DAMON (monitoring and monitoring-based system optimization)
   - `start`, `tune`, and `stop` are included
-- For recording, snapshot, and visualization of useful data including DAMON's
-  monitoring results, DAMON's working status, and additional system information
+- Capture and visualize
+  - For recording, snapshot, and visualization of useful data including DAMON's
+    monitoring results, DAMON's working status, and additional system
+    information
   - `record` and `report` are included
-- For more convenient use of `damo`
+- Misc
+  - For more convenient use of `damo`
   - `version` and `args` are included
 
 Every subcommand also provides `--help` option, which shows the basic usage of
 it.  Below sections introduce more details about the major subcommands.
 
-Note that some of the subcommands that not described in this document would be
-in experimental stage, or not assumed to be used in major use cases.  Those
+Note that some of the subcommands that are not described in this document would
+be in experimental stage, or not assumed to be used in major use cases.  Those
 could be deprecated and removed without any notice and grace periods.  Refer to
 [FEATURES_DEPRECATION_PROCESS.md](FEATURES_DEPRECATION_PROCESS.md) for more
 details.
@@ -111,17 +115,17 @@ details.
 DAMON Availability Check
 ------------------------
 
-The first category commands require some system setups.  That is, the system
-should be configured in a way that DAMON can be used.  To check the
-availability, please use [`damo report sysinfo`](#damo-report-sysinfo) command.
-Please read the document [section](#damo-report-sysinfo) for more details about
-the command.
+The first category (DAMON control) commands require some system setups.  That
+is, the system should be configured in a way that DAMON can be used.  To check
+the availability, please use [`damo report sysinfo`](#damo-report-sysinfo)
+command.  Please read the document [section](#damo-report-sysinfo) for more
+details about the command.
 
-Note that the visualization part of the second category commands and the third
-category (misc helers) are independent to DAMON, and therefore can be used on
-nearly every setup.  It is common and fully supported to run DAMON and collect
-outputs of it on a machine, and do visualizations of the outputs on another
-machines.
+Note that the visualization part of the second category (capture and
+visuialize) commands and the third category (misc) are independent to DAMON,
+and therefore can be used on nearly every setup.  It is common and fully
+supported to run DAMON and collect outputs of it on a machine, and do
+visualizations of the outputs on another machines.
 
 DAMON Control (Access Monitoring and Monitoring-based System Optimization)
 ==========================================================================
