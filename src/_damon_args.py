@@ -1658,18 +1658,19 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
             help='contexts to pause')
     parser.add_argument('--exp_ops_use_reports', action='append',
                         metavar='<Y|N>',
-                        help='use access reports (experimental)'
-                        if not hide_help else argparse.SUPPRESS)
+                        # use access reports (experimental)
+                        help=argparse.SUPPRESS)
     parser.add_argument('--exp_ops_write_only', action='append',
                         metavar='<Y|N>',
-                        help='monitor writes only (experimental)'
-                        if not hide_help else argparse.SUPPRESS)
+                        # monitor writes only (experimental)
+                        help=argparse.SUPPRESS)
     parser.add_argument('--exp_ops_cpus', action='append', metavar='<cpulist>',
-                        help='monitor for given cpus only (experimental)'
-                        if not hide_help else argparse.SUPPRESS)
+                        # monitor for given cpus only (experimental)
+                        help=argparse.SUPPRESS)
     parser.add_argument(
             '--exp_ops_tids', action='append', metavar='<thread ids list>',
-            help='monitoring for given threads only (experimental)')
+            # monitoring for given threads only (experimental)
+            help=argparse.SUPPRESS)
     parser.add_argument(
             '--refresh_stat', metavar='<milliseconds>', action='append',
             help='automatic kdamond internal stat refresh interval')
