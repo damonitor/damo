@@ -1650,8 +1650,8 @@ def set_monitoring_damos_common_args(parser, hide_help=False):
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument(
             '--nr_probes', type=int, nargs='+', metavar='<integer>',
-            help='number of probes for each context (in order)'
-            if not hide_help else argparse.SUPPRESS)
+            # umber of probes for each context (in order)
+            help=argparse.SUPPRESS)
 
     parser.add_argument(
             '--pause_ctx', type=int, nargs='+', metavar='<context index>',
