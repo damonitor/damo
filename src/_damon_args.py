@@ -1812,11 +1812,13 @@ def set_damos_argparser(parser, hide_help):
 
 def set_misc_damon_params_argparser(parser):
     parser.add_argument('-c', '--schemes', metavar='<json string or file>',
-	    help='data access monitoring-based operation schemes')
-    parser.add_argument('--kdamonds', metavar='<json/yaml string or file>',
-            help=' '.join([
-                'json or yaml format kdamonds specification to run DAMON for.',
-                '\'damo args damon\' can help generating it.']))
+                        # data access monitoring-based operation schemes
+                        help=argparse.SUPPRESS)
+    parser.add_argument(
+            '--kdamonds', metavar='<json/yaml string or file>',
+            # json or yaml format kdamonds specification to run DAMON for.
+            # 'damo args damon' can help generating it.
+            help=argparse.SUPPRESS)
     parser.add_argument(
             'deducible_target', type=str, metavar='<deducible string>',
             nargs='?',
