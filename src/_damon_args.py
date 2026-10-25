@@ -1436,6 +1436,8 @@ def kdamonds_for(args):
         if err:
             return None, err
 
+    # TODO: debug why doing set_nr_args() before target deduction causes
+    # failures of schemes test.
     err = set_nr_args(args)
     if err is not None:
         return None, err
