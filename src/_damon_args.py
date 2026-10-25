@@ -1071,6 +1071,9 @@ def warn_option_override(option_name):
 
 def deduce_target_update_args(args):
     'deducible target supports only single context/single kdamond'
+
+    if not args.nr_ctxs in [None, [1]]:
+        return 'deducible target with multiple contexts (%s)' % args.nr_ctxs
     args.self_started_target = False
     target_type = deduced_target_type(args.deducible_target)
     if target_type == target_type_unknown:
