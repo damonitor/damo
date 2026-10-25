@@ -1706,8 +1706,8 @@ def set_monitoring_argparser(parser, hide_help=False):
                         help='obsolte targets'
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--nr_ctxs', metavar='<number>', nargs='+', type=int,
-                        help='number of contexts for each kdamond (in order)'
-                        if not hide_help else argparse.SUPPRESS)
+                        # number of contexts for each kdamond (in order)
+                        help=argparse.SUPPRESS)
 
 def set_damos_argparser(parser, hide_help):
     parser.add_argument(
