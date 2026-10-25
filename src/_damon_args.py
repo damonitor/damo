@@ -1421,10 +1421,6 @@ def kdamonds_for(args):
     if args.kdamonds:
         return kdamonds_from_json_arg(args.kdamonds)
 
-    correct, err = evaluate_args(args)
-    if err is not None:
-        return None, err
-
     if args.deducible_target:
         if args.deducible_target.endswith('.yaml'):
             kdamonds, e = kdamonds_from_yaml_arg(args.deducible_target)
@@ -1435,6 +1431,10 @@ def kdamonds_for(args):
         err = deduce_target_update_args(args)
         if err:
             return None, err
+
+    correct, err = evaluate_args(args)
+    if err is not None:
+        return None, err
 
     # TODO: debug why doing set_nr_args() before target deduction causes
     # failures of schemes test.
