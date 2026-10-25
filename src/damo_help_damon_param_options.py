@@ -20,7 +20,7 @@ def main(args):
     elif category == 'all':
         print('command line options for all DAMON parameters')
         print()
-        _damon_args.set_misc_damon_params_argparser(parser)
+        _damon_args.set_damon_params_argparser(parser, min_help=False)
     help_msg = parser.format_help()
     pars = help_msg.split('\n\n')
     # the first paragraph is usage for this virtual command.  Ignore.
