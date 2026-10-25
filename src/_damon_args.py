@@ -1604,8 +1604,8 @@ def set_monitoring_attrs_argparser(parser, hide_help=False):
                         if not hide_help else argparse.SUPPRESS)
     parser.add_argument('--sample_primitives', action='append',
                         choices=['page_table', 'page_fault'], nargs='+',
-                        help='access sampling primitives to use'
-                        if not hide_help else argparse.SUPPRESS)
+                        # access sampling primitives to use
+                        help=argparse.SUPPRESS)
 
 def set_monitoring_damos_common_args(parser, hide_help=False):
     parser.add_argument(
