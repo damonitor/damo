@@ -55,9 +55,9 @@ Using Source Code
 
 Simply downloading the source code and using `damo` file at the root of the
 source tree is also a completely supported method for `damo` installation.  It
-would be particularly preferred if you want to participate in `damo`
-development.  In the case, you could add the path to the source tree to your
-`$PATH` for convenience.
+would be particularly preferred if you want to use latest version of `damo` or
+participate in `damo` development.  In the case, you could add the path to the
+source tree to your `$PATH` for convenience.
 
 Command Line Auto-completion
 ----------------------------
