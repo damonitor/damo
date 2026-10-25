@@ -1419,7 +1419,7 @@ def kdamonds_for(args):
             kdamonds, e = kdamonds_from_yaml_arg(args.deducible_target)
         else:
             kdamonds, e = kdamonds_from_json_arg(args.deducible_target)
-        if e == None:
+        if e is None:
             return kdamonds, e
         err = deduce_target_update_args(args)
         if err:
