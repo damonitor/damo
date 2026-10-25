@@ -1407,12 +1407,12 @@ def verify_kdamonds(kdamonds):
     return None
 
 def kdamonds_for(args):
+    if args.kdamonds:
+        return kdamonds_from_json_arg(args.kdamonds)
+
     correct, err = evaluate_args(args)
     if err is not None:
         return None, err
-
-    if args.kdamonds:
-        return kdamonds_from_json_arg(args.kdamonds)
 
     if args.deducible_target:
         if args.deducible_target.endswith('.yaml'):
