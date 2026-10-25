@@ -1,0 +1,123 @@
+{
+    "kdamonds": [
+        {
+            "refresh_ms": 0,
+            "contexts": [
+                {
+                    "ops": "vaddr",
+                    "addr_unit": "1 B",
+                    "targets": [
+                        {
+                            "pid": 123,
+                            "obsolete": false,
+                            "regions": []
+                        }
+                    ],
+                    "intervals": {
+                        "sample_us": "5 ms",
+                        "aggr_us": "100 ms",
+                        "ops_update_us": "1 s",
+                        "intervals_goal": {
+                            "access_bp": "4 %",
+                            "aggrs": "3",
+                            "min_sample_us": "5 ms",
+                            "max_sample_us": "10 s"
+                        }
+                    },
+                    "nr_regions": {
+                        "min": "10",
+                        "max": "1,000"
+                    },
+                    "probes": [],
+                    "sample_control": {
+                        "primitives_enabled": {
+                            "page_table": true,
+                            "page_fault": false
+                        },
+                        "sample_filters": []
+                    },
+                    "pause": false,
+                    "schemes": [
+                        {
+                            "action": "migrate_hot",
+                            "dests": [
+                                {
+                                    "id": 0,
+                                    "weight": 1
+                                },
+                                {
+                                    "id": 1,
+                                    "weight": 1
+                                }
+                            ],
+                            "target_nid": null,
+                            "access_pattern": {
+                                "sz_bytes": {
+                                    "min": "0 B",
+                                    "max": "max"
+                                },
+                                "nr_accesses": {
+                                    "min": "5 %",
+                                    "max": "18,446,744,073,709,551,615 %"
+                                },
+                                "age": {
+                                    "min": "0 ns",
+                                    "max": "max"
+                                }
+                            },
+                            "apply_interval_us": "1 s",
+                            "quotas": {
+                                "time_ms": "0 ns",
+                                "sz_bytes": "200.000 MiB",
+                                "reset_interval_ms": "1 s",
+                                "fail_charge_num": "0",
+                                "fail_charge_denom": "0",
+                                "goals": [],
+                                "goal_tuner": "consist",
+                                "effective_sz_bytes": "0 B",
+                                "weights": {
+                                    "sz_permil": "0.1 %",
+                                    "nr_accesses_permil": "0.1 %",
+                                    "age_permil": "0.1 %"
+                                }
+                            },
+                            "watermarks": {
+                                "metric": "none",
+                                "interval_us": "0 ns",
+                                "high_permil": "0 %",
+                                "mid_permil": "0 %",
+                                "low_permil": "0 %"
+                            },
+                            "filters": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+kdamond 0
+    context 0
+        ops: vaddr
+        target 0
+            pid: 123
+        intervals
+            sample 5 ms, aggr 100 ms, update 1 s
+            target 4 % accesses per 3 aggrs, [5 ms, 10 s] sampling interval
+        nr_regions: [10, 1,000]
+        scheme 0
+            action: migrate_hot to node None per 1 s
+            target access pattern
+                sz: [0 B, max]
+                nr_accesses: [5 %, 18,446,744,073,709,551,615 %]
+                age: [0 ns, max]
+            dest 0 weight 1
+            dest 1 weight 1
+            quotas
+                0 ns / 200.000 MiB / 0 B per 1 s
+                priority: sz 0.1 %, nr_accesses 0.1 %, age 0.1 %
+            watermarks
+                metric none, interval 0 ns
+                0 %, 0 %, 0 %
+        access sample control
+        enabled primitives: page_table

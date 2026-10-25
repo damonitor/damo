@@ -1,0 +1,283 @@
+{
+    "kdamonds": [
+        {
+            "refresh_ms": 0,
+            "contexts": [
+                {
+                    "ops": "paddr",
+                    "addr_unit": "1 B",
+                    "targets": [
+                        {
+                            "pid": null,
+                            "obsolete": false,
+                            "regions": [
+                                {
+                                    "start": "4,096",
+                                    "end": "654,336"
+                                },
+                                {
+                                    "start": "1,048,576",
+                                    "end": "3,221,082,112"
+                                },
+                                {
+                                    "start": "4,294,967,296",
+                                    "end": "8,371,830,784"
+                                }
+                            ]
+                        }
+                    ],
+                    "intervals": {
+                        "sample_us": "5 ms",
+                        "aggr_us": "100 ms",
+                        "ops_update_us": "1 s",
+                        "intervals_goal": {
+                            "access_bp": "4 %",
+                            "aggrs": "3",
+                            "min_sample_us": "5 ms",
+                            "max_sample_us": "10 s"
+                        }
+                    },
+                    "nr_regions": {
+                        "min": "10",
+                        "max": "1,000"
+                    },
+                    "probes": [],
+                    "sample_control": {
+                        "primitives_enabled": {
+                            "page_table": true,
+                            "page_fault": false
+                        },
+                        "sample_filters": []
+                    },
+                    "pause": false,
+                    "schemes": [
+                        {
+                            "action": "migrate_cold",
+                            "dests": [],
+                            "target_nid": 1,
+                            "access_pattern": {
+                                "sz_bytes": {
+                                    "min": "0 B",
+                                    "max": "max"
+                                },
+                                "nr_accesses": {
+                                    "min": "0 %",
+                                    "max": "0 %"
+                                },
+                                "age": {
+                                    "min": "0 ns",
+                                    "max": "max"
+                                }
+                            },
+                            "apply_interval_us": "1 s",
+                            "quotas": {
+                                "time_ms": "0 ns",
+                                "sz_bytes": "200.000 MiB",
+                                "reset_interval_ms": "1 s",
+                                "fail_charge_num": "0",
+                                "fail_charge_denom": "0",
+                                "goals": [
+                                    {
+                                        "metric": "node_mem_free_bp",
+                                        "complement": false,
+                                        "nid": "0",
+                                        "memcg_path": null,
+                                        "target_value": "50",
+                                        "current_value": "0"
+                                    }
+                                ],
+                                "goal_tuner": "consist",
+                                "effective_sz_bytes": "0 B",
+                                "weights": {
+                                    "sz_permil": "0.1 %",
+                                    "nr_accesses_permil": "0.1 %",
+                                    "age_permil": "0.1 %"
+                                }
+                            },
+                            "watermarks": {
+                                "metric": "none",
+                                "interval_us": "0 ns",
+                                "high_permil": "0 %",
+                                "mid_permil": "0 %",
+                                "low_permil": "0 %"
+                            },
+                            "filters": [
+                                {
+                                    "filter_type": "young",
+                                    "matching": true,
+                                    "allow": false,
+                                    "memcg_path": null,
+                                    "address_range": null,
+                                    "damon_target_idx": null,
+                                    "hugepage_size": null,
+                                    "probe_hits_wsum_range": null
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "refresh_ms": 0,
+            "contexts": [
+                {
+                    "ops": "paddr",
+                    "addr_unit": "1 B",
+                    "targets": [
+                        {
+                            "pid": null,
+                            "obsolete": false,
+                            "regions": []
+                        }
+                    ],
+                    "intervals": {
+                        "sample_us": "5 ms",
+                        "aggr_us": "100 ms",
+                        "ops_update_us": "1 s",
+                        "intervals_goal": {
+                            "access_bp": "4 %",
+                            "aggrs": "3",
+                            "min_sample_us": "5 ms",
+                            "max_sample_us": "10 s"
+                        }
+                    },
+                    "nr_regions": {
+                        "min": "10",
+                        "max": "1,000"
+                    },
+                    "probes": [],
+                    "sample_control": {
+                        "primitives_enabled": {
+                            "page_table": true,
+                            "page_fault": false
+                        },
+                        "sample_filters": []
+                    },
+                    "pause": false,
+                    "schemes": [
+                        {
+                            "action": "migrate_hot",
+                            "dests": [],
+                            "target_nid": 0,
+                            "access_pattern": {
+                                "sz_bytes": {
+                                    "min": "0 B",
+                                    "max": "max"
+                                },
+                                "nr_accesses": {
+                                    "min": "5 %",
+                                    "max": "18,446,744,073,709,551,615 %"
+                                },
+                                "age": {
+                                    "min": "0 ns",
+                                    "max": "max"
+                                }
+                            },
+                            "apply_interval_us": "1 s",
+                            "quotas": {
+                                "time_ms": "0 ns",
+                                "sz_bytes": "200.000 MiB",
+                                "reset_interval_ms": "1 s",
+                                "fail_charge_num": "0",
+                                "fail_charge_denom": "0",
+                                "goals": [
+                                    {
+                                        "metric": "node_mem_used_bp",
+                                        "complement": false,
+                                        "nid": "0",
+                                        "memcg_path": null,
+                                        "target_value": "9,970",
+                                        "current_value": "0"
+                                    }
+                                ],
+                                "goal_tuner": "consist",
+                                "effective_sz_bytes": "0 B",
+                                "weights": {
+                                    "sz_permil": "0.1 %",
+                                    "nr_accesses_permil": "0.1 %",
+                                    "age_permil": "0.1 %"
+                                }
+                            },
+                            "watermarks": {
+                                "metric": "none",
+                                "interval_us": "0 ns",
+                                "high_permil": "0 %",
+                                "mid_permil": "0 %",
+                                "low_permil": "0 %"
+                            },
+                            "filters": [
+                                {
+                                    "filter_type": "young",
+                                    "matching": true,
+                                    "allow": true,
+                                    "memcg_path": null,
+                                    "address_range": null,
+                                    "damon_target_idx": null,
+                                    "hugepage_size": null,
+                                    "probe_hits_wsum_range": null
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+kdamond 0
+    context 0
+        ops: paddr
+        target 0
+            region [4,096, 654,336) (635.000 KiB)
+            region [1,048,576, 3,221,082,112) (2.999 GiB)
+            region [4,294,967,296, 8,371,830,784) (3.797 GiB)
+        intervals
+            sample 5 ms, aggr 100 ms, update 1 s
+            target 4 % accesses per 3 aggrs, [5 ms, 10 s] sampling interval
+        nr_regions: [10, 1,000]
+        scheme 0
+            action: migrate_cold to node 1 per 1 s
+            target access pattern
+                sz: [0 B, max]
+                nr_accesses: [0 %, 0 %]
+                age: [0 ns, max]
+            quotas
+                0 ns / 200.000 MiB / 0 B per 1 s
+                goal 0: metric node_mem_free_bp (nid 0) target 50 current 0
+                goal tuner: consist
+                priority: sz 0.1 %, nr_accesses 0.1 %, age 0.1 %
+            watermarks
+                metric none, interval 0 ns
+                0 %, 0 %, 0 %
+            filter 0
+                reject young
+        access sample control
+        enabled primitives: page_table
+kdamond 1
+    context 0
+        ops: paddr
+        target 0
+            
+        intervals
+            sample 5 ms, aggr 100 ms, update 1 s
+            target 4 % accesses per 3 aggrs, [5 ms, 10 s] sampling interval
+        nr_regions: [10, 1,000]
+        scheme 0
+            action: migrate_hot to node 0 per 1 s
+            target access pattern
+                sz: [0 B, max]
+                nr_accesses: [5 %, 18,446,744,073,709,551,615 %]
+                age: [0 ns, max]
+            quotas
+                0 ns / 200.000 MiB / 0 B per 1 s
+                goal 0: metric node_mem_used_bp (nid 0) target 9,970 current 0
+                goal tuner: consist
+                priority: sz 0.1 %, nr_accesses 0.1 %, age 0.1 %
+            watermarks
+                metric none, interval 0 ns
+                0 %, 0 %, 0 %
+            filter 0
+                allow young
+        access sample control
+        enabled primitives: page_table
