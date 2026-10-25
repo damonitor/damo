@@ -676,6 +676,13 @@ def set_nr_args(args):
             args.probe is False and args.damos_scheme is False:
         return None
 
+    if args.damon_target is False:
+        sys.argv = ['--damon_target'] + sys.argv
+    if args.damon_ctx is False:
+        sys.argv = ['--damon_ctx'] + sys.argv
+    if args.kdamond is False:
+        sys.argv = ['--kdamond'] + sys.argv
+
     kdamond_idx = -1
     nr_ctxs = []
 
