@@ -3,6 +3,8 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.4.3
 - Give deprecation warning on 'damo features'.
+- Minor updates on USAGE.md.
+- Disallow mixed use of --[damos]_nr_* and options start markers.
 
 v3.4.2
 - Support quota goal complement flag.
