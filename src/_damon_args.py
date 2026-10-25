@@ -1807,8 +1807,8 @@ def set_damos_argparser(parser, hide_help):
             '--damos_max_nr_snapshots', action='append',
             help='damos max_nr_snapshots')
     parser.add_argument('--nr_schemes', metavar='<number>', nargs='+', type=int,
-                        help='number of schemes for each context (in order)'
-                        if not hide_help else argparse.SUPPRESS)
+                        # number of schemes for each context (in order)
+                        help=argparse.SUPPRESS)
 
 def set_misc_damon_params_argparser(parser):
     parser.add_argument('-c', '--schemes', metavar='<json string or file>',
