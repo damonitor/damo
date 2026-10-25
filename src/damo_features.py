@@ -2,6 +2,7 @@
 
 import json
 
+import _damo_deprecation_notice
 import _damo_sysinfo
 import _damon
 import _damon_args
@@ -14,6 +15,9 @@ def pr_infer_version(sysinfo):
     print('Seems the version of DAMON is %s' % version)
 
 def main(args):
+    _damo_deprecation_notice.will_be_deprecated(
+            feature='damo features', deadline='2026-12-25',
+            alternative='damo report sys_info')
     if args.invalidate_cache:
         err = _damo_sysinfo.rm_sysinfo_file()
         if err is not None:
