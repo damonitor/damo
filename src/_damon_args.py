@@ -1084,7 +1084,7 @@ def deduce_target_update_args(args):
         if not args.ops in [['paddr'], None]:
             warn_option_override('--ops')
         args.ops = ['paddr']
-        if args.target_pid != None:
+        if args.target_pid is not None:
             warn_option_override('--target_pid')
         args.target_pid = None
         return None
@@ -1095,7 +1095,7 @@ def deduce_target_update_args(args):
         args.self_started_target = True
     elif target_type == target_type_pid:
         pid = int(args.deducible_target)
-    if args.target_pid != None:
+    if args.target_pid is not None:
         print('warning: --target_pid will be ignored')
     args.target_pid = [pid]
     if not args.regions:
