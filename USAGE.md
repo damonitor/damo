@@ -127,8 +127,8 @@ and therefore can be used on nearly every setup.  It is common and fully
 supported to run DAMON and collect outputs of it on a machine, and do
 visualizations of the outputs on another machines.
 
-DAMON Control (Access Monitoring and Monitoring-based System Optimization)
-==========================================================================
+DAMON Control
+=============
 
 The main purposes of `damo` is operating DAMON, as the name says (DAMO: DAMon
 Operator).  In other words, `damo` is for helping control of DAMON and
@@ -137,9 +137,9 @@ retrieval/interpretation of the results.
 `damo start`
 ------------
 
-`damo start` make DAMON in kernel starts running as users request.  Users can
-specify how and to what address spaces DAMON should do monitor accesses, and do
-what access-aware system operations.  The request can be made via several
+`damo start` request kernel to start running DAMON as users request.  Users can
+specify how and to what address spaces DAMON should do monitor, and do what
+data attributes-aware system operations.  The request can be made via several
 command line options of the command.
 
 Refer to [`mem_tier.sh`](./scripts/mem_tier.sh) and
@@ -155,7 +155,7 @@ will be non-zero.
 ### Simple Target Argument
 
 The command receives one positional argument called deducible target.  It could
-be used for specifying monitoring target, or full DAMON parameters.  The
+be used for specifying monitoring target.  The
 command will try to deduce the type of the argument value and use it.
 
 If the user wants to monitor the entire physical address space of the system, a
@@ -184,7 +184,7 @@ Below example shows a pid target usage:
     # sleep 5 &
     # damo start $(pidof sleep)
 
-### Partial DAMON Parameters Update
+### DAMON Parameters Update
 
 `damo` sets DAMON parameters such as [monitoring
 intervals](https://docs.kernel.org/mm/damon/design.html#access-frequency-monitoring)
@@ -202,12 +202,12 @@ design document is samely applied.  For example the keywords for `--ops` can be
 found from the kernel doc
 [session for operations set](https://docs.kernel.org/mm/damon/design.html#operations-set-layer).
 
-Users can create multiple monitoring targets, multiple DAMON contexts and
-multiple kdamonds.  For that, users can specify related options multiple times
-to set the parameter values with non-default ones.  For that, users should put
-`--kdamond`, `--damon_ctx`, `--damon_target`, and `--damos_scheme` on the
-command line before options of a new kdamond, DAMON context, monitoring target,
-and DAMOS scheme, respectively.
+Users can configure DAMON to run with multiple kdamonds, contexts, monitoring
+targets and DAMOS schemes.  For that, users should put `--kdamond`,
+`--damon_ctx`, `--damon_target` and `--damos_scheme` on the command line before
+adding options for a new kdamond, DAMON context, monitoring targets and DAMOS
+scheme, respectively.  After the start marker, users can specify related
+options.
 
 To see what full DAMON parameters are created with given command line, users
 can use `damo args damon --format report`.  For example:
@@ -267,18 +267,21 @@ kdamond 1
         enabled primitives: page_table
 ```
 
-### Partial DAMOS Parameters Update
+### DAMOS Parameters Update
 
 Command line options having prefix of `--damos_` are for DAMON-based operation
 schemes.  Those options are allowed to be specified multiple times for
 requesting multiple schemes.  When user creates schemes with multiple DAMON
-contexts, `--nr_schemes` should also be provided for assigning the schemes to
-each context.  For example, below shows how you can start DAMON with two DAMOS
-schemes, one for proactive LRU-prioritization of hot pages and the other one
-for proactive LRU-deprioritization of cold pages.
+contexts, `--damos_scheme` should be put first on the command line to specify
+following options until next `--damos_scheme` is for a single scheme.  For
+example, below shows how you can start DAMON with two DAMOS schemes, one for
+proactive LRU-prioritization of hot pages and the other one for proactive
+LRU-deprioritization of cold pages.
 
     # damo start \
+        --damos_scheme \
         --damos_action lru_prio --damos_access_rate 50% max --damos_age 5s max \
+        --damos_scheme \
         --damos_action lru_deprio --damos_access_rate 0% 0% --damos_age 5s max
 
 This command will ask DAMON to find memory regions that showing >=50%
