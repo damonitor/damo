@@ -676,6 +676,12 @@ def set_nr_args(args):
             args.probe is False and args.damos_scheme is False:
         return None
 
+    for v in [args.nr_ctxs, args.nr_targets, args.nr_schemes, args.nr_probes,
+              args.nr_probe_preps, args.nr_probe_filters,
+              args.damos_nr_quota_goals, args.damos_nr_filters]:
+        if v is not None and v != []:
+            return '--[damos]_nr_* cannot be used with start markers'
+
     if args.damon_target is False:
         sys.argv = ['--damon_target'] + sys.argv
     if args.damon_ctx is False:
