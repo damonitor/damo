@@ -42,7 +42,6 @@ fi
 			--damos_quota_goal active_mem_bp 50.1% \
 			--damos_quota_weights 0 1 1 \
 			--damos_filter allow young \
-	--damos_nr_quota_goals 1 1 --damos_nr_filters 1 1
 
 "$damo_bin" args damon --format report \
 	--kdamond --damon_ctx --monitoring_intervals_goal 4% 3 5ms 10s \
@@ -61,4 +60,3 @@ fi
 			--damos_quota_goal active_mem_bp 50.1% \
 			--damos_quota_weights 0 1 1 \
 			--damos_filter allow young \
-	--damos_nr_quota_goals 1 1 --damos_nr_filters 1 1
