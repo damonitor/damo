@@ -1002,11 +1002,6 @@ def gen_assign_probes(ctxs, args):
     return None
 
 def damon_ctxs_for(args):
-    err = set_nr_args(args)
-    if err is not None:
-        return None, err
-    fillup_none_ctx_args(args)
-    fillup_none_target_args(args)
     ctxs = []
     for idx in range(get_nr_ctxs(args)):
         ctx, err = damon_ctx_for(args, idx)
@@ -1424,6 +1419,12 @@ def kdamonds_for(args):
         err = deduce_target_update_args(args)
         if err:
             return None, err
+
+    err = set_nr_args(args)
+    if err is not None:
+        return None, err
+    fillup_none_ctx_args(args)
+    fillup_none_target_args(args)
 
     ctxs, err = damon_ctxs_for(args)
     if err:
