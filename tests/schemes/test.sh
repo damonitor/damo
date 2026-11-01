@@ -64,10 +64,10 @@ test_stat() {
 	echo "PASS $testname ($test_stat_applied cold memory found)"
 
 	testname="schemes-speed-limit $damon_interface"
-	if ! sudo "$damo" features supported \
-		--damon_interface_DEPRECATED "$damon_interface" \
-		2> /dev/null | \
-		grep -w schemes_time_quota > /dev/null
+	feature_name="${damon_interface}/schemes_time_quota"
+	if sudo "$damo" report sysinfo --print unavailable_features \
+		--print_feature_name_only 2> /dev/null | \
+		grep -w "$feature_name" --quiet
 	then
 		echo "SKIP $testname (unsupported)"
 		return
@@ -146,18 +146,18 @@ test_wmarks() {
 	local damon_interface=$1
 	testname="schemes-wmarks $damon_interface"
 
-	if ! sudo "$damo" features supported \
-		--damon_interface_DEPRECATED "$damon_interface" \
-		2> /dev/null | \
-		grep -w schemes_wmarks > /dev/null
+	feature_name="${damon_interface}/schemes_wmarks"
+	if sudo "$damo" report sysinfo --print unavailable_features \
+		--print_feature_name_only 2> /dev/null | \
+		grep -w "$feature_name" --quiet
 	then
 		echo "SKIP $testname (unsupported)"
 		return
 	fi
-	if ! sudo "$damo" features supported \
-		--damon_interface_DEPRECATED "$damon_interface" \
-		2> /dev/null | \
-		grep -w paddr > /dev/null
+	feature_name="${damon_interface}/paddr"
+	if sudo "$damo" report sysinfo --print unavailable_features \
+		--print_feature_name_only 2> /dev/null | \
+		grep -w "$feature_name" --quiet
 	then
 		echo "SKIP $testname (paddr unsupported)"
 		return
@@ -338,10 +338,10 @@ fi
 
 for damon_interface in $damon_interfaces
 do
-	if ! sudo "$damo" features supported \
-	       --damon_interface_DEPRECATED "$damon_interface" \
-	       2> /dev/null | \
-	       grep -w "schemes" > /dev/null
+	feature_name="${damon_interface}/schemes"
+	if sudo "$damo" report sysinfo --print unavailable_features \
+		--print_feature_name_only 2> /dev/null | \
+		grep -w "$feature_name" --quiet
 	then
 		echo "SKIP $(basename $(pwd))"
 		exit 0
@@ -350,10 +350,10 @@ do
 	test_stat "$damon_interface"
 	test_wmarks "$damon_interface"
 
-	if sudo "$damo" features supported \
-	       --damon_interface_DEPRECATED "$damon_interface" \
-	       2> /dev/null | \
-		grep -w "schemes_filters" > /dev/null
+	feature_name="${damon_interface}/schemes_filters"
+	if sudo "$damo" report sysinfo --print unavailable_features \
+		--print_feature_name_only 2> /dev/null | \
+		grep -w "$feature_name" --quiet
 	then
 		test_filters || exit 1
 	fi
