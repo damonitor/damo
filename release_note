@@ -1,6 +1,9 @@
 This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
+v3.4.4
+- Support age_ms damos filter type.
+
 v3.4.3
 - Give deprecation warning on 'damo features'.
 - Minor updates on USAGE.md.
