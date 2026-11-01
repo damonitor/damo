@@ -1229,11 +1229,13 @@ class DamosFilter:
     hugepage_size = None    # list of min/max hugepage size in bytes
     damon_target_idx = None
     probe_hits_wsum_range = None
+    age_ms_range = None
     scheme = None
 
     def __init__(self, filter_type, matching, allow=False,
                  memcg_path=None, address_range=None, damon_target_idx=None,
-                 hugepage_size=None, probe_hits_wsum_range=None):
+                 hugepage_size=None, probe_hits_wsum_range=None,
+                 age_ms_range=None):
         self.filter_type = filter_type
         self.matching = _damo_fmt_str.text_to_bool(matching)
         self.memcg_path = memcg_path
@@ -1256,6 +1258,15 @@ class DamosFilter:
                         'wrong probe_hits_wsum_range for DamosFilter()')
             self.probe_hits_wsum_range = [
                     _damo_fmt_str.text_to_nr(x) for x in probe_hits_wsum_range]
+        if age_ms_range is not None:
+            if filter_type != 'age_ms':
+                raise Exception(
+                        'age_ms_range for !age_ms filter')
+            if not type(age_ms_range) is list and len(age_ms_range) != 2:
+                raise Exception('wrong age_ms_range for DamosFilter()')
+            self.age_ms_range = [
+                    _damo_fmt_str.text_to_ms(x) for x in age_ms_range]
+
 
     def to_str(self, raw):
         words = []
@@ -1290,6 +1301,14 @@ class DamosFilter:
                      _damo_fmt_str.format_nr(
                          self.probe_hits_wsum_range[1], raw)))
             return ' '.join(words)
+        if self.filter_type == 'age_ms':
+            words.append(
+                    '[%s, %s]' %
+                    (_damo_fmt_str.format_time_ms_exact(
+                        self.age_ms_range[0], raw),
+                     _damo_fmt_str.format_time_ms_exact(
+                         self.age_ms_range[1], raw)))
+            return ' '.join(words)
 
     def __str__(self):
         return self.to_str(False)
@@ -1319,7 +1338,9 @@ class DamosFilter:
                     if kv['filter_type'] == 'target' else None,
                     hugepage_size=hugepage_size,
                     probe_hits_wsum_range=kv.get(
-                        'probe_hits_wsum_range', None))
+                        'probe_hits_wsum_range', None),
+                    age_ms_range=kv.get('age_ms_range', None),
+                        )
 
     def to_kvpairs(self, raw=False):
         return collections.OrderedDict([
@@ -1339,6 +1360,10 @@ class DamosFilter:
              [_damo_fmt_str.format_nr(x, raw)
               for x in self.probe_hits_wsum_range]
              if self.probe_hits_wsum_range is not None else None),
+            ('age_ms_range',
+             [_damo_fmt_str.format_time_ms_exact(x, raw)
+              for x in self.age_ms_range]
+             if self.age_ms_range is not None else None),
             ])
 
     def handled_by_ops(self):
