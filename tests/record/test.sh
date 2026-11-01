@@ -56,10 +56,16 @@ test_record_validate_noexit()
 	testname="record-validate \"$target\" $timeout $regions_boundary"
 	testname+=" $damon_interface"
 
-	if [ "$target" = "paddr" ] && ! sudo "$damo" features \
-		--damon_interface_DEPRECATED "$damon_interface" supported \
-		2> /dev/null | \
-		grep -w paddr &> /dev/null
+	paddr_unsupport="false"
+	feature_name="${damon_interface}/paddr"
+	if sudo "$damo" report sysinfo --print unavailable_features \
+		--print_feature_name_only 2> /dev/null | \
+		grep -w "$feature_name" --quiet
+	then
+		paddr_unsupport="true"
+	fi
+
+	if [ "$target" = "paddr" ] && [ "$paddr_unsupport" = "true" ]
 	then
 		echo "SKIP record-validate $target $timeout (paddr unsupported)"
 		return 2
@@ -204,10 +210,10 @@ do
 	test_record_validate "paddr" 3 "none" "$damon_interface"
 done
 
-if sudo "$damo" features \
-	--damon_interface_DEPRECATED "$damon_interface" supported \
-	2> /dev/null | \
-	grep -w fvaddr &> /dev/null
+feature_name="${damon_interface}/fvaddr"
+if ! sudo "$damo" report sysinfo --print unavailable_features \
+	--print_feature_name_only 2> /dev/null | \
+	grep -w "$feature_name" --quiet
 then
 	test_sleep_record_validate 5 16 "4096-81920" "sysfs"
 fi
