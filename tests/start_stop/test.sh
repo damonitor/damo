@@ -24,7 +24,10 @@ fi
 for damon_interface in $damon_interfaces
 do
 	testname2="$testname $damon_interface"
-	if sudo "$damo" features supported | grep schemes_tried_regions --quiet
+	feature_name="${damon_interface}/schemes_tried_regions"
+	if sudo "$damo" report sysinfo --print unavailable_features \
+		--print_feature_name_only 2> /dev/null | \
+		grep -w "$feature_name" --quiet
 	then
 		do_report_access_test="true"
 	else
