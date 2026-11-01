@@ -1149,6 +1149,14 @@ def warn_for_features(arg, features):
 
 def warn_unsupported_damon_features_for(args):
     # damon/next
+    if args.damos_filter != []:
+        filters, err = damos_options_to_filters(args.damos_filter)
+        if err is None:
+            for filter in filters:
+                if filter.filter_type == 'age_ms':
+                    warn_for('--damos_filter with age_ms type',
+                             'sysfs/damos_filter_age_ms')
+
     if args.sample_primitives is not None:
         warn_for('--sample_primitives', 'sysfs/damon_sample_control')
 
