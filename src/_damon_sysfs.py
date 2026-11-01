@@ -1429,6 +1429,12 @@ def mk_feature_supports_map():
         if err is None:
             supports_map['sysfs/schemes_filters_young'] = True
 
+        kdamonds_for_feature_check[0].contexts[0].schemes[0].filters = [
+                _damon.DamosFilter('age_ms', True, age_ms_range=[0, 1000])]
+        err = stage_kdamonds(kdamonds_for_feature_check)
+        if err is None:
+            supports_map['sysfs/damos_filter_age_ms'] = True
+
     if os.path.isfile(os.path.join(scheme_dir_of(0, 0, 0), 'apply_interval_us')):
         supports_map['sysfs/schemes_apply_interval'] = True
 
