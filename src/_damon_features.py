@@ -384,6 +384,10 @@ features_list = [
                      upstream_status='merged into mm.git',
                      upstreamed_version='none'),
 
+        DamonFeature(name='sysfs/damos_filter_age_ms',
+                     upstream_status='hacking on damon/next',
+                     upstreamed_version='none'),
+
         # planned to not be upstreamed.
         DamonFeature(name='sysfs/damon_sample_control',
                      upstream_status='hacking on damon/next',
