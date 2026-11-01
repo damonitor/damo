@@ -161,6 +161,13 @@ def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
         return _damon.DamosFilter(
                 ftype, fmatching, allow=allow,
                 probe_hits_wsum_range=probe_hits_wsum_range), None, 2
+    elif ftype == 'age_ms':
+        if len(optional_words) < 2:
+            return None, 'no range for age in ms is given', 0
+        age_ms_range = [optional_words[0], optional_words[1]]
+        return _damon.DamosFilter(
+                ftype, fmatching, allow=allow,
+                age_ms_range=age_ms_range), None, 2
 
     return None, 'unsupported filter type', 0
 
