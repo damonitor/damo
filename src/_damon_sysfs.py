@@ -197,6 +197,18 @@ def write_filter_dir(dir_path, filter_):
         if err is not None:
             return err
 
+    if filter_.age_ms_range is not None:
+        err = _damo_fs.write_file(
+                os.path.join(dir_path, 'min'),
+                '%d' % filter_.age_ms_range[0])
+        if err is not None:
+            return err
+        err = _damo_fs.write_file(
+                os.path.join(dir_path, 'max'),
+                '%d' % filter_.age_ms_range[1])
+        if err is not None:
+            return err
+
     return _damo_fs.write_file(os.path.join(dir_path, 'matching'),
                                'Y' if filter_.matching else 'N')
 
@@ -228,7 +240,8 @@ def write_filters_dir(dir_path, filters):
     return None
 
 def is_core_filter(damos_filter):
-    return damos_filter.filter_type in ['addr', 'target', 'probe_hits_wsum']
+    return damos_filter.filter_type in [
+            'addr', 'target', 'probe_hits_wsum', 'age_ms']
 
 def write_core_ops_filters_dirs(scheme_dir_path, filters):
     core_filters = [f for f in filters if is_core_filter(f)]
