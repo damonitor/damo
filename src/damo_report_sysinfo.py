@@ -4,7 +4,10 @@ import _damo_sysinfo
 import _damon
 import _damon_features
 
-def pr_feature(feature):
+def pr_feature(feature, name_only):
+    if name_only is True:
+        print(feature.name)
+        return
     print('- %s (%s)' % (feature.name, feature.upstream_status))
     if feature.comments:
         print('  - %s' % feature.comments)
@@ -69,7 +72,7 @@ def main(args):
     if len(features_to_print) > 0:
         print('available DAMON features:')
         for f in features_to_print:
-            pr_feature(f)
+            pr_feature(f, args.print_feature_name_only)
 
     if not should_print_feature(args.print, 'unavailable_features'):
         return
@@ -81,7 +84,7 @@ def main(args):
     if len(unavail_features_to_print) > 0:
         print('unavailable DAMON features:')
         for f in unavail_features_to_print:
-            pr_feature(f)
+            pr_feature(f, args.print_feature_name_only)
 
 def set_argparser(parser):
     parser.add_argument(
@@ -94,4 +97,6 @@ def set_argparser(parser):
             default=['versions', 'interfaces'], help='info to print')
     parser.add_argument('--invalidate_cache', action='store_true',
                         help='invalidate cached sysinfo')
+    parser.add_argument('--print_feature_name_only', action='store_true',
+                        help='print features with only name')
     return parser
