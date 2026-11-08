@@ -1333,7 +1333,7 @@ def warn_unsupported_damon_features_for(args):
         filters, err = damos_options_to_filters(args.damos_filter)
         if err is None:
             for filter in filters:
-                if filter.filter_type == 'target':
+                if filter.filter_type == _damon.damos_filter_type_target:
                     warn_for('--damos_filter with target type',
                              'sysfs/schemes_filters_target')
                 if filter.filter_type == _damon.damos_filter_type_addr:
