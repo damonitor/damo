@@ -1424,7 +1424,7 @@ def mk_feature_supports_map():
         supports_map['sysfs/schemes_filters_anon'] = True
         supports_map['sysfs/schemes_filters_memcg'] = True
         kdamonds_for_feature_check[0].contexts[0].schemes[0].filters = [
-                _damon.DamosFilter('young', True)]
+                _damon.DamosFilter(_damon.damos_filter_type_young, True)]
         err = stage_kdamonds(kdamonds_for_feature_check)
         if err is None:
             supports_map['sysfs/schemes_filters_young'] = True
