@@ -1014,7 +1014,7 @@ def files_content_to_damos_filter(files_content):
                          for x in [files_content['min'], files_content['max']]]
 
     probe_hits_wsum_range = None
-    if ftype == 'probe_hits_wsum':
+    if ftype == _damon.damos_filter_type_probe_hits_wsum:
         probe_hits_wsum_range = [
                 _damo_fmt_str.text_to_nr(x)
                 for x in [files_content['min'], files_content['max']]]

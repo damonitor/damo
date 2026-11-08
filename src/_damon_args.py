@@ -1195,7 +1195,8 @@ def warn_unsupported_damon_features_for(args):
         filters, err = damos_options_to_filters(args.damos_filter)
         if err is None:
             for filter in filters:
-                if filter.filter_type == 'probe_hits_wsum':
+                if filter.filter_type == \
+                        _damon.damos_filter_type_probe_hits_wsum:
                     warn_for('--damos_filter with probe_hits_wsum type',
                              'sysfs/damos_filter_probe_hits_wsum')
 
