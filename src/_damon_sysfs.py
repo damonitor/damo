@@ -239,18 +239,14 @@ def write_filters_dir(dir_path, filters):
             return err
     return None
 
-def is_core_filter(damos_filter):
-    return damos_filter.filter_type in [
-            'addr', 'target', 'probe_hits_wsum', 'age_ms']
-
 def write_core_ops_filters_dirs(scheme_dir_path, filters):
-    core_filters = [f for f in filters if is_core_filter(f)]
+    core_filters = [f for f in filters if not f.handled_by_ops()]
     err = write_filters_dir(os.path.join(scheme_dir_path, 'core_filters'),
                             core_filters)
     if err is not None:
         return err
 
-    ops_filters = [f for f in filters if not is_core_filter(f)]
+    ops_filters = [f for f in filters if f.handled_by_ops()]
     err = write_filters_dir(os.path.join(scheme_dir_path, 'ops_filters'),
                             ops_filters)
     if err is not None:
