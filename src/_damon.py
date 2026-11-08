@@ -1248,6 +1248,15 @@ damos_filter_types = damos_filter_types_no_arg + [
         damos_filter_type_age_ms,
 ]
 
+damos_ops_filter_types = [
+        damos_filter_type_anon,
+        damos_filter_type_active,
+        damos_filter_type_memcg,
+        damos_filter_type_young,
+        damos_filter_type_hugepage_size,
+        damos_filter_type_unmapped,
+        ]
+
 class DamosFilter:
     filter_type = None  # anon, active, memcg, young, hugepage_size, unmapped,
                         # addr, or target
@@ -1400,8 +1409,7 @@ class DamosFilter:
 
     def handled_by_ops(self):
         # whether this filter is handled by DAMON operations set layer
-        return self.filter_type in ['anon', 'active', 'memcg', 'young',
-                                    'hugepage_size', 'unmapped']
+        return self.filter_type in damos_ops_filter_types
 
 class DamosStats:
     nr_tried = None
