@@ -3,6 +3,7 @@ picked by human sense, so could be incomplete and missing many things.
 
 v3.4.5
 - Support active type DAMON filter.
+- Suggest probe_{prep,filter,weight} on CLI auto-completion.
 - Fix start_stop test.
 
 v3.4.4
