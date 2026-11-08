@@ -635,7 +635,7 @@ def write_probe_filter_dir(dir_path, filter):
                               'Y' if filter.allow else 'N')
     if err is not None:
         return err
-    if filter.filter_type == 'memcg':
+    if filter.filter_type == _damon.damon_filter_type_memcg:
         err = _damo_fs.write_file(os.path.join(dir_path, 'path'), filter.path)
         if err is not None:
             return err
