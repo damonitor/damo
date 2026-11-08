@@ -1013,7 +1013,7 @@ def files_content_to_damos_filter(files_content):
     ftype = files_content['type'].strip()
 
     hugepage_size=None
-    if ftype == 'hugepage_size':
+    if ftype == _damon.damos_filter_type_hugepage_size:
         hugepage_size = [_damo_fmt_str.text_to_bytes(x)
                          for x in [files_content['min'], files_content['max']]]
 
