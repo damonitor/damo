@@ -1280,7 +1280,7 @@ class DamosFilter:
         if damon_target_idx != None:
             self.damon_target_idx = _damo_fmt_str.text_to_nr(damon_target_idx)
         if probe_hits_wsum_range is not None:
-            if filter_type != 'probe_hits_wsum':
+            if filter_type != damos_filter_type_probe_hits_wsum:
                 raise Exception(
                         'probe hits wsum range for !probe_hits_wsum filter')
             if (not type(probe_hits_wsum_range) is list and
@@ -1290,7 +1290,7 @@ class DamosFilter:
             self.probe_hits_wsum_range = [
                     _damo_fmt_str.text_to_nr(x) for x in probe_hits_wsum_range]
         if age_ms_range is not None:
-            if filter_type != 'age_ms':
+            if filter_type != damos_filter_type_age_ms:
                 raise Exception(
                         'age_ms_range for !age_ms filter')
             if not type(age_ms_range) is list and len(age_ms_range) != 2:
