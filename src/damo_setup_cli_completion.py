@@ -122,12 +122,10 @@ def get_candidates(words, cword, options):
         candidates.append(option.name)
     return candidates
 
-damos_filter_types = ['active', 'memcg', 'young', 'hugepage_size', 'unmapped',
-                      'addr', 'target']
 damos_filter_positional_candids = [
-        ['allow', 'reject'], ['none'] + damos_filter_types,
+        ['allow', 'reject'], ['none'] + _damon.damos_filter_types,
         # todo: do not suggest unless 'none' was entered
-        damos_filter_types]
+        _damon.damos_filter_types]
 
 damon_filter_positional_candids = [
         ['allow', 'reject'], ['non'] + _damon.damon_filter_types,
