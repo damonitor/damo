@@ -1346,7 +1346,7 @@ def warn_unsupported_damon_features_for(args):
         filters, err = damos_options_to_filters(args.damos_filter)
         if err is None:
             for filter in filters:
-                if filter.filter_type == 'memcg':
+                if filter.filter_type == _damon.damos_filter_type_memcg:
                     warn_for('--damos_filter with memcg type',
                              'sysfs/schemes_filters_memcg')
                 if filter.filter_type == _damon.damos_filter_type_anon:
@@ -1508,7 +1508,7 @@ def stage_kdamonds(args):
 
 def damos_filter_invalidity(filter):
     # todo: support non-memcg filters
-    if filter.filter_type != 'memcg':
+    if filter.filter_type != _damon.damos_filter_type_memcg:
         return None
     memcg_path = filter.memcg_path
     if not memcg_path.startswith('/'):
