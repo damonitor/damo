@@ -165,6 +165,8 @@ def damon_param_candidates(words, cword):
                        damos_filter_positional_candids),
                 Option('--probe_filter', -1, True,
                        damon_filter_positional_candids),
+                Option('--probe_prep', -1, True, None,
+                       _damon.prep_actions)
                 ])
 
 def start_candidates(words, cword):
