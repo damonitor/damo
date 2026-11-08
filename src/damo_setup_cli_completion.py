@@ -129,6 +129,11 @@ damos_filter_positional_candids = [
         # todo: do not suggest unless 'none' was entered
         damos_filter_types]
 
+damon_filter_positional_candids = [
+        ['allow', 'reject'], ['non'] + _damon.damon_filter_types,
+        # todo: do not suggest unless 'none' was entered
+        _damon.damon_filter_types]
+
 def damon_param_candidates(words, cword):
     return get_candidates(
             words, cword,
@@ -158,6 +163,8 @@ def damon_param_candidates(words, cword):
                        repeatable=True),
                 Option('--damos_filter', -1, True,
                        damos_filter_positional_candids),
+                Option('--probe_filter', -1, True,
+                       damon_filter_positional_candids),
                 ])
 
 def start_candidates(words, cword):
