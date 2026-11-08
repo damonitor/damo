@@ -54,6 +54,7 @@ damon_filter_type_memcg = 'memcg'
 damon_filter_type_pgidle_unset = 'pgidle_unset'
 damon_filter_type_pgidle_set = 'pgidle_set'
 damon_filter_type_hugepage_size = 'hugepage_size'
+damon_filter_type_active = 'active'
 
 damon_filter_types = [
         damon_filter_type_anon,
@@ -61,6 +62,7 @@ damon_filter_types = [
         damon_filter_type_pgidle_unset,
         damon_filter_type_pgidle_set,
         damon_filter_type_hugepage_size,
+        damon_filter_type_active,
         ]
 
 class DamonFilter:
