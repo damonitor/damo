@@ -1262,6 +1262,8 @@ class DamosFilter:
                  memcg_path=None, address_range=None, damon_target_idx=None,
                  hugepage_size=None, probe_hits_wsum_range=None,
                  age_ms_range=None):
+        if not filter_type in damos_filter_types:
+            raise Exception('wrong damos filter type (%s)' % filter_type)
         self.filter_type = filter_type
         self.matching = _damo_fmt_str.text_to_bool(matching)
         self.memcg_path = memcg_path
