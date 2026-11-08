@@ -123,7 +123,7 @@ def get_candidates(words, cword, options):
     return candidates
 
 damos_filter_positional_candids = [
-        ['allow', 'reject'], ['none'] + _damon.damos_filter_types,
+        ['allow', 'reject'], ['non'] + _damon.damos_filter_types,
         # todo: do not suggest unless 'none' was entered
         _damon.damos_filter_types]
 
