@@ -1308,23 +1308,23 @@ class DamosFilter:
         if self.matching is False:
             words.append('non')
         words.append(self.filter_type)
-        if self.filter_type in ['anon', 'active', 'young', 'unmapped']:
+        if self.filter_type in damos_filter_types_no_arg:
             return ' '.join(words)
-        if self.filter_type == 'memcg':
+        if self.filter_type == damos_filter_type_memcg:
             return ' '.join(words + [self.memcg_path])
-        if self.filter_type == 'addr':
+        if self.filter_type == damos_filter_type_addr:
             return ' '.join(words + [self.address_range.to_str(raw)])
-        if self.filter_type == 'target':
+        if self.filter_type == damos_filter_type_target:
             return ' '.join(words + [_damo_fmt_str.format_nr(
                     self.damon_target_idx, raw)])
-        if self.filter_type == 'hugepage_size':
+        if self.filter_type == damos_filter_type_hugepage_size:
             if self.hugepage_size is not None:
                 words.append(
                         '[%s, %s]' %
                         (_damo_fmt_str.format_sz(self.hugepage_size[0], raw),
                          _damo_fmt_str.format_sz(self.hugepage_size[1], raw)))
             return ' '.join(words)
-        if self.filter_type == 'probe_hits_wsum':
+        if self.filter_type == damos_filter_type_probe_hits_wsum:
             words.append(
                     '[%s, %s]' %
                     (_damo_fmt_str.format_nr(
@@ -1332,7 +1332,7 @@ class DamosFilter:
                      _damo_fmt_str.format_nr(
                          self.probe_hits_wsum_range[1], raw)))
             return ' '.join(words)
-        if self.filter_type == 'age_ms':
+        if self.filter_type == damos_filter_type_age_ms:
             words.append(
                     '[%s, %s]' %
                     (_damo_fmt_str.format_time_ms_exact(
