@@ -1349,7 +1349,7 @@ def warn_unsupported_damon_features_for(args):
                 if filter.filter_type == 'memcg':
                     warn_for('--damos_filter with memcg type',
                              'sysfs/schemes_filters_memcg')
-                if filter.filter_type == 'anon':
+                if filter.filter_type == _damon.damos_filter_type_anon:
                     warn_for('--damos_filter with anon type',
                              'sysfs/schemes_filters_anon')
     if args.damos_filter != []:
