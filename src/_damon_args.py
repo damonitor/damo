@@ -123,13 +123,13 @@ def schemes_option_to_damos(schemes):
 
 def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
     # return filter, error, and number of consumed words
-    if ftype == 'memcg':
+    if ftype == _damon.damos_filter_type_memcg:
         if len(optional_words) < 1:
             return None, 'no memcg path is given', 0
         memcg_path = optional_words[0]
         return _damon.DamosFilter(ftype, fmatching, memcg_path=memcg_path,
                                   allow=allow), None, 1
-    if ftype == 'addr':
+    if ftype == _damon.damos_filter_type_addr:
         if len(optional_words) < 2:
             return None, 'no address range is given', 0
         try:
@@ -138,7 +138,7 @@ def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
             return None, 'wrong addr range (%s, %s)' % (optional_words, e), 0
         return _damon.DamosFilter(ftype, fmatching, allow=allow,
                                   address_range=addr_range), None, 2
-    elif ftype == 'target':
+    elif ftype == _damon.damos_filter_type_target:
         if len(optional_words) < 1:
             return None, 'no target argument', 0
         try:
@@ -148,20 +148,20 @@ def damos_filter_with_optional_args(ftype, fmatching, allow, optional_words):
         except Exception as e:
             return None, 'target filter creation failed (%s, %s)' % (
                     optional_words[0], e), 0
-    elif ftype == 'hugepage_size':
+    elif ftype == _damon.damos_filter_type_hugepage_size:
         if len(optional_words) < 2:
             return None, 'no range for hugepage sizes is given', 0
         hugepage_size = [optional_words[0], optional_words[1]]
         return _damon.DamosFilter(ftype, fmatching, allow=allow,
                                   hugepage_size=hugepage_size), None, 2
-    elif ftype == 'probe_hits_wsum':
+    elif ftype == _damon.damos_filter_type_probe_hits_wsum:
         if len(optional_words) < 2:
             return None, 'no range for probe hits wsum is given', 0
         probe_hits_wsum_range = [optional_words[0], optional_words[1]]
         return _damon.DamosFilter(
                 ftype, fmatching, allow=allow,
                 probe_hits_wsum_range=probe_hits_wsum_range), None, 2
-    elif ftype == 'age_ms':
+    elif ftype == _damon.damos_filter_type_age_ms:
         if len(optional_words) < 2:
             return None, 'no range for age in ms is given', 0
         age_ms_range = [optional_words[0], optional_words[1]]
