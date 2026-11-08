@@ -1232,13 +1232,16 @@ damos_filter_type_target = 'target'
 damos_filter_type_probe_hits_wsum = 'probe_hits_wsum'
 damos_filter_type_age_ms = 'age_ms'
 
-damos_filter_types = [
+damos_filter_types_no_arg = [
         damos_filter_type_anon,
         damos_filter_type_active,
-        damos_filter_type_memcg,
         damos_filter_type_young,
-        damos_filter_type_hugepage_size,
         damos_filter_type_unmapped,
+        ]
+
+damos_filter_types = damos_filter_types_no_arg + [
+        damos_filter_type_memcg,
+        damos_filter_type_hugepage_size,
         damos_filter_type_addr,
         damos_filter_type_target,
         damos_filter_type_probe_hits_wsum,
