@@ -1602,6 +1602,12 @@ def mk_feature_supports_map():
         if os.path.isfile(os.path.join(probe_filter_dir, 'min')):
             supports_map['sysfs/probe_type_hugepage_size'] = True
 
+        kdamonds_for_feature_check[0].contexts[0].probes[0].filters = [
+                _damon.DamonFilter('active', True)]
+        err = stage_kdamonds(kdamonds_for_feature_check)
+        if err is None:
+            supports_map['sysfs/probe_type_active'] = True
+
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
 
