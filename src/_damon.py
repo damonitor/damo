@@ -1362,11 +1362,12 @@ class DamosFilter:
         return DamosFilter(
                 kv['filter_type'], kv['matching'],
                 allow,
-                kv['memcg_path'] if kv['filter_type'] == 'memcg' else '',
+                kv['memcg_path'] if kv['filter_type'] == \
+                        damos_filter_type_memcg else '',
                 DamonRegion.from_kvpairs(kv['address_range'])
-                    if kv['filter_type'] == 'addr' else None,
+                    if kv['filter_type'] == damos_filter_type_addr else None,
                 kv['damon_target_idx']
-                    if kv['filter_type'] == 'target' else None,
+                    if kv['filter_type'] == damos_filter_type_target else None,
                     hugepage_size=hugepage_size,
                     probe_hits_wsum_range=kv.get(
                         'probe_hits_wsum_range', None),
