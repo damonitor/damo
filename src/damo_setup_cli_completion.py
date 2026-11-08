@@ -164,7 +164,8 @@ def damon_param_candidates(words, cword):
                 Option('--probe_filter', -1, True,
                        damon_filter_positional_candids),
                 Option('--probe_prep', -1, True, None,
-                       _damon.prep_actions)
+                       _damon.prep_actions),
+                Option('--probe_weight', -1, True),
                 ])
 
 def start_candidates(words, cword):
