@@ -1272,13 +1272,14 @@ def warn_unsupported_damon_features_for(args):
         filters, err = damos_options_to_filters(args.damos_filter)
         if err is None:
             for filter in filters:
-                if filter.filter_type == 'active':
+                if filter.filter_type == _damon.damos_filter_type_active:
                     warn_for('--damos_filter with active type',
                              'sysfs/schemes_filters_active')
-                if filter.filter_type == 'unmapped':
+                if filter.filter_type == _damon.damos_filter_type_unmapped:
                     warn_for('--damos_filter with unmapped type',
                              'sysfs/schemes_filters_unmapped')
-                if filter.filter_type == 'hugepage_size':
+                if filter.filter_type == \
+                        _damon.damos_filter_type_hugepage_size:
                     warn_for('--damos_filter with hugepage_size type',
                              'sysfs/schemes_filters_hugepage_size')
     if args.monitoring_intervals_goal is not None:
