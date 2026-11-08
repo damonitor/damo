@@ -1603,7 +1603,7 @@ def mk_feature_supports_map():
             supports_map['sysfs/probe_type_hugepage_size'] = True
 
         kdamonds_for_feature_check[0].contexts[0].probes[0].filters = [
-                _damon.DamonFilter('active', True)]
+                _damon.DamonFilter(_damon.damon_filter_type_active, True)]
         err = stage_kdamonds(kdamonds_for_feature_check)
         if err is None:
             supports_map['sysfs/probe_type_active'] = True
