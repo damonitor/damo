@@ -1221,6 +1221,30 @@ class DamosWatermarks:
                     _damo_fmt_str.format_permil(self.low_permil, raw)),
                 ])
 
+damos_filter_type_anon = 'anon'
+damos_filter_type_active = 'active'
+damos_filter_type_memcg = 'memcg'
+damos_filter_type_young = 'young'
+damos_filter_type_hugepage_size = 'hugepage_size'
+damos_filter_type_unmapped = 'unmapped'
+damos_filter_type_addr = 'addr'
+damos_filter_type_target = 'target'
+damos_filter_type_probe_hits_wsum = 'probe_hits_wsum'
+damos_filter_type_age_ms = 'age_ms'
+
+damos_filter_types = [
+        damos_filter_type_anon,
+        damos_filter_type_active,
+        damos_filter_type_memcg,
+        damos_filter_type_young,
+        damos_filter_type_hugepage_size,
+        damos_filter_type_unmapped,
+        damos_filter_type_addr,
+        damos_filter_type_target,
+        damos_filter_type_probe_hits_wsum,
+        damos_filter_type_age_ms,
+]
+
 class DamosFilter:
     filter_type = None  # anon, active, memcg, young, hugepage_size, unmapped,
                         # addr, or target
