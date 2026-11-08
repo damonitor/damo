@@ -1869,7 +1869,7 @@ def get_snapshot_records_of(request):
                     'sysfs/schemes_filters_addr'):
                 for start, end in addr_ranges:
                     filters.append(_damon.DamosFilter(
-                        'addr', False,
+                        _damon.damos_filter_type_addr, False,
                         address_range=_damon.DamonRegion(start, end)))
         if request.snapshot_damos_filters is not None:
             filters += request.snapshot_damos_filters

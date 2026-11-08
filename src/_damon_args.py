@@ -1336,7 +1336,7 @@ def warn_unsupported_damon_features_for(args):
                 if filter.filter_type == 'target':
                     warn_for('--damos_filter with target type',
                              'sysfs/schemes_filters_target')
-                if filter.filter_type == 'addr':
+                if filter.filter_type == _damon.damos_filter_type_addr:
                     warn_for('--damos_filter with addr type',
                              'sysfs/schemes_filters_addr')
     # schemes_tried_regions_sz should be checked in different places.
