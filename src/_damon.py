@@ -1306,7 +1306,7 @@ class DamosFilter:
         else:
             words.append('reject')
         if self.matching is False:
-            words.append('none')
+            words.append('non')
         words.append(self.filter_type)
         if self.filter_type in ['anon', 'active', 'young', 'unmapped']:
             return ' '.join(words)
