@@ -1618,6 +1618,11 @@ def mk_feature_supports_map():
     if err == None:
         for ops in ['vaddr', 'paddr', 'fvaddr']:
             supports_map['sysfs/%s' % ops] = ops in avail_ops
+
+    if get_sysfs_root() is not None and os.path.isdir(
+            os.path.join(get_sysfs_root(), 'kernel/mm/damon/admin/reports')):
+        supports_map['sysfs/report_producer'] = True
+
     err = stage_kdamonds(orig_kdamonds)
     if err is not None:
         return None, 'restoring original kdamonds setup failed'
