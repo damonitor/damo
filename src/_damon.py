@@ -65,6 +65,11 @@ damon_filter_types = [
         damon_filter_type_active,
         ]
 
+damon_report_type_user_report = 'user_report'
+damon_report_types = [
+        damon_report_type_user_report,
+        ]
+
 class DamonFilter:
     filter_type = None  # anon, memcg
     matching = None
