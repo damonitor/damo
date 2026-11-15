@@ -1173,6 +1173,13 @@ def warn_unsupported_damon_features_for(args):
         warn_for('--sample_primitives', 'sysfs/damon_sample_control')
 
     for probe_filter_args in args.probe_filter:
+        if _damon.damon_filter_type_report_made in probe_filter_args:
+            warn_for(
+                    '--probe_filter of %s' %
+                    _damon.damon_filter_type_report_made,
+                    'sysfs/probe_type_report_made')
+
+    for probe_filter_args in args.probe_filter:
         if _damon.damon_filter_type_hugepage_size in probe_filter_args:
             warn_for(
                     '--probe_filter of %s' %
