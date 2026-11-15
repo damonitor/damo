@@ -1608,6 +1608,7 @@ def mk_feature_supports_map():
         if os.path.isfile(
                 os.path.join(probe_filter_dir, 'filter_report_type')):
             supports_map['sysfs/probe_type_report_made'] = True
+            supports_map['sysfs/report_type_user_report'] = True
 
     if os.path.isdir(os.path.join(ctx_dir_of(0, 0), 'operations_attrs')):
         supports_map['sysfs/ops_attrs'] = True
