@@ -394,6 +394,10 @@ features_list = [
         DamonFeature(name='sysfs/report_producer',
                      upstream_status='hacking on damon/next',
                      upstreamed_version='none'),
+        DamonFeature(name='sysfs/probe_type_report_made',
+                     upstream_status='hacking on damon/next',
+                     upstreamed_version='none'),
+
 
         # planned to not be upstreamed.
         DamonFeature(name='sysfs/damon_sample_control',
