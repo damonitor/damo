@@ -644,6 +644,11 @@ def write_probe_filter_dir(dir_path, filter):
                                   '%d' % filter.range_max)
         if err is not None:
             return err
+    if filter.filter_type == _damon.damon_filter_type_report_made:
+        err = _damo_fs.write_file(os.path.join(dir_path, 'filter_report_type'),
+                                  '%s' % filter.filter_report_type)
+        if err is not None:
+            return err
 
     return None
 
