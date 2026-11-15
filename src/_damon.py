@@ -55,6 +55,7 @@ damon_filter_type_pgidle_unset = 'pgidle_unset'
 damon_filter_type_pgidle_set = 'pgidle_set'
 damon_filter_type_hugepage_size = 'hugepage_size'
 damon_filter_type_active = 'active'
+damon_filter_type_report_made = 'report_made'
 
 damon_filter_types = [
         damon_filter_type_anon,
@@ -63,6 +64,7 @@ damon_filter_types = [
         damon_filter_type_pgidle_set,
         damon_filter_type_hugepage_size,
         damon_filter_type_active,
+        damon_filter_type_report_made,
         ]
 
 damon_report_type_user_report = 'user_report'
@@ -77,9 +79,10 @@ class DamonFilter:
     path = None
     range_min = None
     range_max = None
+    filter_report_type = None
 
     def __init__(self, filter_type, matching=True, allow=False, path=None,
-                 range_min=None, range_max=None):
+                 range_min=None, range_max=None, filter_report_type=None):
         if not filter_type in damon_filter_types:
             raise Exception('wrong damon filter type (%s)' % filter_type)
         self.filter_type = filter_type
@@ -90,6 +93,11 @@ class DamonFilter:
             self.range_min = _damo_fmt_str.text_to_bytes(range_min)
         if range_max is not None:
             self.range_max = _damo_fmt_str.text_to_bytes(range_max)
+        if filter_report_type is not None and \
+                filter_report_type not in damon_report_types:
+            raise Exception('wrong filter_report_type (%s)' %
+                            filter_report_type)
+        self.filter_report_type = filter_report_type
 
     def to_str(self, raw):
         words = []
@@ -106,6 +114,8 @@ class DamonFilter:
             return ' '.join(words + ['[%s, %s]' % (
                 _damo_fmt_str.format_sz(self.range_min, raw),
                 _damo_fmt_str.format_sz(self.range_max, raw))])
+        if self.filter_type == damon_filter_type_report_made:
+            words.append(self.filter_report_type)
         return ' '.join(words)
 
     def __str__(self):
@@ -117,7 +127,8 @@ class DamonFilter:
                 self.matching == other.matching and \
                 self.allow == other.allow and self.path == other.path and \
                 self.range_min == other.range_min and \
-                self.range_max == other.range_max
+                self.range_max == other.range_max and \
+                self.filter_report_type == other.filter_report_type
 
     @classmethod
     def from_kvpairs(cls, kv):
@@ -125,6 +136,7 @@ class DamonFilter:
                 filter_type=kv['filter_type'], matching=kv['matching'],
                 allow=kv['allow'], path=kv['path'],
                 range_min=kv.get('range_min'), range_max=kv.get('range_max'),
+                filter_report_type=kv.get('filter_report_type'),
                 )
 
     def to_kvpairs(self, raw=False):
@@ -141,6 +153,7 @@ class DamonFilter:
             ('path', self.path),
             ('range_min', range_min),
             ('range_max', range_max),
+            ('filter_report_type', self.filter_report_type),
             ])
 
 class DamonProbe:
