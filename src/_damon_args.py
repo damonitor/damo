@@ -924,10 +924,15 @@ def probe_filter_for(filter_arg_fields):
             return None, 'min, max are not given'
         range_min = fields[0]
         range_max = fields[1]
+    elif filter_type == _damon.damon_filter_type_report_made:
+        if len(fields) < 1:
+            return None, 'filter_report_type is not given'
+        filter_report_type = fields[0]
     try:
         filter = _damon.DamonFilter(
                 filter_type=filter_type, matching=matching, allow=allow,
-                path=path, range_min=range_min, range_max=range_max)
+                path=path, range_min=range_min, range_max=range_max,
+                filter_report_type=filter_report_type)
     except Exception as e:
         return None, 'filter creation fail (%s)' % e
     return filter, None
