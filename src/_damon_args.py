@@ -1179,14 +1179,14 @@ def warn_unsupported_damon_features_for(args):
                     _damon.damon_filter_type_report_made,
                     'sysfs/probe_type_report_made')
 
+    # mm.git
+
     for probe_filter_args in args.probe_filter:
         if _damon.damon_filter_type_hugepage_size in probe_filter_args:
             warn_for(
                     '--probe_filter of %s' %
                     _damon.damon_filter_type_hugepage_size,
                     'sysfs/probe_type_hugepage_size')
-
-    # mm.git
 
     if len(args.probe_prep) > 0:
         warn_for('--probe_prep', 'sysfs/probe_preps')
