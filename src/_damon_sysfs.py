@@ -1156,12 +1156,15 @@ def files_content_to_damon_filter(files_content):
     else:
         range_min = None
         range_max = None
+    filter_report_type = files_content.get('filter_report_type')
+    if filter_report_type is not None:
+        filter_report_type = filter_report_type.strip()
     return _damon.DamonFilter(
         filter_type=files_content['type'].strip(),
         matching=files_content['matching'].strip(),
         allow=files_content['allow'].strip(), path=path,
         range_min=range_min, range_max=range_max,
-        filter_report_type=files_content.get('filter_report_type'))
+        filter_report_type=filter_report_type)
 
 def files_content_to_probe(files_content):
     if 'preps' in files_content:
