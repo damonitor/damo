@@ -2286,3 +2286,17 @@ def wait_kdamonds_turned_off():
     for idx in range(nr_kdamonds()):
         while is_kdamond_running(idx):
             time.sleep(1)
+
+# report producer
+
+class ReportProducer:
+    report_type = None
+    addr_start = None
+    addr_end = None
+
+    def __init__(self, report_type, addr_start=None, addr_end=None):
+        if not report_type in damon_report_types:
+            raise Exception('unknown report type (%s)' % report_type)
+        self.report_type = report_type
+        self.addr_start = _damo_fmt_str.text_to_bytes(addr_start)
+        self.addr_end = _damo_fmt_str.text_to_bytes(addr_end)
