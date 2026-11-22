@@ -1553,10 +1553,63 @@ def infer_start_or_commit_fail_reason(kdamonds):
                             'kdamond/context/scheme/filter (%s)' % reason])
     return None
 
+def same_active_intervals_goal(ctx1, ctx2):
+    goal1 = ctx1.intervals.intervals_goal
+    if goal1.aggrs == 0:
+        return False
+    return goal1 == ctx2.intervals.intervals_goal
+
+def set_intervals_to_tuned_intervals(kdamonds_to_stage):
+    '''
+    Avoid unnecessarily updating tuned intervals.
+
+    If new parameters have auto-tuning goal that is active and didn't changed
+    from that of running context, update new intervals to be same to the tuned
+    ones.
+    '''
+    staged_kdamonds = _damon.current_kdamonds()
+
+    need_update = False
+    for kidx, k_to_stage in enumerate(kdamonds_to_stage):
+        if kidx >= len(staged_kdamonds):
+            break
+        for cidx, ctx in enumerate(k_to_stage.contexts):
+            if cidx >= len(staged_kdamonds[kidx].contexts):
+                break
+            if same_active_intervals_goal(
+                    ctx, staged_kdamonds[kidx].contexts[cidx]):
+                need_update = True
+                break
+        if need_update is True:
+            break
+    if need_update is False:
+        return None
+
+    tuned_kdamonds, err = _damon.update_read_kdamonds(
+            update_stats=False, update_tried_regions=False,
+            do_update_tuned_intervals=True)
+    if err is not None:
+        return 'tuned intervals read fail (%s)' % err
+
+    for kidx, k_to_stage in enumerate(kdamonds_to_stage):
+        if kidx >= len(tuned_kdamonds):
+            break
+        for cidx, ctx in enumerate(k_to_stage.contexts):
+            if cidx >= len(tuned_kdamonds[kidx].contexts):
+                break
+            if not same_active_intervals_goal(
+                    ctx, tuned_kdamonds[kidx].contexts[cidx]):
+                continue
+            ctx.intervals = tuned_kdamonds[kidx].contexts[cidx].intervals
+    return None
+
 def commit_kdamonds(args, commit_quota_goals_only):
     kdamonds, err = kdamonds_for(args)
     if err:
         return None, 'cannot create kdamonds to commit from args (%s)' % err
+    err = set_intervals_to_tuned_intervals(kdamonds)
+    if err is not None:
+        return None, 'keeping tuned intervals fail'
     err = _damon.commit(kdamonds, commit_quota_goals_only)
     if err:
         inferred_reason = infer_start_or_commit_fail_reason(kdamonds)
