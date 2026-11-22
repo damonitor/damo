@@ -313,10 +313,12 @@ class DamonIntervals:
     intervals_goal = None
 
     def __init__(self, sample='5ms', aggr='100ms', ops_update='1s',
-                 intervals_goal=DamonIntervalsGoal()):
+                 intervals_goal=None):
         self.sample = _damo_fmt_str.text_to_us(sample)
         self.aggr = _damo_fmt_str.text_to_us(aggr)
         self.ops_update = _damo_fmt_str.text_to_us(ops_update)
+        if intervals_goal is None:
+            intervals_goal = DamonIntervalsGoal()
         self.intervals_goal = intervals_goal
 
     def to_str(self, raw):
