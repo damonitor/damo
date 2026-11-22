@@ -2,6 +2,7 @@ This file records important changes that made in each release.  Those are
 picked by human sense, so could be incomplete and missing many things.
 
 v3.4.7
+- damo tune: Do not unnecessarily reset tuned monitoring intervals.
 - Fix report_made type DAMON filter sysfs file read crash.
 
 v3.4.6
